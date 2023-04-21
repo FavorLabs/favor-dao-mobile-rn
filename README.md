@@ -1,2 +1,2 @@
 # favor-dao-mobile-rn
-favor dao react native
+favor dao mobile client by react native
