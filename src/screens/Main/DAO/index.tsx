@@ -1,11 +1,13 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import { DAOTopTabNavigator } from "../../../navigation/TopTabBar/DAO";
 
 export type Props = {};
-const ReadScreen: React.FC<Props> = (props) => {
+const DAOScreen: React.FC<Props> = (props) => {
   return (
     <View style={styles.container}>
-      <Text>ReadScreen</Text>
+      <Text>DAOScreen</Text>
+      <DAOTopTabNavigator />
     </View>
   )
 }
@@ -16,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReadScreen;
+export default DAOScreen;

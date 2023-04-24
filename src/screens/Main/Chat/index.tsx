@@ -4,7 +4,7 @@ import {View, Text, StyleSheet} from 'react-native';
 export type Props = {};
 const ChatScreen: React.FC<Props> = (props) => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text>ChatScreen</Text>
     </View>
   )
@@ -12,7 +12,7 @@ const ChatScreen: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1
+    flex: 1
   },
 });
 

@@ -4,7 +4,7 @@ import {View, Text, StyleSheet, Button} from 'react-native';
 export type Props = {};
 const RecommendScreen: React.FC<Props> = (props) => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text>RecommendScreen</Text>
     </View>
   )
@@ -12,7 +12,7 @@ const RecommendScreen: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1
+    flex: 1
   },
 });
 

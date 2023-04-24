@@ -1,11 +1,13 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {NotifyTopTabNavigator} from "../../../navigation/TopTabBar/Notify";
 
 export type Props = {};
-const ReadScreen: React.FC<Props> = (props) => {
+const NotifyScreen: React.FC<Props> = (props) => {
   return (
     <View style={styles.container}>
-      <Text>ReadScreen</Text>
+      <Text>NotifyScreen</Text>
+      <NotifyTopTabNavigator />
     </View>
   )
 }
@@ -16,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ReadScreen;
+export default NotifyScreen;
