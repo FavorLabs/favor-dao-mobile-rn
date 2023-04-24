@@ -1,0 +1,13 @@
+export const WalletConnect = 'walletconnect';
+export const ConnectType = 'connectType';
+export const UniPass = 'unipass';
+export const NodeConfig = 'nodeConfig';
+export const ApiURL = 'api';
+export const DefaultApi: string = 'http://localhost:1633';
+export const DaoDomainName = 'favordao';
+export const AutumnDomainName = 'autumn';
+export const ImageMinSize = '?width=150';
+export const ImageMidSize = '?width=320';
+export const ImageMaxSize = '?width=640';
+export const AvatarSize = '?width=50';
+export const UploadImgType = 'image/jpg, image/png, image/webp, image/jpeg';
