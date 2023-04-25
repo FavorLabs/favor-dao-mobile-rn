@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import { DAOTopTabNavigator } from "../../../navigation/TopTabBar/DAO";
+import { DAOTopTabNavigator } from "../../../navigation/TopTabBar";
 
 export type Props = {};
 const DAOScreen: React.FC<Props> = (props) => {
