@@ -208,3 +208,8 @@ web-build/
 dist/
 
 # @end expo-cli
+
+
+# lock
+yarn.lock
+package-lock.json
