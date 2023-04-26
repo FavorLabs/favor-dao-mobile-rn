@@ -102,7 +102,6 @@ dist
 
 # vuepress v2.x temp and cache directory
 .temp
-.cache
 
 # Docusaurus cache and generated files
 .docusaurus
@@ -130,10 +129,6 @@ dist
 .pnp.*
 
 
-
-
-
-node_modules/
 .expo/
 dist/
 npm-debug.*
@@ -153,7 +148,6 @@ web-build/
 
 # OSX
 #
-.DS_Store
 
 # Xcode
 #
@@ -177,7 +171,6 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
-build/
 .idea
 .gradle
 local.properties
@@ -186,7 +179,6 @@ local.properties
 
 # node.js
 #
-node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -202,14 +194,8 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
-# Expo
-.expo/
-web-build/
-dist/
-
 # @end expo-cli
 
 
 # lock
-yarn.lock
 package-lock.json
