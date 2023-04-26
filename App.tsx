@@ -8,12 +8,16 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import {
+    BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
+
 
 export default function App() {
     const [fontsLoaded, setFontsLoader] = useState(false);
     const loadFont = async () => {
+        SplashScreen.preventAutoHideAsync();
         try {
-            await SplashScreen.preventAutoHideAsync();
             await Font.loadAsync({
                 'ABeeZee_regular': require('./src/assets/fonts/ABeeZee_regular.ttf'),
                 'Inter_bold': require('./src/assets/fonts/Inter_bold.ttf'),
@@ -23,15 +27,16 @@ export default function App() {
                 'Inter_semibold': require('./src/assets/fonts/Inter_semibold.ttf'),
             });
         } catch (e) {
-            console.warn(e);
+            console.warn('error', e);
         } finally {
-            await SplashScreen.hideAsync();
+            console.log('loaded')
+            SplashScreen.hideAsync();
             setFontsLoader(true);
         }
     }
     useEffect(() => {
         loadFont().catch(Alert.alert)
-    })
+    },[])
 
     if (!fontsLoaded) return null;
 

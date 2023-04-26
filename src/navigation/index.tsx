@@ -37,9 +37,9 @@ function RootStack() {
 }
 
 export default function AppNavigator() {
-  return (
-    <NavigationContainer>
-      <RootStack />
-    </NavigationContainer>
-  );
+    return (
+        <NavigationContainer>
+                <RootStack/>
+        </NavigationContainer>
+    );
 }
