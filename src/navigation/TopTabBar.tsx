@@ -1,5 +1,5 @@
 import React from "react";
-import {Text, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import RecommendScreen from "../screens/Main/Feeds/RecommendScreen";
 import JoinedScreen from "../screens/Main/Feeds/JoinedScreen";
 import RecommendDAOListScreen from "../screens/Main/DAO/RecommendDAOListScreen";
@@ -8,19 +8,19 @@ import ReadScreen from "../screens/Main/Notify/ReadScreen";
 import UnreadScreen from "../screens/Main/Notify/UnreadScreen";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 const TopTab = createMaterialTopTabNavigator();
+import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
 
 export const TopBarOptions = {
   header: () => null,
-  tabBarActiveTintColor: 'white',
+  // tabBarActiveTintColor: 'white',
   // tabBarInactiveTintColor: 'gray',
-  tabBarLabelStyle: { fontSize: 15 },
   tabBarPressColor: 'transparent',
-  tabBarIndicatorStyle: { backgroundColor: 'white' },
-  // tabBarItemStyle: { margin:5,borderRadius: 30},
+  tabBarIndicatorStyle: { backgroundColor: '#eaeaea', display: 'none' },
+  tabBarItemStyle: { fontSize: 24 },
   tabBarLabel: ({ focused, color, children }: { focused: boolean, color: string, children: string }) => {
     return (
-      <View style={{ width: 150, height: '100%', flex: 1 , justifyContent: 'center', alignItems: 'center', backgroundColor: focused ? '#ff8d1a' : 'white', borderRadius: 30 }}>
-        <Text style={{ color: focused ? 'white' : 'grey', fontSize: 15 }}>{children}</Text>
+      <View style={[styles.container,{backgroundColor: focused ? '#ff8d1a' : 'white'}]}>
+        <Text style={[styles.text,{color: focused ? 'white' : '#000000', fontSize: 15}]}>{children}</Text>
       </View>
     )
   },
@@ -28,7 +28,8 @@ export const TopBarOptions = {
     width: '90%',
     marginHorizontal: '5%',
     backgroundColor: 'white',
-    borderRadius: 30,
+    borderRadius: 48,
+    marginBottom: 5,
   },
 }
 
@@ -61,3 +62,18 @@ export function NotifyTopTabNavigator() {
     </TopTab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: 150,
+    padding: Padding.p_3xs,
+    flex: 1 ,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: Border.br_29xl
+  },
+  text: {
+    // fontSize: FontSize.bodyBody17_size,
+    fontWeight: '600',
+  },
+})
