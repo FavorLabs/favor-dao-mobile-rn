@@ -13,24 +13,25 @@ import InputWalletPasswordScreen from '../screens/InputWalletPasswordScreen';
 import MnemonicBackupScreen from '../screens/MnemonicBackupScreen';
 import DAOSettingScreen from '../screens/Main/Setting/DAOSettingScreen';
 import {BottomTabNavigator} from "./BottomTabBar";
+import Screens from './RouteNames';
 
 const Stack = createStackNavigator();
 
 function RootStack() {
   return (
-    <Stack.Navigator screenOptions={{ header: () => null }}>
-      <Stack.Screen name="Root" component={BottomTabNavigator}/>
-      <Stack.Screen name="CreateWallet" component={CreateWalletScreen} />
-      <Stack.Screen name="ImportWallet" component={ImportWalletScreen} />
-      <Stack.Screen name="CreateDAO" component={CreateDAOScreen} />
-      <Stack.Screen name="CreateNews" component={CreateNewsScreen} />
-      <Stack.Screen name="CreateVideo" component={CreateVideoScreen} />
-      <Stack.Screen name="VideoPlay" component={VideoPlayScreen} />
-      <Stack.Screen name="PostDetail" component={PostDetailScreen} />
-      <Stack.Screen name="QuoteNews" component={QuoteNewsScreen} />
-      <Stack.Screen name="InputWalletPassword" component={InputWalletPasswordScreen} />
-      <Stack.Screen name="MnemonicBackup" component={MnemonicBackupScreen} />
-      <Stack.Screen name="DAOSetting" component={DAOSettingScreen} />
+    <Stack.Navigator screenOptions={{ header: () => null }} initialRouteName={Screens.CreateNews}>
+      <Stack.Screen name={Screens.Root} component={BottomTabNavigator}/>
+      <Stack.Screen name={Screens.CreateWallet} component={CreateWalletScreen} />
+      <Stack.Screen name={Screens.ImportWallet} component={ImportWalletScreen} />
+      <Stack.Screen name={Screens.CreateDAO} component={CreateDAOScreen} />
+      <Stack.Screen name={Screens.CreateNews} component={CreateNewsScreen} />
+      <Stack.Screen name={Screens.CreateVideo} component={CreateVideoScreen} />
+      <Stack.Screen name={Screens.VideoPlay} component={VideoPlayScreen} />
+      <Stack.Screen name={Screens.PostDetail} component={PostDetailScreen} />
+      <Stack.Screen name={Screens.QuoteNews} component={QuoteNewsScreen} />
+      <Stack.Screen name={Screens.InputWalletPassword} component={InputWalletPasswordScreen} />
+      <Stack.Screen name={Screens.MnemonicBackup} component={MnemonicBackupScreen} />
+      <Stack.Screen name={Screens.DAOSetting} component={DAOSettingScreen} />
     </Stack.Navigator>
   );
 }
