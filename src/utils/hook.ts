@@ -1,10 +1,12 @@
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { checkMultiple, requestMultiple } from 'react-native-permissions';
 import {
   AutumnDomainName,
   DaoDomainName,
 } from '../config/constants';
 import { BucketsPath } from '../declare/api/DAOApi';
+import {Permission} from "react-native-permissions/src/types";
 
 export const useUrl = () => {
   let { api, config } = useSelector((state: any) => state.global);
@@ -53,4 +55,33 @@ export const useClick = (callback: any, doubleCallback: any) => {
       clickRef.current.clickCount = 0;
     }, 200);
   };
+};
+
+export const usePermissions = (permissionType: Permission) => {
+  const [status, setStatus] = useState('undetermined');
+
+  useEffect(() => {
+    const getPermissionStatus = async () => {
+      let permissionStatus: any = 'undetermined';
+      try {
+        permissionStatus = await checkMultiple([permissionType]);
+      } catch (error) {
+        console.log(error);
+      }
+      setStatus(permissionStatus[permissionType]);
+    };
+    getPermissionStatus();
+  }, [permissionType]);
+
+  const requestPermission = async () => {
+    try {
+      const result = await requestMultiple([permissionType]);
+      setStatus(result[permissionType]);
+      console.log(`Request ${permissionType}: ${result[permissionType]}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { status, requestPermission };
 };
