@@ -1,14 +1,21 @@
 import React, { useState, useRef } from "react";
-import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
+import {Text, StyleSheet, Image, View, TouchableOpacity, Platform} from "react-native";
 import { Picker } from '@react-native-picker/picker';
+import ImagePicker from 'react-native-image-crop-picker';
+import { PERMISSIONS } from 'react-native-permissions';
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
+import {usePermissions} from "../utils/hook";
 
-export type Props = {};
+export type Props = {
+  imageType: string;
+  isShowSelector?: boolean;
+};
 type SelectListItem = {
   label: string,
   value: string,
 }
 const UploadImage: React.FC<Props> = (props) => {
+  const { imageType, isShowSelector = true } = props;
   const selectList: SelectListItem[] = [{
     label: 'Public',
     value: 'Public'
@@ -17,43 +24,66 @@ const UploadImage: React.FC<Props> = (props) => {
     value: 'Private'
   }];
   const [newsType, setNewsType] = useState<string>(selectList[0].value);
-  const [uploadedImages, setUploadedImages] = useState([require("../assets/image9.png"), require("../assets/image9.png")]);
+  const [images, setImages] = useState([require("../assets/image9.png"), require("../assets/image9.png")]);
   const pickerRef = useRef(null);
+
+  const [image, setImage] = useState<{ uri: string } | null>(null);
+  const PhotoPermission = usePermissions(
+    Platform.OS === 'ios' ? PERMISSIONS.IOS.PHOTO_LIBRARY : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
+  );
+  const photoPermissionStatus = PhotoPermission.status;
+  const requestPhotoPermission = PhotoPermission.requestPermission;
 
   const openPicker = () => {
     // @ts-ignore
     pickerRef.current?.focus();
   };
 
+  const uploadImage = () => {
+    console.log('uploadImage');
+    if (photoPermissionStatus === 'granted') {
+      ImagePicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true,
+      }).then((pickedImage) => {
+        console.log(pickedImage);
+        setImage({ uri: pickedImage.path });
+      });
+    } else {
+      requestPhotoPermission();
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.titleWrap}>
-        <Text style={styles.title}>Upload images</Text>
-        <TouchableOpacity onPress={openPicker}>
-          <View style={styles.selector}>
-            <Image
-              resizeMode="cover"
-              source={require("../assets/icon.png")}
-            />
-            <Text style={styles.selectedValue}>{newsType}</Text>
-            <View style={styles.picker}>
-              <Picker
-                ref={pickerRef}
-                selectedValue={newsType}
-                onValueChange={(value, index) =>
-                  setNewsType(value)
-                }>
-                { selectList.map(item =>
-                  <Picker.Item key={item.label} label={item.label} value={item.value} />
-                )}
-              </Picker>
+        <Text style={styles.title}>Upload { imageType }</Text>
+        { isShowSelector && <TouchableOpacity onPress={openPicker}>
+            <View style={styles.selector}>
+                <Image
+                    resizeMode="cover"
+                    source={require("../assets/icon.png")}
+                />
+                <Text style={styles.selectedValue}>{newsType}</Text>
+                <View style={styles.picker}>
+                    <Picker
+                        ref={pickerRef}
+                        selectedValue={newsType}
+                        onValueChange={(value, index) =>
+                          setNewsType(value)
+                        }>
+                      { selectList.map(item =>
+                        <Picker.Item key={item.label} label={item.label} value={item.value} />
+                      )}
+                    </Picker>
+                </View>
             </View>
-          </View>
-        </TouchableOpacity>
+        </TouchableOpacity> }
       </View>
 
       <View style={styles.uploadedImageWrap}>
-        { uploadedImages.map((item, index) =>
+        { images.map((item, index) =>
           <View key={index} style={styles.uploadedImageItem}>
             <Image
               style={styles.imageItem}
@@ -71,13 +101,15 @@ const UploadImage: React.FC<Props> = (props) => {
 
       <View style={styles.uploadWrap}>
         <View style={styles.uploadIconTips}>
-          <Image
-            resizeMode="cover"
-            source={require("../assets/uploadcloud2.png")}
-          />
-          <Text style={styles.tips}>
-            Upload image (s)
-          </Text>
+          <TouchableOpacity style={styles.iconTips} onPress={uploadImage}>
+            <Image
+              resizeMode="cover"
+              source={require("../assets/uploadcloud2.png")}
+            />
+            <Text style={styles.tips}>
+              Upload { imageType } (s)
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -123,7 +155,6 @@ const styles = StyleSheet.create({
   picker: {
     width: 20,
     marginRight: -10
-    // marginLeft: 36
   },
   uploadedImageWrap: {
     display: 'flex',
@@ -155,8 +186,6 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   uploadIconTips: {
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
     paddingVertical: 22,
     borderWidth: 1,
@@ -164,6 +193,11 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0, 0, 0, 0.12)",
     borderRadius: Border.br_3xs,
     backgroundColor: Color.color2
+  },
+  iconTips: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   tips: {
     fontSize: FontSize.size_mini,
