@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mini,
     color: Color.iOSSystemLabelsLightPrimary,
     flex: 1,
+    height: 63,
     overflow: "hidden",
   },
   ellipseParent: {
@@ -150,14 +151,17 @@ const styles = StyleSheet.create({
   },
   frameParent: {
     marginRight: 10,
+    marginBottom: 20,
     shadowColor: "rgba(0, 0, 0, 0.08)",
     shadowOffset: {
-      width: 2,
+      width: 0,
       height: 2,
     },
-    // shadowRadius: 16,
+    shadowRadius: 16,
     shadowOpacity: 1,
-    width: 240
+    width: 240,
+    height: 240,
+    // overflow: 'hidden',
   },
 });
 

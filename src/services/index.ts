@@ -7,11 +7,11 @@ const request = axios.create({
 });
 
 request.interceptors.request.use((config) => {
-  const token = localStorage.getItem(getKeyByName('token'));
-  if (token) {
-    // @ts-ignore
-    config.headers['x-session-token'] = token;
-  }
+  // const token = localStorage.getItem(getKeyByName('token'));
+  // if (token) {
+  //   // @ts-ignore
+  //   config.headers['x-session-token'] = token;
+  // }
 
   return config;
 });

@@ -35,16 +35,14 @@ const DaoCardList: React.FC<Props> = (props) => {
 
   return (
       <View style={styles.frameContainer}>
-        <View style={styles.frameView}>
-          <ScrollView horizontal={true}>
-            <FlatList
-                style={styles.postList}
-                data={daoCardInfo}
-                renderItem={({ item }) => <DaoCommunityCard daoCardInfo={item} />}
-                horizontal={true}
-            />
-          </ScrollView>
-        </View>
+        {/*<ScrollView horizontal={true}>*/}
+        <FlatList
+          style={styles.postList}
+          data={daoCardInfo}
+          renderItem={({ item }) => <DaoCommunityCard daoCardInfo={item} />}
+          horizontal={true}
+        />
+        {/*</ScrollView>*/}
         <View style={[styles.frameInner, styles.lineViewBorder]} />
       </View>
   )
@@ -52,18 +50,15 @@ const DaoCardList: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   postList: {
-
+    // backgroundColor: Color.color1
   },
   frameContainer: {
-    paddingTop: Padding.p_5xs,
+    paddingTop: Padding.p_xl,
     alignSelf: "stretch",
-    backgroundColor: Color.color1,
-  },
-  frameView: {
-    flexDirection: "row",
+    backgroundColor: 'rgba(0, 0, 0, 0.08)',
   },
   frameInner: {
-    marginTop: 20,
+    // marginTop: 20,
     alignSelf: "stretch",
   },
   lineViewBorder: {

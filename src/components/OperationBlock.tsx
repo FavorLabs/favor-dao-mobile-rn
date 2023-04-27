@@ -6,45 +6,47 @@ import {
   View,
 } from "react-native";
 import { FontFamily, FontSize, Color, Padding } from "../GlobalStyles";
+import { PostInfo } from '../declare/global';
 
-const OperationBlock = () => {
+type Props = {
+  postInfo: PostInfo
+};
+
+const OperationBlock: React.FC<Props> = (props) => {
+  const { postInfo } = props;
   return (
     <View style={styles.like}>
       <View style={styles.look}>
-        <View style={styles.icons8Share1Parent}>
-          <Image
-            style={styles.icons8Share1}
-            resizeMode="cover"
-            source={require("../assets/icons8share-1.png")}
-          />
-          <Text style={[styles.symbol, styles.symbolTypo]}>214</Text>
-        </View>
+        <Image
+          style={styles.icons8Share1}
+          resizeMode="cover"
+          source={require("../assets/icons8share-1.png")}
+        />
+        <Text style={[styles.symbol, styles.symbolTypo]}>{postInfo?.view_count}</Text>
       </View>
       <View style={styles.look}>
-        <View style={styles.icons8Share1Parent}>
-          <Image
-            style={styles.icons8Share1}
-            resizeMode="cover"
-            source={require("../assets/icons8share-11.png")}
-          />
-          <Text style={[styles.symbol, styles.symbolTypo]}>214</Text>
-        </View>
+        <Image
+          style={styles.icons8Share1}
+          resizeMode="cover"
+          source={require("../assets/icons8share-11.png")}
+        />
+        <Text style={[styles.symbol, styles.symbolTypo]}>{postInfo?.ref_count}</Text>
       </View>
-      <View style={styles.comments}>
+      <View style={styles.look}>
         <Image
           style={styles.icons8Share1}
           resizeMode="cover"
           source={require("../assets/icons8comments-1.png")}
         />
-        <Text style={[styles.symbol, styles.symbolTypo]}>116</Text>
+        <Text style={[styles.symbol, styles.symbolTypo]}>{postInfo?.comment_count}</Text>
       </View>
-      <View style={styles.comments}>
+      <View style={styles.look}>
         <Image
           style={styles.icons8Share1}
           resizeMode="cover"
           source={require("../assets/icons8facebooklike-1.png")}
         />
-        <Text style={[styles.symbol3, styles.symbolTypo]}>1122</Text>
+        <Text style={[styles.symbol3, styles.symbolTypo]}>{postInfo?.upvote_count}</Text>
       </View>
     </View>
   );
@@ -67,18 +69,12 @@ const styles = StyleSheet.create({
   symbol: {
     color: Color.iOSSystemLabelsLightSecondary,
   },
-  icons8Share1Parent: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    flexDirection: "row",
-  },
   look: {
-    width: 52,
-    height: 21,
-  },
-  comments: {
+    alignSelf: "stretch",
+    flex: 1,
     flexDirection: "row",
+    overflow: 'hidden',
+    justifyContent: 'center',
   },
   symbol3: {
     color: Color.iOSSystemLabelsLightPrimary,
@@ -87,10 +83,10 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     backgroundColor: Color.color1,
     height: 24,
-    paddingHorizontal: Padding.p_base,
+    // paddingHorizontal: Padding.p_base,
     paddingTop: Padding.p_8xs,
     justifyContent: "space-between",
-    marginTop: 14,
+    marginTop: 10,
     flexDirection: "row",
   },
 });

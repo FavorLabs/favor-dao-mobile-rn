@@ -9,25 +9,27 @@ import { BucketsPath } from '../declare/api/DAOApi';
 import {Permission} from "react-native-permissions/src/types";
 
 export const useUrl = () => {
-  let { api, config } = useSelector((state: any) => state.global);
-  if (!config) return '';
-  return api + '/group/http/' + config.proxyGroup + '/' + DaoDomainName + '/v1';
+  // let { api, config } = useSelector((state: any) => state.global);
+  // if (!config) return '';
+  // return api + '/group/http/' + config.proxyGroup + '/' + DaoDomainName + '/v1';
+  return 'http://192.168.100.250:1609/group/http/dao-backend-local/favordao/v1';
 };
 
 export const useResourceUrl = (type: BucketsPath) => {
-  let { api, config, settings } = useSelector((state: any) => state.global);
-  if (!config || !settings) return '';
-  return (
-    api +
-    '/group/http/' +
-    config.proxyGroup +
-    '/' +
-    AutumnDomainName +
-    '/' +
-    settings.Bucket +
-    '/' +
-    type
-  );
+  // let { api, config, settings } = useSelector((state: any) => state.global);
+  // if (!config || !settings) return '';
+  // return (
+  //   api +
+  //   '/group/http/' +
+  //   config.proxyGroup +
+  //   '/' +
+  //   AutumnDomainName +
+  //   '/' +
+  //   settings.Bucket +
+  //   '/' +
+  //   type
+  // );
+  return 'http://192.168.100.250:1609/group/http/dao-backend-local/autumn/paopao19/' + type
 };
 
 export const useClick = (callback: any, doubleCallback: any) => {

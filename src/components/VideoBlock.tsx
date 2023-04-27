@@ -1,17 +1,41 @@
 import * as React from "react";
-import { Text, StyleSheet, View, Image } from "react-native";
+import {Text, StyleSheet, View, Image, TouchableOpacity} from "react-native";
 import RowUser from "./RowUser";
 import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
 import OperationBlock from "./OperationBlock";
+import {PostInfo} from "./PostList";
+import { BottomSheetModal,BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import {useCallback, useMemo, useRef, useState} from "react";
+import SubscribeBlock from "./SubscribeBlock";
 
-const VideoBlock = () => {
+type Props = {
+  postInfo: PostInfo
+};
+
+const VideoBlock: React.FC<Props> = (props) => {
+  const { postInfo } = props;
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const [isSubscriptionVisilbe, setIsSubscriptionVisilbe] = useState(false);
+  const snapPoints = useMemo(() => ["65%"], []);
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
+
+  const subscribe = () => {
+    // setIsSubscriptionVisilbe(true);
+    // bottomSheetModalRef.current?.present();
+  }
+
   return (
+    // <BottomSheetModalProvider>
     <View style={styles.rowUserParent}>
       <RowUser
-          image={require("../assets/image3.png")}
-          name={'Khasan Shadiyarov'}
-          time={'3h age'}
+        image={require("../assets/image3.png")}
+        name={'Khasan Shadiyarov'}
+        time={'3h age'}
       />
+      <TouchableOpacity onPress={subscribe}>
       <View style={[styles.description, styles.likeSpaceBlock]}>
         <Text style={styles.description1}>
           Stream thousands of episodes, live.
@@ -40,9 +64,19 @@ const VideoBlock = () => {
           source={require("../assets/playcircle.png")}
         />
       </View>
-      <OperationBlock/>
+      </TouchableOpacity>
+      <OperationBlock postInfo={postInfo}/>
       <View style={[styles.frameChild, styles.likeSpaceBlock]} />
+      {/*<BottomSheetModal*/}
+      {/*  ref={bottomSheetModalRef}*/}
+      {/*  index={isSubscriptionVisilbe?1:-1}*/}
+      {/*  snapPoints={snapPoints}*/}
+      {/*  onChange={handleSheetChanges}*/}
+      {/*>*/}
+      {/*  <SubscribeBlock />*/}
+      {/*</BottomSheetModal>*/}
     </View>
+    // </BottomSheetModalProvider>
   );
 };
 
@@ -133,7 +167,7 @@ const styles = StyleSheet.create({
   },
   rectangleParent: {
     top: 14,
-    left: 313,
+    right: 14,
     height: 24,
     position: "absolute",
   },
@@ -190,7 +224,7 @@ const styles = StyleSheet.create({
   },
   rowUserParent: {
     paddingHorizontal: 0,
-    paddingVertical: Padding.p_3xs,
+    paddingTop: Padding.p_3xs,
     marginTop: 10,
     backgroundColor: Color.color1,
     alignSelf: "stretch",

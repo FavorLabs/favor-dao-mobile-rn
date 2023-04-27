@@ -4,10 +4,14 @@ import NewsContent from "./NewsContent";
 import { Padding, FontSize, Color, FontFamily } from "../GlobalStyles";
 import RowUser from "./RowUser";
 import OperationBlock from "./OperationBlock";
+import {PostInfo} from "./PostList";
 
-type Props = {};
+type Props = {
+  postInfo: PostInfo
+};
 
 const QuoteNews: React.FC<Props> = (props) => {
+  const { postInfo } = props;
   return (
     <View style={[styles.frameParent, styles.parentFrameSpaceBlock]}>
       <View style={[styles.groupParent, styles.likeSpaceBlock]}>
@@ -29,7 +33,7 @@ const QuoteNews: React.FC<Props> = (props) => {
           <NewsContent/>
         </View>
       </View>
-      <OperationBlock/>
+      <OperationBlock postInfo={postInfo}/>
       <View style={styles.frameChild} />
     </View>
   );
@@ -41,7 +45,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   likeSpaceBlock: {
-    paddingHorizontal: Padding.p_base,
+    // paddingHorizontal: Padding.p_base,
     alignSelf: "stretch",
   },
   titleTypo: {
@@ -102,6 +106,7 @@ const styles = StyleSheet.create({
     height: 42,
   },
   description1: {
+    paddingHorizontal: Padding.p_base,
     lineHeight: 22,
     color: Color.iOSSystemLabelsLightPrimary,
     fontSize: FontSize.bodyBody17_size,
