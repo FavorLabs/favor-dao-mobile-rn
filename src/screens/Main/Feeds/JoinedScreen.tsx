@@ -8,7 +8,7 @@ const JoinedScreen: React.FC<Props> = (props) => {
   return (
       <ScrollView>
         <View style={styles.container}>
-          <PostList/>
+          <PostList />
         </View>
       </ScrollView>
   )

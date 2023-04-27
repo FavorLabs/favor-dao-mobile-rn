@@ -28,11 +28,11 @@ const UploadImage: React.FC<Props> = (props) => {
   const pickerRef = useRef(null);
 
   const [image, setImage] = useState<{ uri: string } | null>(null);
-  const PhotoPermission = usePermissions(
-    Platform.OS === 'ios' ? PERMISSIONS.IOS.PHOTO_LIBRARY : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
-  );
-  const photoPermissionStatus = PhotoPermission.status;
-  const requestPhotoPermission = PhotoPermission.requestPermission;
+  // const PhotoPermission = usePermissions(
+  //   Platform.OS === 'ios' ? PERMISSIONS.IOS.PHOTO_LIBRARY : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
+  // );
+  // const photoPermissionStatus = PhotoPermission.status;
+  // const requestPhotoPermission = PhotoPermission.requestPermission;
 
   const openPicker = () => {
     // @ts-ignore
@@ -41,18 +41,18 @@ const UploadImage: React.FC<Props> = (props) => {
 
   const uploadImage = () => {
     console.log('uploadImage');
-    if (photoPermissionStatus === 'granted') {
-      ImagePicker.openPicker({
-        width: 300,
-        height: 400,
-        cropping: true,
-      }).then((pickedImage) => {
-        console.log(pickedImage);
-        setImage({ uri: pickedImage.path });
-      });
-    } else {
-      requestPhotoPermission();
-    }
+    // if (photoPermissionStatus === 'granted') {
+    //   ImagePicker.openPicker({
+    //     width: 300,
+    //     height: 400,
+    //     cropping: true,
+    //   }).then((pickedImage) => {
+    //     console.log(pickedImage);
+    //     setImage({ uri: pickedImage.path });
+    //   });
+    // } else {
+    //   requestPhotoPermission();
+    // }
   };
 
   return (

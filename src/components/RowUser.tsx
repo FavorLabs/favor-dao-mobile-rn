@@ -7,22 +7,27 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import { FontFamily, Border, FontSize, Color, Padding } from "../GlobalStyles";
+import {useResourceUrl} from "../utils/hook";
+import {getTime} from "../utils/util";
+import {DaoInfo} from "../declare/global";
 
 type Props = {
-  image: any;
-  name: string;
-  time: string;
+  time: number;
+  dao?: DaoInfo;
 };
 
 const RowUser: React.FC<Props> = (props) => {
-  const { image, name, time } = props
+  const { time, dao } = props;
+  const avatarsResUrl = useResourceUrl('avatars');
+  const createTime = getTime(time);
+
   return (
     <View style={styles.rowUser}>
       <View style={styles.imageParent}>
-        <Image style={styles.imageIcon} resizeMode="cover" source={image} />
+        <Image style={styles.imageIcon} resizeMode="cover" source={{url: `${avatarsResUrl}/${dao?.avatar}`}} />
         <View style={styles.subtitleParent}>
-          <Text style={[styles.subtitle, styles.titleTypo]}>{time}</Text>
-          <Text style={[styles.title, styles.titleTypo]}>{name}</Text>
+          <Text style={[styles.subtitle, styles.titleTypo]}>{createTime}</Text>
+          <Text style={[styles.title, styles.titleTypo]}>{dao?.name}</Text>
         </View>
       </View>
     </View>
@@ -38,9 +43,9 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   imageIcon: {
-    borderRadius: Border.br_5xs,
-    width: 38,
-    height: 40,
+    borderRadius: 50,
+    width: 50,
+    height: 50,
   },
   subtitle: {
     top: 22,

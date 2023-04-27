@@ -3,15 +3,19 @@ import { StyleSheet, View } from "react-native";
 import NewsContent from "./NewsContent";
 import OperationBlock from "./OperationBlock";
 import { Color, Padding } from "../GlobalStyles";
+import { PostInfo } from '../declare/global';
 
-export type Props = {};
+export type Props = {
+  postInfo: PostInfo
+};
 
 const NewsCard: React.FC<Props> = (props) => {
+  const { postInfo } = props;
   return (
     <View style={styles.feedsJoinedInner}>
       <View style={styles.groupParent}>
-        <NewsContent />
-        <OperationBlock/>
+        <NewsContent postInfo={postInfo}/>
+        <OperationBlock postInfo={postInfo}/>
         <View style={styles.frameChild} />
       </View>
     </View>
@@ -19,24 +23,23 @@ const NewsCard: React.FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
+  feedsJoinedInner: {
+    paddingHorizontal: 0,
+    paddingTop: Padding.p_3xs,
+    alignItems: "center",
+    alignSelf: "stretch",
+  },
+  groupParent: {
+    backgroundColor: Color.color1,
+    justifyContent: "center",
+    alignSelf: "stretch",
+  },
   frameChild: {
     borderStyle: "solid",
     borderColor: "#e6e5eb",
     borderTopWidth: 1,
     height: 1,
     marginTop: 14,
-    alignSelf: "stretch",
-  },
-  groupParent: {
-    backgroundColor: Color.color1,
-    // height: 398,
-    justifyContent: "center",
-    alignSelf: "stretch",
-  },
-  feedsJoinedInner: {
-    paddingHorizontal: 0,
-    paddingVertical: Padding.p_3xs,
-    alignItems: "center",
     alignSelf: "stretch",
   },
 });

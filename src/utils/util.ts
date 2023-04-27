@@ -1,4 +1,4 @@
-import Web3 from 'web3';
+// import Web3 from 'web3';
 import { Post } from '../declare/api/DAOApi';
 import { debounce } from 'lodash';
 import moment from 'moment';
@@ -19,36 +19,36 @@ export const getEndPoint = (): boolean | string => {
   }
 };
 
-export const appName = new URLSearchParams(location.search).get('name');
+// export const appName = new URLSearchParams(location.search).get('name');
 
-export const getKeyByName = (type: 'token' | 'connectType') => {
-  const networkId = localStorage.getItem('network_id');
-  let arr = [];
-  if (type === 'token') {
-    arr = ['token', networkId, appName];
-  } else {
-    arr = ['connectType', networkId, appName];
-  }
-  return arr
-  .filter((item) => {
-    if (item) return item;
-  })
-  .join('-');
-};
+// export const getKeyByName = (type: 'token' | 'connectType') => {
+//   const networkId = localStorage.getItem('network_id');
+//   let arr = [];
+//   if (type === 'token') {
+//     arr = ['token', networkId, appName];
+//   } else {
+//     arr = ['connectType', networkId, appName];
+//   }
+//   return arr
+//   .filter((item) => {
+//     if (item) return item;
+//   })
+//   .join('-');
+// };
 
-export const websocket = (host: string) => {
-  let ws = new Web3.providers.WebsocketProvider(host, {
-    reconnect: {
-      auto: true,
-    },
-  });
-  // @ts-ignore
-  ws.on(ws.DATA, (res) => {
-    // @ts-ignore
-    ws.emit(res.params.subscription, res.params.result);
-  });
-  return ws;
-};
+// export const websocket = (host: string) => {
+//   let ws = new Web3.providers.WebsocketProvider(host, {
+//     reconnect: {
+//       auto: true,
+//     },
+//   });
+//   // @ts-ignore
+//   ws.on(ws.DATA, (res) => {
+//     // @ts-ignore
+//     ws.emit(res.params.subscription, res.params.result);
+//   });
+//   return ws;
+// };
 
 export const isMobile = () => {
   return navigator.userAgent.match(
@@ -110,11 +110,11 @@ export const sleep = async (time: number) => {
   });
 };
 
-export const checkLogin = () => {
-  const token = localStorage.getItem(getKeyByName('token'));
-  const connectType = localStorage.getItem(getKeyByName('connectType'));
-  return !!(token && connectType);
-};
+// export const checkLogin = () => {
+//   const token = localStorage.getItem(getKeyByName('token'));
+//   const connectType = localStorage.getItem(getKeyByName('connectType'));
+//   return !!(token && connectType);
+// };
 
 export const getContent = (contents: Post[]) => {
   if (!Array.isArray(contents)) return {};

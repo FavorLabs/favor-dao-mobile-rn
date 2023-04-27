@@ -19,7 +19,7 @@ const Stack = createStackNavigator();
 
 function RootStack() {
   return (
-    <Stack.Navigator screenOptions={{ header: () => null }} initialRouteName={Screens.CreateDAO}>
+    <Stack.Navigator screenOptions={{ header: () => null }} initialRouteName={Screens.Root}>
       <Stack.Screen name={Screens.Root} component={BottomTabNavigator}/>
       <Stack.Screen name={Screens.CreateWallet} component={CreateWalletScreen} />
       <Stack.Screen name={Screens.ImportWallet} component={ImportWalletScreen} />
@@ -39,7 +39,7 @@ function RootStack() {
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <RootStack/>
+      <RootStack />
     </NavigationContainer>
   );
 }

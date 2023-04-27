@@ -14,8 +14,8 @@ const FeedsScreen: React.FC<Props> = (props) => {
   const showActionSheet = () => {
     // @ts-ignore
     this.ActionSheet.show()
-    console.log('abab')
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.frameParent}>
