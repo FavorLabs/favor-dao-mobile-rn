@@ -1,13 +1,13 @@
 import * as React from "react";
-import {Image, StyleSheet, View, Text} from "react-native";
+import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {Padding, FontFamily, FontSize, Color, Border} from "../GlobalStyles";
 import {useEffect, useState} from "react";
 import {useNavigation} from '@react-navigation/native';
-import AgreeCheckBox from "../components/AgreeCheckbox";
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
+import WalletController from "../lib/WalletController";
 
 const ImportWallet = () => {
     const navigation = useNavigation()
@@ -15,6 +15,14 @@ const ImportWallet = () => {
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [agree, setAgree] = useState(false);
+
+    const importMnemonic = () => {
+        try {
+            WalletController.importMnemonic(password, mnemonic);
+        } catch (e) {
+            console.error(e)
+        }
+    }
 
     return (
         <View style={[styles.importWallet, styles.importWalletSpaceBlock]}>
@@ -34,19 +42,23 @@ const ImportWallet = () => {
                 placeholder={`Please enter passwords`}
                 value={password}
                 setValue={setPassword}
+                secureTextEntry={true}
             />
             <TextInputBlock
                 title={'Confirm Password'}
                 placeholder={`Please enter passwords again`}
                 value={repeatPassword}
                 setValue={setRepeatPassword}
+                secureTextEntry={true}
             />
             <ProtocolRadioSelect value={agree} setValue={setAgree}/>
-            <FavorDaoButton
-                textValue="Create"
-                frame1171275771BackgroundColor="#ff8d1a"
-                cancelColor="#fff"
-            />
+            <TouchableOpacity onPress={importMnemonic}>
+                <FavorDaoButton
+                    textValue="Create"
+                    frame1171275771BackgroundColor="#ff8d1a"
+                    cancelColor="#fff"
+                />
+            </TouchableOpacity>
         </View>
     );
 };

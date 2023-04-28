@@ -1,4 +1,5 @@
 import {ethers} from 'ethers';
+import {updateState} from "../store/wallet";
 
 export type State = {
     mnemonic?: string
@@ -6,36 +7,58 @@ export type State = {
 }
 
 class WalletController {
-    private state: State = {};
+    private state: State;
+    provider: ethers.JsonRpcProvider;
 
-    // private wallet: ethers.Wallet | undefined;
+    constructor() {
+        this.state = {};
+        this.provider = new ethers.JsonRpcProvider("https://polygon-rpc.com")
+    }
 
     init(store: any) {
         const reduxState = store?.getState?.();
+        console.log("reduxState", reduxState);
         const state = reduxState?.wallet || {};
         this.state = new Proxy(state, {
             set(target: State, p: keyof State, newValue: any, receiver: any): boolean {
                 target[p] = newValue;
+                store.dispatch(updateState({key: p, value: newValue}));
                 return true
             }
         })
+    }
+
+
+    get wallet() {
+        return ethers.HDNodeWallet.fromPhrase(this.state.mnemonic!).connect(this.provider)
     }
 
     get isCreate() {
         return !!this.state.password
     }
 
-    private get wallet(): ethers.Wallet | null {
-        return this.state.mnemonic ? ethers.Wallet.fromMnemonic(this.state.mnemonic) : null;
+
+    get address(): string {
+        return this.wallet!.address;
     }
 
-    createMnemonic(): string {
-        const wallet = ethers.Wallet.createRandom();
-        return wallet.mnemonic.phrase;
+    createMnemonic(password: string): string {
+        if (!password) {
+            throw new Error('Password Invalid');
+        }
+        const wallet = ethers.HDNodeWallet.createRandom();
+        this.state.mnemonic = wallet.mnemonic!.phrase;
+        this.state.password = password;
+        return this.state.mnemonic;
     }
 
     importMnemonic(password: string, mnemonic: string) {
-        ethers.Wallet.fromMnemonic(mnemonic);
+        if (!password) {
+            throw new Error('Password Invalid');
+        }
+        if (!ethers.Mnemonic.isValidMnemonic(mnemonic)) {
+            throw new Error('Mnemonic Invalid');
+        }
         this.state.mnemonic = mnemonic;
         this.state.password = password;
     }
@@ -51,21 +74,19 @@ class WalletController {
         if (!this.passwordVerify(password)) {
             throw new Error('Password Invalid');
         }
-        return this.wallet?.privateKey;
+        return this.wallet.privateKey;
     }
 
-    signMessage(password: string, message: string) {
-        if (!this.passwordVerify(password)) {
-            throw new Error('Password Invalid');
-        }
+    signMessage(message: string) {
+        // if (!this.passwordVerify(password)) {
+        //     throw new Error('Password Invalid');
+        // }
         return this.wallet?.signMessage(message)
     }
 
-    walletConnectProvide(wallet: ethers.Wallet) {
-        return wallet.connect(new ethers.providers.JsonRpcProvider("https://polygon-rpc.com"))
-    }
 
     passwordVerify(password: string) {
+        console.log(this.state.password)
         return this.state.password === password;
     }
 }

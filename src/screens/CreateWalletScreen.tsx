@@ -1,48 +1,56 @@
 import * as React from "react";
-import {Image, StyleSheet, TouchableOpacity, View, Text} from "react-native";
+import {StyleSheet, TouchableOpacity, View} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
-import WalletWords from "../components/WalletWords";
 import TextInputBlock from "../components/TextInputBlock";
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {Color, Padding} from "../GlobalStyles";
 import {useEffect, useState} from "react";
 import WalletController from "../lib/WalletController";
+import {useNavigation} from "@react-navigation/native";
+import Screens from "../navigation/RouteNames";
+import {StackNavigationProp} from "@react-navigation/stack";
+import { Dialog } from '@rneui/themed';
 
 
 const CreateWallet = () => {
+    const navigation = useNavigation<StackNavigationProp<any>>()
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
-    const [mnemonicArray, setMnemonicArray] = useState<string[]>([]);
     const [agree, setAgree] = useState(false);
 
-    const createMnemonic = () => {
-        const mnemonic = WalletController.createMnemonic();
-        setMnemonicArray(mnemonic.split(' '))
-    }
-
     const create = () => {
-
+        try {
+            const mnemonic = WalletController.createMnemonic(password);
+            navigation.replace(Screens.MnemonicBackup, {
+                mnemonic
+            })
+        } catch (e) {
+            console.error(e);
+        }
     }
+        useEffect(() => {
+    }, [])
 
     return <>
-        <View style={styles.createWallet} onLayout={createMnemonic}>
+        <View style={styles.createWallet}>
             <FavorDaoNavBar
                 title="Create wallet"
                 vector={require("../assets/vector6.png")}
             />
-            <WalletWords mnemonicArray={mnemonicArray}/>
             <TextInputBlock
                 title={'Password'}
                 placeholder={`Please enter passwords`}
                 value={password}
                 setValue={setPassword}
+                secureTextEntry={true}
             />
             <TextInputBlock
                 title={'Confirm Password'}
                 placeholder={`Please enter passwords again`}
                 value={repeatPassword}
                 setValue={setRepeatPassword}
+                secureTextEntry={true}
             />
             <ProtocolRadioSelect value={agree} setValue={setAgree}/>
             <TouchableOpacity onPress={create}>

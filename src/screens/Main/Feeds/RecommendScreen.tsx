@@ -7,11 +7,11 @@ export type Props = {};
 const RecommendScreen: React.FC<Props> = (props) => {
   return (
     // <SafeAreaView>
-      <ScrollView>
+    //   <ScrollView>
         <View style={styles.container}>
           <PostList/>
         </View>
-      </ScrollView>
+      // </ScrollView>
     // </SafeAreaView>
   )
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, StyleSheet, View, FlatList, ListRenderItem} from "react-native";
+import {Text, StyleSheet, View, FlatList} from "react-native";
 import WalletWordItem from "./WalletWordItem";
 import {FontSize, FontFamily, Color} from "../GlobalStyles";
 
