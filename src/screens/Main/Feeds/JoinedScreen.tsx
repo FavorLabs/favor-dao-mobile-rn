@@ -6,11 +6,11 @@ import PostList from "../../../components/PostList";
 export type Props = {};
 const JoinedScreen: React.FC<Props> = (props) => {
   return (
-      <ScrollView>
+      // <ScrollView>
         <View style={styles.container}>
           <PostList />
         </View>
-      </ScrollView>
+      // </ScrollView>
   )
 }
 

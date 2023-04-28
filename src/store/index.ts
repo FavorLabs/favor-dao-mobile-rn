@@ -8,7 +8,6 @@ import {combineReducers, createStore} from 'redux';
 import WalletController from "../lib/WalletController";
 
 const rootReducer = combineReducers({
-    global: globalReducer,
     wallet: walletReducer
 })
 
@@ -28,6 +27,6 @@ const initPStore = () => {
 export const persiStore = persistStore(pStore, null, initPStore);
 export default configureStore({
     reducer: {
-        globalReducer
+        globalReducer,
     }
 })

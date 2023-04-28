@@ -1,6 +1,6 @@
 // import Web3 from 'web3';
 import { Post } from '../declare/api/DAOApi';
-import { debounce } from 'lodash';
+// import { debounce } from 'lodash';
 import moment from 'moment';
 import { useRef } from 'react';
 
@@ -52,7 +52,7 @@ export const getEndPoint = (): boolean | string => {
 
 export const isMobile = () => {
   return navigator.userAgent.match(
-    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
   );
 };
 
@@ -84,9 +84,9 @@ export const stringToBinary = (b: string, len: number) => {
 };
 
 export const omitAddress = (
-  str: string,
-  start: number = 6,
-  end: number = 4,
+    str: string,
+    start: number = 6,
+    end: number = 4,
 ) => {
   return str.substring(0, start) + '...' + str.substring(str.length - end);
 };
@@ -98,9 +98,9 @@ export const getSize = (size: number, level: number = 0): string => {
     n++;
   }
   return (
-    parseFloat((size / Math.pow(1024, n)).toFixed(2)) +
-    ' ' +
-    levelList[level + n]
+      parseFloat((size / Math.pow(1024, n)).toFixed(2)) +
+      ' ' +
+      levelList[level + n]
   );
 };
 
@@ -136,17 +136,17 @@ export const query = (params: any) => {
     filter: JSON.stringify(params.filter || []),
   };
   return (
-    Object.keys(newParams)
-    // @ts-ignore
-    .map((key) => [key, newParams[key]].map(encodeURIComponent).join('='))
-    .join('&')
+      Object.keys(newParams)
+          // @ts-ignore
+          .map((key) => [key, newParams[key]].map(encodeURIComponent).join('='))
+          .join('&')
   );
 };
 
 export const randomHex = () => {
   return `#${Math.floor(Math.random() * 0xffffff)
-  .toString(16)
-  .padEnd(6, '0')}`;
+      .toString(16)
+      .padEnd(6, '0')}`;
 };
 
 export const getDownloadNumber = (b: string) => {

@@ -4,15 +4,16 @@ import WalletItem from "./WalletItem";
 import {useNavigation,} from "@react-navigation/native";
 import {StackNavigationProp} from '@react-navigation/stack'
 import {FontFamily, FontSize, Color, Border, Padding} from "../GlobalStyles";
+import Screens from "../navigation/RouteNames";
 
 const LocalWallet = () => {
     const navigation = useNavigation<StackNavigationProp<any>>();
 
     const createWallet = () => {
-        navigation.navigate('CreateWallet')
+        navigation.navigate(Screens.CreateWallet)
     }
     const importWallet = () => {
-        navigation.navigate('ImportWallet')
+        navigation.navigate(Screens.ImportWallet)
     }
 
     return (
