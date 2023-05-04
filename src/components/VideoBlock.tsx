@@ -3,10 +3,12 @@ import {Text, StyleSheet, View, Image, TouchableOpacity} from "react-native";
 import RowUser from "./RowUser";
 import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
 import OperationBlock from "./OperationBlock";
-import {PostInfo} from "./PostList";
+import { PostInfo } from "../declare/global";
 import { BottomSheetModal,BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import {useCallback, useMemo, useRef, useState} from "react";
 import SubscribeBlock from "./SubscribeBlock";
+import {getContent} from "../utils/util";
+import {useResourceUrl} from "../utils/hook";
 
 type Props = {
   postInfo: PostInfo
@@ -14,9 +16,13 @@ type Props = {
 
 const VideoBlock: React.FC<Props> = (props) => {
   const { postInfo } = props;
+  const {  created_on, contents, dao } = props.postInfo;
+  const imagesResUrl = useResourceUrl('images');
+
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [isSubscriptionVisilbe, setIsSubscriptionVisilbe] = useState(false);
   const snapPoints = useMemo(() => ["65%"], []);
+  const info = getContent(contents);
 
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
@@ -31,9 +37,8 @@ const VideoBlock: React.FC<Props> = (props) => {
     // <BottomSheetModalProvider>
     <View style={styles.rowUserParent}>
       <RowUser
-        image={require("../assets/image3.png")}
-        name={'Khasan Shadiyarov'}
-        time={'3h age'}
+        time={created_on}
+        dao={dao}
       />
       <TouchableOpacity onPress={subscribe}>
       <View style={[styles.description, styles.likeSpaceBlock]}>
@@ -45,7 +50,8 @@ const VideoBlock: React.FC<Props> = (props) => {
         <Image
           style={styles.imageIcon}
           resizeMode="cover"
-          source={require("../assets/image4.png")}
+          // source={require("../assets/image4.png")}
+          source={{uri:`${imagesResUrl}/${info?.[3]?.[0]?.content}`}}
         />
         <View style={[styles.rectangleParent, styles.groupChildLayout]}>
           <View style={[styles.groupChild, styles.lockIconPosition]} />

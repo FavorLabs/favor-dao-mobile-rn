@@ -1,13 +1,18 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import Toast from 'react-native-toast-message';
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import FavorDaoButton from '../components/FavorDaoButton';
 import UploadImage from '../components/UploadImage';
 import TextInputBlock from '../components/TextInputBlock';
 import { Color, Border } from "../GlobalStyles";
+import {useResourceUrl, useUrl} from "../utils/hook";
 
 export type Props = {};
 const CreateNewsScreen: React.FC<Props> = (props) => {
+  const url = useUrl();
+  const imagesResUrl = useResourceUrl('images');
+
   const [description, setDescription] = useState<string>('');
 
   return (

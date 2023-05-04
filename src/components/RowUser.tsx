@@ -24,7 +24,7 @@ const RowUser: React.FC<Props> = (props) => {
   return (
     <View style={styles.rowUser}>
       <View style={styles.imageParent}>
-        <Image style={styles.imageIcon} resizeMode="cover" source={{url: `${avatarsResUrl}/${dao?.avatar}`}} />
+        <Image style={styles.imageIcon} resizeMode="cover" source={{uri: `${avatarsResUrl}/${dao?.avatar}`}} />
         <View style={styles.subtitleParent}>
           <Text style={[styles.subtitle, styles.titleTypo]}>{createTime}</Text>
           <Text style={[styles.title, styles.titleTypo]}>{dao?.name}</Text>
