@@ -72,5 +72,13 @@
     <string>Light</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>$(PRODUCT_NAME) want to select image or videos from your media library</string>
+    <key>NSCameraUsageDescription</key>
+    <string>$(PRODUCT_NAME) want to use your camera</string>
+    <key>NSMotionUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) to access your device motion.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>$(PRODUCT_NAME) want to select photo from your media library</string>
   </dict>
 </plist>

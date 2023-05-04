@@ -1,21 +1,29 @@
-import React, { useState, useRef } from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {Text, StyleSheet, Image, View, TouchableOpacity, Platform} from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
-import {usePermissions} from "../utils/hook";
+import {usePermissions, useResourceUrl, useUrl} from "../utils/hook";
+import ImageApi from "../services/DAOApi/Image";
 
 export type Props = {
   imageType: string;
   isShowSelector?: boolean;
+  upImage?: string;
+  setUpImage?: any;
+  multiple?: boolean;
 };
 type SelectListItem = {
   label: string,
   value: string,
 }
 const UploadImage: React.FC<Props> = (props) => {
-  const { imageType, isShowSelector = true } = props;
+  const url = useUrl();
+  const imagesResUrl = useResourceUrl('images');
+  const avatarsResUrl = useResourceUrl('avatars');
+
+  const { imageType, isShowSelector = true ,setUpImage, multiple, upImage } = props;
   const selectList: SelectListItem[] = [{
     label: 'Public',
     value: 'Public'
@@ -24,8 +32,9 @@ const UploadImage: React.FC<Props> = (props) => {
     value: 'Private'
   }];
   const [newsType, setNewsType] = useState<string>(selectList[0].value);
-  const [images, setImages] = useState([require("../assets/image9.png"), require("../assets/image9.png")]);
+  const [images, setImages] = useState([]);
   const pickerRef = useRef(null);
+  const [isDisableUpImg,setIsDisableUpImg] = useState<boolean>(false);
 
   const [image, setImage] = useState<{ uri: string } | null>(null);
   // const PhotoPermission = usePermissions(
@@ -39,17 +48,37 @@ const UploadImage: React.FC<Props> = (props) => {
     pickerRef.current?.focus();
   };
 
+  const removeImage = (index:number)=>{
+    let img = images;
+    img.splice(index,1);
+    setImages([...img]);
+    setIsDisableUpImg(false)
+    if(!multiple) {
+      setUpImage('')
+    }
+  }
+
   const uploadImage = () => {
-    console.log('uploadImage');
     // if (photoPermissionStatus === 'granted') {
-    //   ImagePicker.openPicker({
-    //     width: 300,
-    //     height: 400,
-    //     cropping: true,
-    //   }).then((pickedImage) => {
-    //     console.log(pickedImage);
-    //     setImage({ uri: pickedImage.path });
-    //   });
+      ImagePicker.openPicker({
+        mediaType: "photo",
+        width: 300,
+        height: 400,
+        cropping: true,
+        includeBase64:true
+      }).then((pickedImage) => {
+        // @ts-ignore
+        setImages(images => [...images,pickedImage])
+        // uploadImg(pickedImage)
+
+        if(!multiple) {
+          setUpImage(pickedImage)
+          setIsDisableUpImg(true)
+        } else {
+
+        }
+
+      });
     // } else {
     //   requestPhotoPermission();
     // }
@@ -88,31 +117,36 @@ const UploadImage: React.FC<Props> = (props) => {
             <Image
               style={styles.imageItem}
               resizeMode="cover"
-              source={item}
+              // @ts-ignore
+              source={{uri: `data:${item.mime};base64,${item.data}`}}
             />
+            <TouchableOpacity onPress={removeImage.bind(index)} style={styles.closeButton}>
             <Image
-              style={styles.closeButton}
               resizeMode="cover"
               source={require("../assets/group-1171275444.png")}
             />
+            </TouchableOpacity>
           </View>
         )}
       </View>
 
-      <View style={styles.uploadWrap}>
-        <View style={styles.uploadIconTips}>
-          <TouchableOpacity style={styles.iconTips} onPress={uploadImage}>
-            <Image
-              resizeMode="cover"
-              source={require("../assets/uploadcloud2.png")}
-            />
-            <Text style={styles.tips}>
-              Upload { imageType } (s)
-            </Text>
-          </TouchableOpacity>
+      { !isDisableUpImg && (
+        <View style={styles.uploadWrap}>
+          <View style={styles.uploadIconTips}>
+            <TouchableOpacity style={styles.iconTips} onPress={uploadImage}>
+              <Image
+                resizeMode="cover"
+                source={require("../assets/uploadcloud2.png")}
+              />
+              <Text style={styles.tips}>
+                Upload { imageType } (s)
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
     </View>
+
   );
 };
 
@@ -167,12 +201,15 @@ const styles = StyleSheet.create({
   },
   uploadedImageItem: {
     position: 'relative',
-    flex: 1,
+    // flex: 1,
+    width: '45%',
     borderRadius: Border.br_3xs,
     marginHorizontal: 8
   },
   imageItem: {
-    width: '100%'
+    width: '100%',
+    height: 160,
+    borderRadius: Border.br_3xs,
   },
   closeButton: {
     position: 'absolute',

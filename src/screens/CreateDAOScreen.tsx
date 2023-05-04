@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback} from 'react-native';
 import Toast from 'react-native-toast-message';
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
@@ -7,15 +7,18 @@ import UploadImage from "../components/UploadImage";
 import {Border, Color, FontFamily, FontSize, Padding} from "../GlobalStyles";
 import SwitchButton from "../components/SwitchButton";
 import DaoApi from '../services/DAOApi/Dao';
-import {useUrl} from "../utils/hook";
+import ImageApi from '../services/DAOApi/Image';
+import {useResourceUrl, useUrl} from "../utils/hook";
 
 export type Props = {};
 const CreateDAOScreen: React.FC<Props> = (props) => {
   const url = useUrl();
+  const avatarsResUrl = useResourceUrl('avatars');
 
   const [daoName, setDaoName] = useState<string>('');
   const [daoDescription, setDaoDescription] = useState<string>('');
   const [daoAvatar, setDaoAvatar] = useState<string>('');
+  const [daoAvatarId, setDaoAvatarId] = useState<string>('');
 
   const createDisable = useMemo(() => {
     return !(
@@ -24,6 +27,20 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
       daoAvatar
     )
   }, [daoName, daoDescription, daoAvatar]);
+
+  const uploadAvatar = async () => {
+    let file = {uri: daoAvatar.path, type: 'multipart/form-data', name:'image.png' };
+    try {
+      let fmData = new FormData();
+      // @ts-ignore
+      fmData.append('avatar', file);
+      const { data } = await ImageApi.upload(avatarsResUrl, fmData);
+      setDaoAvatarId(data.id);
+      console.log(data,'上传dao头像')
+    } catch (e){
+      console.log(e)
+    }
+  };
 
   const createHandle = async () => {
     if (createDisable) {
@@ -34,12 +51,15 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
     }
 
     try {
-      const { data } = await DaoApi.create(url, {
+      const params = {
         name: daoName,
         introduction: daoDescription,
-        avatar: daoAvatar,
-        banner: '',
-      });
+        avatar: daoAvatarId,
+        banner: 'S9N2_H7DwDzbtkiBg31UC_pwbhg0q0UJ0NBQZSTGRP',
+      }
+      console.log(params,'创建DAO传输的数据')
+      // const { data } = await DaoApi.create(url, params);
+      // console.log('创建是否成功',data)
     } catch (e) {
       if (e instanceof Error) {
         Toast.show({
@@ -49,6 +69,12 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
       }
     }
   };
+
+  useEffect(() => {
+    if(daoAvatar) {
+      uploadAvatar()
+    }
+  },[daoAvatar])
 
   return (
     <View style={styles.container}>
@@ -71,7 +97,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           parsed={true}
           placeholder={'Your description...'}
         />
-        <UploadImage imageType={'avatar'} isShowSelector={false} />
+        <UploadImage imageType={'avatar'} isShowSelector={false} setUpImage={setDaoAvatar} upImage={daoAvatar}/>
         <View style={styles.createDaoChild}>
           <View style={[styles.frameView, styles.groupPosition]}>
             <Text style={[styles.title6, styles.titleTypo1]}>

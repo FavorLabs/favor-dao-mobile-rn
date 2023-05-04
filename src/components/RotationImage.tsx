@@ -21,7 +21,7 @@ const RotationImage: React.FC<Props> = (props) => {
         <Image
             style={[styles.groupChild]}
             resizeMode="cover"
-            source={{url: `${imagesResUrl}/${item.content}`}}
+            source={{uri: `${imagesResUrl}/${item.content}`}}
         />
     )
   }
