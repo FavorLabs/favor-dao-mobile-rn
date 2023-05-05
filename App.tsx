@@ -12,8 +12,10 @@ import Toast from 'react-native-toast-message';
 import {NavigationContainer} from "@react-navigation/native";
 import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import WalletBottomSheet from "./src/components/WalletBottomSheet";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
+    // AsyncStorage.clear()
     const [fontsLoaded, setFontsLoader] = useState(false);
     const loadFont = async () => {
         SplashScreen.preventAutoHideAsync();

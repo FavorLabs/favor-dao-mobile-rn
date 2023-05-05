@@ -8,6 +8,7 @@ const {ecsign, isValidPrivate, toRpcSig, hashPersonalMessage} = require('ethereu
 export type State = {
     privateKey?: string
     password?: string
+    token?: string
 }
 
 class WalletController {
@@ -19,7 +20,7 @@ class WalletController {
 
     init(store: any) {
         const reduxState = store?.getState?.();
-        console.log("reduxState", reduxState);
+        // console.log("reduxState", reduxState);
         const state = reduxState?.wallet || {};
         this.state = new Proxy(state, {
             set(target: State, p: keyof State, newValue: any, receiver: any): boolean {
@@ -28,6 +29,10 @@ class WalletController {
                 return true
             }
         })
+    }
+
+    get token() {
+        return this.state.token
     }
 
     get address() {
@@ -49,6 +54,7 @@ class WalletController {
         if (!isValidPrivate(Buffer.from(privateKey, 'hex'))) {
             throw new Error('Private Key Invalid');
         }
+        console.log(111111)
         this.state.privateKey = privateKey;
         this.state.password = password;
     }
@@ -86,7 +92,8 @@ class WalletController {
             wallet_addr: address,
             type: 'meta_mask',
         });
-        await AsyncStorage.setItem('token', data.data.token);
+        this.state.token = data.data.token
+        // await AsyncStorage.setItem('token', data.data.token);
     }
 }
 
