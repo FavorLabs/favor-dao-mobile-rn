@@ -1,6 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit'
 import globalReducer from './global';
 import walletReducer from './wallet';
+import switchReducer from './switch';
 import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -28,5 +29,6 @@ export const persiStore = persistStore(pStore, null, initPStore);
 export default configureStore({
     reducer: {
         globalReducer,
+        switch: switchReducer
     }
 })

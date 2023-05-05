@@ -1,15 +1,12 @@
 import React, {useMemo, useRef, useImperativeHandle, ReactNode, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {
     BottomSheetModal,
     BottomSheetScrollView,
-    BottomSheetModalProvider
 } from '@gorhom/bottom-sheet';
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import FavorDaoButton from "./FavorDaoButton";
 import {Color} from "../GlobalStyles";
-import {useNavigation, useRoute} from "@react-navigation/native";
-import {StackNavigationProp} from "@react-navigation/stack";
 
 type Props = {
     showCancel?: boolean

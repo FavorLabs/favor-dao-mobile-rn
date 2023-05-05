@@ -8,9 +8,11 @@ import {useEffect, useState} from "react";
 import {useNavigation} from '@react-navigation/native';
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import WalletController from "../lib/WalletController";
+import Screens from "../navigation/RouteNames";
+import {StackNavigationProp} from "@react-navigation/stack";
 
 const ImportWallet = () => {
-    const navigation = useNavigation()
+    const navigation = useNavigation<StackNavigationProp<any>>()
     const [mnemonic, setMnemonic] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -18,7 +20,10 @@ const ImportWallet = () => {
 
     const importMnemonic = () => {
         try {
-            WalletController.importMnemonic(password, mnemonic);
+            WalletController.importPrivateKey(password, mnemonic);
+            navigation.replace(Screens.MnemonicBackup, {
+                mnemonic
+            })
         } catch (e) {
             console.error(e)
         }
@@ -30,9 +35,16 @@ const ImportWallet = () => {
                 title="Import wallet"
                 vector={require("../assets/vector6.png")}
             />
+            {/*<TextInputBlock*/}
+            {/*    title={'Mnemonic words'}*/}
+            {/*    placeholder={`Please enter mnemonic words，Separate with semicolons...`}*/}
+            {/*    value={mnemonic}*/}
+            {/*    setValue={setMnemonic}*/}
+            {/*    multiline={true}*/}
+            {/*/>*/}
             <TextInputBlock
-                title={'Mnemonic words'}
-                placeholder={`Please enter mnemonic words，Separate with semicolons...`}
+                title={'Private Key'}
+                placeholder={`Please enter private key`}
                 value={mnemonic}
                 setValue={setMnemonic}
                 multiline={true}
