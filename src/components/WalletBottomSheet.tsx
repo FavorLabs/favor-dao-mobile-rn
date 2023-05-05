@@ -8,7 +8,7 @@ import {useNavigation} from "@react-navigation/native";
 const WalletBottomSheet = () => {
     const navigation = useNavigation();
     const bottomSheetRef = useRef<BottomSheetModal>(null);
-    const {globalBottomSheet} = useSelector<any, any>(state => state.switch)
+    const {globalBottomSheet} = useSelector<any, any>(state => state.controllers)
 
     useEffect(() => {
         globalBottomSheet ? bottomSheetRef.current?.present() : bottomSheetRef.current?.dismiss();

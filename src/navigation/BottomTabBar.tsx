@@ -18,71 +18,83 @@ import NotifyInActiveSvg from '../assets/svg/notify_inactive.svg';
 import SettingActiveSvg from '../assets/svg/setting_active.svg';
 import SettingInActiveSvg from '../assets/svg/setting_inactive.svg';
 import {Color} from "../GlobalStyles";
-import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
+import {updateState as controllersUpdateState} from "../store/controllers"
+import {useDispatch} from "react-redux";
+import WalletController from "../lib/WalletController";
 
 const BottomTabBar = createBottomTabNavigator();
 
 export function BottomTabNavigator() {
+    const dispatch = useDispatch()
     return (
-        // <BottomSheetModalProvider>
-            <BottomTabBar.Navigator
-                initialRouteName={Screens.Main.Feeds}
-                screenOptions={{
-                    headerShown: false,
-                    tabBarActiveTintColor: Color.color
+        <BottomTabBar.Navigator
+            initialRouteName={Screens.Main.Feeds}
+            screenOptions={{
+                headerShown: false,
+                tabBarActiveTintColor: Color.color,
+            }}
+            safeAreaInsets={{bottom: 0}}
+            screenListeners={({navigation, route}) => ({
+                tabPress: e => {
+                    if (route.name !== 'Feeds' && !WalletController.token) {
+                        dispatch(controllersUpdateState({
+                            globalBottomSheet: true,
+                        }))
+                        e.preventDefault()
+                    }
+                },
+            })}
+        >
+            <BottomTabBar.Screen
+                name={Screens.Main.Feeds}
+                component={FeedsScreen}
+                options={{
+                    tabBarLabel: 'Feeds',
+                    tabBarIcon: ({focused, color, size}) => (
+                        <SvgIcon svg={focused ? <FeedsActiveSvg/> : <FeedsInActiveSvg/>}/>
+                    )
                 }}
-            >
-                <BottomTabBar.Screen
-                    name={Screens.Main.Feeds}
-                    component={FeedsScreen}
-                    options={{
-                        tabBarLabel: 'Feeds',
-                        tabBarIcon: ({focused, color, size}) => (
-                            <SvgIcon svg={focused ? <FeedsActiveSvg/> : <FeedsInActiveSvg/>}/>
-                        )
-                    }}
-                />
-                <BottomTabBar.Screen
-                    name={Screens.Main.Chat}
-                    component={ChatScreen}
-                    options={{
-                        tabBarLabel: 'Chat',
-                        tabBarIcon: ({focused, color, size}) => (
-                            <SvgIcon svg={focused ? <ChatActiveSvg/> : <ChatInActiveSvg/>}/>
-                        )
-                    }}
-                />
-                <BottomTabBar.Screen
-                    name={Screens.Main.DAO}
-                    component={DAOScreen}
-                    options={{
-                        tabBarLabel: 'DAO',
-                        tabBarIcon: ({focused, color, size}) => (
-                            <SvgIcon svg={focused ? <DaoActiveSvg/> : <DaoInActiveSvg/>}/>
-                        )
-                    }}
-                />
-                <BottomTabBar.Screen
-                    name={Screens.Main.Notify}
-                    component={NotifyScreen}
-                    options={{
-                        tabBarLabel: 'Notify',
-                        tabBarIcon: ({focused, color, size}) => (
-                            <SvgIcon svg={focused ? <NotifyActiveSvg/> : <NotifyInActiveSvg/>}/>
-                        )
-                    }}
-                />
-                <BottomTabBar.Screen
-                    name={Screens.Main.Setting}
-                    component={SettingScreen}
-                    options={{
-                        tabBarLabel: 'Setting',
-                        tabBarIcon: ({focused, color, size}) => (
-                            <SvgIcon svg={focused ? <SettingActiveSvg/> : <SettingInActiveSvg/>}/>
-                        )
-                    }}
-                />
-            </BottomTabBar.Navigator>
-        // </BottomSheetModalProvider>
+            />
+            <BottomTabBar.Screen
+                name={Screens.Main.Chat}
+                component={ChatScreen}
+                options={{
+                    tabBarLabel: 'Chat',
+                    tabBarIcon: ({focused, color, size}) => (
+                        <SvgIcon svg={focused ? <ChatActiveSvg/> : <ChatInActiveSvg/>}/>
+                    )
+                }}
+            />
+            <BottomTabBar.Screen
+                name={Screens.Main.DAO}
+                component={DAOScreen}
+                options={{
+                    tabBarLabel: 'DAO',
+                    tabBarIcon: ({focused, color, size}) => (
+                        <SvgIcon svg={focused ? <DaoActiveSvg/> : <DaoInActiveSvg/>}/>
+                    )
+                }}
+            />
+            <BottomTabBar.Screen
+                name={Screens.Main.Notify}
+                component={NotifyScreen}
+                options={{
+                    tabBarLabel: 'Notify',
+                    tabBarIcon: ({focused, color, size}) => (
+                        <SvgIcon svg={focused ? <NotifyActiveSvg/> : <NotifyInActiveSvg/>}/>
+                    )
+                }}
+            />
+            <BottomTabBar.Screen
+                name={Screens.Main.Setting}
+                component={SettingScreen}
+                options={{
+                    tabBarLabel: 'Setting',
+                    tabBarIcon: ({focused, color, size}) => (
+                        <SvgIcon svg={focused ? <SettingActiveSvg/> : <SettingInActiveSvg/>}/>
+                    )
+                }}
+            />
+        </BottomTabBar.Navigator>
     );
 }
