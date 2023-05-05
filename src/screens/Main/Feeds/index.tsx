@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, SafeAreaView, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity,TextInput } from 'react-native';
 import {FeedsTopTabNavigator} from '../../../navigation/TopTabBar';
 import {FontSize, Color, Border, FontFamily, Padding} from "../../../GlobalStyles";
 // @ts-ignore
@@ -7,6 +7,7 @@ import ActionSheet from 'react-native-actionsheet'
 import {useNavigation} from "@react-navigation/native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import Screens from "../../../navigation/RouteNames";
+import {getDebounce} from "../../../utils/util";
 
 export type Props = {};
 const FeedsScreen: React.FC<Props> = (props) => {
@@ -18,6 +19,18 @@ const FeedsScreen: React.FC<Props> = (props) => {
         actionSheetRef.current?.show()
     }
 
+    const [searchValue, setSearchValue] = useState<string>('');
+
+    const handleKeyPress = (event: { nativeEvent: { key: string; }; }) => {
+        if (event.nativeEvent.key === 'Enter') {
+            console.log('User pressed Enter key');
+        }
+    };
+
+    const getSearch = () => {
+        console.log('blur')
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.frameParent}>
@@ -26,14 +39,22 @@ const FeedsScreen: React.FC<Props> = (props) => {
                     <View style={styles.frameGroup}>
                         <View style={[styles.groupWrapper, styles.wrapperBg]}>
                             <View style={styles.searchParent}>
-                                <Image
-                                    style={[styles.searchIcon, styles.parentPosition]}
-                                    resizeMode="cover"
-                                    source={require("../../../assets/search.png")}
+                                {/*<Image*/}
+                                {/*    style={[styles.searchIcon, styles.parentPosition]}*/}
+                                {/*    resizeMode="cover"*/}
+                                {/*    source={require("../../../assets/search.png")}*/}
+                                {/*/>*/}
+                                {/*<Text style={[styles.placeholderLabel, styles.descriptionTypo]}>*/}
+                                {/*    Search*/}
+                                {/*</Text>*/}
+                                <TextInput
+                                  style={styles.searchInput}
+                                  placeholder={'Search'}
+                                  value={searchValue}
+                                  onChangeText={text => setSearchValue(text)}
+                                  onKeyPress={handleKeyPress}
+                                  onBlur={getDebounce(getSearch)}
                                 />
-                                <Text style={[styles.placeholderLabel, styles.descriptionTypo]}>
-                                    Search
-                                </Text>
                             </View>
                         </View>
                         <TouchableOpacity onPress={showActionSheet}>
@@ -66,6 +87,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         // backgroundColor: Color.color1
+    },
+    searchInput: {
+      flex: 1,
     },
     selectionBg: {
         backgroundColor: Color.whitesmoke_300,
