@@ -18,29 +18,29 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
   const [daoName, setDaoName] = useState<string>('');
   const [daoDescription, setDaoDescription] = useState<string>('');
   const [daoAvatar, setDaoAvatar] = useState<string>('');
-  const [daoAvatarId, setDaoAvatarId] = useState<string>('');
+  const [daoBanner, setBanner] = useState<string>('');
 
   const createDisable = useMemo(() => {
     return !(
       daoName &&
       daoDescription &&
-      daoAvatar
+      daoAvatar &&
+      daoBanner
     )
-  }, [daoName, daoDescription, daoAvatar]);
+  }, [daoName, daoDescription, daoAvatar, daoBanner]);
 
-  const uploadAvatar = async () => {
-    let file = {uri: daoAvatar.path, type: 'multipart/form-data', name:'image.png' };
-    try {
-      let fmData = new FormData();
-      // @ts-ignore
-      fmData.append('avatar', file);
-      const { data } = await ImageApi.upload(avatarsResUrl, fmData);
-      setDaoAvatarId(data.id);
-      console.log(data,'上传dao头像')
-    } catch (e){
-      console.log(e)
-    }
-  };
+  // const uploadAvatar = async () => {
+  //   let file = {uri: daoAvatar.path, type: 'multipart/form-data', name:'image.png' };
+  //   try {
+  //     let fmData = new FormData();
+  //     // @ts-ignore
+  //     fmData.append('avatar', file);
+  //     const { data } = await ImageApi.upload(avatarsResUrl, fmData);
+  //     setDaoAvatarId(data.id);
+  //   } catch (e){
+  //     console.log(e)
+  //   }
+  // };
 
   const createHandle = async () => {
     if (createDisable) {
@@ -54,8 +54,8 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
       const params = {
         name: daoName,
         introduction: daoDescription,
-        avatar: daoAvatarId,
-        banner: 'S9N2_H7DwDzbtkiBg31UC_pwbhg0q0UJ0NBQZSTGRP',
+        avatar: daoAvatar,
+        banner: daoBanner,
       }
       console.log(params,'创建DAO传输的数据')
       // const { data } = await DaoApi.create(url, params);
@@ -70,11 +70,11 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
     }
   };
 
-  useEffect(() => {
-    if(daoAvatar) {
-      uploadAvatar()
-    }
-  },[daoAvatar])
+  // useEffect(() => {
+  //   if(daoAvatar) {
+  //     uploadAvatar()
+  //   }
+  // },[daoAvatar])
 
   return (
     <View style={styles.container}>
@@ -94,10 +94,11 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           value={daoDescription}
           setValue={setDaoDescription}
           multiline={true}
-          parsed={true}
+          // parsed={true}
           placeholder={'Your description...'}
         />
-        <UploadImage imageType={'avatar'} isShowSelector={false} setUpImage={setDaoAvatar} upImage={daoAvatar}/>
+        <UploadImage imageType={'avatar'} isShowSelector={false} setUpImage={setDaoAvatar}/>
+        <UploadImage imageType={'banner'} isShowSelector={false} setUpImage={setBanner}/>
         <View style={styles.createDaoChild}>
           <View style={[styles.frameView, styles.groupPosition]}>
             <Text style={[styles.title6, styles.titleTypo1]}>

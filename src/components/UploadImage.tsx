@@ -35,8 +35,8 @@ const UploadImage: React.FC<Props> = (props) => {
   const [images, setImages] = useState([]);
   const pickerRef = useRef(null);
   const [isDisableUpImg,setIsDisableUpImg] = useState<boolean>(false);
+  const imgArr = useRef<string[]>([])
 
-  const [image, setImage] = useState<{ uri: string } | null>(null);
   // const PhotoPermission = usePermissions(
   //   Platform.OS === 'ios' ? PERMISSIONS.IOS.PHOTO_LIBRARY : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
   // );
@@ -48,13 +48,15 @@ const UploadImage: React.FC<Props> = (props) => {
     pickerRef.current?.focus();
   };
 
-  const removeImage = (index:number)=>{
+  const removeImage = (index: number)=>{
     let img = images;
     img.splice(index,1);
     setImages([...img]);
     setIsDisableUpImg(false)
     if(!multiple) {
       setUpImage('')
+    } else {
+      processImagesArr(img);
     }
   }
 
@@ -64,24 +66,67 @@ const UploadImage: React.FC<Props> = (props) => {
         mediaType: "photo",
         width: 300,
         height: 400,
-        cropping: true,
-        includeBase64:true
+        cropping: multiple ? false : true,
+        includeBase64:true,
+        multiple: multiple ? true : false,
+        maxFiles: 9,
       }).then((pickedImage) => {
-        // @ts-ignore
-        setImages(images => [...images,pickedImage])
-        // uploadImg(pickedImage)
-
-        if(!multiple) {
-          setUpImage(pickedImage)
-          setIsDisableUpImg(true)
+        if(Array.isArray(pickedImage)) {
+          processImagesArr(pickedImage)
+          setIsDisableUpImg(false)
         } else {
-
+          processImages(pickedImage)
+          setIsDisableUpImg(true)
         }
-
       });
     // } else {
     //   requestPhotoPermission();
     // }
+  };
+
+  const processImages = async (pickedImage: any) => {
+    // @ts-ignore
+    setImages(images => [...images,pickedImage])
+    let file = {uri: pickedImage.path, type: 'multipart/form-data', name:'image.png' };
+    try {
+      let fmData = new FormData();
+      // @ts-ignore
+      fmData.append(imageType, file);
+      if(imageType === 'avatar') {
+        const { data } = await ImageApi.upload(avatarsResUrl, fmData);
+        setUpImage(data.id)
+        console.log(data,'upload Avatar')
+      } else {
+        const { data } = await ImageApi.upload(imagesResUrl, fmData);
+        setUpImage(data.id)
+        console.log(data,'upload Image')
+      }
+    } catch (e){
+      console.log(e)
+    }
+  };
+
+  const processImagesArr = async (pickedImage: any) => {
+    setImages([]);
+    setUpImage([]);
+    // setImgArr([]);
+    imgArr.current = [];
+    pickedImage.map(async (item: any) => {
+      // @ts-ignore
+      setImages(images => [...images,item])
+      let file = {uri: item.path, type: 'multipart/form-data', name: 'image.png'};
+      try {
+        let fmData = new FormData();
+        // @ts-ignore
+        fmData.append(imageType, file);
+        const {data} = await ImageApi.upload(imagesResUrl, fmData);
+        // @ts-ignore
+        imgArr.current.push(data.id)
+      } catch (e) {
+        console.log(e)
+      }
+    });
+    setUpImage(imgArr.current);
   };
 
   return (
@@ -120,7 +165,11 @@ const UploadImage: React.FC<Props> = (props) => {
               // @ts-ignore
               source={{uri: `data:${item.mime};base64,${item.data}`}}
             />
-            <TouchableOpacity onPress={removeImage.bind(index)} style={styles.closeButton}>
+            <TouchableOpacity
+              // @ts-ignore
+              onPress={() => { removeImage(index)}}
+              style={styles.closeButton}
+            >
             <Image
               resizeMode="cover"
               source={require("../assets/group-1171275444.png")}
@@ -229,7 +278,7 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
     borderColor: "rgba(0, 0, 0, 0.12)",
     borderRadius: Border.br_3xs,
-    backgroundColor: Color.color2
+    backgroundColor: Color.color1
   },
   iconTips: {
     display: 'flex',

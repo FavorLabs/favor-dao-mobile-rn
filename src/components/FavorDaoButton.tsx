@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     paddingVertical: Padding.p_sm,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 30,
+    // marginTop: 30,
   },
 });
 
