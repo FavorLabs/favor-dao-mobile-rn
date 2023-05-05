@@ -6,45 +6,29 @@ import TextInputParsed from "./TextInputParsed";
 type TextInputBlockType = React.ComponentProps<typeof TextInput> & {
     title: string
     value: string
-    setValue: (value: string) => void
+    setValue?: (value: string) => void
     height?: number
-    parsed?: boolean
 }
 
 const TextInputBlock = (props: TextInputBlockType) => {
-    const defaultHeight = 100;
     const {
         title,
-        placeholder,
         value,
         setValue,
-        multiline = false,
-        height = defaultHeight,
-        parsed = false,
-        secureTextEntry = false
+        height = 100,
+        ...inputProps
     } = props;
     return (
         <View style={styles.createWalletInner}>
             <Text style={styles.title}>{title}</Text>
-            {parsed ? <>
-                <TextInputParsed
-                    multiline={multiline}
-                    height={height}
-                    style={[styles.input, multiline && {height: height}]}
-                    value={value}
-                    placeholder={placeholder}
-                    onChangeText={setValue}
-                />
-            </> : <>
-                <TextInput
-                    multiline={multiline}
-                    style={[styles.input, multiline && {height: height}]}
-                    value={value}
-                    placeholder={placeholder}
-                    onChangeText={setValue}
-                    secureTextEntry={secureTextEntry}
-                />
-            </>}
+            <TextInput
+                style={[styles.input, inputProps.multiline && {height: height}]}
+                value={value}
+                onChangeText={setValue}
+                {
+                    ...inputProps
+                }
+            />
         </View>
     );
 };

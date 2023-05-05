@@ -10,20 +10,27 @@ import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import WalletController from "../lib/WalletController";
 import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
+import {useUrl} from "../utils/hook";
 
 const ImportWallet = () => {
+    const url = useUrl();
     const navigation = useNavigation<StackNavigationProp<any>>()
     const [mnemonic, setMnemonic] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [agree, setAgree] = useState(false);
 
-    const importMnemonic = () => {
+    const importMnemonic = async () => {
+        if (!password || password !== repeatPassword) {
+            return console.error('Password Invalid')
+        }
+        if (!agree) {
+            return console.error('Please check the box')
+        }
         try {
             WalletController.importPrivateKey(password, mnemonic);
-            navigation.replace(Screens.MnemonicBackup, {
-                mnemonic
-            })
+            await WalletController.login(url);
+            navigation.goBack();
         } catch (e) {
             console.error(e)
         }
