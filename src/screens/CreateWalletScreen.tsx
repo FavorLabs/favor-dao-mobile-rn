@@ -10,19 +10,35 @@ import WalletController from "../lib/WalletController";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
+import {useUrl} from "../utils/hook";
 
 const CreateWallet = () => {
+    const url = useUrl();
     const navigation = useNavigation<StackNavigationProp<any>>()
+    const [privateKey, setPrivateKey] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [agree, setAgree] = useState(false);
 
-    const create = () => {
+    const createPK = () => {
         try {
-            const mnemonic = WalletController.createPrivateKey(password);
-            navigation.replace(Screens.MnemonicBackup, {
-                mnemonic
-            })
+            const privateKey = WalletController.createPrivateKey(password);
+            setPrivateKey(privateKey);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    const create = async () => {
+        if (!password || password !== repeatPassword) {
+            return console.error('Password Invalid')
+        }
+        if (!agree) {
+            return console.error('Please check the box')
+        }
+        try {
+            WalletController.importPrivateKey(password, privateKey);
+            await WalletController.login(url);
+            navigation.goBack();
         } catch (e) {
             console.error(e);
         }
@@ -30,10 +46,17 @@ const CreateWallet = () => {
 
 
     return <>
-        <View style={styles.createWallet}>
+        <View style={styles.createWallet} onLayout={createPK}>
             <FavorDaoNavBar
                 title="Create wallet"
                 vector={require("../assets/vector6.png")}
+            />
+            <TextInputBlock
+                title={'Private Key'}
+                placeholder={`Please enter private key`}
+                value={privateKey}
+                editable={false}
+                multiline
             />
             <TextInputBlock
                 title={'Password'}

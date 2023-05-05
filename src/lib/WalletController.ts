@@ -1,7 +1,9 @@
 import {updateState} from "../store/wallet";
 import Wallet from "ethereumjs-wallet";
+import UserApi from "../services/DAOApi/User";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const {ecsign, isValidPrivate, toRpcSig, keccak256,hashPersonalMessage} = require('ethereumjs-util');
+const {ecsign, isValidPrivate, toRpcSig, hashPersonalMessage} = require('ethereumjs-util');
 
 export type State = {
     privateKey?: string
@@ -37,20 +39,14 @@ class WalletController {
     }
 
     createPrivateKey(password: string): string {
-        if (!password) {
-            throw new Error('Password Invalid');
-        }
-        const privateKey = Wallet.generate().getPrivateKey().toString('hex');
-        this.state.privateKey = privateKey;
-        this.state.password = password;
-        return privateKey;
+        return Wallet.generate().getPrivateKey().toString('hex');
     }
 
     importPrivateKey(password: string, privateKey: string) {
         if (!password) {
             throw new Error('Password Invalid');
         }
-        if (!isValidPrivate(privateKey)) {
+        if (!isValidPrivate(Buffer.from(privateKey, 'hex'))) {
             throw new Error('Private Key Invalid');
         }
         this.state.privateKey = privateKey;
@@ -75,10 +71,22 @@ class WalletController {
         return toRpcSig(signature.v, signature.r, signature.s);
     }
 
-
     passwordVerify(password: string) {
-        console.log(this.state.password)
         return this.state.password === password;
+    }
+
+    async login(url: string) {
+        const address = this.address;
+        const timestamp = Date.parse(new Date().toUTCString());
+        const msg = `${address} login FavorDAO at ${timestamp}`;
+        const signature = this.signMessage(msg);
+        const {data} = await UserApi.signIn(url, {
+            timestamp,
+            signature,
+            wallet_addr: address,
+            type: 'meta_mask',
+        });
+        await AsyncStorage.setItem('token', data.data.token);
     }
 }
 

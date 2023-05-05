@@ -1,21 +1,13 @@
 import * as React from "react";
-import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
+import {StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import WalletWords from "../components/WalletWords";
 import {FontFamily, Color, FontSize, Border, Padding} from "../GlobalStyles";
 import FavorDaoButton from "../components/FavorDaoButton";
-import {useNavigation, useRoute} from "@react-navigation/native";
+import { useRoute} from "@react-navigation/native";
 import {useMemo} from "react";
-import {StackNavigationProp} from "@react-navigation/stack";
-import WalletController from "../lib/WalletController";
-import UserApi from "../services/DAOApi/User"
-import {useUrl} from "../utils/hook";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import TextInputBlock from "../components/TextInputBlock";
 
 const Mnemonic = () => {
-    const url = useUrl();
-    const navigation = useNavigation<StackNavigationProp<any>>()
     const route = useRoute()
     const {mnemonic} = route.params as { mnemonic: string }
 
@@ -23,23 +15,6 @@ const Mnemonic = () => {
     //     return mnemonic?.split(' ') || [];
     // }, [mnemonic])
 
-    const press = async () => {
-        const address = WalletController.address;
-        const timestamp = Date.parse(new Date().toUTCString());
-        const msg = `${address} login FavorDAO at ${timestamp}`;
-        console.log(msg)
-        const signature = WalletController.signMessage(msg);
-        console.log(signature)
-        const {data} = await UserApi.signIn(url, {
-            timestamp,
-            signature,
-            wallet_addr: address,
-            type: 'meta_mask',
-        });
-        console.log(data)
-        await AsyncStorage.setItem('token', data.data.token);
-        navigation.goBack();
-    }
     return (
         <View style={[styles.mnemonic, styles.mnemonicFlexBox]}>
             {/*<FavorDaoNavBar*/}
@@ -74,9 +49,9 @@ const Mnemonic = () => {
                     mnemonic
                 }
             </Text>
-            <TouchableOpacity onPress={press}>
+            <TouchableOpacity>
                 <FavorDaoButton
-                    textValue="Login"
+                    textValue="Backup"
                     frame1171275771BackgroundColor="#ff8d1a"
                     cancelColor="#fff"
                 />
