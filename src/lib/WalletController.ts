@@ -1,18 +1,18 @@
-import {ethers} from 'ethers';
 import {updateState} from "../store/wallet";
+import Wallet from "ethereumjs-wallet";
+
+const {ecsign, isValidPrivate, toRpcSig, keccak256,hashPersonalMessage} = require('ethereumjs-util');
 
 export type State = {
-    mnemonic?: string
+    privateKey?: string
     password?: string
 }
 
 class WalletController {
     private state: State;
-    provider: ethers.JsonRpcProvider;
 
     constructor() {
         this.state = {};
-        this.provider = new ethers.JsonRpcProvider("https://polygon-rpc.com")
     }
 
     init(store: any) {
@@ -28,60 +28,51 @@ class WalletController {
         })
     }
 
-
-    get wallet() {
-        return ethers.HDNodeWallet.fromPhrase(this.state.mnemonic!).connect(this.provider)
+    get address() {
+        return '0x' + Wallet.fromPrivateKey(Buffer.from(this.state.privateKey!, 'hex')).getAddress().toString('hex')
     }
 
     get isCreate() {
         return !!this.state.password
     }
 
-
-    get address(): string {
-        return this.wallet!.address;
-    }
-
-    createMnemonic(password: string): string {
+    createPrivateKey(password: string): string {
         if (!password) {
             throw new Error('Password Invalid');
         }
-        const wallet = ethers.HDNodeWallet.createRandom();
-        this.state.mnemonic = wallet.mnemonic!.phrase;
+        const privateKey = Wallet.generate().getPrivateKey().toString('hex');
+        this.state.privateKey = privateKey;
         this.state.password = password;
-        return this.state.mnemonic;
+        return privateKey;
     }
 
-    importMnemonic(password: string, mnemonic: string) {
+    importPrivateKey(password: string, privateKey: string) {
         if (!password) {
             throw new Error('Password Invalid');
         }
-        if (!ethers.Mnemonic.isValidMnemonic(mnemonic)) {
-            throw new Error('Mnemonic Invalid');
+        if (!isValidPrivate(privateKey)) {
+            throw new Error('Private Key Invalid');
         }
-        this.state.mnemonic = mnemonic;
+        this.state.privateKey = privateKey;
         this.state.password = password;
     }
 
-    exportSeedPhrase(password: string) {
-        if (!this.passwordVerify(password)) {
-            throw new Error('Password Invalid');
-        }
-        return this.state.mnemonic;
-    }
 
     exportPrivateKey(password: string) {
         if (!this.passwordVerify(password)) {
             throw new Error('Password Invalid');
         }
-        return this.wallet.privateKey;
+        return this.state.privateKey;
     }
 
     signMessage(message: string) {
         // if (!this.passwordVerify(password)) {
         //     throw new Error('Password Invalid');
         // }
-        return this.wallet?.signMessage(message)
+        const messageBuffer = hashPersonalMessage(Buffer.from(message));
+        const privateKeyBuffer = Buffer.from(this.state.privateKey!, 'hex');
+        const signature = ecsign(messageBuffer, privateKeyBuffer);
+        return toRpcSig(signature.v, signature.r, signature.s);
     }
 
 

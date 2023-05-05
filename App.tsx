@@ -2,13 +2,16 @@ import React, {useEffect, useRef, useState} from "react";
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Alert, Text} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import AppNavigator from "./src/navigation";
+import RootStack from "./src/navigation";
 import store, {persiStore} from './src/store/index';
 import {Provider, useSelector} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
+import {NavigationContainer} from "@react-navigation/native";
+import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
+import WalletBottomSheet from "./src/components/WalletBottomSheet";
 
 export default function App() {
     const [fontsLoaded, setFontsLoader] = useState(false);
@@ -35,7 +38,6 @@ export default function App() {
         loadFont().catch(Alert.alert)
     }, [])
 
-
     if (!fontsLoaded) return null;
 
     return (
@@ -44,7 +46,12 @@ export default function App() {
                 <SafeAreaProvider initialMetrics={null} style={styles.container}>
                     <SafeAreaView style={{flex: 1}}>
                         <StatusBar style="auto"/>
-                        <AppNavigator/>
+                        <NavigationContainer>
+                            <BottomSheetModalProvider>
+                                <RootStack/>
+                                <WalletBottomSheet />
+                            </BottomSheetModalProvider>
+                        </NavigationContainer>
                         <Toast/>
                     </SafeAreaView>
                 </SafeAreaProvider>

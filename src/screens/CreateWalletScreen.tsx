@@ -10,8 +10,6 @@ import WalletController from "../lib/WalletController";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
-import { Dialog } from '@rneui/themed';
-
 
 const CreateWallet = () => {
     const navigation = useNavigation<StackNavigationProp<any>>()
@@ -21,7 +19,7 @@ const CreateWallet = () => {
 
     const create = () => {
         try {
-            const mnemonic = WalletController.createMnemonic(password);
+            const mnemonic = WalletController.createPrivateKey(password);
             navigation.replace(Screens.MnemonicBackup, {
                 mnemonic
             })
@@ -29,8 +27,7 @@ const CreateWallet = () => {
             console.error(e);
         }
     }
-        useEffect(() => {
-    }, [])
+
 
     return <>
         <View style={styles.createWallet}>

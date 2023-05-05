@@ -11,6 +11,7 @@ import WalletController from "../lib/WalletController";
 import UserApi from "../services/DAOApi/User"
 import {useUrl} from "../utils/hook";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TextInputBlock from "../components/TextInputBlock";
 
 const Mnemonic = () => {
     const url = useUrl();
@@ -18,15 +19,17 @@ const Mnemonic = () => {
     const route = useRoute()
     const {mnemonic} = route.params as { mnemonic: string }
 
-    const mnemonicArray = useMemo(() => {
-        return mnemonic?.split(' ') || [];
-    }, [mnemonic])
+    // const mnemonicArray = useMemo(() => {
+    //     return mnemonic?.split(' ') || [];
+    // }, [mnemonic])
 
     const press = async () => {
         const address = WalletController.address;
         const timestamp = Date.parse(new Date().toUTCString());
         const msg = `${address} login FavorDAO at ${timestamp}`;
-        const signature = await WalletController.signMessage(msg);
+        console.log(msg)
+        const signature = WalletController.signMessage(msg);
+        console.log(signature)
         const {data} = await UserApi.signIn(url, {
             timestamp,
             signature,
@@ -39,17 +42,38 @@ const Mnemonic = () => {
     }
     return (
         <View style={[styles.mnemonic, styles.mnemonicFlexBox]}>
+            {/*<FavorDaoNavBar*/}
+            {/*    title="Mnemonic words"*/}
+            {/*    vector={require("../assets/vector6.png")}*/}
+            {/*/>*/}
+            {/*<View style={styles.titleParent}>*/}
+            {/*    <Text style={[styles.title, styles.titleLayout]}>{`Backup mnemonics`}</Text>*/}
+            {/*    <Text style={[styles.title1, styles.titleLayout]}>*/}
+            {/*        Please copy the mnemonic words in order to ensure accurate backup*/}
+            {/*    </Text>*/}
+            {/*</View>*/}
+            {/*<WalletWords mnemonicArray={mnemonicArray}/>*/}
             <FavorDaoNavBar
-                title="Mnemonic words"
+                title="Private Key"
                 vector={require("../assets/vector6.png")}
             />
             <View style={styles.titleParent}>
-                <Text style={[styles.title, styles.titleLayout]}>{`Backup mnemonics`}</Text>
+                <Text style={[styles.title, styles.titleLayout]}>{`Backup private key`}</Text>
                 <Text style={[styles.title1, styles.titleLayout]}>
-                    Please copy the mnemonic words in order to ensure accurate backup
+                    Please copy the private key in order to ensure accurate backup
                 </Text>
             </View>
-            <WalletWords mnemonicArray={mnemonicArray}/>
+            <Text style={{
+                padding: 20,
+                borderRadius:10,
+                borderStyle:'solid',
+                borderWidth:1,
+                borderColor:'#ccc'
+            }}>
+                {
+                    mnemonic
+                }
+            </Text>
             <TouchableOpacity onPress={press}>
                 <FavorDaoButton
                     textValue="Login"
