@@ -10,15 +10,11 @@ import {getContent} from "../utils/util";
 
 export type Props = {
   postInfo: PostInfo
+  isQuote?: boolean
 };
 
 const NewsContent: React.FC<Props> = (props) => {
   const { created_on, dao, contents} = props.postInfo;
-  const [imageArr,setImageArr] = useState<any[]>([
-      require("../assets/image4.png"),
-      require("../assets/image4.png"),
-      require("../assets/image4.png"),
-  ]);
   const info = getContent(contents);
 
   return (
@@ -29,7 +25,7 @@ const NewsContent: React.FC<Props> = (props) => {
       />
       <NewsDescription postInfo={props.postInfo}/>
       {
-        info[3] && <RotationImage imageArr={imageArr} postInfo={props.postInfo}/>
+        info[3] && <RotationImage postInfo={props.postInfo}/>
       }
     </View>
   );

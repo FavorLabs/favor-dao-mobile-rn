@@ -4,7 +4,8 @@ import NewsContent from "./NewsContent";
 import { Padding, FontSize, Color, FontFamily } from "../GlobalStyles";
 import RowUser from "./RowUser";
 import OperationBlock from "./OperationBlock";
-import {PostInfo} from "./PostList";
+import { PostInfo } from '../declare/global';
+import NewsDescription from "./NewsDescription";
 
 type Props = {
   postInfo: PostInfo
@@ -12,25 +13,20 @@ type Props = {
 
 const QuoteNews: React.FC<Props> = (props) => {
   const { postInfo } = props;
+  const { dao, created_on} = props.postInfo;
   return (
-    <View style={[styles.frameParent, styles.parentFrameSpaceBlock]}>
+    <View style={[styles.frameParent]}>
       <View style={[styles.groupParent, styles.likeSpaceBlock]}>
-        <RowUser
-            image={require("../assets/image3.png")}
-            name={'Robbie Harrison'}
-            time={'2h ago'}
-        />
+        <RowUser time={created_on} dao={dao}/>
         <View style={[styles.description, styles.parentFrameSpaceBlock]}>
-          <View style={[styles.descriptionWrapper, styles.descriptionPosition]}>
-            <Text style={[styles.description1, styles.descriptionPosition]}>
-              I like it !
-            </Text>
+          <View style={[styles.descriptionWrapper]}>
+            <NewsDescription postInfo={postInfo}/>
           </View>
         </View>
       </View>
       <View style={[styles.frameWrapper, styles.parentFrameSpaceBlock]}>
         <View style={styles.groupWrapper}>
-          <NewsContent/>
+          <NewsContent postInfo={postInfo}/>
         </View>
       </View>
       <OperationBlock postInfo={postInfo}/>
@@ -42,6 +38,7 @@ const QuoteNews: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   parentFrameSpaceBlock: {
     marginTop: 10,
+    marginBottom: 10,
     alignSelf: "stretch",
   },
   likeSpaceBlock: {
@@ -54,12 +51,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontFamily: FontFamily.paragraphP313,
     letterSpacing: 0,
-  },
-  descriptionPosition: {
-    width: "100%",
-    left: "0%",
-    top: "0%",
-    position: "absolute",
   },
   symbolTypo: {
     marginLeft: 6,
@@ -115,9 +106,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   descriptionWrapper: {
-    height: "100%",
-    right: "0%",
-    bottom: "0%",
   },
   description: {
     height: 22,

@@ -7,12 +7,11 @@ import {getContent} from "../utils/util";
 import {useResourceUrl} from "../utils/hook";
 
 export type Props = {
-  imageArr: any[];
   postInfo: PostInfo
 };
 
 const RotationImage: React.FC<Props> = (props) => {
-  const { imageArr, postInfo } = props;
+  const { postInfo } = props;
   const info = getContent(postInfo.contents);
   const imagesResUrl = useResourceUrl('images');
 
