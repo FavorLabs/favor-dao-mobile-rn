@@ -55,7 +55,7 @@ const FeedsScreen: React.FC<Props> = (props) => {
                 options={['Video Post', 'News Post', 'Cancel']}
                 cancelButtonIndex={2}
                 onPress={(index: number) => {
-                    navigation.navigate(screens[index]);
+                    if (index < screens.length) navigation.navigate(screens[index]);
                 }}
             />
         </View>
