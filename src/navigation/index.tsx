@@ -16,6 +16,7 @@ import Screens from './RouteNames';
 import StartNode from "../screens/StartNode";
 import Favor, {group_sub_method} from "../libs/favor";
 import Loading from "../components/Loading";
+import QuoteEditScreen from "../screens/QuoteEditScreen";
 
 const Stack = createStackNavigator();
 
@@ -61,6 +62,7 @@ function RootStack() {
               <Stack.Screen name={Screens.InputWalletPassword} component={InputWalletPasswordScreen}/>
               <Stack.Screen name={Screens.MnemonicBackup} component={MnemonicBackupScreen}/>
               <Stack.Screen name={Screens.DAOSetting} component={DAOSettingScreen}/>
+              <Stack.Screen name={Screens.QuoteEdit} component={QuoteEditScreen} />
           </Stack.Navigator>
           <Loading text={'loading'} visible={visible}/>
       </>

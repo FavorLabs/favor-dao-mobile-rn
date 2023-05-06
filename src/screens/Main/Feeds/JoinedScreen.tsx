@@ -6,11 +6,9 @@ import PostList from "../../../components/PostList";
 export type Props = {};
 const JoinedScreen: React.FC<Props> = (props) => {
   return (
-      // <ScrollView>
         <View style={styles.container}>
-          <PostList />
+          <PostList type={'post'} focus/>
         </View>
-      // </ScrollView>
   )
 }
 

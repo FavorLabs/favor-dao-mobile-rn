@@ -1,11 +1,22 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Button, SafeAreaView, ScrollView, FlatList} from 'react-native';
 import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
 import DaoCommunityCard from "./DaoCommunityCard";
+import {Page, PostInfo} from "../declare/global";
+import {useUrl} from "../utils/hook";
+import PostApi from "../services/DAOApi/Post";
 
-export type Props = {};
+type Props = {};
 
 const DaoCardList: React.FC<Props> = (props) => {
+  const url = useUrl();
+  const [pageData, setPageData] = useState<Page>({
+    page: 1,
+    page_size: 5,
+    type: -1,
+    query: undefined,
+  });
+
   const [daoCardInfo,setDaoCardInfo] = useState([
     {
       backgroundImg: require("../assets/preview1.png"),
@@ -31,18 +42,45 @@ const DaoCardList: React.FC<Props> = (props) => {
       level: 'Level 8',
       description: 'Stream thousands of episodes, live sports, iconic movies, and exclusive originals from CBS, BET, Comedy...'
     },
-  ])
+  ]);
+  const [postListArr,setPostListArr] = useState<PostInfo[]>([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  const loadMore = async () => {
+    try {
+      const request = (params: Page) => PostApi.getPostListByType(url, params);
+      const { data } = await request(pageData);
+      const listArr: PostInfo[] = data.data.list;
+      setPostListArr(() => [...postListArr,...listArr]);
+      setIsLoadingMore(
+        data.data.pager.total_rows > pageData.page * pageData.page_size,
+      );
+      setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
+    } catch (e) {
+      if (e instanceof Error) console.error(e)
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (isLoadingMore) {
+      loadMore();
+    }
+  };
+
+  useEffect(() => {
+    loadMore();
+  },[])
 
   return (
       <View style={styles.frameContainer}>
-        {/*<ScrollView horizontal={true}>*/}
         <FlatList
           style={styles.postList}
-          data={daoCardInfo}
+          data={postListArr}
           renderItem={({ item }) => <DaoCommunityCard daoCardInfo={item} />}
           horizontal={true}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
         />
-        {/*</ScrollView>*/}
         <View style={[styles.frameInner, styles.lineViewBorder]} />
       </View>
   )

@@ -1,49 +1,56 @@
 import * as React from "react";
 import { Image, StyleSheet, View, Text } from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
+import {PostInfo} from "../declare/global";
+import {useResourceUrl} from "../utils/hook";
 
 type Props = {
-  daoCardInfo: {
-    backgroundImg : any,
-    avatar: any,
-    daoName: string,
-    joined: string,
-    level: string,
-    description: string
-  }
+  // daoCardInfo: {
+  //   backgroundImg : any,
+  //   avatar: any,
+  //   daoName: string,
+  //   joined: string,
+  //   level: string,
+  //   description: string
+  // };
+  daoCardInfo: PostInfo
 };
 
 const DaoCommunityCard: React.FC<Props> = (props) => {
-  const { daoCardInfo } = props
+  const { dao } = props.daoCardInfo;
+
+  const avatarsResUrl = useResourceUrl('avatars');
+  const imagesResUrl = useResourceUrl('images');
+
   return (
     <View style={[styles.frameParent, styles.frameParentBg]}>
       <View style={[styles.previewWrapper, styles.frameParentBg]}>
         <Image
           style={styles.previewIcon}
           resizeMode="cover"
-          source={daoCardInfo.backgroundImg}
+          source={{uri: `${imagesResUrl}/${dao.banner}`}}
         />
       </View>
       <View style={styles.ellipseParent}>
         <Image
           style={styles.frameChild}
           resizeMode="cover"
-          source={daoCardInfo.avatar}
+          source={{uri: `${avatarsResUrl}/${dao.avatar}`}}
         />
         <View style={[styles.groupParent, styles.labelFlexBox]}>
           <View style={styles.subtitleParent}>
-            <Text style={styles.subtitle}>{daoCardInfo.joined}</Text>
-            <Text style={[styles.title, styles.titleClr]}>{daoCardInfo.daoName}</Text>
+            <Text style={styles.subtitle}>joined: {dao.follow_count}</Text>
+            <Text style={[styles.title, styles.titleClr]}>{dao.name}</Text>
           </View>
           <View style={styles.labelWrapper}>
             <View style={[styles.label, styles.labelFlexBox]}>
-              <Text style={styles.label1}>{daoCardInfo.level}</Text>
+              <Text style={styles.label1}>8 level</Text>
             </View>
           </View>
         </View>
         <View style={[styles.groupParent, styles.labelFlexBox]}>
-          <Text style={[styles.description, styles.titleClr]}>
-            {daoCardInfo.description}
+          <Text style={[styles.description, styles.titleClr]} numberOfLines={3}>
+            {dao.introduction}
           </Text>
         </View>
       </View>
@@ -80,6 +87,7 @@ const styles = StyleSheet.create({
   frameChild: {
     width: 64,
     height: 64,
+    borderRadius: 64,
   },
   subtitle: {
     top: 26,

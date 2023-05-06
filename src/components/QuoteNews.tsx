@@ -6,6 +6,8 @@ import RowUser from "./RowUser";
 import OperationBlock from "./OperationBlock";
 import { PostInfo } from '../declare/global';
 import NewsDescription from "./NewsDescription";
+import VideoBlock from "./VideoBlock";
+import VideoBlockItem from "./VideoBlockItem";
 
 type Props = {
   postInfo: PostInfo
@@ -26,7 +28,14 @@ const QuoteNews: React.FC<Props> = (props) => {
       </View>
       <View style={[styles.frameWrapper, styles.parentFrameSpaceBlock]}>
         <View style={styles.groupWrapper}>
-          <NewsContent postInfo={postInfo}/>
+          {
+            postInfo?.orig_type === 0 ? (
+              <NewsContent postInfo={postInfo} isQuote={true}/>
+            ) : (
+              <VideoBlockItem postInfo={postInfo} isQuote={true}/>
+            )
+          }
+
         </View>
       </View>
       <OperationBlock postInfo={postInfo}/>
@@ -37,8 +46,8 @@ const QuoteNews: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   parentFrameSpaceBlock: {
-    marginTop: 10,
-    marginBottom: 10,
+    // marginTop: 10,
+    // marginBottom: 10,
     alignSelf: "stretch",
   },
   likeSpaceBlock: {
@@ -108,7 +117,7 @@ const styles = StyleSheet.create({
   descriptionWrapper: {
   },
   description: {
-    height: 22,
+    flex: 1,
   },
   groupParent: {
     paddingTop: Padding.p_3xs,

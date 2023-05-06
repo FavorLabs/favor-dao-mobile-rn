@@ -6,15 +6,16 @@ import { Color, Padding } from "../GlobalStyles";
 import { PostInfo } from '../declare/global';
 
 export type Props = {
-  postInfo: PostInfo
+  postInfo: PostInfo;
+  isReTransfer?: boolean;
 };
 
 const NewsCard: React.FC<Props> = (props) => {
-  const { postInfo } = props;
+  const { postInfo, isReTransfer = false } = props;
   return (
     <View style={styles.feedsJoinedInner}>
       <View style={styles.groupParent}>
-        <NewsContent postInfo={postInfo}/>
+        <NewsContent postInfo={postInfo} isReTransfer={isReTransfer}/>
         <OperationBlock postInfo={postInfo}/>
         <View style={styles.frameChild} />
       </View>

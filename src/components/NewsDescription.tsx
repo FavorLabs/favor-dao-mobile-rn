@@ -6,26 +6,25 @@ import {Post, PostInfo} from "../declare/global";
 import {getContent} from "../utils/util";
 
 export type Props = {
-  postInfo: PostInfo
+  postInfo: PostInfo;
+  isQuote?: boolean | undefined;
+  isReTransfer?: boolean;
 };
 const NewsDescription: React.FC<Props> = (props) => {
-  const { contents } = props.postInfo;
-  const info = getContent(contents);
+  const { isQuote, isReTransfer } = props;
+  const { contents, orig_contents } = props.postInfo;
+  const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
 
   return (
     <View
-      style={[styles.description,  ]}
+      style={[styles.description,]}
     >
       <View style={styles.descriptionWrapper}>
         <Text
-          style={[styles.description1, styles.descriptionPosition,]}
+          style={[styles.description1]}
+          numberOfLines={3}
+          ellipsizeMode='tail'
         >
-          {/*<Text style={styles.comeOn}>{`Come on`}</Text>*/}
-          {/*<Text style={styles.craigLove}>@craig_love</Text>*/}
-          {/*<Text style={styles.comeOn}>*/}
-          {/*  {` what are you talking about? Isn’t it a joke? please have a look at this dummy image... `}*/}
-          {/*</Text>*/}
-          {/*<Text style={styles.craigLove}>{`More`}</Text>*/}
           {info[2]?.[0]?.content}
         </Text>
       </View>
@@ -34,11 +33,6 @@ const NewsDescription: React.FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
-  descriptionPosition: {
-    // height: 66,
-    // left: 0,
-    // position: "absolute",
-  },
   comeOn: {
     color: Color.iOSSystemLabelsLightPrimary,
   },
@@ -53,17 +47,14 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   descriptionWrapper: {
-    alignSelf: "stretch",
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
     flex: 1,
   },
   description: {
     marginTop: 10,
-    // top: 56,
-    // width: 411,
     paddingHorizontal: Padding.p_base,
     paddingVertical: 0,
-    height: 66,
-    // backgroundColor: 'red',
   },
 });
 
