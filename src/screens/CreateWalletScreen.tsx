@@ -6,7 +6,7 @@ import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {Color, Padding} from "../GlobalStyles";
 import {useEffect, useState} from "react";
-import WalletController from "../lib/WalletController";
+import WalletController from "../libs/walletController";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";

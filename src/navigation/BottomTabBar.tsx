@@ -20,7 +20,7 @@ import SettingInActiveSvg from '../assets/svg/setting_inactive.svg';
 import {Color} from "../GlobalStyles";
 import {updateState as controllersUpdateState} from "../store/controllers"
 import {useDispatch} from "react-redux";
-import WalletController from "../lib/WalletController";
+import WalletController from "../libs/walletController";
 
 const BottomTabBar = createBottomTabNavigator();
 

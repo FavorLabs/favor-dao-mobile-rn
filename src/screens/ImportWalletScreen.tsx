@@ -7,7 +7,7 @@ import {Padding, FontFamily, FontSize, Color, Border} from "../GlobalStyles";
 import {useEffect, useState} from "react";
 import {useNavigation} from '@react-navigation/native';
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
-import WalletController from "../lib/WalletController";
+import WalletController from "../libs/walletController";
 import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useUrl} from "../utils/hook";
