@@ -59,6 +59,7 @@ export type PostInfo = {
   orig_type: number;
   orig_contents: Post[];
   ref_count: number;
+  // modified_on: number;
 };
 
 export type Post = {

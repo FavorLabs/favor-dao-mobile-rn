@@ -1,18 +1,14 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button, SafeAreaView, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Button } from 'react-native';
 import { FontSize, Color, Border, FontFamily, Padding } from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 
 export type Props = {};
 const RecommendScreen: React.FC<Props> = (props) => {
   return (
-    // <SafeAreaView>
-    //   <ScrollView>
         <View style={styles.container}>
-          <PostList/>
+          <PostList type={'post'}/>
         </View>
-      // </ScrollView>
-    // </SafeAreaView>
   )
 }
 

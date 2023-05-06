@@ -7,12 +7,15 @@ import {getContent} from "../utils/util";
 import {useResourceUrl} from "../utils/hook";
 
 export type Props = {
-  postInfo: PostInfo
+  postInfo: PostInfo;
+  isQuote?: boolean | undefined;
+  isReTransfer?: boolean
 };
 
 const RotationImage: React.FC<Props> = (props) => {
-  const { postInfo } = props;
-  const info = getContent(postInfo.contents);
+  const { isQuote, isReTransfer } = props;
+  const { contents, orig_contents } = props.postInfo;
+  const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
   const imagesResUrl = useResourceUrl('images');
 
   const Item = (item: any) => {
@@ -43,7 +46,9 @@ const RotationImage: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    height: 200,
+    // backgroundColor: 'red'
   },
   swiperFlatList: {
     marginTop: 10,
