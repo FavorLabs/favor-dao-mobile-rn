@@ -33,7 +33,6 @@ const NewsContent: React.FC<Props> = (props) => {
     }
   };
 
-
   return (
     <TouchableOpacity onPress={toPostDerail}>
     <View style={styles.frameParent}>
