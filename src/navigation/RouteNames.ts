@@ -18,6 +18,7 @@ const Screens = {
   InputWalletPassword: 'InputWalletPassword',
   MnemonicBackup: 'MnemonicBackup',
   DAOSetting: 'DAOSetting',
+  StartNode:'StartNode'
 }
 
 export default Screens;

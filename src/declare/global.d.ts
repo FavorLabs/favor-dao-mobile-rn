@@ -17,6 +17,26 @@ export type Config = {
   storeNodes: string[];
 };
 
+export type FavorXConfig = {
+  "name": string
+  "bootnode": string[]
+  "chain-endpoint": string
+  "network-id": number
+  "oracle-contract-addr": string
+  "traffic": boolean
+  "traffic-contract-addr": string
+  "proxy-group": string
+  "proxy-nodes": string[]
+  "unipass": {
+    "nodeRPC": string
+    "domain": string
+  }
+  "chat": {
+    "region": string
+    "appId": string
+  }
+}
+
 export type PostInfo = {
   address: string;
   collection_count: number;

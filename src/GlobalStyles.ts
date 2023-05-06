@@ -11,6 +11,7 @@ export const FontFamily = {
 };
 /* font sizes */
 export const FontSize = {
+  size_mid:17,
   size_mini: 15,
   bodyBody17_size: 17,
   paragraphP313_size: 13,

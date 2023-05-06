@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {State} from '../lib/WalletController'
+import {State} from '../libs/walletController'
 
 export const walletControllerStore = createSlice({
     name: "wallet",

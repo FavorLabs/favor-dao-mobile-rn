@@ -6,7 +6,7 @@ import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {combineReducers, createStore} from 'redux';
-import WalletController from "../lib/WalletController";
+import WalletController from "../libs/walletController";
 
 const rootReducer = combineReducers({
     wallet: walletReducer
