@@ -17,32 +17,6 @@ const DaoCardList: React.FC<Props> = (props) => {
     query: undefined,
   });
 
-  const [daoCardInfo,setDaoCardInfo] = useState([
-    {
-      backgroundImg: require("../assets/preview1.png"),
-      avatar: require("../assets/ellipse-1.png"),
-      daoName: 'Mr. Bean',
-      joined: 'Joined: 50.1k',
-      level: 'Level 8',
-      description: 'Stream thousands of episodes, live sports, iconic movies, and exclusive originals from CBS, BET, Comedy...'
-    },
-    {
-      backgroundImg: require("../assets/preview1.png"),
-      avatar: require("../assets/avatar-image3.png"),
-      daoName: '小廖社区',
-      joined: 'Joined: 40k',
-      level: 'Level 2',
-      description: '这是小廖的私人社区'
-    },
-    {
-      backgroundImg: require("../assets/preview1.png"),
-      avatar: require("../assets/ellipse-1.png"),
-      daoName: 'Mr. Bean',
-      joined: 'Joined: 50.1k',
-      level: 'Level 8',
-      description: 'Stream thousands of episodes, live sports, iconic movies, and exclusive originals from CBS, BET, Comedy...'
-    },
-  ]);
   const [postListArr,setPostListArr] = useState<PostInfo[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -91,9 +65,10 @@ const styles = StyleSheet.create({
     // backgroundColor: Color.color1
   },
   frameContainer: {
+    paddingLeft: 10,
     paddingTop: Padding.p_xl,
     alignSelf: "stretch",
-    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+    backgroundColor: '#fff'
   },
   frameInner: {
     // marginTop: 20,
