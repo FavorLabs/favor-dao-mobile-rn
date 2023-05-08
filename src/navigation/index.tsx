@@ -20,7 +20,12 @@ import QuoteEditScreen from "../screens/QuoteEditScreen";
 
 const Stack = createStackNavigator();
 
+function EmptyScreen() {
+    return null;
+}
+
 function RootStack() {
+    const [firstLoad, setFirstLoad] = useState(true);
     const [requestLoading, setRequestLoading] = useState(true);
     const [routeName, setRouteName] = useState(Screens.StartNode);
     useEffect(() => {
@@ -31,6 +36,11 @@ function RootStack() {
             Favor.removeAllListeners(group_sub_method)
         }
     }, [])
+    useEffect(() => {
+        if (firstLoad && !requestLoading) {
+            setFirstLoad(false);
+        }
+    }, [requestLoading])
     const visible = useMemo(() => {
           return routeName === Screens.StartNode ? false : requestLoading
       },
@@ -50,7 +60,7 @@ function RootStack() {
             })}
           >
               <Stack.Screen name={Screens.StartNode} component={StartNode}/>
-              <Stack.Screen name={Screens.Root} component={BottomTabNavigator}/>
+              <Stack.Screen name={Screens.Root} component={firstLoad ? EmptyScreen : BottomTabNavigator}/>
               <Stack.Screen name={Screens.CreateWallet} component={CreateWalletScreen}/>
               <Stack.Screen name={Screens.ImportWallet} component={ImportWalletScreen}/>
               <Stack.Screen name={Screens.CreateDAO} component={CreateDAOScreen}/>
@@ -64,7 +74,7 @@ function RootStack() {
               <Stack.Screen name={Screens.DAOSetting} component={DAOSettingScreen}/>
               <Stack.Screen name={Screens.QuoteEdit} component={QuoteEditScreen} />
           </Stack.Navigator>
-          <Loading text={'loading'} visible={visible}/>
+          <Loading visible={visible} text={'Connecting to a p2p network'}/>
       </>
     );
 }
