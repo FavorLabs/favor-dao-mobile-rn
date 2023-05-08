@@ -1,49 +1,65 @@
-import React, {useMemo, useRef, useImperativeHandle, ReactNode, useEffect} from 'react';
+import React, {useMemo, useRef, useImperativeHandle, ReactNode, useEffect, useState, useCallback} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {
     BottomSheetModal,
+    BottomSheetView,
     BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import FavorDaoButton from "./FavorDaoButton";
 import {Color} from "../GlobalStyles";
 
-type Props = {
+type Props = Partial<React.ComponentProps<typeof BottomSheetModal>> & {
+    show: boolean
     showCancel?: boolean
     children?: ReactNode
 }
-const BottomSheet = (props: Props, ref: React.Ref<any>) => {
-    const {showCancel = false, children} = props
+const BottomSheet = (props: Props) => {
+    const {showCancel = false, children, show, ...bsmProps} = props
     const insets = useSafeAreaInsets();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-    const snapPoints = useMemo(() => ['50%'], []);
+    const snapPoints = useMemo(() => bsmProps.snapPoints ?? ['50%'], []);
 
-    useImperativeHandle(ref, () => bottomSheetModalRef.current)
+    useEffect(() => {
+        show ? bottomSheetModalRef.current?.present() : bottomSheetModalRef.current?.dismiss();
+    }, [show, bottomSheetModalRef.current])
 
     const cancel = () => {
         bottomSheetModalRef.current?.dismiss();
     }
 
+    const renderFooter = useCallback(
+      () => (
+        <TouchableOpacity style={[styles.cancel]} onPress={cancel}>
+            <FavorDaoButton textValue="Cancel"></FavorDaoButton>
+        </TouchableOpacity>
+      ),
+      []
+    );
+
     return (
-        <BottomSheetModal
-            ref={bottomSheetModalRef}
-            index={0}
-            snapPoints={snapPoints}
-        >
-            <BottomSheetScrollView
-                contentContainerStyle={[styles.contentContainer, {marginBottom: insets.bottom}]}>
-                <View>
-                    {
-                        children
-                    }
-                </View>
-                {
-                    showCancel && <TouchableOpacity style={styles.cancel} onPress={cancel}>
-                        <FavorDaoButton textValue="Cancel"></FavorDaoButton>
-                    </TouchableOpacity>
-                }
-            </BottomSheetScrollView>
-        </BottomSheetModal>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        {
+            ...bsmProps
+        }
+        snapPoints={snapPoints}
+      >
+          <View style={[styles.contentContainer, {marginBottom: insets.bottom}]}>
+              <BottomSheetScrollView style={{flex: 1}}>
+                  {
+                      children
+                  }
+              </BottomSheetScrollView>
+              {
+                showCancel && <TouchableOpacity style={[styles.cancel]} onPress={cancel}>
+                      <FavorDaoButton textValue="Cancel"></FavorDaoButton>
+                  </TouchableOpacity>
+              }
+
+          </View>
+      </BottomSheetModal>
     );
 };
 
@@ -60,4 +76,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default React.forwardRef(BottomSheet);
+export default BottomSheet;
