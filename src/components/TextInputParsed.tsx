@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
-import {TextInputProps} from "react-native/Libraries/Components/TextInput/TextInput";
+import React, { useEffect, useRef, useState } from 'react';
+import {View, StyleSheet, TextInput, ScrollView, TouchableOpacity} from 'react-native';
+import { TextInputProps } from "react-native/Libraries/Components/TextInput/TextInput";
 import ParsedText from 'react-native-parsed-text';
 import {Padding} from "../GlobalStyles";
 
@@ -10,18 +10,22 @@ export type Props = TextInputProps & {
 
 const TextInputParsed: React.FC<Props> = (props) => {
   const { value, height } = props;
+
+  const inputRef = useRef<TextInput | null>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const handleFocus = () => {
+    // console.log('handleFocus');
     setIsFocused(true);
   };
   const handleBlur = () => {
+    // console.log('handleBlur');
     setIsFocused(false);
   };
   const handleTopicPress = (topic: string) => {
-    console.log(`Pressed on topic: ${topic}`);
+    // console.log(`Pressed on topic: ${topic}`);
   };
   const handleUserPress = (user: string) => {
-    console.log(`Pressed on user: ${user}`);
+    // console.log(`Pressed on user: ${user}`);
   };
 
   const parsePatterns = [
@@ -29,16 +33,24 @@ const TextInputParsed: React.FC<Props> = (props) => {
     { pattern: /@(\w+)/, style: { color: 'green' }, onPress: handleUserPress },
   ];
 
+  useEffect(() => {
+    if (isFocused && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isFocused, inputRef.current]);
+
   return (
     <View style={styles.container}>
       { (!isFocused && value?.trim().length) ? <>
-        <ScrollView style={[props.style, styles.scrollWrap]}>
-          <ParsedText parse={parsePatterns} style={styles.ParsedText}>
-            {value}
-          </ParsedText>
-        </ScrollView>
+        <TouchableOpacity activeOpacity={1} onPress={() => { setIsFocused(true) }}>
+          <ScrollView style={[props.style, styles.scrollWrap]}>
+            <ParsedText parse={parsePatterns} style={styles.ParsedText}>
+              {value}
+            </ParsedText>
+          </ScrollView>
+        </TouchableOpacity>
       </> : <>
-        <TextInput { ...props } onFocus={handleFocus} onBlur={handleBlur} />
+        <TextInput { ...props } onFocus={handleFocus} onBlur={handleBlur} ref={inputRef} />
       </> }
     </View>
   )
@@ -46,7 +58,7 @@ const TextInputParsed: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    //
+    flex: 1
   },
   scrollWrap: {
     paddingTop: 0,

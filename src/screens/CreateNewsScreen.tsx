@@ -10,6 +10,7 @@ import {useResourceUrl, useUrl} from "../utils/hook";
 import { Post } from "../declare/global";
 import { CreatePost } from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
+import TextInputParsedBlock from "../components/TextInputParsedBlock";
 
 export type Props = {};
 const CreateNewsScreen: React.FC<Props> = (props) => {
@@ -67,17 +68,16 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
         title="Create news"
         vector={require("../assets/vector6.png")}
       />
-      <TextInputBlock
+      <TextInputParsedBlock
         title={'News description'}
         value={description}
         setValue={setDescription}
         multiline={true}
-        // parsed={true}
         placeholder={'Your description...'}
       />
       <UploadImage imageType={'image'} isShowSelector={false} setUpImage={setImageList} multiple={true}/>
       </ScrollView>
-      <View style={[styles.instanceParent,createDisable && { opacity: 0.5 }]}>
+      <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
         <TouchableOpacity onPress={createHandle}>
           <FavorDaoButton
             textValue="Post"
