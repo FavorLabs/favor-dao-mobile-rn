@@ -9,6 +9,7 @@ import {useResourceUrl} from "../utils/hook";
 import {getContent} from "../utils/util";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
+import NewsBlock from "./NewsBlock";
 
 export type Props = {
   postInfo: PostInfo
@@ -29,7 +30,7 @@ const NewsContent: React.FC<Props> = (props) => {
   const toPostDerail = () => {
     if(routeName !== Screens.PostDetail) {
     // @ts-ignore
-    navigation.navigate(Screens.PostDetail,{ postId: props.postInfo.id});
+    navigation.navigate(Screens.PostDetail,{ postId:  isQuote ? props.postInfo.ref_id : props.postInfo.id});
     }
   };
 
@@ -42,10 +43,7 @@ const NewsContent: React.FC<Props> = (props) => {
         isReTransfer={isReTransfer}
         postInfo={props.postInfo}
       />
-      <NewsDescription postInfo={props.postInfo} isQuote={isQuote} isReTransfer={isReTransfer}/>
-      {
-        info[3] && <RotationImage postInfo={props.postInfo} isQuote={isQuote} isReTransfer={isReTransfer}/>
-      }
+      <NewsBlock postInfo={props.postInfo} isQuote={isQuote} isReTransfer={isReTransfer}/>
     </View>
     </TouchableOpacity>
   );

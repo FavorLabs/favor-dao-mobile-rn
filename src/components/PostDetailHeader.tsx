@@ -1,9 +1,12 @@
 import React, { useMemo } from "react";
 import { Image, StyleSheet, Pressable, Text, View } from "react-native";
 import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
+import {useResourceUrl} from "../utils/hook";
+import {PostInfo} from "../declare/global";
+import {getTime} from "../utils/util";
 
 type PostDetailHeaderType = {
-  title?: string;
+  postInfo: PostInfo | null;
 
   /** Style props */
   postDetailHeaderWidth?: number | string;
@@ -23,8 +26,13 @@ const PostDetailHeader = ({
   postDetailHeaderWidth,
   postDetailHeaderPaddingHorizontal,
   postDetailHeaderAlignSelf,
-  title,
+  postInfo,
 }: PostDetailHeaderType) => {
+
+  const avatarsResUrl = useResourceUrl('avatars');
+
+  const createTime = getTime(postInfo ? postInfo?.created_on : 0);
+
   const postDetailHeaderStyle = useMemo(() => {
     return {
       ...getStyleValue("width", postDetailHeaderWidth),
@@ -49,14 +57,14 @@ const PostDetailHeader = ({
       <Image
         style={styles.imageIcon}
         resizeMode="cover"
-        source={require("../assets/image3.png")}
+        source={{uri: `${avatarsResUrl}/${postInfo?.dao.avatar}`}}
       />
       <View style={styles.info}>
         <Text style={[styles.title, styles.titleTypo]} numberOfLines={1}>
-          {title}
+          {postInfo?.dao.name}
         </Text>
         <Text style={[styles.subtitle, styles.titleTypo]} numberOfLines={1}>
-          1h ago
+          {createTime}
         </Text>
       </View>
       <View style={styles.follow}>
@@ -102,8 +110,8 @@ const styles = StyleSheet.create({
     height: 24,
   },
   imageIcon: {
-    borderRadius: Border.br_5xs,
-    width: 43,
+    borderRadius: 40,
+    width: 40,
     height: 40,
     marginLeft: 12,
   },

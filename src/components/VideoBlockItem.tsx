@@ -5,6 +5,8 @@ import { PostInfo } from "../declare/global";
 import {useResourceUrl} from "../utils/hook";
 import {getContent} from "../utils/util";
 import RowUser from "./RowUser";
+import {useNavigation} from "@react-navigation/native";
+import Screens from "../navigation/RouteNames";
 
 type Props = {
   postInfo: PostInfo
@@ -16,8 +18,13 @@ const VideoBlockItem: React.FC<Props> = (props) => {
   const { postInfo, isReTransfer, isQuote } = props;
   const { contents, orig_contents, created_on, dao, author_dao } = props.postInfo;
   const imagesResUrl = useResourceUrl('images');
-
   const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
+  const navigation = useNavigation();
+
+  const toVideoDetail = () => {
+    // @ts-ignore
+    navigation.navigate(Screens.VideoPlay,{ postId: props.postInfo.id});
+  }
 
   return (
     <View style={styles.rowUserParent}>
@@ -28,7 +35,7 @@ const VideoBlockItem: React.FC<Props> = (props) => {
         isReTransfer={isReTransfer}
         isQuote={isQuote}
       />
-      <TouchableOpacity>
+      <TouchableOpacity onPress={toVideoDetail}>
         <View style={[styles.description, styles.likeSpaceBlock]}>
           <Text style={styles.description1}>
             {info?.[1]?.[0]?.content}

@@ -26,7 +26,6 @@ const NewsCard: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   feedsJoinedInner: {
     paddingHorizontal: 0,
-    paddingTop: Padding.p_3xs,
     alignItems: "center",
     alignSelf: "stretch",
   },

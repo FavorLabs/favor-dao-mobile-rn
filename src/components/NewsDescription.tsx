@@ -1,9 +1,11 @@
 // @ts-ignore
-import React, { useMemo } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { Color, FontSize, FontFamily, Padding } from "../GlobalStyles";
 import {Post, PostInfo} from "../declare/global";
 import {getContent} from "../utils/util";
+import {useRoute} from "@react-navigation/native";
+import Screens from "../navigation/RouteNames";
 
 export type Props = {
   postInfo: PostInfo;
@@ -14,6 +16,15 @@ const NewsDescription: React.FC<Props> = (props) => {
   const { isQuote, isReTransfer } = props;
   const { contents, orig_contents } = props.postInfo;
   const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
+  const route = useRoute();
+  // @ts-ignore
+  const routeName = route.name;
+
+  const [showAllText,setShowAllText] = useState<boolean>(false);
+
+  useEffect(() => {
+    if(routeName === Screens.PostDetail && !isQuote) setShowAllText(true);
+  },[showAllText])
 
   return (
     <View
@@ -22,7 +33,7 @@ const NewsDescription: React.FC<Props> = (props) => {
       <View style={styles.descriptionWrapper}>
         <Text
           style={[styles.description1]}
-          numberOfLines={3}
+          numberOfLines={showAllText ? undefined : 3}
           ellipsizeMode='tail'
         >
           {info[2]?.[0]?.content}

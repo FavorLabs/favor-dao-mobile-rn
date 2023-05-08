@@ -5,8 +5,10 @@ import {useNavigation, useRoute} from "@react-navigation/native";
 import { useUrl } from "../utils/hook";
 import { PostInfo } from "../declare/global";
 import PostApi from "../services/DAOApi/Post";
-import NewsCard from "../components/NewsCard";
-import QuoteNews from "../components/QuoteNews";
+import NewsBlock from "../components/NewsBlock";
+import QuoteBlock from "../components/QuoteBlock";
+import {Color} from "../GlobalStyles";
+import OperationBlock from "../components/OperationBlock";
 
 export type Props = {};
 const PostDetailScreen: React.FC<Props> = (props) => {
@@ -42,21 +44,23 @@ const PostDetailScreen: React.FC<Props> = (props) => {
     <View style={styles.container}>
       <PostDetailHeader
         onBackPress={() => navigation.goBack()}
-        title="Khasan Shadiyarov"
+        postInfo={postInfo}
       />
       <ScrollView style={styles.scrollWrap}>
       {
         postInfo && (
           <View>
             {postInfo.type === 0 || postInfo.type === 2 ? (
-                <NewsCard postInfo={postInfo} isReTransfer={isReTransfer}/>
+                <NewsBlock postInfo={postInfo} isReTransfer={isReTransfer}/>
               ): (
-                <QuoteNews postInfo={postInfo}/>
+                <QuoteBlock postInfo={postInfo}/>
               )
             }
+            <OperationBlock postInfo={postInfo}/>
           </View>
         )
       }
+
       </ScrollView>
     </View>
   )
@@ -64,6 +68,7 @@ const PostDetailScreen: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Color.color1,
   },
   scrollWrap: {
     flex: 1,
