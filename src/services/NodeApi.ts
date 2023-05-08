@@ -7,6 +7,7 @@ import type {
   FileList,
 } from '../declare/api/nodeApi';
 import { ChunkSource } from '../declare/api/nodeApi';
+import {Video} from "react-native-image-crop-picker";
 
 export default {
   // Api
@@ -26,15 +27,16 @@ export default {
       },
     });
   },
-  uploadFile(api: string, file: File) {
-    let fileName = file.name;
+  uploadFile(api: string, file: Video, data: any) {
+    let fileName = file.filename;
     let headers = {};
     // @ts-ignore
-    headers['Content-Type'] = file.type || 'application/x-www-form-urlencoded';
+    // headers['Content-Type'] = file.mime || 'application/x-www-form-urlencoded';
+    headers['Content-Type'] = 'multipart/form-data';
     return request({
       url: api + '/file',
       method: 'post',
-      data: file,
+      data,
       params: { name: fileName },
       headers,
       timeout: 0,

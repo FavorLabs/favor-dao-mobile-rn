@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     frameParent: {
         alignSelf: "stretch",
         marginTop: 20,
+        marginHorizontal: 4
     },
 })
 

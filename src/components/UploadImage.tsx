@@ -6,34 +6,24 @@ import { PERMISSIONS } from 'react-native-permissions';
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
 import {usePermissions, useResourceUrl, useUrl} from "../utils/hook";
 import ImageApi from "../services/DAOApi/Image";
+import UploadBlockTitle from "./UploadBlockTitle";
 
 export type Props = {
   imageType: string;
   isShowSelector?: boolean;
   upImage?: string;
-  setUpImage?: any;
+  setUpImage: any;
   multiple?: boolean;
+  cropping?: boolean;
+  autoThumbnail?: string;
 };
-type SelectListItem = {
-  label: string,
-  value: string,
-}
 const UploadImage: React.FC<Props> = (props) => {
   const url = useUrl();
   const imagesResUrl = useResourceUrl('images');
   const avatarsResUrl = useResourceUrl('avatars');
 
-  const { imageType, isShowSelector = true ,setUpImage, multiple, upImage } = props;
-  const selectList: SelectListItem[] = [{
-    label: 'Public',
-    value: 'Public'
-  }, {
-    label: 'Private',
-    value: 'Private'
-  }];
-  const [newsType, setNewsType] = useState<string>(selectList[0].value);
-  const [images, setImages] = useState([]);
-  const pickerRef = useRef(null);
+  const { imageType, setUpImage, multiple = true, upImage, cropping = false, autoThumbnail } = props;
+  const [images, setImages] = useState<any[]>([]);
   const [isDisableUpImg,setIsDisableUpImg] = useState<boolean>(false);
   const imgArr = useRef<string[]>([])
 
@@ -42,11 +32,6 @@ const UploadImage: React.FC<Props> = (props) => {
   // );
   // const photoPermissionStatus = PhotoPermission.status;
   // const requestPhotoPermission = PhotoPermission.requestPermission;
-
-  const openPicker = () => {
-    // @ts-ignore
-    pickerRef.current?.focus();
-  };
 
   const removeImage = (index: number)=>{
     let img = images;
@@ -66,9 +51,9 @@ const UploadImage: React.FC<Props> = (props) => {
         mediaType: "photo",
         width: 300,
         height: 400,
-        cropping: multiple ? false : true,
+        cropping: cropping,
         includeBase64:true,
-        multiple: multiple ? true : false,
+        multiple: multiple,
         maxFiles: 9,
       }).then((pickedImage) => {
         if(Array.isArray(pickedImage)) {
@@ -129,32 +114,13 @@ const UploadImage: React.FC<Props> = (props) => {
     setUpImage(imgArr.current);
   };
 
+  useEffect(() => {
+    setImages(autoThumbnail ? [{ sourceURL: autoThumbnail }] : [])
+  }, [autoThumbnail]);
+
   return (
     <View style={styles.container}>
-      <View style={styles.titleWrap}>
-        <Text style={styles.title}>Upload { imageType }</Text>
-        { isShowSelector && <TouchableOpacity onPress={openPicker}>
-            <View style={styles.selector}>
-                <Image
-                    resizeMode="cover"
-                    source={require("../assets/icon.png")}
-                />
-                <Text style={styles.selectedValue}>{newsType}</Text>
-                <View style={styles.picker}>
-                    <Picker
-                        ref={pickerRef}
-                        selectedValue={newsType}
-                        onValueChange={(value, index) =>
-                          setNewsType(value)
-                        }>
-                      { selectList.map(item =>
-                        <Picker.Item key={item.label} label={item.label} value={item.value} />
-                      )}
-                    </Picker>
-                </View>
-            </View>
-        </TouchableOpacity> }
-      </View>
+      <UploadBlockTitle type={imageType} />
 
       <View style={styles.uploadedImageWrap}>
         { images.map((item, index) =>
@@ -163,7 +129,7 @@ const UploadImage: React.FC<Props> = (props) => {
               style={styles.imageItem}
               resizeMode="cover"
               // @ts-ignore
-              source={{uri: `data:${item.mime};base64,${item.data}`}}
+              source={{uri: item.sourceURL}}
             />
             <TouchableOpacity
               // @ts-ignore
@@ -204,40 +170,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 20,
     alignSelf: "stretch",
-  },
-  titleWrap: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row'
-  },
-  title: {
-    fontSize: FontSize.bodyBody17_size,
-    lineHeight: 23,
-    color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.capsCaps310SemiBold,
-    fontWeight: "600",
-  },
-  selector: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexDirection: 'row',
-    height: 30,
-    borderColor: "#e8e8e8",
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderRadius: Border.br_5xs,
-    paddingLeft: 10,
-    backgroundColor: Color.color1
-  },
-  selectedValue: {
-    marginLeft: 2,
-    marginRight: 20,
-  },
-  picker: {
-    width: 20,
-    marginRight: -10
   },
   uploadedImageWrap: {
     display: 'flex',

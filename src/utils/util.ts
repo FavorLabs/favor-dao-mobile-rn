@@ -1,6 +1,7 @@
 // import Web3 from 'web3';
 import { Post } from '../declare/api/DAOApi';
 // import { debounce } from 'lodash';
+import EventEmitter from 'eventemitter3';
 import moment from 'moment';
 import { useRef } from 'react';
 
@@ -109,6 +110,8 @@ export const sleep = async (time: number) => {
     setTimeout(s, time);
   });
 };
+
+export const eventEmitter = new EventEmitter();
 
 // export const checkLogin = () => {
 //   const token = localStorage.getItem(getKeyByName('token'));
