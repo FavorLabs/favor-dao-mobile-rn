@@ -54,11 +54,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.color1,
     overflow: "hidden",
     flexDirection: "row",
-    // paddingHorizontal: Padding.p_124xl_5,
+    paddingHorizontal: Padding.p_124xl_5,
     paddingVertical: Padding.p_sm,
     alignItems: "center",
     justifyContent: "center",
-    // marginTop: 30,
+    marginTop: 30,
   },
 });
 
