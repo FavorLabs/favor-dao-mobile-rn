@@ -4,7 +4,7 @@ import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
 import { Page, PostInfo } from '../declare/global';
 import PostApi from '../services/DAOApi/Post';
 import { useUrl } from '../utils/hook';
-import { isMobile, sleep } from '../utils/util';
+import { sleep } from '../utils/util';
 import NewsCard from "./NewsCard";
 import DaoCardList from "./DaoCardList";
 import QuoteNews from "./QuoteNews";
