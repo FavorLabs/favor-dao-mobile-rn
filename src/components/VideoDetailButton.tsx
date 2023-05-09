@@ -1,140 +1,175 @@
 import * as React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
 import {PostInfo} from "../declare/global";
+import {useResourceUrl, useUrl} from "../utils/hook";
+import {useEffect, useState} from "react";
+import PostApi from "../services/DAOApi/Post";
+import {getDebounce} from "../utils/util";
 
 type Props = {
   postInfo: PostInfo | null
 };
 
 const VideoDetailButton: React.FC<Props> = (props) => {
+  const { postInfo } = props;
+  if(!postInfo) return <></>;
+  const url = useUrl();
+  const avatarsResUrl = useResourceUrl('avatars');
+
+  const [like, setLike] = useState<boolean>(false);
+  const [isPostLike, setIsPostLike] = useState<boolean>(true);
+  const [likeCount, setLikeCount] = useState<number>(postInfo.upvote_count);
+  // const [watchCount, setWatchCount] = useState<number>(postInfo.view_count);
+  const [refCount, setRefCount] = useState<number>(postInfo.ref_count);
+  const [commentOnCount, setCommentOnCount] = useState<number>(postInfo.comment_count);
+
+  const getPostLikeStatus = async () => {
+    const { data } = await PostApi.checkPostLike(url, postInfo.id);
+    if (data.data) {
+      setLike(data.data.status);
+    }
+  };
+
+  const postLike = async () => {
+    if (isPostLike && postInfo) {
+      try {
+        setIsPostLike(false);
+        const { data } = await PostApi.postLike(url, postInfo.id);
+        if (data.data) {
+          setLike(data.data.status);
+          if (data.data.status) { // @ts-ignore
+            setLikeCount(likeCount + 1);
+          }
+          else { // @ts-ignore
+            setLikeCount(likeCount - 1);
+          }
+        }
+      } catch (e) {
+        setIsPostLike(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if(postInfo) {
+      getPostLikeStatus();
+    }
+  },[]);
+
+  useEffect(() => {
+    setIsPostLike(true);
+  }, [like]);
+
   return (
     <View style={styles.groupParent}>
-      <View style={styles.placeholderParent}>
+      {
+        postInfo && (
+          <View style={styles.placeholderParent}>
+            <View>
+              <Image
+                style={[styles.avatar]}
+                resizeMode="cover"
+                source={{uri: `${avatarsResUrl}/${postInfo.author_dao.avatar ? postInfo.author_dao.avatar : postInfo.dao.avatar}`}}
+              />
+            </View>
+
+            <View style={[styles.threeButton]}>
+              <TouchableOpacity onPress={getDebounce(postLike)}>
+                <Image
+                  style={[styles.image]}
+                  resizeMode="cover"
+                  source={like ? require("../assets/frameLiked.png") : require("../assets/frame.png")}
+                />
+              </TouchableOpacity>
+              <Text style={[styles.text]}>{likeCount}</Text>
+            </View>
+
+            <View style={[styles.threeButton]}>
+              <Image
+                style={[styles.image]}
+                resizeMode="cover"
+                source={require("../assets/icons8comments-2.png")}
+              />
+              <Text style={[styles.text]}>{commentOnCount}</Text>
+            </View>
+
+            <View style={[styles.threeButton]}>
+              <Image
+                style={[styles.image]}
+                resizeMode="cover"
+                source={require("../assets/frame1.png")}
+              />
+              <Text style={[styles.text]}>{refCount}</Text>
+            </View>
+          </View>
+        )
+      }
+      <View>
         <Image
-          style={[styles.placeholderIcon, styles.iconLayout]}
+          style={[styles.alertCircleIcon]}
           resizeMode="cover"
-          source={require("../assets/placeholder.png")}
+          source={require("../assets/alertcircle.png")}
         />
-        <View style={[styles.frameParent, styles.frameLayout]}>
-          <Image
-            style={[styles.frameIcon, styles.iconLayout]}
-            resizeMode="cover"
-            source={require("../assets/frame.png")}
-          />
-          <Text style={[styles.symbol, styles.symbolTypo]}>326</Text>
-        </View>
-        <View style={[styles.icons8Comments2Parent, styles.icons8Position]}>
-          <Image
-            style={[styles.icons8Comments2, styles.icons8Position]}
-            resizeMode="cover"
-            source={require("../assets/icons8comments-2.png")}
-          />
-          <Text style={[styles.symbol1, styles.symbolTypo]}>128</Text>
-        </View>
-        <View style={[styles.frameGroup, styles.frameLayout]}>
-          <Image
-            style={[styles.frameIcon, styles.iconLayout]}
-            resizeMode="cover"
-            source={require("../assets/frame1.png")}
-          />
-          <Text style={[styles.symbol2, styles.symbolTypo]}>18</Text>
-        </View>
       </View>
-      <Image
-        style={[styles.alertCircleIcon, styles.iconLayout]}
-        resizeMode="cover"
-        source={require("../assets/alertcircle.png")}
-      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  iconLayout: {
+  placeholderParent: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: 'space-between',
+
+  },
+  avatar: {
     height: 30,
-    left: 0,
+    borderRadius: 30,
     width: 30,
-    position: "absolute",
   },
-  frameLayout: {
-    height: 60,
-    left: 0,
+  threeButton: {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // like: {
+  //   backgroundColor: 'red',
+  // },
+  // comment: {
+  //   backgroundColor: 'blue',
+  // },
+  // ref: {
+  //   backgroundColor: 'green',
+  // },
+  image: {
     width: 30,
-    position: "absolute",
+    height: 30,
   },
-  symbolTypo: {
-    textAlign: "left",
+  text: {
+    marginTop: 10,
     color: Color.color1,
     fontFamily: FontFamily.paragraphP313,
     lineHeight: 20,
     letterSpacing: 0,
     fontSize: FontSize.size_mini,
-    top: "66.67%",
-    position: "absolute",
   },
-  icons8Position: {
-    left: "0%",
-    right: "0%",
-    width: "100%",
-    position: "absolute",
-  },
-  placeholderIcon: {
-    top: 0,
-    height: 30,
-  },
-  frameIcon: {
-    overflow: "hidden",
-    top: 0,
-    height: 30,
-  },
-  symbol: {
-    width: "93.33%",
-    left: "3.33%",
-  },
-  frameParent: {
-    top: 54,
-  },
-  icons8Comments2: {
-    height: "50%",
-    top: "0%",
-    bottom: "50%",
-    maxWidth: "100%",
-    maxHeight: "100%",
-    overflow: "hidden",
-  },
-  symbol1: {
-    left: "6.67%",
-  },
-  icons8Comments2Parent: {
-    height: "21.28%",
-    top: "48.94%",
-    bottom: "29.79%",
-  },
-  symbol2: {
-    width: "53.33%",
-    left: "23.33%",
-  },
-  frameGroup: {
-    top: 222,
-  },
-  placeholderParent: {
-    height: 282,
-    left: 0,
-    top: 0,
-    width: 30,
-    position: "absolute",
-  },
+
   alertCircleIcon: {
-    top: 306,
     overflow: "hidden",
+    height: 30,
+    width: 30,
   },
   groupParent: {
-    top: 397,
-    left: 321,
+    bottom: 30,
+    right: 30,
     height: 336,
     width: 30,
     position: "absolute",
+    display: 'flex',
+    justifyContent: 'center'
   },
 });
 
