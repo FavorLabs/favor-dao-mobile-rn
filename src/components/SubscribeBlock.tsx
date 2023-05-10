@@ -1,23 +1,53 @@
 import * as React from "react";
-import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
+import {Text, StyleSheet, View, TouchableOpacity} from "react-native";
 import {Color, Border, Padding, FontFamily, FontSize} from "../GlobalStyles";
 import FavorDaoButton from "./FavorDaoButton";
 import DaoCommunityCard from "./DaoCommunityCard";
+import {useIsLogin, useUrl} from "../utils/hook";
+import UserApi from '../services/DAOApi/User'
+import {useEffect, useState} from "react";
 
-type Props = {
-    daoCard: React.ComponentProps<typeof DaoCommunityCard>
+type Props = React.ComponentProps<typeof DaoCommunityCard> & {
+    subFn?: Function
 }
-const SubscribeBlock = ({daoCard}: Props) => {
+const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
+    const url = useUrl();
+    const [balance, setBalance] = useState(0);
+    const [isLogin, gotoLogin] = useIsLogin()
+
+    useEffect(() => {
+        getBalance()
+    }, [])
+    const getBalance = async () => {
+        const {data} = await UserApi.getAccounts(url);
+        console.log(data)
+        setBalance(data.data[0].balance)
+    }
+    const subscribe = () => {
+        if (!isLogin) {
+            gotoLogin();
+            return;
+        }
+        if (daoCardInfo.dao.price > balance) {
+            return;
+        }
+        subFn?.();
+    }
+
     return (
       <View style={styles.titleParent}>
           <Text style={[styles.title, styles.titleFlexBox]}>
               Please subscribe first
           </Text>
-          <DaoCommunityCard
-            {
-                ...daoCard
-            }
-          />
+          <View style={{
+              width: '100%',
+              marginTop: 20,
+          }}>
+              <DaoCommunityCard
+                daoCardInfo={daoCardInfo}
+              />
+          </View>
+
           <View style={[styles.frameWrapper, styles.frameWrapperSpaceBlock]}>
               <View style={styles.frameGroup}>
                   <View style={styles.descriptionParent}>
@@ -25,21 +55,21 @@ const SubscribeBlock = ({daoCard}: Props) => {
                           Balance
                       </Text>
                       <Text style={[styles.description2, styles.descriptionTypo]}>
-                          1000 FavT
+                          {balance} FavT
                       </Text>
                   </View>
                   <View style={styles.frameItem}/>
                   <View style={styles.descriptionGroup}>
                       <Text style={[styles.description1, styles.descriptionTypo]}>
-                          Balance
+                          price
                       </Text>
                       <Text style={[styles.description2, styles.descriptionTypo]}>
-                          1000 FavT
+                          {daoCardInfo.dao.price} FavT
                       </Text>
                   </View>
               </View>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={subscribe}>
               <FavorDaoButton
                 textValue="Subscribe"
                 frame1171275771BackgroundColor="#ff8d1a"
@@ -177,7 +207,7 @@ const styles = StyleSheet.create({
         alignSelf: "stretch",
     },
     description1: {
-        width: 213,
+        // width: 213,
         lineHeight: 20,
         fontFamily: FontFamily.paragraphP313,
         fontSize: FontSize.size_mini,

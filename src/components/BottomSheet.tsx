@@ -1,9 +1,10 @@
 import React, {useMemo, useRef, useImperativeHandle, ReactNode, useEffect, useState, useCallback} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text,TouchableWithoutFeedback} from 'react-native';
 import {
     BottomSheetModal,
     BottomSheetView,
     BottomSheetScrollView,
+    BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetBackgroundProps
 } from '@gorhom/bottom-sheet';
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import FavorDaoButton from "./FavorDaoButton";
@@ -14,7 +15,8 @@ type Props = Partial<React.ComponentProps<typeof BottomSheetModal>> & {
     showCancel?: boolean
     children?: ReactNode
 }
-const BottomSheet = (props: Props) => {
+
+const BottomSheetM = (props: Props) => {
     const {showCancel = false, children, show, ...bsmProps} = props
     const insets = useSafeAreaInsets();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -27,15 +29,6 @@ const BottomSheet = (props: Props) => {
     const cancel = () => {
         bottomSheetModalRef.current?.dismiss();
     }
-
-    const renderFooter = useCallback(
-      () => (
-        <TouchableOpacity style={[styles.cancel]} onPress={cancel}>
-            <FavorDaoButton textValue="Cancel"></FavorDaoButton>
-        </TouchableOpacity>
-      ),
-      []
-    );
 
     return (
       <BottomSheetModal
@@ -76,4 +69,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default BottomSheet;
+export default BottomSheetM;
