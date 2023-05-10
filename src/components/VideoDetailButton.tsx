@@ -1,11 +1,13 @@
 import * as React from "react";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {Color, FontFamily, FontSize} from "../GlobalStyles";
 import {PostInfo} from "../declare/global";
-import {useResourceUrl, useUrl} from "../utils/hook";
-import {useEffect, useState} from "react";
+import {useResourceUrl, useScreenDimensions, useUrl} from "../utils/hook";
+import {createRef, useEffect, useState} from "react";
 import PostApi from "../services/DAOApi/Post";
 import {getDebounce} from "../utils/util";
+import BottomSheet from "./BottomSheet";
+import Comment from "./Comment";
 
 type Props = {
     postInfo: PostInfo
@@ -15,6 +17,9 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     const {postInfo} = props;
     const url = useUrl();
     const avatarsResUrl = useResourceUrl('avatars');
+    const { screenWidth, screenHeight } = useScreenDimensions();
+
+    const commentRef = createRef<any>();
 
     const [like, setLike] = useState<boolean>(false);
     const [isPostLike, setIsPostLike] = useState<boolean>(true);
@@ -22,6 +27,8 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     // const [watchCount, setWatchCount] = useState<number>(postInfo.view_count);
     const [refCount, setRefCount] = useState<number>(postInfo.ref_count);
     const [commentOnCount, setCommentOnCount] = useState<number>(postInfo.comment_count);
+    const [showCommentDialog, setShowCommentDialog] = useState<boolean>(false);
+    const [comment, setComment] = useState<string>('');
 
     const getPostLikeStatus = async () => {
         const {data} = await PostApi.checkPostLike(url, postInfo.id);
@@ -82,11 +89,15 @@ const VideoDetailButton: React.FC<Props> = (props) => {
               </View>
 
               <View style={[styles.threeButton]}>
-                  <Image
-                    style={[styles.image]}
-                    resizeMode="cover"
-                    source={require("../assets/icons8comments-2.png")}
-                  />
+                  <TouchableOpacity onPress={() => {
+                      setShowCommentDialog(true);
+                  }}>
+                      <Image
+                        style={[styles.image]}
+                        resizeMode="cover"
+                        source={require("../assets/icons8comments-2.png")}
+                      />
+                  </TouchableOpacity>
                   <Text style={[styles.text]}>{commentOnCount}</Text>
               </View>
 
@@ -106,6 +117,46 @@ const VideoDetailButton: React.FC<Props> = (props) => {
                 source={require("../assets/alertcircle.png")}
               />
           </View>
+          <BottomSheet
+            show={showCommentDialog}
+            children={<View style={{ width: screenWidth }}>
+                <Comment
+                  onRef={commentRef}
+                  postId={postInfo.id}
+                  comment={comment}
+                  setComment={setComment}
+                  postType={postInfo.type}
+                />
+            </View>}
+            // enablePanDownToClose={false}
+            // handleIndicatorStyle={{
+            //     display: 'none'
+            // }}
+            onChange={(index) => {
+                if (index === -1) {
+                    setShowCommentDialog(false);
+                }
+            }}
+            footer={
+                <View style={[styles.footer, { width: screenWidth - 32 }]}>
+                    <TextInput
+                      style={styles.footerInput}
+                      placeholder={'Comment...'}
+                      placeholderTextColor={Color.darkslategray_400}
+                      value={comment}
+                      onChangeText={(value) => {
+                          setComment(value);
+                      }}
+                    />
+                    <TouchableOpacity onPress={getDebounce(() => {
+                        console.log('send comment--', comment);
+                        commentRef.current?.sendComment();
+                    })}>
+                        <Text>Send</Text>
+                    </TouchableOpacity>
+                </View>
+            }
+          />
       </View>
     );
 };
@@ -158,6 +209,23 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center'
     },
+
+    footer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 16,
+        paddingVertical: 8,
+        backgroundColor: Color.color2
+    },
+    footerInput: {
+        flex: 1,
+        marginRight: 20,
+        padding: 10,
+        borderRadius: 20,
+        backgroundColor: Color.color1
+    }
 });
 
 export default VideoDetailButton;

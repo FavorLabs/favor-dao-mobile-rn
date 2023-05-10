@@ -10,6 +10,7 @@ import QuoteBlock from "../components/QuoteBlock";
 import {Color} from "../GlobalStyles";
 import OperationBlock from "../components/OperationBlock";
 import Comment from "../components/Comment";
+import {getDebounce} from "../utils/util";
 
 export type Props = {};
 const PostDetailScreen: React.FC<Props> = (props) => {
@@ -107,10 +108,10 @@ const PostDetailScreen: React.FC<Props> = (props) => {
             setComment(value);
           }}
         />
-        <TouchableOpacity onPress={() => {
+        <TouchableOpacity onPress={getDebounce(() => {
           console.log('send comment--', comment);
           commentRef.current?.sendComment();
-        }}>
+        })}>
           <Text>Send</Text>
         </TouchableOpacity>
       </View>

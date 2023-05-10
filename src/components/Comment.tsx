@@ -9,13 +9,15 @@ import {
   TouchableOpacity,
   TextInput
 } from 'react-native';
+import { useSelector } from 'react-redux';
 import PostApi from '../services/DAOApi/Post';
 import {GetCommentsParams, CommentInfo, CommentReplyRes} from '../declare/api/DAOApi';
 import { useUrl, useResourceUrl, useScreenDimensions } from "../utils/hook";
 import {Color} from "../GlobalStyles";
 import Toast from "react-native-toast-message";
 import BottomSheet from '../components/BottomSheet';
-import {getTime} from "../utils/util";
+import {getDebounce, getTime} from "../utils/util";
+import Models from "../declare/storeTypes";
 
 export type Props = {
   onRef: RefObject<{
@@ -50,13 +52,7 @@ const Comment: React.FC<Props> = (props) => {
   const [replyToComment, setReplyToComment] = useState<ReplyToComment | null>(null);
   const [reply, setReply] = useState<string>('');
 
-  const user = {
-    address: "0x23dd8961b9dcff32a2b8330f67298e16834ee0ee",
-    avatar: "default_avatar_emily",
-    id: "6459b9e4754c2762814b79d8",
-    nickname :"0x23dd8961",
-  };
-  // const { user } = useSelector((state: Models) => state.global);
+  const { user } = useSelector((state: Models) => state.global);
 
   const loadMore = async () => {
     try {
@@ -106,7 +102,7 @@ const Comment: React.FC<Props> = (props) => {
             address: user?.address as string,
             avatar: user?.avatar as string,
             nickname: user?.nickname as string,
-            role: ''
+            role: user?.role as string
           },
           contents: [
             {
@@ -158,7 +154,7 @@ const Comment: React.FC<Props> = (props) => {
             address: user?.address as string,
             avatar: user?.avatar as string,
             nickname: user?.nickname as string,
-            role: ''
+            role: user?.role as string
           },
         };
         setReplyToComment({
@@ -252,7 +248,10 @@ const Comment: React.FC<Props> = (props) => {
   };
 
   const commentReplyEle = <View style={[styles.commentReplyWrap, { width: screenWidth }]}>
-    <TouchableOpacity onPress={() => { setShowReply(false) }}>
+    <TouchableOpacity onPress={() => {
+      console.log('close reply dialog')
+      setShowReply(false);
+    }}>
       <View style={styles.closeReplyBtn}>
         <Text style={styles.closeReplyBtnText}>x</Text>
       </View>
@@ -294,24 +293,35 @@ const Comment: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        style={styles.listWrap}
-        data={Object.values(commentListMap)}
-        /* @ts-ignore */
-        renderItem={({item, index}) => getCommentItem(item, index)}
-        keyExtractor={item => item.id}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
-        ItemSeparatorComponent={() => (
-          <View style={styles.separator} />
-        )}
-      />
+      { Object.values(commentListMap).length ? <>
+        <FlatList
+          style={styles.listWrap}
+          data={Object.values(commentListMap)}
+          /* @ts-ignore */
+          renderItem={({item, index}) => getCommentItem(item, index)}
+          keyExtractor={item => item.id}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          ItemSeparatorComponent={() => (
+            <View style={styles.separator} />
+          )}
+        />
+      </> : <>
+        <View style={styles.noReply}>
+          <Text style={styles.noReplyText}>No comment yet</Text>
+        </View>
+      </> }
       <BottomSheet
         show={showReply}
         children={commentReplyEle}
-        enablePanDownToClose={false}
-        handleIndicatorStyle={{
-          display: 'none'
+        // enablePanDownToClose={false}
+        // handleIndicatorStyle={{
+        //   display: 'none'
+        // }}
+        onChange={(index) => {
+          if (index === -1) {
+            setShowReply(false);
+          }
         }}
         footer={
           <View style={[styles.replyModalFooter, { width: screenWidth - 32 }]}>
@@ -324,10 +334,10 @@ const Comment: React.FC<Props> = (props) => {
                 setReply(value);
               }}
             />
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity onPress={getDebounce(() => {
               console.log('send reply--', reply);
               sendReply();
-            }}>
+            })}>
               <Text>Send</Text>
             </TouchableOpacity>
           </View>
