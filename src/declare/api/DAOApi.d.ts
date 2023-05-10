@@ -155,12 +155,11 @@ export type CommentReplyRes = {
     id: string;
     content: string;
     user: User;
+    comment_id: string;
+    created_on: number;
 };
 
-export type CreateCommentReplyRes = {
-    id: string;
-    content: string;
-};
+export type CreateCommentReplyRes = Omit<CommentReplyRes, 'user'>;
 
 export type ResData<T> = Promise<
   AxiosResponse<{

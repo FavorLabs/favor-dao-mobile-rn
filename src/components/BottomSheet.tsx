@@ -1,10 +1,9 @@
 import React, {useMemo, useRef, useImperativeHandle, ReactNode, useEffect, useState, useCallback} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text,TouchableWithoutFeedback} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {
     BottomSheetModal,
     BottomSheetView,
     BottomSheetScrollView,
-    BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetBackgroundProps
 } from '@gorhom/bottom-sheet';
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import FavorDaoButton from "./FavorDaoButton";
@@ -14,10 +13,11 @@ type Props = Partial<React.ComponentProps<typeof BottomSheetModal>> & {
     show: boolean
     showCancel?: boolean
     children?: ReactNode
+    footer?: ReactNode
 }
 
 const BottomSheetM = (props: Props) => {
-    const {showCancel = false, children, show, ...bsmProps} = props
+    const {showCancel = false, children, show, footer, ...bsmProps} = props
     const insets = useSafeAreaInsets();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
     const snapPoints = useMemo(() => bsmProps.snapPoints ?? ['50%'], []);
@@ -50,7 +50,9 @@ const BottomSheetM = (props: Props) => {
                       <FavorDaoButton textValue="Cancel"></FavorDaoButton>
                   </TouchableOpacity>
               }
-
+              <View>
+                  { footer }
+              </View>
           </View>
       </BottomSheetModal>
     );
