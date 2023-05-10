@@ -7,7 +7,7 @@ export type Props = {};
 const RecommendScreen: React.FC<Props> = (props) => {
   return (
         <View style={styles.container}>
-          <PostList type={'post'}/>
+          <PostList type={'post'} isHome={true}/>
         </View>
   )
 }

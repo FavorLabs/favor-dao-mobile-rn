@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   groupParent: {
+    paddingTop: 10,
     backgroundColor: Color.color1,
     justifyContent: "center",
     alignSelf: "stretch",

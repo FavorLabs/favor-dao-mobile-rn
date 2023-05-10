@@ -17,6 +17,7 @@ import StartNode from "../screens/StartNode";
 import Favor, {group_sub_method} from "../libs/favor";
 import Loading from "../components/Loading";
 import QuoteEditScreen from "../screens/QuoteEditScreen";
+import FeedsOfDAO from "../screens/FeedsOfDAO";
 import UserApi from '../services/DAOApi/User'
 import DaoApi from '../services/DAOApi/Dao'
 import {useIsLogin, useUrl} from "../utils/hook";
@@ -100,7 +101,8 @@ function RootStack() {
               <Stack.Screen name={Screens.InputWalletPassword} component={InputWalletPasswordScreen}/>
               <Stack.Screen name={Screens.MnemonicBackup} component={MnemonicBackupScreen}/>
               <Stack.Screen name={Screens.DAOSetting} component={DAOSettingScreen}/>
-              <Stack.Screen name={Screens.QuoteEdit} component={QuoteEditScreen}/>
+              <Stack.Screen name={Screens.QuoteEdit} component={QuoteEditScreen} />
+              <Stack.Screen name={Screens.FeedsOfDAO} component={FeedsOfDAO} />
           </Stack.Navigator>
           <Loading visible={visible} text={'Connecting to a p2p network'}/>
       </>

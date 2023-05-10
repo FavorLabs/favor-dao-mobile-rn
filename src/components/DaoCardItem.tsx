@@ -1,58 +1,47 @@
 import * as React from "react";
-import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
+import { Image, StyleSheet, View, Text } from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
-import {PostInfo} from "../declare/global";
+import {DaoInfo} from "../declare/global";
 import {useResourceUrl} from "../utils/hook";
-import {useNavigation} from "@react-navigation/native";
-import {getDebounce} from "../utils/util";
-import Screens from "../navigation/RouteNames";
+import {useEffect, useState} from "react";
+import JoinButton from "./JoinButton";
 
 type Props = {
-  // daoCardInfo: {
-  //   backgroundImg : any,
-  //   avatar: any,
-  //   daoName: string,
-  //   joined: string,
-  //   level: string,
-  //   description: string
-  // };
-  daoCardInfo: PostInfo
+  daoInfo: DaoInfo;
+  handle: () => void;
+  joinStatus: boolean;
 };
 
-const DaoCommunityCard: React.FC<Props> = (props) => {
-  const { dao } = props.daoCardInfo;
-  const navigation = useNavigation();
+const DaoCardItem: React.FC<Props> = (props) => {
+  const { daoInfo, handle, joinStatus } = props;
 
   const avatarsResUrl = useResourceUrl('avatars');
   const imagesResUrl = useResourceUrl('images');
 
-  const onPress = () => {
-    // @ts-ignore
-    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao, type : 'Mixed'});
-  }
-
   return (
-    <TouchableOpacity onPress={getDebounce(onPress)}>
     <View style={[styles.frameParent, styles.frameParentBg]}>
       <View style={[styles.previewWrapper, styles.frameParentBg]}>
         <Image
           style={styles.previewIcon}
           resizeMode="cover"
-          source={{uri: `${imagesResUrl}/${dao.banner}`}}
+          source={{uri: `${imagesResUrl}/${daoInfo.banner}`}}
         />
       </View>
       <View style={styles.ellipseParent}>
         <Image
           style={styles.frameChild}
           resizeMode="cover"
-          source={{uri: `${avatarsResUrl}/${dao.avatar}`}}
+          source={{uri: `${avatarsResUrl}/${daoInfo.avatar}`}}
         />
         <View style={[styles.groupParent, styles.labelFlexBox]}>
           <View style={styles.subtitleParent}>
-            <Text style={styles.subtitle}>joined: {dao.follow_count}</Text>
-            <Text style={[styles.title, styles.titleClr]}>{dao.name}</Text>
+            <Text style={styles.subtitle}>joined: {daoInfo.follow_count}</Text>
+            <Text style={[styles.title, styles.titleClr]}>{daoInfo.name}</Text>
           </View>
           <View style={styles.labelWrapper}>
+
+            <JoinButton isJoin={joinStatus} handle={handle}/>
+
             <View style={[styles.label, styles.labelFlexBox]}>
               <Text style={styles.label1}>8 level</Text>
             </View>
@@ -60,12 +49,11 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
         </View>
         <View style={[styles.groupParent, styles.labelFlexBox]}>
           <Text style={[styles.description, styles.titleClr]} numberOfLines={3}>
-            {dao.introduction}
+            {daoInfo.introduction}
           </Text>
         </View>
       </View>
     </View>
-    </TouchableOpacity>
   );
 };
 
@@ -137,11 +125,13 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   label: {
+    marginTop: 6,
     borderRadius: Border.br_base,
     backgroundColor: Color.darkorange_100,
     paddingHorizontal: Padding.p_2xs,
     paddingVertical: Padding.p_8xs,
     justifyContent: "center",
+    alignItems: 'center',
   },
   labelWrapper: {
     alignItems: "flex-end",
@@ -169,8 +159,6 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   frameParent: {
-    marginRight: 10,
-    marginBottom: 20,
     shadowColor: "rgba(0, 0, 0, 0.08)",
     shadowOffset: {
       width: 0,
@@ -178,10 +166,7 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 16,
     shadowOpacity: 1,
-    width: 240,
-    height: 240,
-    // overflow: 'hidden',
   },
 });
 
-export default DaoCommunityCard;
+export default DaoCardItem;
