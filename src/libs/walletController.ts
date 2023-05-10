@@ -2,6 +2,7 @@ import {updateState} from "../store/wallet";
 import Wallet from "ethereumjs-wallet";
 import UserApi from "../services/DAOApi/User";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {SignatureData} from "../declare/api/DAOApi";
 
 const {ecsign, isValidPrivate, toRpcSig, hashPersonalMessage} = require('ethereumjs-util');
 
@@ -20,8 +21,7 @@ class WalletController {
 
     init(store: any) {
         const reduxState = store?.getState?.();
-        // console.log("reduxState", reduxState);
-        const state = reduxState?.wallet || {};
+        const state = Object.assign({}, reduxState?.wallet);
         this.state = new Proxy(state, {
             set(target: State, p: keyof State, newValue: any, receiver: any): boolean {
                 target[p] = newValue;
@@ -54,7 +54,6 @@ class WalletController {
         if (!isValidPrivate(Buffer.from(privateKey, 'hex'))) {
             throw new Error('Private Key Invalid');
         }
-        console.log(111111)
         this.state.privateKey = privateKey;
         this.state.password = password;
     }
@@ -82,18 +81,23 @@ class WalletController {
     }
 
     async login(url: string) {
+        const {data} = await UserApi.signIn(url, this.getSignatureData());
+        this.state.token = data.data.token
+        // await AsyncStorage.setItem('token', data.data.token);
+    }
+
+    getSignatureData(index = 0): SignatureData {
+        const signatureMsg = ['login FavorDAO at', 'subscribe DAO at']
         const address = this.address;
         const timestamp = Date.parse(new Date().toUTCString());
-        const msg = `${address} login FavorDAO at ${timestamp}`;
+        const msg = `${address} ${signatureMsg[index]} ${timestamp}`;
         const signature = this.signMessage(msg);
-        const {data} = await UserApi.signIn(url, {
+        return {
             timestamp,
             signature,
             wallet_addr: address,
             type: 'meta_mask',
-        });
-        this.state.token = data.data.token
-        // await AsyncStorage.setItem('token', data.data.token);
+        }
     }
 }
 

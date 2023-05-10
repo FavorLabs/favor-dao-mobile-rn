@@ -3,7 +3,7 @@ import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Alert, Text} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import RootStack from "./src/navigation";
-import store, {persiStore} from './src/store/index';
+import {store,persiStore} from './src/store';
 import {Provider, useSelector} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import * as Font from 'expo-font';

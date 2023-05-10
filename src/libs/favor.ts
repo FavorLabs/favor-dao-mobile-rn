@@ -3,8 +3,11 @@ import Web3 from "web3";
 import {WebsocketProvider} from 'web3-core'
 import * as FavorX from "react-native-favor";
 import favorlabsApi from "../services/FavorlabsApi";
+import BucketApi from '../services/DAOApi/Global';
 import Api from "../services/NodeApi";
 import {EventEmitter} from 'events'
+import {BucketRes} from "../declare/api/DAOApi";
+import {AutumnDomainName, DaoDomainName} from "../config/constants";
 
 export const group_sub_method = 'group_subscribe';
 
@@ -13,9 +16,14 @@ class Favor extends EventEmitter {
     debugApi?: string
     ws?: WebsocketProvider
     config?: Config
+    bucket?: BucketRes
 
     get url() {
-        return `${this.api}/group/http/${this.config!.proxyGroup}/favordao/v1`
+        return `${this.api}/group/http/${this.config!.proxyGroup}/${DaoDomainName}/v1`
+    }
+
+    get resourceUrl() {
+        return `${this.api}/group/http/${this.config!.proxyGroup}/${AutumnDomainName}/${this.bucket!.Settings.Bucket}/`
     }
 
     async startNode(fc: FavorX.Options) {
@@ -57,6 +65,11 @@ class Favor extends EventEmitter {
     async getConfig(id: number, name?: string) {
         const {data} = await favorlabsApi.getConfig(id, name);
         this.config = data.data;
+    }
+
+    async getBucket() {
+        const {data} = await BucketApi.getBucket(this.url);
+        this.bucket = data.data;
     }
 
     async subProxy() {

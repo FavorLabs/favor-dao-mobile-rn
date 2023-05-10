@@ -1,5 +1,5 @@
 import axios from 'axios';
-// import { getKeyByName } from '../utils/util';
+import WalletController from "../libs/walletController";
 
 const request = axios.create({
   baseURL: '',
@@ -7,10 +7,8 @@ const request = axios.create({
 });
 
 request.interceptors.request.use((config) => {
-  // const token = localStorage.getItem(getKeyByName('token'));
-  const token = '2214477675949391173_168083895079fb2bf54e8500379b58aab69dda39'
+  const token = WalletController.token;
   if (token) {
-    // @ts-ignore
     config.headers['x-session-token'] = token;
   }
 

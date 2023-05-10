@@ -8,28 +8,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {combineReducers, createStore} from 'redux';
 import WalletController from "../libs/walletController";
 
-const rootReducer = combineReducers({
-    wallet: walletReducer
-})
 
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
 };
 
-const pReducer = persistReducer(persistConfig, rootReducer);
+const rootReducer = combineReducers({
+    wallet: persistReducer(persistConfig, walletReducer),
+    global: globalReducer,
+    controllers: controllersReducer,
+})
 
-export const pStore = createStore(pReducer);
+export const store = createStore(rootReducer);
 
 const initPStore = async () => {
-    console.log(pStore.getState())
-    WalletController.init(pStore)
+    console.log(store.getState())
+    WalletController.init(store)
 }
 
-export const persiStore = persistStore(pStore, null, initPStore);
-export default configureStore({
-    reducer: {
-        global: globalReducer,
-        controllers: controllersReducer
-    }
-})
+export const persiStore = persistStore(store, null, initPStore);
+

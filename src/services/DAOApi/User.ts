@@ -1,51 +1,41 @@
 import request from '../index';
-import { ResData, Statistic } from '../../declare/api/DAOApi';
+import {ResData, SignatureData, Statistic, User, UserAccounts} from '../../declare/api/DAOApi';
+
 export default {
-  signIn(
-    url: string,
-    data: {
-      timestamp: number;
-      wallet_addr: string;
-      signature: string;
-      type: string;
+    signIn(url: string, data: SignatureData) {
+        return request({
+            method: 'post',
+            url: url + '/auth/login',
+            data,
+        });
     },
-  ) {
-    return request({
-      method: 'post',
-      url: url + '/auth/login',
-      data,
-    });
-  },
-  getInfo(url: string) {
-    return request({
-      url: url + '/user/info',
-    });
-  },
-  getStatistic(url: string): ResData<Statistic> {
-    return request({
-      url: url + '/user/statistic',
-    });
-  },
-  changeNickName(url: string, nickname: string | undefined): ResData<any> {
-    return request({
-      method: 'post',
-      url: url + '/user/nickname',
-      data: { nickname },
-    });
-  },
-  accountCancellation(
-    url: string,
-    data: {
-      timestamp: number;
-      wallet_addr: string;
-      signature: string;
-      type: string;
+    getInfo(url: string): ResData<User> {
+        return request({
+            url: url + '/user/info',
+        });
     },
-  ) {
-    return request({
-      method: 'delete',
-      url: url + '/account',
-      data,
-    });
-  },
+    getStatistic(url: string): ResData<Statistic> {
+        return request({
+            url: url + '/user/statistic',
+        });
+    },
+    changeNickName(url: string, nickname: string | undefined): ResData<any> {
+        return request({
+            method: 'post',
+            url: url + '/user/nickname',
+            data: {nickname},
+        });
+    },
+    accountCancellation(url: string, data: SignatureData) {
+        return request({
+            method: 'delete',
+            url: url + '/account',
+            data,
+        });
+    },
+    getAccounts(url: string): ResData<UserAccounts[]> {
+        return request({
+            url: url + '/user/accounts',
+        });
+    },
 };

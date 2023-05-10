@@ -17,6 +17,11 @@ import StartNode from "../screens/StartNode";
 import Favor, {group_sub_method} from "../libs/favor";
 import Loading from "../components/Loading";
 import QuoteEditScreen from "../screens/QuoteEditScreen";
+import UserApi from '../services/DAOApi/User'
+import DaoApi from '../services/DAOApi/Dao'
+import {useIsLogin, useUrl} from "../utils/hook";
+import {useDispatch} from "react-redux";
+import {updateState as globalUpdateState} from "../store/global"
 
 const Stack = createStackNavigator();
 
@@ -25,6 +30,8 @@ function EmptyScreen() {
 }
 
 function RootStack() {
+    const dispatch = useDispatch()
+    const [isLogin] = useIsLogin();
     const [firstLoad, setFirstLoad] = useState(true);
     const [requestLoading, setRequestLoading] = useState(true);
     const [routeName, setRouteName] = useState(Screens.StartNode);
@@ -37,15 +44,36 @@ function RootStack() {
         }
     }, [])
     useEffect(() => {
-        if (firstLoad && !requestLoading) {
-            setFirstLoad(false);
+        async function fetch() {
+            if (firstLoad && !requestLoading) {
+                await Favor.getBucket();
+                setFirstLoad(false);
+            }
         }
-    }, [requestLoading])
-    const visible = useMemo(() => {
-          return routeName === Screens.StartNode ? false : requestLoading
-      },
-      [requestLoading, routeName])
 
+        fetch()
+    }, [requestLoading])
+    useEffect(() => {
+        async function fetch() {
+            if (isLogin && !requestLoading) {
+                let info = await UserApi.getInfo(Favor.url);
+                let dao = null;
+                if (info.data) {
+                    dao = await DaoApi.get(Favor.url);
+                }
+                dispatch(globalUpdateState({
+                    user: info.data.data,
+                    dao: dao?.data.data[0]
+                }))
+            }
+        }
+
+        fetch()
+    }, [requestLoading, isLogin])
+    const visible = useMemo(() => {
+          return routeName === Screens.StartNode ? false : firstLoad || requestLoading
+      },
+      [requestLoading, routeName, firstLoad])
     return (
       <>
           <Stack.Navigator
@@ -72,7 +100,7 @@ function RootStack() {
               <Stack.Screen name={Screens.InputWalletPassword} component={InputWalletPasswordScreen}/>
               <Stack.Screen name={Screens.MnemonicBackup} component={MnemonicBackupScreen}/>
               <Stack.Screen name={Screens.DAOSetting} component={DAOSettingScreen}/>
-              <Stack.Screen name={Screens.QuoteEdit} component={QuoteEditScreen} />
+              <Stack.Screen name={Screens.QuoteEdit} component={QuoteEditScreen}/>
           </Stack.Navigator>
           <Loading visible={visible} text={'Connecting to a p2p network'}/>
       </>
