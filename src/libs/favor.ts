@@ -8,6 +8,12 @@ import Api from "../services/NodeApi";
 import {EventEmitter} from 'events'
 import {BucketRes} from "../declare/api/DAOApi";
 import {AutumnDomainName, DaoDomainName} from "../config/constants";
+import {
+    EXTERNAL_NODE,
+    EXTERNAL_NODE_API_URL,
+    EXTERNAL_NODE_DEBUG_API_URL,
+    EXTERNAL_NODE_WS_URL
+} from '@env'
 
 export const group_sub_method = 'group_subscribe';
 
@@ -27,6 +33,10 @@ class Favor extends EventEmitter {
     }
 
     async startNode(fc: FavorX.Options) {
+        if (EXTERNAL_NODE !== undefined) {
+            this.useExternalNode();
+            return;
+        }
         const apiPort = fc['api-port'] || 2633;
         const debugApiPort = fc['debug-api-port'] || 2635;
         const wsPort = fc['ws-port'] || 2637;
@@ -42,6 +52,23 @@ class Favor extends EventEmitter {
         this.debugApi = fc['enable-tls'] ? 'https' : 'http' + host + debugApiPort;
         this.ws = new Web3.providers.WebsocketProvider(
           fc['enable-tls'] ? 'wss' : 'ws' + host + wsPort,
+          {
+              reconnect: {
+                  auto: true,
+              }
+          });
+        // @ts-ignore
+        this.ws.on('data', (res) => {
+            // @ts-ignore
+            this.ws.emit(res.params.subscription, res.params.result);
+        });
+    }
+
+    useExternalNode() {
+        this.api = EXTERNAL_NODE_API_URL
+        this.debugApi = EXTERNAL_NODE_DEBUG_API_URL
+        this.ws = new Web3.providers.WebsocketProvider(
+          EXTERNAL_NODE_WS_URL,
           {
               reconnect: {
                   auto: true,
