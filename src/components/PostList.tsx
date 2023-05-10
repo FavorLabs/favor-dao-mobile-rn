@@ -10,16 +10,18 @@ import DaoCardList from "./DaoCardList";
 import QuoteNews from "./QuoteNews";
 import VideoBlock from "./VideoBlock";
 import ReTransfer from "./ReTransfer";
+import DaoInfoHeader from "./DaoInfoHeader";
 
 export type Props = {
   type?: number | string;
   daoId?: string;
   focus?: boolean;
   query?: string;
+  isHome?: boolean;
 };
 
 const PostList: React.FC<Props> = (props) => {
-  const { type, daoId, focus = false, query } = props;
+  const { type, daoId, focus = false, query, isHome = false } = props;
   const url = useUrl();
 
   const [pageData, setPageData] = useState<Page>({
@@ -74,7 +76,7 @@ const PostList: React.FC<Props> = (props) => {
 
   const renderItem = (item:PostInfo)=>{
     if(item.type === -1){
-      // return <DaoCardList postInfo={item} />;
+      // return <DaoCardList />;
     } else if(item.type === 0) {
       return <NewsCard postInfo={item}/>
     } else if(item.type === 1) {
@@ -111,10 +113,19 @@ const PostList: React.FC<Props> = (props) => {
           data={postListArr}
           // @ts-ignore
           renderItem={({item, index}) => {
-            if(index === 1 && !focus) {
+            if(index === 1 && isHome) {
               return (
                 <>
                   <DaoCardList/>
+                  {renderItem(item)}
+                </>
+              )
+            } else if(daoId && index === 0 && type==='post') {
+              return (
+                <>
+                  <View style={styles.daoUnderLine}>
+                    <DaoInfoHeader daoInfo={item.dao}/>
+                  </View>
                   {renderItem(item)}
                 </>
               )
@@ -139,7 +150,12 @@ const PostList: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   postList: {
 
-  }
+  },
+  daoUnderLine: {
+    backgroundColor: Color.color1,
+    borderBottomWidth: 1,
+    borderColor: '#E6E5EB',
+  },
 })
 
 export default PostList

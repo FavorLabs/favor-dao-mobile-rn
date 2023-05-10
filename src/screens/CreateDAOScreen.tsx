@@ -9,10 +9,12 @@ import SwitchButton from "../components/SwitchButton";
 import DaoApi from '../services/DAOApi/Dao';
 import ImageApi from '../services/DAOApi/Image';
 import {useResourceUrl, useUrl} from "../utils/hook";
+import {useNavigation} from "@react-navigation/native";
 
 export type Props = {};
 const CreateDAOScreen: React.FC<Props> = (props) => {
   const url = useUrl();
+  const navigation = useNavigation()
   const avatarsResUrl = useResourceUrl('avatars');
 
   const [daoName, setDaoName] = useState<string>('');
@@ -57,9 +59,16 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         avatar: daoAvatar,
         banner: daoBanner,
       }
-      console.log(params,'创建DAO传输的数据')
-      // const { data } = await DaoApi.create(url, params);
-      // console.log('创建是否成功',data)
+      console.log(params,'create DAO')
+      // @ts-ignore
+      const { data } = await DaoApi.create(url, params);
+      if(data.data) {
+        Toast.show({
+          type: 'info',
+          text1: 'create dao success!'
+        });
+        navigation.goBack();
+      }
     } catch (e) {
       if (e instanceof Error) {
         Toast.show({

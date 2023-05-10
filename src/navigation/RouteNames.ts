@@ -20,6 +20,7 @@ const Screens = {
   DAOSetting: 'DAOSetting',
   StartNode:'StartNode',
   QuoteEdit: 'QuoteEdit',
+  FeedsOfDAO: 'FeedsOfDAO',
 }
 
 export default Screens;

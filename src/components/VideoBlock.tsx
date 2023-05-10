@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   rowUserParent: {
     paddingHorizontal: 0,
     paddingTop: Padding.p_3xs,
-    marginTop: 10,
+    // marginTop: 10,
     backgroundColor: Color.color1,
     alignSelf: "stretch",
   },

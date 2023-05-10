@@ -29,7 +29,7 @@ export const TopBarOptions = {
     marginHorizontal: '5%',
     backgroundColor: 'white',
     borderRadius: 48,
-    marginBottom: 5,
+    marginBottom: 10,
   },
 }
 
@@ -47,8 +47,8 @@ export function DAOTopTabNavigator() {
   return (
     // @ts-ignore
     <TopTab.Navigator screenOptions={TopBarOptions}>
-      <TopTab.Screen name="RecommendDAOList" component={RecommendDAOListScreen} />
-      <TopTab.Screen name="JoinedDAOList" component={JoinedDAOListScreen} />
+      <TopTab.Screen name="DAOs" component={RecommendDAOListScreen} />
+      <TopTab.Screen name="Joined" component={JoinedDAOListScreen} />
     </TopTab.Navigator>
   );
 }
