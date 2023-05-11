@@ -15,7 +15,7 @@ import {DaoParams} from "../declare/api/DAOApi";
 export type Props = {};
 const CreateDAOScreen: React.FC<Props> = (props) => {
   const url = useUrl();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const avatarsResUrl = useResourceUrl('avatars');
 
   const [daoName, setDaoName] = useState<string>('');
