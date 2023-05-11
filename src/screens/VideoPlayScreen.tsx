@@ -109,7 +109,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
               </View>
 
           </View>
-          <VideoDetailButton postInfo={videoData}/>
+          <VideoDetailButton postInfo={videoData} vSrc={info.hash as string}/>
       </View>
     )
 }

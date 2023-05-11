@@ -39,14 +39,6 @@ const FeedsScreen: React.FC<Props> = (props) => {
                     <View style={styles.frameGroup}>
                         <View style={[styles.groupWrapper, styles.wrapperBg]}>
                             <View style={styles.searchParent}>
-                                {/*<Image*/}
-                                {/*    style={[styles.searchIcon, styles.parentPosition]}*/}
-                                {/*    resizeMode="cover"*/}
-                                {/*    source={require("../../../assets/search.png")}*/}
-                                {/*/>*/}
-                                {/*<Text style={[styles.placeholderLabel, styles.descriptionTypo]}>*/}
-                                {/*    Search*/}
-                                {/*</Text>*/}
                                 <TextInput
                                   style={styles.searchInput}
                                   placeholder={'Search'}
