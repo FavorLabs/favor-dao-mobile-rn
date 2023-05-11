@@ -5,25 +5,26 @@ import TextInputBlock from "../components/TextInputBlock";
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {Color, Padding} from "../GlobalStyles";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import WalletController from "../libs/walletController";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useUrl} from "../utils/hook";
+import WalletWords from "../components/WalletWords";
 
 const CreateWallet = () => {
     const url = useUrl();
     const navigation = useNavigation<StackNavigationProp<any>>()
-    const [privateKey, setPrivateKey] = useState('');
+    const [mnemonic, setMnemonic] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [agree, setAgree] = useState(false);
 
     const createPK = () => {
         try {
-            const privateKey = WalletController.createPrivateKey(password);
-            setPrivateKey(privateKey);
+            const mnemonic = WalletController.createMnemonic();
+            setMnemonic(mnemonic);
         } catch (e) {
             console.error(e);
         }
@@ -36,7 +37,7 @@ const CreateWallet = () => {
             return console.error('Please check the box')
         }
         try {
-            WalletController.importPrivateKey(password, privateKey);
+            WalletController.importMnemonic(password, mnemonic);
             await WalletController.login(url);
             navigation.goBack();
         } catch (e) {
@@ -44,40 +45,37 @@ const CreateWallet = () => {
         }
     }
 
+    const mnemonicArray = useMemo(() => {
+        return mnemonic ? mnemonic.split(' ') : [];
+    }, [mnemonic])
 
     return <>
         <View style={styles.createWallet} onLayout={createPK}>
             <FavorDaoNavBar
-                title="Create wallet"
-                vector={require("../assets/vector6.png")}
+              title="Create wallet"
+              vector={require("../assets/vector6.png")}
+            />
+            <WalletWords mnemonicArray={mnemonicArray} />
+            <TextInputBlock
+              title={'Password'}
+              placeholder={`Please enter passwords`}
+              value={password}
+              setValue={setPassword}
+              secureTextEntry={true}
             />
             <TextInputBlock
-                title={'Private Key'}
-                placeholder={`Please enter private key`}
-                value={privateKey}
-                editable={false}
-                multiline
-            />
-            <TextInputBlock
-                title={'Password'}
-                placeholder={`Please enter passwords`}
-                value={password}
-                setValue={setPassword}
-                secureTextEntry={true}
-            />
-            <TextInputBlock
-                title={'Confirm Password'}
-                placeholder={`Please enter passwords again`}
-                value={repeatPassword}
-                setValue={setRepeatPassword}
-                secureTextEntry={true}
+              title={'Confirm Password'}
+              placeholder={`Please enter passwords again`}
+              value={repeatPassword}
+              setValue={setRepeatPassword}
+              secureTextEntry={true}
             />
             <ProtocolRadioSelect value={agree} setValue={setAgree}/>
             <TouchableOpacity onPress={create}>
                 <FavorDaoButton
-                    textValue="Create"
-                    frame1171275771BackgroundColor="#ff8d1a"
-                    cancelColor="#fff"
+                  textValue="Create"
+                  frame1171275771BackgroundColor="#ff8d1a"
+                  cancelColor="#fff"
                 />
             </TouchableOpacity>
         </View>

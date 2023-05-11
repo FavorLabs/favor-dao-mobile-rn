@@ -28,7 +28,7 @@ const ImportWallet = () => {
             return console.error('Please check the box')
         }
         try {
-            WalletController.importPrivateKey(password, mnemonic);
+            WalletController.importMnemonic(password, mnemonic);
             await WalletController.login(url);
             navigation.goBack();
         } catch (e) {
