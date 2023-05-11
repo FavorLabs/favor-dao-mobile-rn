@@ -5,19 +5,30 @@ import {getDebounce} from "../../../utils/util";
 import {Border, Color, FontFamily, FontSize, Padding} from "../../../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
 import Screens from '../../../navigation/RouteNames';
+import {useSelector} from "react-redux";
+import Models from "../../../declare/storeTypes";
+import Toast from "react-native-toast-message";
 
 export type Props = {};
 const DAOScreen: React.FC<Props> = (props) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState<string>('');
+  const { dao } = useSelector((state: Models) => state.global);
 
   const getSearch = () => {
     console.log('blur')
   }
 
   const toCreateDao = () => {
-    // @ts-ignore
-    navigation.navigate(Screens.CreateDAO)
+    if(!dao) {
+      // @ts-ignore
+      navigation.navigate(Screens.CreateDAO)
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'dao community already exists!'
+      });
+    }
   }
 
 

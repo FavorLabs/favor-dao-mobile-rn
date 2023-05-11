@@ -11,11 +11,14 @@ import ImageApi from '../services/DAOApi/Image';
 import {useResourceUrl, useUrl} from "../utils/hook";
 import {useNavigation} from "@react-navigation/native";
 import {DaoParams} from "../declare/api/DAOApi";
+import {useDispatch} from "react-redux";
+import {updateState as globalUpdateState} from "../store/global";
 
 export type Props = {};
 const CreateDAOScreen: React.FC<Props> = (props) => {
   const url = useUrl();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const avatarsResUrl = useResourceUrl('avatars');
 
   const [daoName, setDaoName] = useState<string>('');
@@ -71,6 +74,9 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           type: 'info',
           text1: 'create dao success!'
         });
+        dispatch(globalUpdateState({
+          dao: data.data
+        }))
         navigation.goBack();
       }
     } catch (e) {

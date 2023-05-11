@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
+import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
 import {Color} from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 import DaoBriefCard from "../../../components/DaoBriefCard";
@@ -7,8 +7,9 @@ import DaoCommunityCard from "../../../components/DaoCommunityCard";
 import {Page, PostInfo} from "../../../declare/global";
 import PostApi from "../../../services/DAOApi/Post";
 import {useUrl} from "../../../utils/hook";
+import {sleep} from "../../../utils/util";
 
-export type Props = {};
+type Props = {};
 const RecommendDAOListScreen: React.FC<Props> = (props) => {
   const url = useUrl();
   const [pageData, setPageData] = useState<Page>({
@@ -20,6 +21,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
 
   const [postListArr,setPostListArr] = useState<PostInfo[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const loadMore = async () => {
     try {
@@ -34,6 +36,29 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
     } catch (e) {
       if (e instanceof Error) console.error(e)
     }
+  };
+
+  const refreshPage = async () => {
+    try {
+      const pageInfo = { page: 1, page_size: 20, type:-1};
+      const request = (params: Page) => PostApi.getPostListByType(url, params);
+      const { data } = await request(pageInfo);
+      const listArr: PostInfo[] = data.data.list;
+      setPostListArr([...listArr]);
+      setIsLoadingMore(
+        data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,
+      );
+      setPageData((pageData) => ({ ...pageData, page: 2 }));
+    } catch (e) {
+      if (e instanceof Error) console.error(e)
+    }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await sleep(2000);
+    setRefreshing(false);
+    await refreshPage();
   };
 
   const handleLoadMore = () => {
@@ -55,6 +80,12 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
         onEndReachedThreshold={0.5}
         contentContainerStyle={styles.flautist}
         numColumns={2}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       />
     </View>
   )
@@ -65,9 +96,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f8f8',
     paddingTop: 5,
+    alignItems: 'center'
   },
   flautist: {
-    alignItems: 'center',
+
   },
 });
 

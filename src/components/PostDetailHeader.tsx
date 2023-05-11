@@ -1,9 +1,11 @@
-import React, { useMemo } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { Image, StyleSheet, Pressable, Text, View } from "react-native";
 import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
-import {useResourceUrl} from "../utils/hook";
+import {useResourceUrl, useUrl} from "../utils/hook";
 import {PostInfo} from "../declare/global";
 import {getTime} from "../utils/util";
+import JoinButton from "./JoinButton";
+import DaoApi from "../services/DAOApi/Dao";
 
 type PostDetailHeaderType = {
   postInfo: PostInfo | null;
@@ -28,10 +30,36 @@ const PostDetailHeader = ({
   postDetailHeaderAlignSelf,
   postInfo,
 }: PostDetailHeaderType) => {
+  const url = useUrl();
 
   const avatarsResUrl = useResourceUrl('avatars');
 
   const createTime = getTime(postInfo ? postInfo?.created_on : 0);
+  const [isJoin, setIsJoin] = useState(false);
+
+  const bookmarkHandle = async () => {
+    if(postInfo?.dao.id)
+    try {
+      const { data } = await DaoApi.bookmark(url, postInfo.dao.id);
+      setIsJoin(data.data.status);
+    } catch (e) {
+      if (e instanceof Error) console.error(e.message);
+    }
+  };
+
+  const checkJoinStatus = async () => {
+    if(postInfo?.dao.id)
+    try {
+      const { data } = await DaoApi.checkBookmark(url, postInfo.dao.id);
+      setIsJoin(data.data.status);
+    } catch (e) {
+      if (e instanceof Error) console.error(e.message);
+    }
+  };
+
+  useEffect(() =>  {
+    checkJoinStatus();
+  },[postInfo?.dao.id])
 
   const postDetailHeaderStyle = useMemo(() => {
     return {
@@ -67,14 +95,15 @@ const PostDetailHeader = ({
           {createTime}
         </Text>
       </View>
-      <View style={styles.follow}>
-        <View style={[styles.joined, styles.join1FlexBox]}>
-          <Text style={[styles.join, styles.joinTypo]}>Joined</Text>
-        </View>
-        <View style={[styles.join1, styles.join1FlexBox]}>
-          <Text style={[styles.join2, styles.joinTypo]}>Join</Text>
-        </View>
-      </View>
+      {/*<View style={styles.follow}>*/}
+      {/*  <View style={[styles.joined, styles.join1FlexBox]}>*/}
+      {/*    <Text style={[styles.join, styles.joinTypo]}>Joined</Text>*/}
+      {/*  </View>*/}
+      {/*  <View style={[styles.join1, styles.join1FlexBox]}>*/}
+      {/*    <Text style={[styles.join2, styles.joinTypo]}>Join</Text>*/}
+      {/*  </View>*/}
+      {/*</View>*/}
+      <JoinButton isJoin={isJoin} handle={bookmarkHandle}/>
     </View>
   );
 };
@@ -166,6 +195,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.color1,
     height: 90,
     paddingTop: Padding.p_29xl,
+    paddingRight: 10,
     alignItems: "center",
     flexDirection: "row",
   },

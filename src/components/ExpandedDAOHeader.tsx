@@ -11,6 +11,12 @@ import { Color, Padding } from "../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
 import {DaoInfo} from "../declare/global";
 import {useResourceUrl} from "../utils/hook";
+import {getDebounce} from "../utils/util";
+import {useEffect, useState} from "react";
+import DaoInfoHeader from "./DaoInfoHeader";
+import PublishContainer from "./PublishContainer";
+import Chats from "./Chats";
+import BottomSheet from "./BottomSheet";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -21,10 +27,19 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
   const navigation = useNavigation();
 
   const imagesResUrl = useResourceUrl('images');
+  const [isShow,setIsShow] = useState<boolean>(false);
 
   const toBack = () => {
     navigation.goBack();
   }
+
+  const toFeedsOfDao = () => {
+    setIsShow(true);
+  }
+
+  useEffect(() => {
+    setIsShow(false);
+  },[])
 
   return (
     <ImageBackground
@@ -36,14 +51,34 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
         <TouchableOpacity onPress={toBack}>
         <Back />
         </TouchableOpacity>
+
         <DAOInfo daoInfo={daoInfo}/>
+
+        <TouchableOpacity onPress={getDebounce(toFeedsOfDao)}>
         <BtnChatToggle />
+        </TouchableOpacity>
+
       </View>
+
+      <BottomSheet show={isShow}>
+        <DaoInfoHeader daoInfo={daoInfo}/>
+        <View style={styles.channelDao}>
+          <PublishContainer daoInfo={daoInfo}/>
+          <Chats/>
+        </View>
+      </BottomSheet>
+
     </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  channelDao: {
+    width: 343,
+    padding: Padding.p_xs,
+    alignItems: "center",
+    backgroundColor: Color.color1,
+  },
   maskeddaoinfoLayout: {
     height: 90,
     alignSelf: "stretch",

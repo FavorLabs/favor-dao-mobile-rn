@@ -9,7 +9,7 @@ import {
 } from '../../declare/api/DAOApi';
 
 export default {
-    get(url: string):ResData<DaoInfo[]> {
+    get(url: string):ResData<ListData<DaoInfo>> {
         return request({
             url: url + '/dao/my',
         });
@@ -57,6 +57,13 @@ export default {
             url: url + '/dao/sub/' + id,
             data,
             method: 'post'
+        })
+    },
+    modifyDao(url: string, data: DaoParams): ResData<DaoInfo> {
+        return request({
+            url: url + '/dao',
+            data,
+            method: 'put'
         })
     }
 };

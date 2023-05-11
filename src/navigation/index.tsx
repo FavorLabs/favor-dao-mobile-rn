@@ -64,7 +64,7 @@ function RootStack() {
                 }
                 dispatch(globalUpdateState({
                     user: info.data.data,
-                    dao: dao?.data.data[0]
+                    dao: dao?.data.data.list[0] || null
                 }))
             }
         }

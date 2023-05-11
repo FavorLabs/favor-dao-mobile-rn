@@ -28,7 +28,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
 
   const [daoInfo, setDaoInfo] = useState<DaoInfo>();
   // @ts-ignore
-  const [activeId, setActiveId] = useState<string>(dao?.id);
+  const [activeId, setActiveId] = useState<string>('');
 
   const getBookmarkList = async () => {
     try {
@@ -101,25 +101,24 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   }, []);
 
   useEffect(() => {
-    if(activeId){
+      if(bookmarkList[0] && !activeId){
+        setActiveId(bookmarkList[0].id)
+      }
       getDaoInfo();
       checkJoinStatus();
-    }
   },[activeId,bookmarkList])
 
   return (
     <View style={[styles.followeddao]}>
       <View style={styles.frameParentFlexBox}>
 
-        {
-          dao?.id &&
-            <FollowDAOHeader
-                bookmarkList={bookmarkList}
-                handleLoadMore={handleLoadMore}
-                activeId={activeId}
-                setActiveId={setActiveId}
-            />
-        }
+        <FollowDAOHeader
+          bookmarkList={bookmarkList}
+          handleLoadMore={handleLoadMore}
+          refreshPage={refreshList}
+          activeId={activeId}
+          setActiveId={setActiveId}
+        />
 
         <ScrollView>
           {

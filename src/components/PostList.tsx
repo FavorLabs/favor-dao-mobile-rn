@@ -120,16 +120,18 @@ const PostList: React.FC<Props> = (props) => {
                   {renderItem(item)}
                 </>
               )
-            } else if(daoId && index === 0 && type==='post') {
-              return (
-                <>
-                  <View style={styles.daoUnderLine}>
-                    <DaoInfoHeader daoInfo={item.dao}/>
-                  </View>
-                  {renderItem(item)}
-                </>
-              )
-            } else {
+            }
+            // else if(daoId && index === 0 && type==='post') {
+            //   return (
+            //     <>
+            //       <View style={styles.daoUnderLine}>
+            //         <DaoInfoHeader daoInfo={item.dao}/>
+            //       </View>
+            //       {renderItem(item)}
+            //     </>
+            //   )
+            // }
+            else {
               return renderItem(item)
             }
           }}

@@ -16,7 +16,7 @@ const NewsCard: React.FC<Props> = (props) => {
     <View style={styles.feedsJoinedInner}>
       <View style={styles.groupParent}>
         <NewsContent postInfo={postInfo} isReTransfer={isReTransfer}/>
-        <OperationBlock postInfo={postInfo}/>
+        <OperationBlock postInfo={postInfo} type={0}/>
         <View style={styles.frameChild} />
       </View>
     </View>

@@ -17,7 +17,7 @@ const JoinedScreen: React.FC<Props> = (props) => {
     }, [isLogin, isFocused])
 
     return (
-      <View>
+      <View style={styles.container}>
           {
               isLogin ?
                 <View style={styles.container}>

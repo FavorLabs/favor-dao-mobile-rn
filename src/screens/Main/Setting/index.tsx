@@ -1,18 +1,88 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import { FontSize, FontFamily, Color, Padding, Border } from "../../../GlobalStyles";
+import WalletUser from "../../../components/WalletUser";
+import Receive from "../../../components/Receive";
+import Send from "../../../components/Send";
+import Transactions from "../../../components/Transactions";
+import BalanceBackContainer from "../../../components/BalanceBackContainer";
+import DAOManagementContainer from "../../../components/DAOManagementContainer";
+import {useSelector} from "react-redux";
+import Models from "../../../declare/storeTypes";
+// import ServiceComponent from "../../../components/ServiceComponent";
+// import PromotionTasks from "../../../components/PromotionTasks";
 
 export type Props = {};
 const SettingScreen: React.FC<Props> = (props) => {
   return (
     <View style={styles.container}>
-      <Text>SettingScreen</Text>
+      <ScrollView>
+      <View style={styles.titleWrapper}>
+        <Text style={styles.title}>Profile</Text>
+      </View>
+      <WalletUser />
+      <View style={[styles.sendbar, styles.sendbarFlexBox]}>
+        <Receive />
+        <Send />
+        <Transactions />
+      </View>
+      <View style={styles.settings1}>
+        <BalanceBackContainer />
+        <View style={styles.settingpannel}>
+          <DAOManagementContainer />
+          {/*<ServiceComponent />*/}
+          {/*<PromotionTasks />*/}
+        </View>
+      </View>
+      </ScrollView>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    overflow: "hidden",
+    backgroundColor: Color.whitesmoke_300,
+  },
+  titleWrapper: {
+    paddingHorizontal: Padding.p_3xs,
+    paddingTop: Padding.p_11xl,
+    paddingBottom: Padding.p_3xs,
+    flexDirection: "row",
+    alignSelf: "stretch",
+  },
+  title: {
+    fontSize: FontSize.size_15xl,
+    letterSpacing: -1,
+    lineHeight: 41,
+    fontWeight: "700",
+    fontFamily: FontFamily.interBold,
+    color: Color.iOSSystemLabelsLightPrimary,
+    textAlign: "left",
+  },
+  sendbar: {
+    marginTop: 30,
+    flexDirection: "row",
+    alignSelf: "stretch",
+    alignItems: "center",
+  },
+  sendbarFlexBox: {
+    justifyContent: "center",
+    marginTop: 30,
+  },
+  settings1: {
+    paddingHorizontal: Padding.p_base,
+    marginTop: 30,
+    paddingVertical: 0,
+    alignSelf: "stretch",
+    alignItems: "center",
+  },
+  settingpannel: {
+    marginTop: 15,
+    alignSelf: "stretch",
   },
 });
 

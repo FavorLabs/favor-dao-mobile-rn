@@ -12,8 +12,6 @@ import {useNavigation, useRoute} from "@react-navigation/native";
 
 type Props = {
   postInfo: PostInfo
-  isQuote?: boolean
-  isReTransfer?: boolean
 }
 
 const QuoteBlock: React.FC<Props> = (props) => {
