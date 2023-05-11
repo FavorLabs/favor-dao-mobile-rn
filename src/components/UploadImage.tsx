@@ -120,7 +120,7 @@ const UploadImage: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <UploadBlockTitle type={imageType} />
+      <UploadBlockTitle type={imageType} isShowSelector={false} />
 
       <View style={styles.uploadedImageWrap}>
         { images.map((item, index) =>

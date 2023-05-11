@@ -56,6 +56,7 @@ export type DaoInfo = {
     ];
     is_joined: boolean;
     is_subscribed: boolean;
+    tags: string[];
 };
 
 export type User = {
@@ -172,7 +173,7 @@ export type ResData<T> = Promise<
 
 export type DaoParams = Omit<
   DaoInfo,
-  'address' | 'visibility' | 'id' | 'follow_count' | 'last_posts'
+  'address' | 'id' | 'follow_count' | 'last_posts' | 'price' | 'is_joined' | 'is_subscribed'
 >;
 
 export type ListData<T> = {

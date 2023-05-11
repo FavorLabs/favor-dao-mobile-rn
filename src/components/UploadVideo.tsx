@@ -340,7 +340,7 @@ const UploadVideo: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.groupParent}>
-      <UploadBlockTitle type={'video'} />
+      <UploadBlockTitle type={'video'} isShowSelector={false} />
 
       { showSelect ? <>
         <View style={styles.uploadWrap}>

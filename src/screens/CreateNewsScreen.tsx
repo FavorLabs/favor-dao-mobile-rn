@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet,  ScrollView, TouchableOpacity} from 'react-native';
 import Toast from 'react-native-toast-message';
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
@@ -11,6 +11,9 @@ import { Post } from "../declare/global";
 import { CreatePost } from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";
+import SwitchButton from "../components/SwitchButton";
+import {useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
 
 export type Props = {};
 const CreateNewsScreen: React.FC<Props> = (props) => {
@@ -18,6 +21,9 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
 
   const [description, setDescription] = useState<string>('');
   const [imageList, setImageList] = useState([]);
+  const [daoMode, setDaoMode] = useState<number>(0);
+
+  const { dao } = useSelector((state: Models) => state.global);
 
   const createDisable = useMemo(() => {
     return !(
@@ -42,11 +48,11 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
       });
       const postData: CreatePost = {
         contents: contents,
-        dao_id: '644b8ab03d02093d481d0658',
+        dao_id: dao?.id as string,
         tags: [],
         type: 0,
         users: [],
-        visibility: 1,
+        visibility: daoMode,
       };
       console.log(postData,'postData')
       // const { data } = await PostApi.createPost(url, postData);
@@ -60,22 +66,29 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (dao) {
+      setDaoMode(dao.visibility);
+    }
+  }, [dao]);
+
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollWrap}>
-      <FavorDaoNavBar
-        title="Create news"
-        vector={require("../assets/vector6.png")}
-      />
-      <TextInputParsedBlock
-        title={'News description'}
-        value={description}
-        setValue={setDescription}
-        multiline={true}
-        placeholder={'Your description...'}
-      />
-      <UploadImage imageType={'image'} isShowSelector={false} setUpImage={setImageList} multiple={true}/>
+        <FavorDaoNavBar
+          title="Create news"
+          vector={require("../assets/vector6.png")}
+        />
+        <TextInputParsedBlock
+          title={'News description'}
+          value={description}
+          setValue={setDescription}
+          multiline={true}
+          placeholder={'Your description...'}
+        />
+        <UploadImage imageType={'image'} isShowSelector={false} setUpImage={setImageList} multiple={true}/>
+        <SwitchButton mode={daoMode} setMode={setDaoMode} />
       </ScrollView>
       <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
         <TouchableOpacity onPress={createHandle}>

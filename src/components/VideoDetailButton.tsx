@@ -8,13 +8,15 @@ import PostApi from "../services/DAOApi/Post";
 import {getDebounce} from "../utils/util";
 import BottomSheet from "./BottomSheet";
 import Comment from "./Comment";
+import ChunkSourceInfo from "./ChunkSourceInfo";
 
 type Props = {
-    postInfo: PostInfo
+    postInfo: PostInfo;
+    vSrc: string;
 };
 
 const VideoDetailButton: React.FC<Props> = (props) => {
-    const {postInfo} = props;
+    const { postInfo, vSrc } = props;
     const url = useUrl();
     const avatarsResUrl = useResourceUrl('avatars');
     const { screenWidth, screenHeight } = useScreenDimensions();
@@ -29,6 +31,9 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     const [commentOnCount, setCommentOnCount] = useState<number>(postInfo.comment_count);
     const [showCommentDialog, setShowCommentDialog] = useState<boolean>(false);
     const [comment, setComment] = useState<string>('');
+    const [sourceInfoDialog, setSourceInfoDialog] = useState(false);
+    const [videoHash, setVideoHash] = useState<string>('');
+    const [oracleArr, setOracleArr] = useState<string[]>([]);
 
     const getPostLikeStatus = async () => {
         const {data} = await PostApi.checkPostLike(url, postInfo.id);
@@ -65,6 +70,16 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     useEffect(() => {
         setIsPostLike(true);
     }, [like]);
+
+    useEffect(() => {
+        if (vSrc) {
+            if (vSrc.includes('?')) {
+                const temp = vSrc.split('?');
+                setVideoHash(temp[0]);
+                setOracleArr([temp[1].split('=')[1]]);
+            }
+        }
+    }, [vSrc]);
 
     return (
       <View style={styles.groupParent}>
@@ -111,11 +126,15 @@ const VideoDetailButton: React.FC<Props> = (props) => {
               </View>
           </View>
           <View>
-              <Image
-                style={[styles.alertCircleIcon]}
-                resizeMode="cover"
-                source={require("../assets/alertcircle.png")}
-              />
+              <TouchableOpacity onPress={() => {
+                  setSourceInfoDialog(true);
+              }}>
+                  <Image
+                    style={[styles.alertCircleIcon]}
+                    resizeMode="cover"
+                    source={require("../assets/alertcircle.png")}
+                  />
+              </TouchableOpacity>
           </View>
           <BottomSheet
             show={showCommentDialog}
@@ -156,6 +175,20 @@ const VideoDetailButton: React.FC<Props> = (props) => {
                     </TouchableOpacity>
                 </View>
             }
+          />
+          <BottomSheet
+            children={<View style={[styles.sourceInfoWrap, { width: screenWidth, height: screenHeight / 2 - 80 }]}>
+                <ChunkSourceInfo
+                  videoHash={videoHash}
+                  oracleArr={oracleArr}
+                />
+            </View>}
+            show={sourceInfoDialog}
+            onChange={(index) => {
+                if (index === -1) {
+                    setSourceInfoDialog(false);
+                }
+            }}
           />
       </View>
     );
@@ -225,6 +258,10 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20,
         backgroundColor: Color.color1
+    },
+
+    sourceInfoWrap: {
+        marginTop: 10,
     }
 });
 

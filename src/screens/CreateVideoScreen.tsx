@@ -17,6 +17,7 @@ import { eventEmitter } from '../utils/util';
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
+import SwitchButton from "../components/SwitchButton";
 
 export type Props = {};
 const CreateVideoScreen: React.FC<Props> = (props) => {
@@ -29,8 +30,10 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
   const [thumbnail, setThumbnail] = useState<string>('');
   const [autoThumbnail, setAutoThumbnail] = useState<string>('');
   const [postLoading, setPostLoading] = useState<boolean>(false);
+  const [daoMode, setDaoMode] = useState<number>(0);
 
   // const { userInfo } = useSelector((state: Models) => state.dao);
+  const { dao } = useSelector((state: Models) => state.global);
 
   const createDisable = useMemo(() => {
     return !(
@@ -56,12 +59,11 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
       contents.push({ content: video, type: 4, sort: 0 });
       const postData: CreatePost = {
         contents: contents,
-        // dao_id: userInfo?.id as string,
-        dao_id: '',
+        dao_id: dao?.id as string,
         tags: [],
         type: 1,
         users: [],
-        visibility: 1,
+        visibility: daoMode,
       };
       const { data } = await PostApi.createPost(url, postData);
       if (data.data) {
@@ -81,6 +83,12 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
   useEffect(() => {
     //
   }, []);
+
+  useEffect(() => {
+    if (dao) {
+      setDaoMode(dao.visibility);
+    }
+  }, [dao]);
 
   return (
     <View style={styles.container}>
@@ -105,6 +113,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
         <UploadVideo setVideo={setVideo} thumbnail={thumbnail} setThumbnail={setThumbnail} autoThumbnail={autoThumbnail} setAutoThumbnail={setAutoThumbnail} />
         <UploadImage imageType={'thumbnail'} setUpImage={setThumbnail} autoThumbnail={autoThumbnail} />
         <SingleChoice />
+        <SwitchButton mode={daoMode} setMode={setDaoMode} />
         <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
           <TouchableOpacity onPress={createHandle}>
             <View style={[styles.createWrapper, styles.wrapperFlexBox]}>

@@ -58,7 +58,11 @@ const Comment: React.FC<Props> = (props) => {
     try {
       const { data } = await PostApi.getPostComments(url, pageData);
       if (data.data.list) {
-        setCommentListMap({ ...commentListMap, ...data.data.list });
+        const map: CommentListMap = {};
+        data.data.list.forEach((item, index) => {
+          map[(pageData.page - 1) * 10 + index] = { ...item };
+        });
+        setCommentListMap({ ...commentListMap, ...map });
         setHasMore(
           data.data.pager.total_rows > pageData.page * pageData.page_size,
         );
@@ -288,7 +292,7 @@ const Comment: React.FC<Props> = (props) => {
   },[])
 
   useEffect(() => {
-    console.log('commentListMap change', Object.values(commentListMap).length)
+    // console.log('commentListMap change', Object.values(commentListMap).length)
   }, [commentListMap]);
 
   return (
@@ -301,7 +305,7 @@ const Comment: React.FC<Props> = (props) => {
           renderItem={({item, index}) => getCommentItem(item, index)}
           keyExtractor={item => item.id}
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.1}
           ItemSeparatorComponent={() => (
             <View style={styles.separator} />
           )}

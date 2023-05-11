@@ -10,6 +10,7 @@ import DaoApi from '../services/DAOApi/Dao';
 import ImageApi from '../services/DAOApi/Image';
 import {useResourceUrl, useUrl} from "../utils/hook";
 import {useNavigation} from "@react-navigation/native";
+import {DaoParams} from "../declare/api/DAOApi";
 
 export type Props = {};
 const CreateDAOScreen: React.FC<Props> = (props) => {
@@ -21,6 +22,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
   const [daoDescription, setDaoDescription] = useState<string>('');
   const [daoAvatar, setDaoAvatar] = useState<string>('');
   const [daoBanner, setBanner] = useState<string>('');
+  const [daoMode, setDaoMode] = useState<number>(0);
 
   const createDisable = useMemo(() => {
     return !(
@@ -53,11 +55,13 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
     }
 
     try {
-      const params = {
+      const params: DaoParams = {
         name: daoName,
         introduction: daoDescription,
         avatar: daoAvatar,
         banner: daoBanner,
+        visibility: daoMode,
+        tags: []
       }
       console.log(params,'create DAO')
       // @ts-ignore
@@ -106,16 +110,9 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           // parsed={true}
           placeholder={'Your description...'}
         />
-        <UploadImage imageType={'avatar'} isShowSelector={false} setUpImage={setDaoAvatar}/>
-        <UploadImage imageType={'banner'} isShowSelector={false} setUpImage={setBanner}/>
-        <View style={styles.createDaoChild}>
-          <View style={[styles.frameView, styles.groupPosition]}>
-            <Text style={[styles.title6, styles.titleTypo1]}>
-              Default Content Mode
-            </Text>
-            <SwitchButton />
-          </View>
-        </View>
+        <UploadImage imageType={'avatar'} isShowSelector={false} setUpImage={setDaoAvatar} multiple={false}/>
+        <UploadImage imageType={'banner'} isShowSelector={false} setUpImage={setBanner} multiple={false}/>
+        <SwitchButton mode={daoMode} setMode={setDaoMode} />
         <View style={styles.instanceParent2}>
           <TouchableWithoutFeedback onPress={createHandle}>
             <View style={[styles.createWrapper, createDisable && { opacity: 0.5 }]}>
@@ -159,18 +156,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
   },
-
-  title6: {
-    alignSelf: "stretch",
-  },
-  frameView: {
-    width: 343,
-  },
-  createDaoChild: {
-    height: 74,
-    marginTop: 20,
-    alignSelf: "stretch",
-  },
   create: {
     color: Color.color1,
     fontFamily: FontFamily.capsCaps310SemiBold,
@@ -195,20 +180,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignSelf: "stretch",
     alignItems: "center",
-  },
-  titleTypo1: {
-    textAlign: "left",
-    color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.capsCaps310SemiBold,
-    fontWeight: "600",
-    lineHeight: 23,
-    letterSpacing: 0,
-    fontSize: FontSize.bodyBody17_size,
-  },
-  groupPosition: {
-    left: 0,
-    top: 0,
-    position: "absolute",
   },
 });
 
