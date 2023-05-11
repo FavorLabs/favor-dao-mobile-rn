@@ -1,13 +1,13 @@
 import {updateState} from "../store/wallet";
-import Wallet from "ethereumjs-wallet";
+import {hdkey} from "ethereumjs-wallet";
 import UserApi from "../services/DAOApi/User";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {SignatureData} from "../declare/api/DAOApi";
 
-const {ecsign, isValidPrivate, toRpcSig, hashPersonalMessage} = require('ethereumjs-util');
+const bip39 = require('bip39');
+const {ecsign, toRpcSig, hashPersonalMessage} = require('ethereumjs-util');
 
 export type State = {
-    privateKey?: string
+    mnemonic?: string
     password?: string
     token?: string
 }
@@ -35,44 +35,40 @@ class WalletController {
         return this.state.token
     }
 
+    private get hdWallet() {
+        return hdkey.fromMasterSeed(bip39.mnemonicToSeedSync(this.state.mnemonic!));
+    }
+
+    private get wallet() {
+        return this.hdWallet.derivePath("m/44'/60'/0'/0/0").getWallet()
+    }
+
     get address() {
-        return '0x' + Wallet.fromPrivateKey(Buffer.from(this.state.privateKey!, 'hex')).getAddress().toString('hex')
+        return this.wallet.getAddressString()
     }
 
-    get isCreate() {
-        return !!this.state.password
+    get privateKeyBuffer() {
+        return this.wallet.getPrivateKey()
     }
 
-    createPrivateKey(password: string): string {
-        return Wallet.generate().getPrivateKey().toString('hex');
+    createMnemonic(): string {
+        return bip39.generateMnemonic();
     }
 
-    importPrivateKey(password: string, privateKey: string) {
+    importMnemonic(password: string, mnemonic: string) {
         if (!password) {
             throw new Error('Password Invalid');
         }
-        if (!isValidPrivate(Buffer.from(privateKey, 'hex'))) {
+        if (!bip39.validateMnemonic(mnemonic)) {
             throw new Error('Private Key Invalid');
         }
-        this.state.privateKey = privateKey;
+        this.state.mnemonic = mnemonic;
         this.state.password = password;
     }
 
-
-    exportPrivateKey(password: string) {
-        if (!this.passwordVerify(password)) {
-            throw new Error('Password Invalid');
-        }
-        return this.state.privateKey;
-    }
-
     signMessage(message: string) {
-        // if (!this.passwordVerify(password)) {
-        //     throw new Error('Password Invalid');
-        // }
         const messageBuffer = hashPersonalMessage(Buffer.from(message));
-        const privateKeyBuffer = Buffer.from(this.state.privateKey!, 'hex');
-        const signature = ecsign(messageBuffer, privateKeyBuffer);
+        const signature = ecsign(messageBuffer, this.privateKeyBuffer);
         return toRpcSig(signature.v, signature.r, signature.s);
     }
 
@@ -83,7 +79,6 @@ class WalletController {
     async login(url: string) {
         const {data} = await UserApi.signIn(url, this.getSignatureData());
         this.state.token = data.data.token
-        // await AsyncStorage.setItem('token', data.data.token);
     }
 
     getSignatureData(index = 0): SignatureData {

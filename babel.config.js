@@ -8,9 +8,7 @@ module.exports = function (api) {
                 "module:react-native-dotenv", {
                 "allowUndefined": true,
             }
-            ]
-            // '@babel/plugin-proposal-private-methods',
-            // '@babel/plugin-proposal-class-properties'
+            ],
         ],
     };
 };
