@@ -14,10 +14,12 @@ import TextInputParsedBlock from "../components/TextInputParsedBlock";
 import SwitchButton from "../components/SwitchButton";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
+import {useNavigation} from "@react-navigation/native";
 
 export type Props = {};
 const CreateNewsScreen: React.FC<Props> = (props) => {
   const url = useUrl();
+  const navigation = useNavigation();
 
   const [description, setDescription] = useState<string>('');
   const [imageList, setImageList] = useState([]);
@@ -27,12 +29,12 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
 
   const createDisable = useMemo(() => {
     return !(
-      description && imageList
+      description
     )
-  }, [description,imageList]);
+  }, [description]);
 
   const createHandle = async () => {
-    console.log('111',imageList)
+    console.log('111',imageList, createDisable)
     if (createDisable) {
       return Toast.show({
         type: 'info',
@@ -55,7 +57,14 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
         visibility: daoMode,
       };
       console.log(postData,'postData')
-      // const { data } = await PostApi.createPost(url, postData);
+      const { data } = await PostApi.createPost(url, postData);
+      if(data.data) {
+        Toast.show({
+          type: 'info',
+          text1: 'Post successfully'
+        });
+        navigation.goBack();
+      }
     } catch (e) {
       if (e instanceof Error) {
         Toast.show({
