@@ -16,7 +16,7 @@ const VideoBlock: React.FC<Props> = (props) => {
   return (
     <View style={styles.rowUserParent}>
       <VideoBlockItem postInfo={postInfo} isReTransfer={isReTransfer}/>
-      <OperationBlock postInfo={postInfo}/>
+      <OperationBlock postInfo={postInfo} type={1}/>
       <View style={[styles.frameChild, styles.likeSpaceBlock]} />
     </View>
   );

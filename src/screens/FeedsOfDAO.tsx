@@ -43,9 +43,7 @@ const FeedsOfDAO: React.FC<Props> = (props) => {
     <View style={styles.feedsOfDao}>
       <ExpandedDAOHeader daoInfo={daoInfo}/>
 
-      <FeedsOfDaoNavigator
-        daoInfo={daoInfo}
-      />
+      <FeedsOfDaoNavigator daoInfo={daoInfo}/>
 
     </View>
     // </SafeAreaView>

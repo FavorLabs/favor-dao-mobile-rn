@@ -71,6 +71,8 @@ export const Color = {
   limegreen_100: "#00c147",
   limegreen_200: "rgba(1, 214, 79, 0.1)",
   lightBlueBase: "#0085ff",
+  darkgray_200: "#a9a9a9",
+  color93: "#939393",
 };
 /* Paddings */
 export const Padding = {
@@ -95,6 +97,8 @@ export const Padding = {
   p_5xl: 24,
   p_smi: 13,
   p_mini: 15,
+  p_11xs: 2,
+  p_3xl: 22,
 };
 /* border radiuses */
 export const Border = {

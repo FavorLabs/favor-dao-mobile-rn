@@ -23,7 +23,7 @@ const QuoteNews: React.FC<Props> = (props) => {
         <RowUser time={created_on} dao={dao}/>
       </View>
       <QuoteBlock postInfo={postInfo}/>
-      <OperationBlock postInfo={postInfo}/>
+      <OperationBlock postInfo={postInfo} type={ postInfo.orig_type === 0 ? 0 : 1}/>
       <View style={styles.frameChild} />
     </View>
   );

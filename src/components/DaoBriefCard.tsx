@@ -9,6 +9,7 @@ import BottomSheet from "./BottomSheet";
 import {useEffect, useState} from "react";
 import PublishContainer from "./PublishContainer";
 import Chats from "./Chats";
+import DaoInfoHeader from "./DaoInfoHeader";
 
 type Props = {
   daoCardInfo: PostInfo
@@ -53,8 +54,9 @@ const DaoBriefCard: React.FC<Props> = (props) => {
       </TouchableOpacity>
 
       <BottomSheet show={isShow}>
+        <DaoInfoHeader daoInfo={dao}/>
         <View style={styles.channelDao}>
-          <PublishContainer />
+          <PublishContainer daoInfo={dao}/>
           <Chats/>
         </View>
       </BottomSheet>

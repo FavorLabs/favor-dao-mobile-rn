@@ -10,6 +10,8 @@ import { FontFamily, Border, FontSize, Color, Padding } from "../GlobalStyles";
 import {useResourceUrl} from "../utils/hook";
 import {getTime} from "../utils/util";
 import {DaoInfo, PostInfo} from "../declare/global";
+import {useNavigation} from "@react-navigation/native";
+import Screens from "../navigation/RouteNames";
 
 type Props = {
   time: number;
@@ -21,11 +23,13 @@ type Props = {
 
 const RowUser: React.FC<Props> = (props) => {
   const { time,  postInfo , isReTransfer, isQuote, dao} = props;
+  const navigation = useNavigation();
   const avatarsResUrl = useResourceUrl('avatars');
   const createTime = getTime(time);
 
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
-    console.log('avatar')
+    // @ts-ignore
+    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : postInfo?.dao , type : 'Mixed'});
     event.stopPropagation();
   };
 

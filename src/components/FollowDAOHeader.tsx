@@ -1,24 +1,33 @@
 import * as React from "react";
-import {FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
 import {DaoInfo} from "../declare/global";
 import {useResourceUrl} from "../utils/hook";
-import {getDebounce} from "../utils/util";
+import {getDebounce, sleep} from "../utils/util";
 
 type Props = {
   bookmarkList: DaoInfo[];
   handleLoadMore: () => void;
+  refreshPage: () => void;
   activeId: string;
   setActiveId: (id: string) => void;
 };
 const FollowDAOHeader: React.FC<Props> = (props) => {
-  const { activeId, setActiveId } = props;
+  const { activeId, setActiveId,refreshPage,handleLoadMore,bookmarkList } = props;
   const avatarsResUrl = useResourceUrl('avatars');
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const onPress = (id: string) => {
     if(id !== activeId){
       setActiveId(id);
     }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await sleep(1000);
+    setRefreshing(false);
+    await refreshPage();
   };
 
   // @ts-ignore
@@ -41,12 +50,18 @@ const FollowDAOHeader: React.FC<Props> = (props) => {
   return (
     <View style={styles.followDaoHeader}>
       <FlatList
-        data={props.bookmarkList}
+        data={bookmarkList}
         // @ts-ignore
         renderItem={({ item }) => <RenderItem item={item}/>}
-        onEndReached={props.handleLoadMore}
+        onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         contentContainerStyle={styles.flautist}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       />
     </View>
   );

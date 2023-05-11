@@ -83,7 +83,7 @@ const PostDetailScreen: React.FC<Props> = (props) => {
                   <QuoteBlock postInfo={postInfo}/>
                 )
                 }
-                <OperationBlock postInfo={postInfo}/>
+                <OperationBlock postInfo={postInfo} type={0}/>
                 <View style={styles.commentWrap}>
                   <Comment
                     onRef={commentRef}
