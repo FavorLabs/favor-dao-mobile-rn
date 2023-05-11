@@ -28,6 +28,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
     const [videoData, setVideoData] = useState<PostInfo | null>(null);
     const [isSelf, setIsSelf] = useState<boolean>(true);
     const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
+    const [i, setI] = useState(0);
 
     const playable = useMemo(() => videoData?.member === 0 ? true : videoData?.dao.is_subscribed, [videoData])
 
@@ -69,6 +70,11 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
         }
     }
 
+    const subModal = useMemo(() => {
+        if (!videoData) return null;
+        return <SubscribeModal show={!playable} daoCardInfo={videoData} fn={confirm}/>
+    }, [videoData, i])
+
 
     if (!videoData) return null;
 
@@ -80,18 +86,31 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
           >
               <Icon type={'antdesign'} name={'left'} color={Color.color1}/>
           </Pressable>
-          <View style={styles.videoBox}>
-              <Video
-                style={styles.video}
-                source={{
-                    uri: `${Favor.api}/file/${info.hash}`
-                }}
-                controls={true}
-                resizeMode="contain"
-                poster={`${resourceUrl}/${info.thumbnail}`}
-              />
+
+          <View style={styles.box}>
+              <View style={styles.videoBox}>
+                  {
+                    !playable && <Pressable onPress={() => {
+                        setI(v => v + 1);
+                    }} style={styles.playIcon}>
+                          <Icon name={'play-circle'} type={'feather'} color={'#fff'} size={50}/>
+                      </Pressable>
+                  }
+                  <Video
+                    style={styles.video}
+                    source={{
+                        uri: `${Favor.api}/file/${info.hash}`
+                    }}
+                    controls={true}
+                    resizeMode="contain"
+                    poster={`${resourceUrl}/${info.thumbnail}`}
+                  />
+              </View>
           </View>
-          <SubscribeModal show={!playable} daoCardInfo={videoData} fn={confirm} />
+          {
+              subModal
+          }
+          {/*<SubscribeModal show={!playable} daoCardInfo={videoData} fn={confirm}/>*/}
           <View style={styles.groupParent}>
               <Text style={[styles.name, styles.largeTypo]}>
                   @{isReTransfer ? videoData?.author_dao.name : videoData?.dao.name}
@@ -125,9 +144,20 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         alignItems: 'flex-start',
     },
-    videoBox: {
+    box: {
         flex: 1,
         justifyContent: "center",
+    },
+    videoBox: {
+        position: 'relative',
+    },
+    playIcon: {
+        position: "absolute",
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 2
     },
     video: {
         height: 238,
