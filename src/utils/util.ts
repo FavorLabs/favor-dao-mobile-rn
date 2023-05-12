@@ -169,3 +169,9 @@ export const getDebounce = (fn: Function, delay: number = 500) => {
     }, delay);
   };
 };
+
+export const getMatchedStrings = (str: string, regex: RegExp): string[] => {
+  const matches = str.match(regex);
+  if (!matches) return [];
+  return matches.map(match => match.slice(1));
+}

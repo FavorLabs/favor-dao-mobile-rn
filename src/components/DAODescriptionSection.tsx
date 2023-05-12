@@ -1,18 +1,18 @@
-import * as React from "react";
+import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Padding, Color, FontFamily, Border, FontSize } from "../GlobalStyles";
-import TextInputBlock from "./TextInputBlock";
 import {useEffect, useState} from "react";
 import UploadImage from "./UploadImage";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
+import TextInputParsedBlock from "./TextInputParsedBlock";
 
 type Props = {
   daoInfo: DaoInfo;
   daoDescription: string;
-  setDaoDescription: () => void;
-  setDaoAvatar: () => void;
-  setBanner: () => void;
+  setDaoDescription: React.Dispatch<React.SetStateAction<string>>;
+  setDaoAvatar: React.Dispatch<React.SetStateAction<string>>;
+  setBanner: React.Dispatch<React.SetStateAction<string>>;
 };
 const DAODescriptionSection: React.FC<Props> = (props) => {
 
@@ -58,11 +58,11 @@ const DAODescriptionSection: React.FC<Props> = (props) => {
       {/*</View>*/}
 
 
-      <UploadImage imageType={'avatar'} isShowSelector={false} setUpImage={setDaoAvatar} multiple={false}/>
+      <UploadImage imageType={'avatar'} isShowSelector={false} upImage={daoInfo.avatar} setUpImage={setDaoAvatar} multiple={false}/>
 
-      <UploadImage imageType={'banner'} isShowSelector={false} setUpImage={setBanner} multiple={false}/>
+      <UploadImage imageType={'banner'} isShowSelector={false} upImage={daoInfo.banner} setUpImage={setBanner} multiple={false}/>
 
-      <TextInputBlock
+      <TextInputParsedBlock
         title={'DAO description'}
         value={daoDescription}
         setValue={setDaoDescription}

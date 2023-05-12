@@ -6,6 +6,7 @@ import {Post, PostInfo} from "../declare/global";
 import {getContent} from "../utils/util";
 import {useRoute} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
+import TextParsed from "./TextParsed";
 
 export type Props = {
   postInfo: PostInfo;
@@ -31,13 +32,12 @@ const NewsDescription: React.FC<Props> = (props) => {
       style={[styles.description,]}
     >
       <View style={styles.descriptionWrapper}>
-        <Text
-          style={[styles.description1]}
+        { /* @ts-ignore */}
+        <TextParsed style={[styles.description1]}
           numberOfLines={showAllText ? undefined : 3}
           ellipsizeMode='tail'
-        >
-          {info[2]?.[0]?.content}
-        </Text>
+          content={info[2]?.[0]?.content}
+        />
       </View>
     </View>
   );

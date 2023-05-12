@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import {View, StyleSheet, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 import { TextInputProps } from "react-native/Libraries/Components/TextInput/TextInput";
 import ParsedText from 'react-native-parsed-text';
-import {Padding} from "../GlobalStyles";
+import {Color, Padding} from "../GlobalStyles";
+
+export const RegExps = {
+  tag: /#[^#\s]+/g,
+  user: /@(\w+)/,
+}
 
 export type Props = TextInputProps & {
   height?: number;
@@ -29,8 +34,8 @@ const TextInputParsed: React.FC<Props> = (props) => {
   };
 
   const parsePatterns = [
-    { pattern: /#(\w+)/, style: { color: 'red' }, onPress: handleTopicPress },
-    { pattern: /@(\w+)/, style: { color: 'green' }, onPress: handleUserPress },
+    { pattern: RegExps.tag, style: { color: Color.accentLight }, onPress: handleTopicPress },
+    { pattern: RegExps.user, style: { color: Color.accentLight }, onPress: handleUserPress },
   ];
 
   useEffect(() => {

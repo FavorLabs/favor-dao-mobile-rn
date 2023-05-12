@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet,  ScrollView, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Toast from 'react-native-toast-message';
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import FavorDaoButton from '../components/FavorDaoButton';
@@ -15,6 +15,8 @@ import SwitchButton from "../components/SwitchButton";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {useNavigation} from "@react-navigation/native";
+import {getMatchedStrings} from "../utils/util";
+import {RegExps} from "../components/TextInputParsed";
 
 export type Props = {};
 const CreateNewsScreen: React.FC<Props> = (props) => {
@@ -24,6 +26,7 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
   const [description, setDescription] = useState<string>('');
   const [imageList, setImageList] = useState([]);
   const [daoMode, setDaoMode] = useState<number>(0);
+  const [tags, setTags] = useState<string[]>([]);
 
   const { dao } = useSelector((state: Models) => state.global);
 
@@ -51,10 +54,10 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
       const postData: CreatePost = {
         contents: contents,
         dao_id: dao?.id as string,
-        tags: [],
+        tags,
         type: 0,
         users: [],
-        visibility: daoMode,
+        visibility: daoMode ? 0 : 1,
       };
       console.log(postData,'postData')
       const { data } = await PostApi.createPost(url, postData);
@@ -80,6 +83,10 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
       setDaoMode(dao.visibility);
     }
   }, [dao]);
+
+  useEffect(() => {
+    setTags(getMatchedStrings(description, RegExps.tag));
+  }, [description]);
 
 
   return (

@@ -256,6 +256,20 @@ const VideoDetailButton: React.FC<Props> = (props) => {
                 </View>
             }
           />
+          <BottomSheet
+            children={<View style={[styles.sourceInfoWrap, { width: screenWidth, height: screenHeight / 2 - 80 }]}>
+                <ChunkSourceInfo
+                  videoHash={videoHash}
+                  oracleArr={oracleArr}
+                />
+            </View>}
+            show={sourceInfoDialog}
+            onChange={(index) => {
+                if (index === -1) {
+                    setSourceInfoDialog(false);
+                }
+            }}
+          />
       </View>
     );
 };
