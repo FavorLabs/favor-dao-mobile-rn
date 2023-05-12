@@ -9,10 +9,10 @@ import Models from "../declare/storeTypes";
 import {DaoInfo} from "../declare/api/DAOApi";
 
 type Props = {
-  daoInfo: DaoInfo;
+  daoBanner: string;
 }
 const DAOSettingHeader: React.FC<Props> = (props) => {
-  const { daoInfo } = props;
+  const { daoBanner } = props;
   const navigation = useNavigation();
   const imagesResUrl = useResourceUrl('images');
 
@@ -24,7 +24,7 @@ const DAOSettingHeader: React.FC<Props> = (props) => {
     <ImageBackground
       style={[styles.expandeddaoheaderIcon, styles.maskeddaoinfoLayout]}
       resizeMode="cover"
-      source={{uri: `${imagesResUrl}/${daoInfo.avatar}`}}
+      source={{uri: `${imagesResUrl}/${daoBanner}`}}
     >
       <View style={[styles.maskeddaoinfo, styles.maskeddaoinfoLayout]}>
         <TouchableOpacity onPress={toBack}>

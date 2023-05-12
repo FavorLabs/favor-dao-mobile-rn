@@ -33,9 +33,6 @@ const DAOScreen: React.FC<Props> = (props) => {
 
 
   return (
-    // <View style={styles.container}>
-    //   <DAOTopTabNavigator />
-    // </View>
   <View style={styles.container}>
     <View style={styles.frameParent}>
       <View style={[styles.titleParent, styles.selectionBg]}>
@@ -149,7 +146,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   titleParent: {
-    paddingTop: Padding.p_29xl,
+    paddingTop: Padding.p_11xl,
     paddingBottom: Padding.p_3xs,
     justifyContent: "flex-end",
     paddingHorizontal: Padding.p_base,

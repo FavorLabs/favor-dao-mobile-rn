@@ -8,15 +8,23 @@ import {useNavigation} from "@react-navigation/native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import Screens from "../../../navigation/RouteNames";
 import {getDebounce} from "../../../utils/util";
+import {useIsLogin} from "../../../utils/hook";
 
 export type Props = {};
 const FeedsScreen: React.FC<Props> = (props) => {
     const navigation = useNavigation<StackNavigationProp<any>>();
     const actionSheetRef = useRef<ActionSheet>(null);
     const screens = [Screens.CreateVideo, Screens.CreateNews];
+    const [isLogin, gotoLogin] = useIsLogin();
 
-    const showActionSheet = () => {
-        actionSheetRef.current?.show()
+    const showActionSheet = (e: { preventDefault: () => void; }) => {
+        if(isLogin) {
+            actionSheetRef.current?.show()
+        } else {
+            gotoLogin();
+            e.preventDefault()
+        }
+
     }
 
     const [searchValue, setSearchValue] = useState<string>('');
@@ -155,7 +163,7 @@ const styles = StyleSheet.create({
         alignSelf: "stretch",
     },
     titleParent: {
-        paddingTop: Padding.p_29xl,
+        paddingTop: Padding.p_11xl,
         paddingBottom: Padding.p_3xs,
         justifyContent: "flex-end",
         paddingHorizontal: Padding.p_base,

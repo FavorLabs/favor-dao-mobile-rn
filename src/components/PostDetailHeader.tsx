@@ -6,6 +6,8 @@ import {PostInfo} from "../declare/global";
 import {getTime} from "../utils/util";
 import JoinButton from "./JoinButton";
 import DaoApi from "../services/DAOApi/Dao";
+import {useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
 
 type PostDetailHeaderType = {
   postInfo: PostInfo | null;
@@ -31,7 +33,7 @@ const PostDetailHeader = ({
   postInfo,
 }: PostDetailHeaderType) => {
   const url = useUrl();
-
+  const { dao } = useSelector((state: Models) => state.global);
   const avatarsResUrl = useResourceUrl('avatars');
 
   const createTime = getTime(postInfo ? postInfo?.created_on : 0);
@@ -95,15 +97,11 @@ const PostDetailHeader = ({
           {createTime}
         </Text>
       </View>
-      {/*<View style={styles.follow}>*/}
-      {/*  <View style={[styles.joined, styles.join1FlexBox]}>*/}
-      {/*    <Text style={[styles.join, styles.joinTypo]}>Joined</Text>*/}
-      {/*  </View>*/}
-      {/*  <View style={[styles.join1, styles.join1FlexBox]}>*/}
-      {/*    <Text style={[styles.join2, styles.joinTypo]}>Join</Text>*/}
-      {/*  </View>*/}
-      {/*</View>*/}
-      <JoinButton isJoin={isJoin} handle={bookmarkHandle}/>
+
+      {
+        postInfo?.dao.id !== dao?.id &&
+          <JoinButton isJoin={isJoin} handle={bookmarkHandle}/>
+      }
     </View>
   );
 };

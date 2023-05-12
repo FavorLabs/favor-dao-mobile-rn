@@ -5,7 +5,6 @@ export type Props = {};
 const UnreadScreen: React.FC<Props> = (props) => {
   return (
     <View style={styles.container}>
-      <Text>UnreadScreen</Text>
     </View>
   )
 }

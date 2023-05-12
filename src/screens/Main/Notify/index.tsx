@@ -6,7 +6,6 @@ export type Props = {};
 const NotifyScreen: React.FC<Props> = (props) => {
   return (
     <View style={styles.container}>
-      <Text>NotifyScreen</Text>
       <NotifyTopTabNavigator />
     </View>
   )
@@ -14,7 +13,8 @@ const NotifyScreen: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingTop: 10,
   },
 });
 
