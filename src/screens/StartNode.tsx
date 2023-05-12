@@ -11,7 +11,7 @@ import Screens from "../navigation/RouteNames";
 import {Padding, Color, FontFamily, FontSize, Border} from "../GlobalStyles";
 import Loading from "../components/Loading";
 import Favor from "../libs/favor";
-
+import {EXTERNAL_CONFIG_NAME} from '@env'
 
 const StartNode = () => {
     const navigation = useNavigation<StackNavigationProp<any>>()
@@ -60,7 +60,7 @@ const StartNode = () => {
                 }],
             })
             console.log("Node start success");
-            await Favor.getConfig(fc["network-id"], 'FavorDAOL');
+            await Favor.getConfig(fc["network-id"], EXTERNAL_CONFIG_NAME || 'FavorDAO');
             await Favor.subProxy();
             navigation.replace(Screens.Root);
         } catch (e) {
