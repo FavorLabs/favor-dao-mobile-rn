@@ -4,52 +4,37 @@ import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import WalletWords from "../components/WalletWords";
 import {FontFamily, Color, FontSize, Border, Padding} from "../GlobalStyles";
 import FavorDaoButton from "../components/FavorDaoButton";
-import { useRoute} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
 import {useMemo} from "react";
 
 const Mnemonic = () => {
+    const navigation = useNavigation();
     const route = useRoute()
     const {mnemonic} = route.params as { mnemonic: string }
 
-    // const mnemonicArray = useMemo(() => {
-    //     return mnemonic?.split(' ') || [];
-    // }, [mnemonic])
+    const mnemonicArray = useMemo(() => {
+        return mnemonic?.split(' ') || [];
+    }, [mnemonic])
+
+    const backUp = () => {
+      navigation.goBack();
+    };
 
     return (
         <View style={[styles.mnemonic, styles.mnemonicFlexBox]}>
-            {/*<FavorDaoNavBar*/}
-            {/*    title="Mnemonic words"*/}
-            {/*    vector={require("../assets/vector6.png")}*/}
-            {/*/>*/}
-            {/*<View style={styles.titleParent}>*/}
-            {/*    <Text style={[styles.title, styles.titleLayout]}>{`Backup mnemonics`}</Text>*/}
-            {/*    <Text style={[styles.title1, styles.titleLayout]}>*/}
-            {/*        Please copy the mnemonic words in order to ensure accurate backup*/}
-            {/*    </Text>*/}
-            {/*</View>*/}
-            {/*<WalletWords mnemonicArray={mnemonicArray}/>*/}
             <FavorDaoNavBar
-                title="Private Key"
+                title="Mnemonic words"
                 vector={require("../assets/vector6.png")}
             />
             <View style={styles.titleParent}>
-                <Text style={[styles.title, styles.titleLayout]}>{`Backup private key`}</Text>
+                <Text style={[styles.title, styles.titleLayout]}>{`Backup mnemonics`}</Text>
                 <Text style={[styles.title1, styles.titleLayout]}>
-                    Please copy the private key in order to ensure accurate backup
+                    Please copy the mnemonic words in order to ensure accurate backup
                 </Text>
             </View>
-            <Text style={{
-                padding: 20,
-                borderRadius:10,
-                borderStyle:'solid',
-                borderWidth:1,
-                borderColor:'#ccc'
-            }}>
-                {
-                    mnemonic
-                }
-            </Text>
-            <TouchableOpacity>
+            <WalletWords mnemonicArray={mnemonicArray}/>
+
+            <TouchableOpacity onPress={backUp}>
                 <FavorDaoButton
                     textValue="Backup"
                     frame1171275771BackgroundColor="#ff8d1a"

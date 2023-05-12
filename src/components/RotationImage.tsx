@@ -2,7 +2,7 @@
 import React, { useMemo } from "react";
 import {Image, StyleSheet, ImageSourcePropType, FlatList,View, Text} from "react-native";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import {PostInfo} from "../declare/global";
+import {PostInfo} from "../declare/api/DAOApi";
 import {getContent} from "../utils/util";
 import {useResourceUrl} from "../utils/hook";
 

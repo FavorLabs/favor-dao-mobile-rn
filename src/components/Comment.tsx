@@ -12,7 +12,7 @@ import {
 import { useSelector } from 'react-redux';
 import PostApi from '../services/DAOApi/Post';
 import {GetCommentsParams, CommentInfo, CommentReplyRes} from '../declare/api/DAOApi';
-import { useUrl, useResourceUrl, useScreenDimensions } from "../utils/hook";
+import {useUrl, useResourceUrl, useScreenDimensions, useIsLogin} from "../utils/hook";
 import {Color} from "../GlobalStyles";
 import Toast from "react-native-toast-message";
 import BottomSheet from '../components/BottomSheet';
@@ -40,6 +40,7 @@ const Comment: React.FC<Props> = (props) => {
   const url = useUrl();
   const avatarsResUrl = useResourceUrl('avatars');
   const { screenWidth, screenHeight } = useScreenDimensions();
+  const [isLogin, gotoLogin] = useIsLogin();
 
   const [commentListMap, setCommentListMap] = useState<CommentListMap>({});
   const [hasMore, setHasMore] = useState(true);
@@ -83,6 +84,7 @@ const Comment: React.FC<Props> = (props) => {
   }, [reply]);
 
   const sendComment = async () => {
+    if(!isLogin) return gotoLogin();
     if (sendDisable) return Toast.show({ type: 'info', text1: 'Please enter your comment!' });
     try {
       const { data } = await PostApi.addPostComment(url, {
@@ -139,6 +141,7 @@ const Comment: React.FC<Props> = (props) => {
   };
 
   const sendReply = async () => {
+    if(!isLogin) return gotoLogin();
     if (sendReplyDisable) return Toast.show({ type: 'info', text1: 'Please enter your reply!' });
     try {
       const currentReply = replyToComment as ReplyToComment;

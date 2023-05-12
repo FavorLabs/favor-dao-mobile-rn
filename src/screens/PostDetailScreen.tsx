@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity} from 'r
 import PostDetailHeader from "../components/PostDetailHeader";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import { useUrl, useScreenDimensions } from "../utils/hook";
-import { PostInfo } from "../declare/global";
+import { PostInfo } from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
 import NewsBlock from "../components/NewsBlock";
 import QuoteBlock from "../components/QuoteBlock";

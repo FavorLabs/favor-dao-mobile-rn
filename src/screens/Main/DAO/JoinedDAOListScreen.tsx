@@ -4,7 +4,7 @@ import { Border, Color, FontFamily, FontSize, Padding } from "../../../GlobalSty
 import FollowDAOHeader from "../../../components/FollowDAOHeader";
 import PublishContainer from "../../../components/PublishContainer";
 import Chats from "../../../components/Chats";
-import {DaoInfo, Page} from "../../../declare/global";
+import {DaoInfo, Page} from "../../../declare/api/DAOApi";
 import DaoApi from "../../../services/DAOApi/Dao";
 import {useUrl} from "../../../utils/hook";
 import DaoCardItem from "../../../components/DaoCardItem";
@@ -126,7 +126,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   }, []);
 
   useEffect(() => {
-      if(bookmarkList[0] && !dao){
+      if(bookmarkList[0] && !activeId){
         setActiveId(bookmarkList[0].id)
       }
       getDaoInfo();

@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import {FontFamily, FontSize, Color, Padding} from "../GlobalStyles";
-import {PostInfo} from '../declare/global';
+import {PostInfo} from "../declare/api/DAOApi";
 import {useEffect, useRef, useState} from "react";
 // @ts-ignore
 import ActionSheet from 'react-native-actionsheet'
@@ -30,8 +30,9 @@ const OperationBlock: React.FC<Props> = (props) => {
   const { postInfo, type } = props;
   const {id} = props.postInfo;
   const url = useUrl();
-  const {token} = useSelector((state: any) => state.wallet);
+  const { token } = useSelector((state: any) => state.wallet);
   const { dao } = useSelector((state: Models) => state.global);
+  const [isLogin, gotoLogin] = useIsLogin();
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -46,8 +47,21 @@ const OperationBlock: React.FC<Props> = (props) => {
   const [likeCount, setLikeCount] = useState<number>(postInfo?.upvote_count);
   const [watchCount, setWatchCount] = useState<number>(postInfo?.view_count);
 
-  const showActionSheet = () => {
-    actionSheetRef.current?.show()
+  const showActionSheet = (e: { preventDefault: () => void; }) => {
+    if(isLogin) {
+      if(dao) {
+        actionSheetRef.current?.show();
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'please create a community!'
+        });
+        e.preventDefault()
+      }
+    } else {
+      gotoLogin();
+      e.preventDefault()
+    }
   }
 
   const getPostLikeStatus = async () => {
@@ -58,6 +72,7 @@ const OperationBlock: React.FC<Props> = (props) => {
   };
 
   const postLike = async () => {
+    if(!isLogin) return  gotoLogin();
     if (isPostLike) {
       try {
         setIsPostLike(false);
@@ -74,10 +89,11 @@ const OperationBlock: React.FC<Props> = (props) => {
   };
 
   const postView = async () => {
-    try {
-      const {data} = await PostApi.addPostView(url, id);
-      if (data.data.status) setWatchCount(watchCount + 1);
-    } catch (e) {
+    if (token) {
+      try {
+        const {data} = await PostApi.addPostView(url, id);
+        if (data.data.status) setWatchCount(watchCount + 1);
+      } catch (e) {}
     }
   };
 

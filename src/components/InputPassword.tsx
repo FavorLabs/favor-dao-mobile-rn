@@ -12,11 +12,12 @@ export type Props = {
 const InputPassword = ({fn}: Props) => {
     const [password, setPassword] = useState('')
     const confirm = () => {
-        if (!WalletController.passwordVerify(password)) {
+        try {
+            const privateKey = WalletController.exportPrivateKey(password);
+            fn(WalletController.getSignatureData(privateKey, 1));
+        } catch (e) {
             console.error('Password Error')
-            return;
         }
-        fn(WalletController.getSignatureData(1));
     }
     return <>
         <TextInputBlock title={'Password'} placeholder={'Please enter password here'} value={password}

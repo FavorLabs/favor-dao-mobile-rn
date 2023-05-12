@@ -2,7 +2,7 @@ import * as React from "react";
 import {Text, StyleSheet, View, Image, TouchableOpacity} from "react-native";
 import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
 import OperationBlock from "./OperationBlock";
-import { PostInfo } from "../declare/global";
+import { PostInfo } from "../declare/api/DAOApi";
 import VideoBlockItem from "./VideoBlockItem";
 
 type Props = {

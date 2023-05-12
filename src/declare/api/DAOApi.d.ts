@@ -46,7 +46,7 @@ export type DaoInfo = {
     avatar: string;
     banner: string;
     follow_count: number;
-    price: number;
+    price: string;
     last_posts: [
         {
             type: number;
@@ -251,7 +251,7 @@ export type UserAccounts = {
     "wallet": string
     "created_at": string
     "updated_at": string
-    "balance": number
+    "balance": string
     "frozen": number
     "decimal": number
 }

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { FontSize, FontFamily, Color } from "../GlobalStyles";
-import {DaoInfo} from "../declare/global";
+import {DaoInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 
 type Props = {

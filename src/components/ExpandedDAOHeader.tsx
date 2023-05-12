@@ -9,7 +9,7 @@ import DAOInfo from "./DAOInfo";
 import BtnChatToggle from "./BtnChatToggle";
 import { Color, Padding } from "../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
-import {DaoInfo} from "../declare/global";
+import {DaoInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 import {getDebounce} from "../utils/util";
 import {useEffect, useState} from "react";

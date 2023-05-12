@@ -2,7 +2,7 @@ import * as React from "react";
 import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
 import { FontFamily, Color, FontSize, Border } from "../GlobalStyles";
 import {getDebounce} from "../utils/util";
-import {DaoInfo} from "../declare/global";
+import {DaoInfo} from "../declare/api/DAOApi";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 

@@ -21,7 +21,7 @@ import FeedsOfDAO from "../screens/FeedsOfDAO";
 import UserApi from '../services/DAOApi/User'
 import DaoApi from '../services/DAOApi/Dao'
 import {useIsLogin, useUrl} from "../utils/hook";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {updateState as globalUpdateState} from "../store/global"
 
 const Stack = createStackNavigator();
@@ -64,8 +64,8 @@ function RootStack() {
                 }
                 dispatch(globalUpdateState({
                     user: info.data.data,
-                    dao: dao?.data.data.list[0] || null
-                }))
+                    dao: dao?.data.data.list?.[0] || null
+                }));
             }
         }
 

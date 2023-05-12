@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
 import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
-import { Page, PostInfo } from '../declare/global';
+import { Page, PostInfo } from "../declare/api/DAOApi";
 import PostApi from '../services/DAOApi/Post';
 import { useUrl } from '../utils/hook';
 import { sleep } from '../utils/util';
@@ -10,7 +10,8 @@ import DaoCardList from "./DaoCardList";
 import QuoteNews from "./QuoteNews";
 import VideoBlock from "./VideoBlock";
 import ReTransfer from "./ReTransfer";
-import DaoInfoHeader from "./DaoInfoHeader";
+import {useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
 
 export type Props = {
   type?: number | string;
@@ -121,16 +122,6 @@ const PostList: React.FC<Props> = (props) => {
                 </>
               )
             }
-            // else if(daoId && index === 0 && type==='post') {
-            //   return (
-            //     <>
-            //       <View style={styles.daoUnderLine}>
-            //         <DaoInfoHeader daoInfo={item.dao}/>
-            //       </View>
-            //       {renderItem(item)}
-            //     </>
-            //   )
-            // }
             else {
               return renderItem(item)
             }
@@ -150,14 +141,7 @@ const PostList: React.FC<Props> = (props) => {
 }
 
 const styles = StyleSheet.create({
-  postList: {
-
-  },
-  daoUnderLine: {
-    backgroundColor: Color.color1,
-    borderBottomWidth: 1,
-    borderColor: '#E6E5EB',
-  },
+  postList: {},
 })
 
 export default PostList

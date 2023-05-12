@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
-import {DaoInfo} from "../declare/global";
+import {DaoInfo} from "../declare/api/DAOApi";
 import {getDebounce} from "../utils/util";
 
 type Props = {

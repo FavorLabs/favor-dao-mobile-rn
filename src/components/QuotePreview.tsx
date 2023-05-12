@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Border, FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
-import {Post, PostInfo} from "../declare/global";
+import {Post, PostInfo} from "../declare/api/DAOApi";
 import {useEffect, useState} from "react";
 import {getContent} from "../utils/util";
 import {useResourceUrl} from "../utils/hook";

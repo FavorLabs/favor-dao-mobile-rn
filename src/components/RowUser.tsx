@@ -9,23 +9,27 @@ import {
 import { FontFamily, Border, FontSize, Color, Padding } from "../GlobalStyles";
 import {useResourceUrl} from "../utils/hook";
 import {getTime} from "../utils/util";
-import {DaoInfo, PostInfo} from "../declare/global";
+import {DaoInfo, PostInfo} from "../declare/api/DAOApi";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
+import {useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
 
 type Props = {
   time: number;
-  dao?: DaoInfo;
+  daoInfo?: DaoInfo;
+  userDao?: DaoInfo;
   isReTransfer?: boolean;
   postInfo?: PostInfo;
   isQuote?: boolean;
 };
 
 const RowUser: React.FC<Props> = (props) => {
-  const { time,  postInfo , isReTransfer, isQuote, dao} = props;
+  const { time,  postInfo , isReTransfer, isQuote, daoInfo, userDao} = props;
   const navigation = useNavigation();
   const avatarsResUrl = useResourceUrl('avatars');
   const createTime = getTime(time);
+  const { dao } = useSelector((state: Models) => state.global);
 
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
     // @ts-ignore
@@ -37,16 +41,17 @@ const RowUser: React.FC<Props> = (props) => {
     <TouchableOpacity onPress={toDaoCommunity}>
     <View style={styles.rowUser}>
       <View style={styles.imageParent}>
-        <Image style={styles.imageIcon} resizeMode="cover" source={{uri: `${avatarsResUrl}/${dao?.avatar}`}} />
+        <Image style={styles.imageIcon} resizeMode="cover" source={{uri: `${avatarsResUrl}/${daoInfo?.avatar}`}} />
         <View style={styles.subtitleParent}>
           <View style={styles.row}>
-            <Text style={[styles.title, styles.titleTypo]} numberOfLines={1}>{dao?.name}</Text>
+            <Text style={[styles.title, styles.titleTypo]} numberOfLines={1}>{daoInfo?.name}</Text>
             {
               isReTransfer && (
                 <View style={styles.reTransfer}>
                   <Text style={styles.retTransferText} numberOfLines={1}>was retransfered by</Text>
-                  {/*<Text>{postInfo?.dao.name}</Text>*/}
-                  <Text style={styles.daoName} numberOfLines={1}>Me</Text>
+                  <Text style={styles.daoName} numberOfLines={1}>
+                    { dao?.id === userDao?.id ? 'Me' : userDao?.name}
+                  </Text>
                 </View>
               )
             }

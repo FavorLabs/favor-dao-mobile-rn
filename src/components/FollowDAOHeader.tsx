@@ -1,7 +1,7 @@
 import * as React from "react";
 import {FlatList, Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
-import {DaoInfo} from "../declare/global";
+import {DaoInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 import {getDebounce, sleep} from "../utils/util";
 

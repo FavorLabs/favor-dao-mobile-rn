@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View } from "react-native";
 import { Color, Padding } from "../GlobalStyles";
-import { PostInfo } from '../declare/global';
+import { PostInfo } from "../declare/api/DAOApi";
 import NewsCard from "./NewsCard";
 import VideoBlock from "./VideoBlock";
 

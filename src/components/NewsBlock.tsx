@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {PostInfo} from "../declare/global";
+import {PostInfo} from "../declare/api/DAOApi";
 import NewsContent from "./NewsContent";
 import NewsDescription from "./NewsDescription";
 import RotationImage from "./RotationImage";
