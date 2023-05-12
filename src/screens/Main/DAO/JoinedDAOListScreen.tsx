@@ -24,8 +24,6 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
     page_size: 10,
   });
 
-  // const daoId = '644b8ab03d02093d481d0658';
-
   const [daoInfo, setDaoInfo] = useState<DaoInfo>();
   // @ts-ignore
   const [activeId, setActiveId] = useState<string>('');
@@ -33,7 +31,19 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   const getBookmarkList = async () => {
     try {
       const { data } = await DaoApi.getBookmarkList(url, daoPageData);
-      setBookmarkList(() => [...bookmarkList,...data.data?.list]);
+      if(data.data?.list) {
+        const newsData = data.data.list;
+        const firstItem: DaoInfo | undefined = newsData?.find(item => item.id === dao?.id);
+        const otherItems: DaoInfo[] = newsData.filter(item => item.id !== dao?.id);
+        // @ts-ignore
+        let sortedData: DaoInfo[] = [];
+        if(firstItem) {
+          sortedData = [firstItem, ...otherItems];
+        } else {
+          sortedData = [...otherItems];
+        }
+        setBookmarkList(() => [...bookmarkList,...sortedData]);
+      }
       setIsLoadingMore(
         data.data.pager.total_rows > daoPageData.page * daoPageData.page_size,
       );
@@ -47,7 +57,19 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
     const pageData = { page: 1, page_size: 10,}
     try {
       const { data } = await DaoApi.getBookmarkList(url, pageData);
-      setBookmarkList(data.data?.list);
+      if(data.data?.list) {
+        const newsData = data.data.list;
+        const firstItem: DaoInfo | undefined = newsData?.find(item => item.id === dao?.id);
+        const otherItems: DaoInfo[] = newsData.filter(item => item.id !== dao?.id);
+        // @ts-ignore
+        let sortedData: DaoInfo[] = [];
+        if(firstItem) {
+          sortedData = [firstItem, ...otherItems];
+        } else {
+          sortedData = [...otherItems];
+        }
+        setBookmarkList([...sortedData]);
+      }
       setIsLoadingMore(
         data.data.pager.total_rows > pageData.page * pageData.page_size,
       );
@@ -98,10 +120,13 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
 
   useEffect(() => {
     getBookmarkList();
+    if(dao) {
+      setActiveId(dao.id)
+    }
   }, []);
 
   useEffect(() => {
-      if(bookmarkList[0] && !activeId){
+      if(bookmarkList[0] && !dao){
         setActiveId(bookmarkList[0].id)
       }
       getDaoInfo();

@@ -6,6 +6,8 @@ import {useResourceUrl, useUrl} from "../utils/hook";
 import JoinButton from "./JoinButton";
 import DaoApi from "../services/DAOApi/Dao";
 import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -13,6 +15,7 @@ type Props = {
 
 const DaoInfoHeader: React.FC<Props> = (props) => {
   const url = useUrl();
+  const { dao } = useSelector((state: Models) => state.global);
 
   const { daoInfo } = props;
   const avatarsResUrl = useResourceUrl('avatars');
@@ -57,7 +60,11 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
         </View>
 
         <View style={styles.topRight}>
-          <JoinButton isJoin={isJoin} handle={bookmarkHandle}/>
+
+          { dao?.id !== daoInfo.id &&
+              <JoinButton isJoin={isJoin} handle={bookmarkHandle}/>
+          }
+
           <View style={styles.level}>
             <Text style={styles.levelText}>8 level</Text>
           </View>

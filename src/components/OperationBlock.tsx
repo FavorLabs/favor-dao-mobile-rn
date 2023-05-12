@@ -13,7 +13,7 @@ import ActionSheet from 'react-native-actionsheet'
 import Screens from "../navigation/RouteNames";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {useUrl} from "../utils/hook";
+import {useIsLogin, useUrl} from "../utils/hook";
 import PostApi from '../services/DAOApi/Post';
 import {getDebounce} from "../utils/util";
 import {ReTransferPost} from "../declare/api/DAOApi";

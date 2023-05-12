@@ -2,11 +2,21 @@ import * as React from "react";
 import { Text, StyleSheet, View } from "react-native";
 import DefaultContentModeContainer from "./DefaultContentModeContainer";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
+import SwitchButton from "./SwitchButton";
+import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
 
-const ContentInfoContainer = () => {
+type Props = {
+  daoMode: number;
+  setDaoMode: React.Dispatch<React.SetStateAction<number>>;
+};
+const ContentInfoContainer: React.FC<Props> = (props) => {
+  const { daoMode, setDaoMode } = props;
+
   return (
     <View style={styles.contentinfo}>
-      <DefaultContentModeContainer />
+      <SwitchButton mode={daoMode} setMode={setDaoMode} />
       <View style={[styles.price, styles.priceFlexBox]}>
         <Text style={[styles.membershipPrice, styles.textFlexBox]}>
           Subscribe Price
@@ -88,7 +98,7 @@ const styles = StyleSheet.create({
   contentinfo: {
     backgroundColor: "#f8f8f8",
     paddingHorizontal: Padding.p_base,
-    paddingVertical: Padding.p_xl,
+    paddingBottom: Padding.p_xl,
     marginTop: 20,
     alignSelf: "stretch",
   },

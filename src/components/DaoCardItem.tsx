@@ -5,6 +5,8 @@ import {DaoInfo} from "../declare/global";
 import {useResourceUrl} from "../utils/hook";
 import {useEffect, useState} from "react";
 import JoinButton from "./JoinButton";
+import {useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -14,6 +16,7 @@ type Props = {
 
 const DaoCardItem: React.FC<Props> = (props) => {
   const { daoInfo, handle, joinStatus } = props;
+  const { dao } = useSelector((state: Models) => state.global);
 
   const avatarsResUrl = useResourceUrl('avatars');
   const imagesResUrl = useResourceUrl('images');
@@ -40,7 +43,9 @@ const DaoCardItem: React.FC<Props> = (props) => {
           </View>
           <View style={styles.labelWrapper}>
 
-            <JoinButton isJoin={joinStatus} handle={handle}/>
+            { dao?.id !== daoInfo.id &&
+                <JoinButton isJoin={joinStatus} handle={handle}/>
+            }
 
             <View style={[styles.label, styles.labelFlexBox]}>
               <Text style={styles.label1}>8 level</Text>
