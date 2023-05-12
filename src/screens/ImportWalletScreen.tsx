@@ -1,14 +1,13 @@
 import * as React from "react";
-import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
+import {StyleSheet, View,TouchableOpacity} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {Padding, FontFamily, FontSize, Color, Border} from "../GlobalStyles";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useNavigation} from '@react-navigation/native';
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import WalletController from "../libs/walletController";
-import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useUrl} from "../utils/hook";
 
@@ -29,10 +28,11 @@ const ImportWallet = () => {
         }
         try {
             WalletController.importMnemonic(password, mnemonic);
-            await WalletController.login(url);
+            const privateKey = WalletController.exportPrivateKey(password)
+            await WalletController.login(url, privateKey);
             navigation.goBack();
         } catch (e) {
-            console.error(e)
+            console.error(e);
         }
     }
 

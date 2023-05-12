@@ -5,10 +5,9 @@ import TextInputBlock from "../components/TextInputBlock";
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {Color, Padding} from "../GlobalStyles";
-import {useEffect, useMemo, useState} from "react";
+import {useMemo, useState} from "react";
 import WalletController from "../libs/walletController";
 import {useNavigation} from "@react-navigation/native";
-import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useUrl} from "../utils/hook";
 import WalletWords from "../components/WalletWords";
@@ -38,7 +37,8 @@ const CreateWallet = () => {
         }
         try {
             WalletController.importMnemonic(password, mnemonic);
-            await WalletController.login(url);
+            const privateKey = WalletController.exportPrivateKey(password)
+            await WalletController.login(url, privateKey);
             navigation.goBack();
         } catch (e) {
             console.error(e);
@@ -55,7 +55,7 @@ const CreateWallet = () => {
               title="Create wallet"
               vector={require("../assets/vector6.png")}
             />
-            <WalletWords mnemonicArray={mnemonicArray} />
+            <WalletWords mnemonicArray={mnemonicArray}/>
             <TextInputBlock
               title={'Password'}
               placeholder={`Please enter passwords`}
