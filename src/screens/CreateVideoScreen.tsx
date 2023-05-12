@@ -13,11 +13,12 @@ import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import PostApi from '../services/DAOApi/Post';
 import {useUrl} from "../utils/hook";
-import { eventEmitter } from '../utils/util';
+import { eventEmitter, getMatchedStrings } from '../utils/util';
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
 import SwitchButton from "../components/SwitchButton";
+import {RegExps} from "../components/TextInputParsed";
 
 export type Props = {};
 const CreateVideoScreen: React.FC<Props> = (props) => {
@@ -31,6 +32,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
   const [autoThumbnail, setAutoThumbnail] = useState<string>('');
   const [postLoading, setPostLoading] = useState<boolean>(false);
   const [daoMode, setDaoMode] = useState<number>(0);
+  const [tags, setTags] = useState<string[]>([]);
 
   // const { userInfo } = useSelector((state: Models) => state.dao);
   const { dao } = useSelector((state: Models) => state.global);
@@ -60,10 +62,10 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
       const postData: CreatePost = {
         contents: contents,
         dao_id: dao?.id as string,
-        tags: [],
+        tags,
         type: 1,
         users: [],
-        visibility: daoMode,
+        visibility: daoMode ? 0 : 1,
       };
       const { data } = await PostApi.createPost(url, postData);
       if (data.data) {
@@ -90,6 +92,10 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
     }
   }, [dao]);
 
+  useEffect(() => {
+    setTags(getMatchedStrings(videoDesc, RegExps.tag));
+  }, [videoDesc]);
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollWrap}>
@@ -111,7 +117,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
           multiline={true}
         />
         <UploadVideo setVideo={setVideo} thumbnail={thumbnail} setThumbnail={setThumbnail} autoThumbnail={autoThumbnail} setAutoThumbnail={setAutoThumbnail} />
-        <UploadImage imageType={'thumbnail'} setUpImage={setThumbnail} autoThumbnail={autoThumbnail} />
+        <UploadImage imageType={'thumbnail'} setUpImage={setThumbnail} autoThumbnail={autoThumbnail} multiple={false} />
         <SingleChoice />
         <SwitchButton mode={daoMode} setMode={setDaoMode} />
         <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>

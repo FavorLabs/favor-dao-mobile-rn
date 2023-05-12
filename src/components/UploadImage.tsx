@@ -71,7 +71,7 @@ const UploadImage: React.FC<Props> = (props) => {
 
   const processImages = async (pickedImage: any) => {
     // @ts-ignore
-    setImages(images => [...images,pickedImage])
+    multiple ? setImages(images => [...images,pickedImage]) : setImages([pickedImage]);
     let file = {uri: pickedImage.path, type: 'multipart/form-data', name:'image.png' };
     try {
       let fmData = new FormData();
@@ -117,6 +117,17 @@ const UploadImage: React.FC<Props> = (props) => {
   useEffect(() => {
     setImages(autoThumbnail ? [{ sourceURL: autoThumbnail }] : [])
   }, [autoThumbnail]);
+
+  useEffect(() => {
+    if (upImage) {
+      setImages([{ sourceURL: `${imageType === 'avatar' ? avatarsResUrl : imagesResUrl}/${upImage}` }]);
+    }
+  }, [upImage]);
+
+  useEffect(() => {
+    if (!multiple && images.length) setIsDisableUpImg(true);
+    else setIsDisableUpImg(false);
+  }, [multiple, images])
 
   return (
     <View style={styles.container}>

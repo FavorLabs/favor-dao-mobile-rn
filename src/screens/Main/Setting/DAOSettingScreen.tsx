@@ -15,6 +15,9 @@ import Toast from "react-native-toast-message";
 import DaoApi from "../../../services/DAOApi/Dao";
 import {updateState as globalUpdateState} from "../../../store/global";
 import {useUrl} from "../../../utils/hook";
+import {DaoParams} from "../../../declare/api/DAOApi";
+import {getMatchedStrings} from "../../../utils/util";
+import {RegExps} from "../../../components/TextInputParsed";
 
 type Props = {};
 const DAOSettingScreen: React.FC<Props> = (props) => {
@@ -28,16 +31,18 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
   const [daoAvatar, setDaoAvatar] = useState<string>('');
   const [daoBanner, setBanner] = useState<string>('');
   const [daoMode, setDaoMode] = useState<number>(0);
+  const [tags, setTags] = useState<string[]>([]);
 
   const settingDao = async () => {
     try {
-      const params = {
-        name: dao?.name,
+      const params: DaoParams & { id: string } = {
+        name: dao?.name as string,
         introduction: daoDescription,
         avatar: daoAvatar,
         banner: daoBanner,
-        id: dao?.id,
+        id: dao?.id as string,
         visibility: daoMode,
+        tags,
       }
       // @ts-ignore
       const { data } = await DaoApi.modifyDao(url, params);
@@ -45,7 +50,7 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
       if(data.msg === 'success') {
         Toast.show({
           type: 'info',
-          text1: 'create dao success!'
+          text1: 'modify dao success!'
         });
 
         dispatch(globalUpdateState({
@@ -70,13 +75,18 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    if(dao) {
+    if (dao) {
+      setDaoMode(dao.visibility);
       setDaoDescription(dao.introduction);
       setDaoAvatar(dao.avatar);
       setBanner(dao.banner);
-      setDaoMode(dao.visibility);
     }
   },[dao])
+
+  useEffect(() => {
+    setTags(getMatchedStrings(daoDescription, RegExps.tag));
+    console.log('tags', getMatchedStrings(daoDescription, RegExps.tag))
+  }, [daoDescription]);
 
 
   return (
@@ -91,11 +101,8 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
               <DAODescriptionSection
                 daoInfo={dao}
                 daoDescription={daoDescription}
-                // @ts-ignore
                 setDaoDescription={setDaoDescription}
-                // @ts-ignore
                 setDaoAvatar={setDaoAvatar}
-                // @ts-ignore
                 setBanner={setBanner}
               />
 

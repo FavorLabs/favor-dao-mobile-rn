@@ -13,6 +13,9 @@ import {useNavigation} from "@react-navigation/native";
 import {DaoParams} from "../declare/api/DAOApi";
 import {useDispatch} from "react-redux";
 import {updateState as globalUpdateState} from "../store/global";
+import {getMatchedStrings} from "../utils/util";
+import {RegExps} from "../components/TextInputParsed";
+import TextInputParsedBlock from "../components/TextInputParsedBlock";
 
 export type Props = {};
 const CreateDAOScreen: React.FC<Props> = (props) => {
@@ -26,6 +29,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
   const [daoAvatar, setDaoAvatar] = useState<string>('');
   const [daoBanner, setBanner] = useState<string>('');
   const [daoMode, setDaoMode] = useState<number>(0);
+  const [tags, setTags] = useState<string[]>([]);
 
   const createDisable = useMemo(() => {
     return !(
@@ -64,7 +68,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         avatar: daoAvatar,
         banner: daoBanner,
         visibility: daoMode,
-        tags: []
+        tags,
       }
       console.log(params,'create DAO')
       // @ts-ignore
@@ -95,6 +99,10 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
   //   }
   // },[daoAvatar])
 
+  useEffect(() => {
+    setTags(getMatchedStrings(daoDescription, RegExps.tag));
+  }, [daoDescription]);
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollWrap}>
@@ -108,7 +116,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           setValue={setDaoName}
           placeholder={'Please enter a name'}
         />
-        <TextInputBlock
+        <TextInputParsedBlock
           title={'DAO description'}
           value={daoDescription}
           setValue={setDaoDescription}
