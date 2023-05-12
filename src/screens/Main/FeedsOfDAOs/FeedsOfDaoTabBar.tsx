@@ -6,7 +6,7 @@ import { FontSize, Color, Border, FontFamily, Padding } from "../../../GlobalSty
 import Mixed from '../FeedsOfDAOs/Mixed';
 import News from "./News";
 import Videos from "./Viedos";
-import {DaoInfo} from "../../../declare/global";
+import {DaoInfo} from "../../../declare/api/DAOApi";
 
 export const TopBarOptions = {
   header: () => null,

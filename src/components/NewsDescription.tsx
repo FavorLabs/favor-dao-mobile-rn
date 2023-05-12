@@ -2,7 +2,7 @@
 import React, {useEffect, useMemo, useState} from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { Color, FontSize, FontFamily, Padding } from "../GlobalStyles";
-import {Post, PostInfo} from "../declare/global";
+import {Post, PostInfo} from "../declare/api/DAOApi";
 import {getContent} from "../utils/util";
 import {useRoute} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";

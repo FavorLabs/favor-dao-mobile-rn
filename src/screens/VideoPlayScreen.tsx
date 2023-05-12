@@ -5,7 +5,7 @@ import {useNavigation, useRoute} from "@react-navigation/native";
 import {FontSize, FontFamily, Color, Border} from "../GlobalStyles";
 import {useResourceUrl, useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
-import {PostInfo} from "../declare/global";
+import {PostInfo} from "../declare/api/DAOApi";
 import {getContent} from "../utils/util";
 import Video from 'react-native-video';
 import {Icon} from "@rneui/themed";

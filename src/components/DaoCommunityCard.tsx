@@ -1,11 +1,12 @@
 import * as React from "react";
 import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
-import {PostInfo} from "../declare/global";
+import {PostInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 import {useNavigation} from "@react-navigation/native";
 import {getDebounce} from "../utils/util";
 import Screens from "../navigation/RouteNames";
+import TextParsed from "./TextParsed";
 
 type Props = {
   // daoCardInfo: {
@@ -59,9 +60,9 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
           </View>
         </View>
         <View style={[styles.groupParent, styles.labelFlexBox]}>
-          <Text style={[styles.description, styles.titleClr]} numberOfLines={3}>
-            {dao.introduction}
-          </Text>
+          {/* @ts-ignore */}
+          <TextParsed content={dao.introduction} style={[styles.description, styles.titleClr]} numberOfLines={3} />
+
         </View>
       </View>
     </View>

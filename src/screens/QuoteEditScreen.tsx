@@ -9,7 +9,7 @@ import TextInputBlock from "../components/TextInputBlock";
 import {useEffect, useMemo, useState} from "react";
 import {useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
-import {Post, PostInfo} from "../declare/global";
+import {Post, PostInfo} from "../declare/api/DAOApi";
 import {getContent, getDebounce} from "../utils/util";
 import Toast from "react-native-toast-message";
 import {ReTransferPost} from "../declare/api/DAOApi";

@@ -1,12 +1,13 @@
 import * as React from "react";
 import {Text, StyleSheet, View, Image, TouchableOpacity} from "react-native";
 import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
-import { PostInfo } from "../declare/global";
-import {useResourceUrl} from "../utils/hook";
+import { PostInfo } from "../declare/api/DAOApi";
+import {useIsLogin, useResourceUrl} from "../utils/hook";
 import {getContent} from "../utils/util";
 import RowUser from "./RowUser";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
+import {useEffect} from "react";
 
 type Props = {
   postInfo: PostInfo
@@ -20,49 +21,68 @@ const VideoBlockItem: React.FC<Props> = (props) => {
   const imagesResUrl = useResourceUrl('images');
   const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
   const navigation = useNavigation();
+  const [isLogin, gotoLogin] = useIsLogin();
 
   const toVideoDetail = () => {
-    // @ts-ignore
-    navigation.navigate(Screens.VideoPlay,{ postId: props.postInfo.id});
+    if(postInfo.member === 1) {
+      if(isLogin) {
+        // @ts-ignore
+        navigation.navigate(Screens.VideoPlay,{ postId: props.postInfo.id});
+      } else {
+        gotoLogin();
+      }
+    } else {
+      // @ts-ignore
+      navigation.navigate(Screens.VideoPlay,{ postId: props.postInfo.id});
+    }
   }
 
   return (
     <View style={styles.rowUserParent}>
       <RowUser
         time={created_on}
-        dao={isQuote || isReTransfer ? author_dao : dao}
+        daoInfo={isQuote || isReTransfer ? author_dao : dao}
         postInfo={postInfo}
         isReTransfer={isReTransfer}
         isQuote={isQuote}
+        userDao={dao}
       />
       <TouchableOpacity onPress={toVideoDetail}>
+
         <View style={[styles.description, styles.likeSpaceBlock]}>
           <Text style={styles.description1}>
             {info?.[1]?.[0]?.content}
           </Text>
         </View>
+
         <View style={[styles.imageParent, styles.likeSpaceBlock]}>
           <Image
             style={styles.imageIcon}
             resizeMode="cover"
             source={{uri:`${imagesResUrl}/${info?.[3]?.[0]?.content}`}}
           />
-          <View style={[styles.rectangleParent, styles.groupChildLayout]}>
-            <View style={[styles.groupChild, styles.lockIconPosition]} />
-            <View style={styles.subtitleParent}>
-              <Text style={styles.subtitle}>Unlock</Text>
-              <Image
-                style={[styles.lockIcon, styles.lockIconPosition]}
-                resizeMode="cover"
-                source={require("../assets/lock.png")}
-              />
+
+          { postInfo.member === 1 &&
+            <View style={[styles.rectangleParent, styles.groupChildLayout]}>
+              <View style={[styles.groupChild, styles.lockIconPosition]} />
+                <View style={styles.subtitleParent}>
+                  <Text style={styles.subtitle}>Unlock</Text>
+                    <Image
+                       style={[styles.lockIcon, styles.lockIconPosition]}
+                       resizeMode="cover"
+                       source={require("../assets/lock.png")}
+                    />
+                </View>
             </View>
-          </View>
+          }
+
+
           <Image
             style={styles.playCircleIcon}
             resizeMode="cover"
             source={require("../assets/playcircle.png")}
           />
+
         </View>
       </TouchableOpacity>
     </View>

@@ -7,7 +7,7 @@ import UploadImage from '../components/UploadImage';
 import TextInputBlock from '../components/TextInputBlock';
 import { Color, Border } from "../GlobalStyles";
 import {useResourceUrl, useUrl} from "../utils/hook";
-import { Post } from "../declare/global";
+import { Post } from "../declare/api/DAOApi";
 import { CreatePost } from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";

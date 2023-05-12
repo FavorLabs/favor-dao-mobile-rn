@@ -4,7 +4,7 @@ import {Color} from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 import DaoBriefCard from "../../../components/DaoBriefCard";
 import DaoCommunityCard from "../../../components/DaoCommunityCard";
-import {Page, PostInfo} from "../../../declare/global";
+import {Page, PostInfo} from "../../../declare/api/DAOApi";
 import PostApi from "../../../services/DAOApi/Post";
 import {useUrl} from "../../../utils/hook";
 import {sleep} from "../../../utils/util";

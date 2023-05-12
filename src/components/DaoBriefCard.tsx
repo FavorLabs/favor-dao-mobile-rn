@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
-import {PostInfo} from "../declare/global";
+import {PostInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 import {getDebounce} from "../utils/util";
 import {useNavigation} from "@react-navigation/native";

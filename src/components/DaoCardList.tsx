@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Button, SafeAreaView, ScrollView, FlatList} from 'react-native';
 import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
 import DaoCommunityCard from "./DaoCommunityCard";
-import {Page, PostInfo} from "../declare/global";
+import {Page, PostInfo} from "../declare/api/DAOApi";
 import {useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
 

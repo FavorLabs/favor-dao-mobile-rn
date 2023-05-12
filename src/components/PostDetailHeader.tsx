@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useState} from "react";
 import { Image, StyleSheet, Pressable, Text, View } from "react-native";
 import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
 import {useResourceUrl, useUrl} from "../utils/hook";
-import {PostInfo} from "../declare/global";
+import {PostInfo} from "../declare/api/DAOApi";
 import {getTime} from "../utils/util";
 import JoinButton from "./JoinButton";
 import DaoApi from "../services/DAOApi/Dao";

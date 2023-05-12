@@ -15,6 +15,10 @@ export const globalStore = createSlice({
     } as State,
     reducers: {
         updateState: (state, action: PayloadAction<Partial<State>>) => {
+            console.log({
+                ...state,
+                ...action.payload,
+            })
             return {
                 ...state,
                 ...action.payload,

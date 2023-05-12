@@ -6,13 +6,15 @@ import DaoCommunityCard from "./DaoCommunityCard";
 import {useIsLogin, useUrl} from "../utils/hook";
 import UserApi from '../services/DAOApi/User'
 import {useEffect, useState} from "react";
+import {addDecimal, compareNumber} from "../utils/balance";
+import Toast from "react-native-toast-message";
 
 type Props = React.ComponentProps<typeof DaoCommunityCard> & {
     subFn?: Function
 }
 const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
     const url = useUrl();
-    const [balance, setBalance] = useState(0);
+    const [balance, setBalance] = useState<string>('0');
     const [isLogin, gotoLogin] = useIsLogin()
 
     useEffect(() => {
@@ -28,9 +30,15 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
             gotoLogin();
             return;
         }
-        if (daoCardInfo.dao.price > balance) {
+
+        if(compareNumber(daoCardInfo.dao.price,balance)) {
+            Toast.show({
+                type: 'info',
+                text1: 'Insufficient balance!'
+            })
             return;
         }
+
         subFn?.();
     }
 
@@ -55,7 +63,7 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
                           Balance
                       </Text>
                       <Text style={[styles.description2, styles.descriptionTypo]}>
-                          {balance} FavT
+                          { addDecimal(balance) } FavT
                       </Text>
                   </View>
                   <View style={styles.frameItem}/>
@@ -64,7 +72,7 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
                           price
                       </Text>
                       <Text style={[styles.description2, styles.descriptionTypo]}>
-                          {daoCardInfo.dao.price} FavT
+                          {addDecimal(daoCardInfo.dao.price)} FavT
                       </Text>
                   </View>
               </View>

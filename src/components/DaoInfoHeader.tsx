@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Image, StyleSheet, View, Text } from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
-import {DaoInfo} from "../declare/global";
+import {DaoInfo} from "../declare/api/DAOApi";
 import {useResourceUrl, useUrl} from "../utils/hook";
 import JoinButton from "./JoinButton";
 import DaoApi from "../services/DAOApi/Dao";

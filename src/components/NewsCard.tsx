@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import NewsContent from "./NewsContent";
 import OperationBlock from "./OperationBlock";
 import { Color, Padding } from "../GlobalStyles";
-import { PostInfo } from '../declare/global';
+import { PostInfo } from "../declare/api/DAOApi";
 
 export type Props = {
   postInfo: PostInfo;

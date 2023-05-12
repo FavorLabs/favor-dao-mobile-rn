@@ -2,7 +2,7 @@ import * as React from "react";
 import { Text, StyleSheet, Image, View } from "react-native";
 import { FontFamily, Color, FontSize, Border } from "../GlobalStyles";
 import PublishesItem from "./PublishesItem";
-import {DaoInfo} from "../declare/global";
+import {DaoInfo} from "../declare/api/DAOApi";
 
 type Props = {
   daoInfo: DaoInfo;

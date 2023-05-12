@@ -4,7 +4,7 @@ import NewsContent from "./NewsContent";
 import { Padding, FontSize, Color, FontFamily } from "../GlobalStyles";
 import RowUser from "./RowUser";
 import OperationBlock from "./OperationBlock";
-import { PostInfo } from '../declare/global';
+import { PostInfo } from "../declare/api/DAOApi";
 import NewsDescription from "./NewsDescription";
 import VideoBlock from "./VideoBlock";
 import VideoBlockItem from "./VideoBlockItem";
@@ -20,7 +20,7 @@ const QuoteNews: React.FC<Props> = (props) => {
   return (
     <View style={[styles.frameParent]}>
       <View style={[styles.groupParent, styles.likeSpaceBlock]}>
-        <RowUser time={created_on} dao={dao}/>
+        <RowUser time={created_on} daoInfo={dao}/>
       </View>
       <QuoteBlock postInfo={postInfo}/>
       <OperationBlock postInfo={postInfo} type={ postInfo.orig_type === 0 ? 0 : 1}/>

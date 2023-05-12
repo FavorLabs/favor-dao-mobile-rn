@@ -9,6 +9,8 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import Screens from "../../../navigation/RouteNames";
 import {getDebounce} from "../../../utils/util";
 import {useIsLogin} from "../../../utils/hook";
+import {useSelector} from "react-redux";
+import Models from "../../../declare/storeTypes";
 
 export type Props = {};
 const FeedsScreen: React.FC<Props> = (props) => {
@@ -16,27 +18,26 @@ const FeedsScreen: React.FC<Props> = (props) => {
     const actionSheetRef = useRef<ActionSheet>(null);
     const screens = [Screens.CreateVideo, Screens.CreateNews];
     const [isLogin, gotoLogin] = useIsLogin();
+    const { dao } = useSelector((state: Models) => state.global);
 
     const showActionSheet = (e: { preventDefault: () => void; }) => {
         if(isLogin) {
-            actionSheetRef.current?.show()
+            if(dao) {
+              actionSheetRef.current?.show();
+            } else {
+              navigation.navigate(Screens.CreateDAO);
+              e.preventDefault()
+            }
         } else {
             gotoLogin();
             e.preventDefault()
         }
-
     }
 
     const [searchValue, setSearchValue] = useState<string>('');
 
-    const handleKeyPress = (event: { nativeEvent: { key: string; }; }) => {
-        if (event.nativeEvent.key === 'Enter') {
-            console.log('User pressed Enter key');
-        }
-    };
-
     const getSearch = () => {
-        console.log('blur')
+        console.log(searchValue)
     }
 
     return (
@@ -52,7 +53,6 @@ const FeedsScreen: React.FC<Props> = (props) => {
                                   placeholder={'Search'}
                                   value={searchValue}
                                   onChangeText={text => setSearchValue(text)}
-                                  onKeyPress={handleKeyPress}
                                   onBlur={getDebounce(getSearch)}
                                 />
                             </View>

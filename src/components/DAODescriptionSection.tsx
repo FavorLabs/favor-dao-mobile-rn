@@ -44,20 +44,6 @@ const DAODescriptionSection: React.FC<Props> = (props) => {
         </View>
       </View>
 
-      {/*<View style={[styles.uploadimage, styles.uploadimageSpaceBlock]}>*/}
-      {/*  <View style={styles.content}>*/}
-      {/*    <Image*/}
-      {/*      style={styles.uploadCloudIcon}*/}
-      {/*      resizeMode="cover"*/}
-      {/*      source={require("../assets/uploadcloud2.png")}*/}
-      {/*    />*/}
-      {/*    <Text style={[styles.description, styles.subtitleTypo]}>*/}
-      {/*      Upload Avatar*/}
-      {/*    </Text>*/}
-      {/*  </View>*/}
-      {/*</View>*/}
-
-
       <UploadImage imageType={'avatar'} isShowSelector={false} upImage={daoInfo.avatar} setUpImage={setDaoAvatar} multiple={false}/>
 
       <UploadImage imageType={'banner'} isShowSelector={false} upImage={daoInfo.banner} setUpImage={setBanner} multiple={false}/>

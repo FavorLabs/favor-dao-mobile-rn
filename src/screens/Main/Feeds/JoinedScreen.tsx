@@ -4,11 +4,14 @@ import {Color} from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 import {useIsFocused} from "@react-navigation/native";
 import {useIsLogin} from "../../../utils/hook";
+import {useSelector} from "react-redux";
+import Models from "../../../declare/storeTypes";
 
 export type Props = {};
 const JoinedScreen: React.FC<Props> = (props) => {
     const [isLogin, gotoLogin] = useIsLogin()
     const isFocused = useIsFocused();
+    const { dao } = useSelector((state: Models) => state.global);
 
     useEffect(() => {
         if (isFocused && !isLogin) {

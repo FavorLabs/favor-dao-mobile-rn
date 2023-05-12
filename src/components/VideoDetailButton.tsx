@@ -3,8 +3,8 @@ import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-
 import {Color, FontFamily, FontSize} from "../GlobalStyles";
 // @ts-ignore
 import ActionSheet from 'react-native-actionsheet'
-import {PostInfo} from "../declare/global";
-import {useResourceUrl, useScreenDimensions, useUrl} from "../utils/hook";
+import {PostInfo} from "../declare/api/DAOApi";
+import {useIsLogin, useResourceUrl, useScreenDimensions, useUrl} from "../utils/hook";
 import {createRef, useEffect, useRef, useState} from "react";
 import PostApi from "../services/DAOApi/Post";
 import {getDebounce} from "../utils/util";
@@ -30,6 +30,7 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   const avatarsResUrl = useResourceUrl('avatars');
   const { screenWidth, screenHeight } = useScreenDimensions();
   const { dao } = useSelector((state: Models) => state.global);
+  const [isLogin, gotoLogin] = useIsLogin();
 
   const commentRef = createRef<any>();
 
@@ -56,21 +57,25 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   };
 
   const postLike = async () => {
-    if (isPostLike && postInfo) {
-      try {
-        setIsPostLike(false);
-        const {data} = await PostApi.postLike(url, postInfo.id);
-        if (data.data) {
-          setLike(data.data.status);
-          if (data.data.status) { // @ts-ignore
-            setLikeCount(likeCount + 1);
-          } else { // @ts-ignore
-            setLikeCount(likeCount - 1);
+    if(isLogin) {
+        if (isPostLike && postInfo) {
+          try {
+            setIsPostLike(false);
+            const {data} = await PostApi.postLike(url, postInfo.id);
+            if (data.data) {
+              setLike(data.data.status);
+              if (data.data.status) { // @ts-ignore
+                setLikeCount(likeCount + 1);
+              } else { // @ts-ignore
+                setLikeCount(likeCount - 1);
+              }
+            }
+          } catch (e) {
+            setIsPostLike(true);
           }
         }
-      } catch (e) {
-        setIsPostLike(true);
-      }
+    } else {
+      gotoLogin();
     }
   };
 
@@ -116,8 +121,21 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     }
   };
 
-  const showActionSheet = () => {
-    actionSheetRef.current?.show()
+  const showActionSheet = (e: { preventDefault: () => void; }) => {
+    if(isLogin) {
+      if(dao) {
+        actionSheetRef.current?.show();
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'please create a community!'
+        });
+        e.preventDefault()
+      }
+    } else {
+      gotoLogin();
+      e.preventDefault()
+    }
   }
 
   useEffect(() => {
@@ -166,7 +184,11 @@ const VideoDetailButton: React.FC<Props> = (props) => {
 
         <View style={[styles.threeButton]}>
           <TouchableOpacity onPress={() => {
-            setShowCommentDialog(true);
+            if(isLogin) {
+              setShowCommentDialog(true);
+            } else {
+              gotoLogin();
+            }
           }}>
             <Image
               style={[styles.image]}
