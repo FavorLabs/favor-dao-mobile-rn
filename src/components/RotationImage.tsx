@@ -1,6 +1,6 @@
 // @ts-ignore
 import React, { useMemo } from "react";
-import {Image, StyleSheet, ImageSourcePropType, FlatList,View, Text} from "react-native";
+import {Image, StyleSheet, ImageSourcePropType, FlatList, View, Text, Dimensions} from "react-native";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
 import {PostInfo} from "../declare/api/DAOApi";
 import {getContent} from "../utils/util";
@@ -20,11 +20,13 @@ const RotationImage: React.FC<Props> = (props) => {
 
   const Item = (item: any) => {
     return (
+      <View style={styles.slide}>
         <Image
-            style={[styles.groupChild]}
-            resizeMode="cover"
+            style={styles.images}
+            resizeMode='cover'
             source={{uri: `${imagesResUrl}/${item.content}`}}
         />
+      </View>
     )
   }
 
@@ -34,11 +36,11 @@ const RotationImage: React.FC<Props> = (props) => {
             // autoplay
             // autoplayDelay={1}
             // autoplayLoop
-            showPagination
+            style={styles.swiper}
+            showPagination= { info[3].length > 1 ? true : false}
             data={info[3]}
             renderItem={({ item }) => Item(item)}
-            vertical={false}
-            style={styles.swiperFlatList}
+            // vertical={false}
         />
       </View>
   );
@@ -46,28 +48,22 @@ const RotationImage: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     height: 200,
-    // backgroundColor: 'red'
-  },
-  swiperFlatList: {
     marginTop: 10,
-    flex: 1,
   },
-  groupChild: {
-    // position: "absolute",
-    // height: "60.69%",
-    // width: "100%",
-    // top: "39.31%",
-    // right: "0%",
-    // bottom: "0%",
-    // left: "0%",
-    // maxWidth: "100%",
-    // overflow: "hidden",
-    // maxHeight: "100%",
+  swiper: {
+    width: '100%',
+    height: '100%',
+  },
+  slide: {
     flex: 1,
-    width: 375,
-    height: 200,
+    width: Dimensions.get('window').width,
+    height: '100%',
+  },
+  images: {
+    width: '100%',
+    height: '100%',
   },
 });
 
