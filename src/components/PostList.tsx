@@ -151,7 +151,7 @@ const PostList: React.FC<Props> = (props) => {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.2}
           // @ts-ignore
-          ListFooterComponent={renderFooter}
+          // ListFooterComponent={renderFooter}
         />
       </View>
   )
