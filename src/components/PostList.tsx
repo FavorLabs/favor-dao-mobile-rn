@@ -31,7 +31,7 @@ const PostList: React.FC<Props> = (props) => {
     type,
     query,
   });
-  const [postListArr,setPostListArr] = useState<PostInfo[] | any>([])
+  const [postListArr,setPostListArr] = useState<PostInfo[]>([])
   const [refreshing, setRefreshing] = React.useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loading,setLoading] = useState(false);
@@ -90,16 +90,6 @@ const PostList: React.FC<Props> = (props) => {
 
   }
 
-  const renderFooter = () => {
-    return (
-      loading &&
-      <View style={styles.footer}>
-          <ActivityIndicator size="large" />
-          <Text style={styles.footerText}>Loading...</Text>
-      </View>
-    );
-  };
-
   const onRefresh = async () => {
     setRefreshing(true);
     await sleep(2000);
@@ -120,8 +110,6 @@ const PostList: React.FC<Props> = (props) => {
     loadMore();
   },[])
 
-
-
   return (
       <View>
         <FlatList
@@ -141,7 +129,7 @@ const PostList: React.FC<Props> = (props) => {
               return renderItem(item)
             }
           }}
-          keyExtractor={item => item.id}
+          // keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -150,8 +138,17 @@ const PostList: React.FC<Props> = (props) => {
           }
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.2}
-          // @ts-ignore
-          // ListFooterComponent={renderFooter}
+          ListFooterComponent={() => (
+            <>
+              {
+                loading &&
+                  <View style={styles.footer}>
+                      <ActivityIndicator size="large" />
+                      <Text style={styles.footerText}>Loading...</Text>
+                  </View>
+              }
+            </>
+          )}
         />
       </View>
   )
