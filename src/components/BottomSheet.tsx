@@ -10,13 +10,13 @@ import FavorDaoButton from "./FavorDaoButton";
 import {Color} from "../GlobalStyles";
 
 type Props = Partial<React.ComponentProps<typeof BottomSheetModal>> & {
-    show: boolean
+    show?: boolean
     showCancel?: boolean
     children?: ReactNode
     footer?: ReactNode
 }
 
-const BottomSheetM = (props: Props) => {
+const BottomSheet = (props: Props, ref?: React.Ref<any>) => {
     const {showCancel = false, children, show, footer, ...bsmProps} = props
     const insets = useSafeAreaInsets();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -24,7 +24,9 @@ const BottomSheetM = (props: Props) => {
 
     useEffect(() => {
         show ? bottomSheetModalRef.current?.present() : bottomSheetModalRef.current?.dismiss();
-    }, [show, bottomSheetModalRef.current])
+    }, [show])
+
+    useImperativeHandle(ref, () => bottomSheetModalRef.current)
 
     const cancel = () => {
         bottomSheetModalRef.current?.dismiss();
@@ -37,21 +39,22 @@ const BottomSheetM = (props: Props) => {
         {
             ...bsmProps
         }
+        bottomInset={insets.bottom}
         snapPoints={snapPoints}
       >
-          <View style={[styles.contentContainer, {marginBottom: insets.bottom}]}>
-              <BottomSheetScrollView style={{flex: 1}}>
+          <View style={[styles.contentContainer]}>
+              <View style={{flex: 1, alignSelf: 'stretch'}}>
                   {
                       children
                   }
-              </BottomSheetScrollView>
+              </View>
               {
                 showCancel && <TouchableOpacity style={[styles.cancel]} onPress={cancel}>
                       <FavorDaoButton textValue="Cancel"></FavorDaoButton>
                   </TouchableOpacity>
               }
               <View>
-                  { footer }
+                  {footer}
               </View>
           </View>
       </BottomSheetModal>
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 20,
+        // paddingHorizontal: 20,
         backgroundColor: Color.color2
     },
     cancel: {
@@ -71,4 +74,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default BottomSheetM;
+export default React.forwardRef(BottomSheet);
