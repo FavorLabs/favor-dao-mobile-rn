@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
+import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator} from 'react-native';
 import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
 import { Page, PostInfo } from "../declare/api/DAOApi";
 import PostApi from '../services/DAOApi/Post';
@@ -34,6 +34,7 @@ const PostList: React.FC<Props> = (props) => {
   const [postListArr,setPostListArr] = useState<PostInfo[]>([])
   const [refreshing, setRefreshing] = React.useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [loading,setLoading] = useState(false);
 
   const loadMore = async () => {
     try {
@@ -48,7 +49,6 @@ const PostList: React.FC<Props> = (props) => {
       setIsLoadingMore(
         data.data.pager.total_rows > pageData.page * pageData.page_size,
       );
-
       setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
     } catch (e) {
       if (e instanceof Error) console.error(e)
@@ -67,7 +67,7 @@ const PostList: React.FC<Props> = (props) => {
       const listArr: PostInfo[] = data.data.list;
       setPostListArr(() => [...listArr]);
       setIsLoadingMore(
-        data.data.pager.total_rows > pageData.page * pageData.page_size,
+        data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,
       );
       setPageData((pageData) => ({ ...pageData, page: 2 }));
     } catch (e) {
@@ -97,9 +97,12 @@ const PostList: React.FC<Props> = (props) => {
     await refreshPage();
   };
 
-  const handleLoadMore = () => {
-    if (isLoadingMore) {
-      loadMore();
+  const handleLoadMore = async () => {
+    if (isLoadingMore && !loading) {
+      setLoading(true);
+      // await sleep(2000);
+      await loadMore();
+      setLoading(false);
     }
   };
 
@@ -126,7 +129,7 @@ const PostList: React.FC<Props> = (props) => {
               return renderItem(item)
             }
           }}
-          keyExtractor={item => item.id}
+          // keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -134,7 +137,18 @@ const PostList: React.FC<Props> = (props) => {
             />
           }
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.2}
+          ListFooterComponent={() => (
+            <>
+              {
+                loading &&
+                  <View style={styles.footer}>
+                      <ActivityIndicator size="large" />
+                      <Text style={styles.footerText}>Loading...</Text>
+                  </View>
+              }
+            </>
+          )}
         />
       </View>
   )
@@ -142,6 +156,15 @@ const PostList: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   postList: {},
+  footer: {
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  footerText: {
+    fontSize: 16
+  }
 })
 
 export default PostList
