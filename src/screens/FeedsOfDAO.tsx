@@ -16,7 +16,7 @@ type Props = {};
 const FeedsOfDAO: React.FC<Props> = (props) => {
   const route = useRoute();
   // @ts-ignore
-  const { daoInfo, type } = route.params as { daoInfo: DaoInfo};
+  const { daoInfo, type } = route.params as { daoInfo: DaoInfo, type: string};
   const [activeOption, setActiveOption] = useState<number>(0);
   const activeList = ['Mixed','News','Videos'];
   const objParams = {
@@ -43,7 +43,7 @@ const FeedsOfDAO: React.FC<Props> = (props) => {
     <View style={styles.feedsOfDao}>
       <ExpandedDAOHeader daoInfo={daoInfo}/>
 
-      <FeedsOfDaoNavigator daoInfo={daoInfo}/>
+      <FeedsOfDaoNavigator daoInfo={daoInfo} type={type}/>
 
     </View>
     // </SafeAreaView>

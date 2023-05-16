@@ -9,11 +9,13 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import Screens from "../../../navigation/RouteNames";
 import {getDebounce} from "../../../utils/util";
 import {useIsLogin} from "../../../utils/hook";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
+import {updateState as searchUpdateState} from "../../../store/search"
 
 export type Props = {};
 const FeedsScreen: React.FC<Props> = (props) => {
+    const dispatch = useDispatch()
     const navigation = useNavigation<StackNavigationProp<any>>();
     const actionSheetRef = useRef<ActionSheet>(null);
     const screens = [Screens.CreateVideo, Screens.CreateNews];
@@ -38,6 +40,9 @@ const FeedsScreen: React.FC<Props> = (props) => {
 
     const getSearch = () => {
         console.log(searchValue)
+        dispatch(searchUpdateState({
+            feedsSearch: searchValue
+        }))
     }
 
     return (

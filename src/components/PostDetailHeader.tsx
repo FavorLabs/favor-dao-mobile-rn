@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from "react";
 import { Image, StyleSheet, Pressable, Text, View } from "react-native";
 import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
-import {useResourceUrl, useUrl} from "../utils/hook";
+import {useIsLogin, useResourceUrl, useUrl} from "../utils/hook";
 import {PostInfo} from "../declare/api/DAOApi";
 import {getTime} from "../utils/util";
 import JoinButton from "./JoinButton";
@@ -38,8 +38,10 @@ const PostDetailHeader = ({
 
   const createTime = getTime(postInfo ? postInfo?.created_on : 0);
   const [isJoin, setIsJoin] = useState(false);
+  const [isLogin, gotoLogin] = useIsLogin();
 
   const bookmarkHandle = async () => {
+    if(!isLogin) return gotoLogin();
     if(postInfo?.dao.id)
     try {
       const { data } = await DaoApi.bookmark(url, postInfo.dao.id);
@@ -60,7 +62,7 @@ const PostDetailHeader = ({
   };
 
   useEffect(() =>  {
-    checkJoinStatus();
+    if(isLogin) checkJoinStatus();
   },[postInfo?.dao.id])
 
   const postDetailHeaderStyle = useMemo(() => {
