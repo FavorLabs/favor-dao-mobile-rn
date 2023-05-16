@@ -1,8 +1,31 @@
 import * as React from "react";
 import { Text, StyleSheet, Image, View } from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import {useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
+import {useEffect, useState} from "react";
+import UserApi from "../services/DAOApi/User";
+import {useUrl} from "../utils/hook";
+import {addDecimal} from "../utils/balance";
 
-const BalanceBackContainer = () => {
+type Props = {};
+const BalanceBackContainer: React.FC<Props> = (props) => {
+  const url = useUrl();
+  const [balance, setBalance] = useState<string>('0');
+  const getBalance = async () => {
+    try {
+      const {data} = await UserApi.getAccounts(url);
+      console.log(data,'data')
+      setBalance(data.data[0].balance)
+    } catch (e) {
+      if (e instanceof Error) console.error(e)
+    }
+  }
+
+  useEffect(() => {
+    // getBalance()
+  }, [])
+
   return (
     <View style={styles.balanceback}>
       <View>
@@ -15,7 +38,7 @@ const BalanceBackContainer = () => {
           />
           <View style={styles.values}>
             <Text style={[styles.valuesofusdt]}>
-              $54,29.79
+              $ { addDecimal(balance) }
             </Text>
           </View>
         </View>

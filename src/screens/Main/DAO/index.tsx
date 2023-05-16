@@ -5,18 +5,22 @@ import {getDebounce} from "../../../utils/util";
 import {Border, Color, FontFamily, FontSize, Padding} from "../../../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
 import Screens from '../../../navigation/RouteNames';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import Toast from "react-native-toast-message";
+import {updateState as searchUpdateState} from "../../../store/search";
 
 export type Props = {};
 const DAOScreen: React.FC<Props> = (props) => {
+  const dispatch = useDispatch()
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState<string>('');
   const { dao } = useSelector((state: Models) => state.global);
 
   const getSearch = () => {
-    console.log('blur')
+    dispatch(searchUpdateState({
+      daoSearch: searchValue
+    }))
   }
 
   const toCreateDao = () => {

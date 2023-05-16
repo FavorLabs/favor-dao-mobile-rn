@@ -12,11 +12,13 @@ import Toast from "react-native-toast-message";
 import WalletController from "../libs/walletController";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
+import {useResourceUrl} from "../utils/hook";
 
 type Props = {};
 const WalletUser: React.FC<Props> = (props) => {
   const navigation = useNavigation();
   const { user } = useSelector((state: Models) => state.global);
+  const avatarsResUrl = useResourceUrl('avatars');
 
   const [isBackUpShow,setBackUpIsShow] = useState<boolean>(false);
   const [password, setPassword] = useState('');
@@ -58,7 +60,7 @@ const WalletUser: React.FC<Props> = (props) => {
       <Image
         style={styles.avatarIcon}
         resizeMode="cover"
-        source={require("../assets/avatar.png")}
+        source={{uri: `${avatarsResUrl}/${user?.avatar}`}}
       />
       <Text style={[styles.username, styles.xc8320fTypo]}>{user?.nickname}</Text>
       <View style={[styles.addressline, styles.addresslineFlexBox]}>
@@ -107,9 +109,9 @@ const WalletUser: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   backUpDialog: {
-    width: 345,
-    // backgroundColor: 'red',
+    flex: 1,
     paddingTop: 10,
+    paddingHorizontal: 20,
   },
   closeIcon: {
     width: 40,

@@ -3,6 +3,8 @@ import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {getDebounce} from "../utils/util";
+import {updateState as globalUpdateState} from "../store/global";
+import {useDispatch} from "react-redux";
 
 type Props = {
   isJoin: boolean;
@@ -10,19 +12,24 @@ type Props = {
 };
 
 const JoinButton: React.FC<Props> = (props) => {
+  const dispatch = useDispatch()
   const { isJoin, handle } = props;
 
   const onPress = () => {
     handle();
+    dispatch(globalUpdateState({
+      joinStatus: true,
+      newsJoinStatus: true
+    }))
   };
 
   return (
     <TouchableOpacity onPress={getDebounce(onPress)}>
-    <View style={[styles.joinButton, isJoin ? styles.joined : styles.join]}>
-      <Text style={[styles.joinText, isJoin ? styles.joined : styles.join]}>
-        {isJoin ? 'joined' : 'join'}
-      </Text>
-    </View>
+      <View style={[styles.joinButton, isJoin ? styles.joined : styles.join]}>
+        <Text style={[styles.joinText, isJoin ? styles.joined : styles.join]}>
+          {isJoin ? 'joined' : 'join'}
+        </Text>
+      </View>
     </TouchableOpacity>
   )
 };

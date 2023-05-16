@@ -17,26 +17,6 @@ const FeedsOfDAO: React.FC<Props> = (props) => {
   const route = useRoute();
   // @ts-ignore
   const { daoInfo, type } = route.params as { daoInfo: DaoInfo, type: string};
-  const [activeOption, setActiveOption] = useState<number>(0);
-  const activeList = ['Mixed','News','Videos'];
-  const objParams = {
-    daoInfo: daoInfo,
-    activeOption: activeOption
-  } as { daoInfo: DaoInfo, activeOption: number};
-
-  const onActiveHandle = (index:number) => {
-    setActiveOption(index);
-  };
-
-  useEffect(() => {
-    if(type === 'News'){
-      setActiveOption(1);
-    } else if(type === 'Videos') {
-      setActiveOption(2)
-    } else {
-      setActiveOption(0);
-    }
-  },[type])
 
   return (
     // <SafeAreaView style={styles.safeAreaView} >

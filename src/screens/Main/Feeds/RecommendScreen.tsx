@@ -9,6 +9,7 @@ import Models from "../../../declare/storeTypes";
 export type Props = {};
 const RecommendScreen: React.FC<Props> = (props) => {
   const isFocused = useIsFocused();
+  const { feedsSearch } = useSelector((state: Models) => state.search);
 
   useEffect(() => {
     if (isFocused) {
@@ -18,7 +19,7 @@ const RecommendScreen: React.FC<Props> = (props) => {
 
   return (
      <View style={styles.container}>
-       <PostList type={'post'} isHome={true}/>
+       <PostList type={'post'} isHome={true} query={feedsSearch}/>
      </View>
   )
 }

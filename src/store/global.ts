@@ -4,7 +4,9 @@ import {DaoInfo} from "../declare/api/DAOApi";
 
 export type State = {
     user: User | null,
-    dao: DaoInfo | null
+    dao: DaoInfo | null,
+    joinStatus: boolean,
+    newsJoinStatus: boolean,
 }
 
 export const globalStore = createSlice({
@@ -12,6 +14,8 @@ export const globalStore = createSlice({
     initialState: {
         user: null,
         dao: null,
+        joinStatus: false,
+        newsJoinStatus: false,
     } as State,
     reducers: {
         updateState: (state, action: PayloadAction<Partial<State>>) => {

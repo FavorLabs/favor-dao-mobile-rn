@@ -8,13 +8,18 @@ import {DaoInfo, Page} from "../../../declare/api/DAOApi";
 import DaoApi from "../../../services/DAOApi/Dao";
 import {useUrl} from "../../../utils/hook";
 import DaoCardItem from "../../../components/DaoCardItem";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
+import NoDataShow from "../../../components/NoDataShow";
+import {updateState as globalUpdateState} from "../../../store/global";
+import {useIsFocused} from "@react-navigation/native";
 
 export type Props = {};
 const JoinedDAOListScreen: React.FC<Props> = (props) => {
   const url = useUrl();
-  const { dao } = useSelector((state: Models) => state.global);
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+  const { dao, joinStatus } = useSelector((state: Models) => state.global);
 
   const [bookmarkList, setBookmarkList] = useState<DaoInfo[]>([]);
   const [isJoin, setIsJoin] = useState(false);
@@ -119,45 +124,61 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    getBookmarkList();
-    if(dao) {
-      setActiveId(dao.id)
-    }
-  }, []);
-
-  useEffect(() => {
       if(bookmarkList[0] && !activeId){
         setActiveId(bookmarkList[0].id)
       }
       getDaoInfo();
       checkJoinStatus();
-  },[activeId,bookmarkList])
+  },[activeId,bookmarkList]);
+
+  useEffect(() => {
+    if (isFocused && joinStatus) {
+      refreshList();
+      if(bookmarkList[0]){
+        setActiveId(bookmarkList[0].id)
+      }
+      dispatch(globalUpdateState({
+        joinStatus: false
+      }))
+    }
+  },[isFocused])
+
+  useEffect(() => {
+    refreshList();
+    if(bookmarkList[0]){
+      setActiveId(bookmarkList[0].id)
+    }
+  },[])
 
   return (
     <View style={[styles.followeddao]}>
-      <View style={styles.frameParentFlexBox}>
+      {
+        bookmarkList ?
+          <View style={styles.frameParentFlexBox}>
+            <FollowDAOHeader
+              bookmarkList={bookmarkList}
+              handleLoadMore={handleLoadMore}
+              refreshPage={refreshList}
+              activeId={activeId}
+              setActiveId={setActiveId}
+            />
+            <ScrollView>
+              {
+                daoInfo &&
+                  <View style={styles.daoDetail}>
+                      <DaoCardItem daoInfo={daoInfo} handle={bookmarkHandle} joinStatus={isJoin}/>
+                      <View style={styles.channelsofdao}>
+                          <PublishContainer daoInfo={daoInfo}/>
+                          <Chats/>
+                      </View>
+                  </View>
+              }
+            </ScrollView>
+          </View>
+          :
+          <NoDataShow/>
+      }
 
-        <FollowDAOHeader
-          bookmarkList={bookmarkList}
-          handleLoadMore={handleLoadMore}
-          refreshPage={refreshList}
-          activeId={activeId}
-          setActiveId={setActiveId}
-        />
-
-        <ScrollView>
-          {
-            daoInfo &&
-              <View style={styles.daoDetail}>
-                <DaoCardItem daoInfo={daoInfo} handle={bookmarkHandle} joinStatus={isJoin}/>
-                <View style={styles.channelsofdao}>
-                  <PublishContainer daoInfo={daoInfo}/>
-                  <Chats/>
-                </View>
-              </View>
-          }
-        </ScrollView>
-      </View>
     </View>
   )
 }
@@ -256,10 +277,8 @@ const styles = StyleSheet.create({
     backgroundColor: Color.color1,
   },
   followeddao: {
-    backgroundColor: Color.color1,
-    justifyContent: "center",
-    width: "100%",
     flex: 1,
+    backgroundColor: Color.color1,
   },
 });
 

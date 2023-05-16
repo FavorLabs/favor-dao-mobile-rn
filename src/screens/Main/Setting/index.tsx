@@ -21,7 +21,7 @@ const SettingScreen: React.FC<Props> = (props) => {
         <Text style={styles.title}>Profile</Text>
       </View>
       <WalletUser />
-      <View style={[styles.sendbar, styles.sendbarFlexBox]}>
+      <View style={styles.sendbar}>
         <Receive />
         <Send />
         <Transactions />
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    alignItems: "center",
     overflow: "hidden",
     backgroundColor: Color.whitesmoke_300,
   },
@@ -66,12 +65,8 @@ const styles = StyleSheet.create({
   sendbar: {
     marginTop: 30,
     flexDirection: "row",
-    alignSelf: "stretch",
+    justifyContent: "space-around",
     alignItems: "center",
-  },
-  sendbarFlexBox: {
-    justifyContent: "center",
-    marginTop: 30,
   },
   settings1: {
     paddingHorizontal: Padding.p_base,

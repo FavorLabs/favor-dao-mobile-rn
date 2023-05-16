@@ -39,7 +39,6 @@ const FeedsScreen: React.FC<Props> = (props) => {
     const [searchValue, setSearchValue] = useState<string>('');
 
     const getSearch = () => {
-        console.log(searchValue)
         dispatch(searchUpdateState({
             feedsSearch: searchValue
         }))

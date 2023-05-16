@@ -3,8 +3,6 @@ import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 import {useRoute} from "@react-navigation/native";
-import {useEffect} from "react";
-import DaoInfoHeader from "../../../components/DaoInfoHeader";
 
 type Props ={};
 
@@ -18,9 +16,6 @@ const Mixed: React.FC<Props> = (props) => {
       {
         daoInfo &&
           <View style={styles.postList}>
-            {/*<View style={styles.daoUnderLine}>*/}
-            {/*  <DaoInfoHeader daoInfo={daoInfo}/>*/}
-            {/*</View>*/}
             <PostList type={'post'} daoId={daoInfo.id}/>
           </View>
       }
@@ -38,7 +33,7 @@ const styles = StyleSheet.create({
     borderColor: '#E6E5EB',
   },
   postList: {
-    // flex: 1,
+    flex: 1,
   },
 });
 
