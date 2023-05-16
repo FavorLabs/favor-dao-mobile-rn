@@ -24,12 +24,15 @@ export const TopBarOptions = {
   },
 }
 
-export function FeedsOfDaoNavigator(
-  {daoInfo}:{daoInfo:DaoInfo}
-) {
+type FeedsOfDaoProps = {
+  daoInfo: DaoInfo;
+  type: string;
+}
+export function FeedsOfDaoNavigator(props: FeedsOfDaoProps) {
+  const { daoInfo, type } = props;
   return (
     // @ts-ignore
-    <TopTab.Navigator screenOptions={TopBarOptions}>
+    <TopTab.Navigator screenOptions={TopBarOptions} initialRouteName={type}>
       <TopTab.Screen name="Mixed" component={Mixed} initialParams={{daoInfo:daoInfo}} />
       <TopTab.Screen name="News" component={News} initialParams={{daoInfo:daoInfo}}/>
       <TopTab.Screen name="Videos" component={Videos} initialParams={{daoInfo:daoInfo}}/>

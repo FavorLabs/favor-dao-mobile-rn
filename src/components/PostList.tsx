@@ -144,7 +144,6 @@ const PostList: React.FC<Props> = (props) => {
                 loading &&
                   <View style={styles.footer}>
                       <ActivityIndicator size="large" />
-                      <Text style={styles.footerText}>Loading...</Text>
                   </View>
               }
             </>
@@ -162,9 +161,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  footerText: {
-    fontSize: 16
-  }
 })
 
 export default PostList

@@ -19,23 +19,8 @@ export type Props = {
 
 const NewsContent: React.FC<Props> = (props) => {
   const { isQuote, isReTransfer } = props;
-  const { created_on, dao, contents, orig_contents, author_dao } = props.postInfo;
-  const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
-
-  const navigation = useNavigation();
-  const route = useRoute();
-  // @ts-ignore
-  const routeName = route.name;
-
-  const toPostDerail = () => {
-    if(routeName !== Screens.PostDetail) {
-    // @ts-ignore
-    navigation.navigate(Screens.PostDetail,{ postId:  isQuote ? props.postInfo.ref_id : props.postInfo.id});
-    }
-  };
-
+  const { created_on, dao, author_dao } = props.postInfo;
   return (
-    <TouchableOpacity onPress={toPostDerail}>
     <View style={styles.frameParent}>
       <RowUser
         time={created_on}
@@ -46,7 +31,6 @@ const NewsContent: React.FC<Props> = (props) => {
       />
       <NewsBlock postInfo={props.postInfo} isQuote={isQuote} isReTransfer={isReTransfer}/>
     </View>
-    </TouchableOpacity>
   );
 };
 
