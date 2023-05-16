@@ -16,7 +16,7 @@ const News: React.FC<Props> = (props) => {
     <View style={styles.container}>
       {
         daoInfo &&
-          <View>
+          <View style={styles.container}>
               <PostList type={0} daoId={daoInfo.id}/>
           </View>
       }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, RefreshControl} from 'react-native';
+import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator} from 'react-native';
 import {Color} from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 import DaoBriefCard from "../../../components/DaoBriefCard";
@@ -7,21 +7,26 @@ import DaoCommunityCard from "../../../components/DaoCommunityCard";
 import {Page, PostInfo} from "../../../declare/api/DAOApi";
 import PostApi from "../../../services/DAOApi/Post";
 import {useUrl} from "../../../utils/hook";
-import {sleep} from "../../../utils/util";
+import {query, sleep} from "../../../utils/util";
+import {useSelector} from "react-redux";
+import Models from "../../../declare/storeTypes";
+import NoDataShow from "../../../components/NoDataShow";
 
 type Props = {};
 const RecommendDAOListScreen: React.FC<Props> = (props) => {
   const url = useUrl();
+  const { daoSearch } = useSelector((state: Models) => state.search);
   const [pageData, setPageData] = useState<Page>({
     page: 1,
     page_size: 20,
     type: -1,
-    query: undefined,
+    query: daoSearch,
   });
 
   const [postListArr,setPostListArr] = useState<PostInfo[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [loading,setLoading] = useState(false);
 
   const loadMore = async () => {
     try {
@@ -40,7 +45,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
 
   const refreshPage = async () => {
     try {
-      const pageInfo = { page: 1, page_size: 20, type:-1};
+      const pageInfo = { page: 1, page_size: 20, type:-1 , query: daoSearch};
       const request = (params: Page) => PostApi.getPostListByType(url, params);
       const { data } = await request(pageInfo);
       const listArr: PostInfo[] = data.data.list;
@@ -56,20 +61,26 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await sleep(2000);
-    setRefreshing(false);
+    // await sleep(2000);
     await refreshPage();
+    setRefreshing(false);
   };
 
-  const handleLoadMore = () => {
-    if (isLoadingMore) {
-      loadMore();
+  const handleLoadMore = async () => {
+    if (isLoadingMore && !loading) {
+      setLoading(true);
+      await loadMore();
+      setLoading(false);
     }
   };
 
+  // useEffect(() => {
+  //   loadMore();
+  // },[])
+
   useEffect(() => {
-    loadMore();
-  },[])
+    onRefresh()
+  },[daoSearch])
 
   return (
     <View style={styles.container}>
@@ -86,6 +97,21 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
             onRefresh={onRefresh}
           />
         }
+        ListFooterComponent={() => (
+          <>
+            {
+              loading &&
+                <View style={styles.footer}>
+                    <ActivityIndicator size="large" />
+                </View>
+            }
+          </>
+        )}
+        ListEmptyComponent={!postListArr.length && !refreshing ?
+          <View style={styles.noData}>
+            <NoDataShow/>
+          </View>
+          : null}
       />
     </View>
   )
@@ -100,6 +126,16 @@ const styles = StyleSheet.create({
   },
   flautist: {
 
+  },
+  noData: {
+    flex: 1,
+    marginTop: '40%',
+  },
+  footer: {
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 });
 

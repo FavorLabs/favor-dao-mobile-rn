@@ -26,12 +26,12 @@ const DaoBriefCard: React.FC<Props> = (props) => {
     setIsShow(true);
   }
 
-  useEffect(() => {
-    setIsShow(false);
-  },[])
+  // useEffect(() => {
+  //   setIsShow(false);
+  // },[])
 
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableOpacity onPress={getDebounce(toFeedsOfDao)}>
         <View style={styles.daoBriefCard}>
           <View style={styles.infowithavatar}>
@@ -66,10 +66,16 @@ const DaoBriefCard: React.FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: '47%',
+    marginHorizontal: 5,
+    marginVertical: 5,
+  },
   channelDao: {
-    width: 343,
+    flex: 1,
     padding: Padding.p_xs,
     alignItems: "center",
+    justifyContent: 'center',
     backgroundColor: Color.color1,
   },
   subtitleTypo: {
@@ -89,18 +95,17 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontFamily: FontFamily.headingH613,
     color: Color.iOSSystemLabelsLightPrimary,
-    width: 87,
     textAlign: "left",
     letterSpacing: 0,
   },
   subtitle: {
     fontSize: FontSize.paragraphP313_size,
     lineHeight: 20,
-    width: 96,
     marginTop: 3,
   },
   briefinfo: {
     marginLeft: 8,
+    flex: 1,
   },
   infowithavatar: {
     flexDirection: "row",
@@ -116,11 +121,9 @@ const styles = StyleSheet.create({
   daoBriefCard: {
     borderRadius: Border.br_3xs,
     backgroundColor: Color.color1,
-    width: 170,
+    width: '100%',
     height: 80,
     padding: Padding.p_3xs,
-    marginHorizontal: 5,
-    marginVertical: 5,
     justifyContent: "center",
   },
 });
