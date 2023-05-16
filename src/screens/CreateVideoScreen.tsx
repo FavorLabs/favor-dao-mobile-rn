@@ -15,7 +15,6 @@ import PostApi from '../services/DAOApi/Post';
 import {useUrl} from "../utils/hook";
 import { eventEmitter, getMatchedStrings } from '../utils/util';
 import {useNavigation} from "@react-navigation/native";
-import Screens from "../navigation/RouteNames";
 import {StackNavigationProp} from "@react-navigation/stack";
 import SwitchButton from "../components/SwitchButton";
 import {RegExps} from "../components/TextInputParsed";
@@ -33,6 +32,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
   const [postLoading, setPostLoading] = useState<boolean>(false);
   const [daoMode, setDaoMode] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
+  const [member, setMember] = useState<number>(0);
 
   // const { userInfo } = useSelector((state: Models) => state.dao);
   const { dao } = useSelector((state: Models) => state.global);
@@ -44,6 +44,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
   }, [videoTitle, videoDesc, video, thumbnail]);
 
   const createHandle = async () => {
+    console.log('videoTitle, videoDesc, video, thumbnail', videoTitle, videoDesc, video, thumbnail)
     if (postLoading) return;
     if (createDisable) {
       return Toast.show({
@@ -59,13 +60,14 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
       contents.push({ content: videoDesc, type: 2, sort: 0 });
       contents.push({ content: thumbnail, type: 3, sort: 0 });
       contents.push({ content: video, type: 4, sort: 0 });
-      const postData: CreatePost = {
+      const postData: CreatePost & { member: number } = {
         contents: contents,
         dao_id: dao?.id as string,
         tags,
         type: 1,
         users: [],
         visibility: daoMode ? 0 : 1,
+        member
       };
       const { data } = await PostApi.createPost(url, postData);
       if (data.data) {
@@ -74,7 +76,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
           text1: 'Post successfully'
         })
         eventEmitter.emit('menuRefreshRecommend');
-        navigation.navigate(Screens.Main.Feeds);
+        navigation.goBack();
       }
     } catch (e) {
       if (e instanceof Error) Toast.show({ type: 'error', text1: e.message });
@@ -118,7 +120,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
         />
         <UploadVideo setVideo={setVideo} thumbnail={thumbnail} setThumbnail={setThumbnail} autoThumbnail={autoThumbnail} setAutoThumbnail={setAutoThumbnail} />
         <UploadImage imageType={'thumbnail'} setUpImage={setThumbnail} autoThumbnail={autoThumbnail} multiple={false} />
-        <SingleChoice />
+        <SingleChoice member={member} setMember={setMember} />
         <SwitchButton mode={daoMode} setMode={setDaoMode} />
         <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
           <TouchableOpacity onPress={createHandle}>

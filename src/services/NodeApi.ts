@@ -27,19 +27,25 @@ export default {
       },
     });
   },
-  uploadFile(api: string, file: Video, data: any) {
+  async uploadFile(api: string, file: Video, blob: any) {
     let fileName = file.filename;
     let headers = {};
     // @ts-ignore
-    // headers['Content-Type'] = file.mime || 'application/x-www-form-urlencoded';
-    headers['Content-Type'] = 'multipart/form-data';
+    headers['Content-Type'] = file.mime || 'application/x-www-form-urlencoded';
     return request({
       url: api + '/file',
       method: 'post',
-      data,
+      data: blob,
       params: { name: fileName },
       headers,
       timeout: 0,
+      transformRequest: [(data, headers) => {
+        if (typeof Blob !== 'undefined' && data instanceof Blob) {
+          return data;
+        }
+        // @ts-ignore
+        return request.defaults.transformRequest[0].call(null, data, headers);
+      }],
     });
   },
   observeProxyGroup(

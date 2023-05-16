@@ -8,7 +8,7 @@ import Models from "../declare/storeTypes";
 import Toast from 'react-native-toast-message';
 import ImagePicker, { Video } from 'react-native-image-crop-picker';
 import { LocalStorage, SessionStorage } from '../utils/storage';
-import { getSize, getProgress, stringToBinary } from '../utils/util';
+import {getSize, getProgress, stringToBinary, omitAddress} from '../utils/util';
 import { decode } from 'base-64';
 import Favor from "../libs/favor";
 import {WebsocketProvider} from "web3-core";
@@ -16,6 +16,9 @@ import {Config} from "../declare/global";
 import Events from "events";
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import RnFs from 'react-native-fs';
+import ImageApi from "../services/DAOApi/Image";
+import {useResourceUrl} from "../utils/hook";
+import LoadingSpinner from "./LoadingSpinner";
 
 export type Props = {
   setVideo: React.Dispatch<React.SetStateAction<string>>;
@@ -43,13 +46,14 @@ type FavorType = {
 const UploadVideo: React.FC<Props> = (props) => {
   const { setVideo, thumbnail, setThumbnail, autoThumbnail, setAutoThumbnail } = props;
   const dispatch = useDispatch();
+  const imagesResUrl = useResourceUrl('images');
 
   const [showSelect, setShowSelect] = useState<boolean>(true);
   const [uploading, setUploading] = useState<boolean>(false);
-  const [progressValue, setProgressValue] = useState<number>(0);
+  const [progressValue, setProgressValue] = useState<number>(100);
   const [statusTip, setStatusTip] = useState<string>('');
   const [videoName, setVideoName] = useState<string>('');
-  const [videoSize, setVideoSize] = useState<string>('');
+  const [videoSize, setVideoSize] = useState<number>(0);
 
   // const { api, debugApi, ws, config } = useSelector((state: Models) => state.global);
   // @ts-ignore
@@ -64,16 +68,32 @@ const UploadVideo: React.FC<Props> = (props) => {
     // })
   }, []);
 
+  const init = () => {
+    setProgressValue(0);
+    setAutoThumbnail('');
+    setVideoName('');
+    setVideoSize(0);
+    setShowSelect(true);
+    setThumbnail('');
+  };
+
   const pickVideo = async () => {
+    init();
+    setShowSelect(false);
     const video = await ImagePicker.openPicker({
       mediaType: "video",
     });
     console.log('video', video);
     if (!checkVideoSize(video)) return;
+    setVideoName(video.filename as string);
+    setVideoSize(video.size);
+
+    const res = await fetch(video.sourceURL as string);
+    const blob = await res.blob();
 
     await generateThumbnail(video.sourceURL);
     // @ts-ignore
-    uploadVideo(video);
+    uploadVideo(video, blob);
   };
 
   const checkVideoSize = (video: Video) => {
@@ -98,6 +118,12 @@ const UploadVideo: React.FC<Props> = (props) => {
       );
       console.log("uri", uri);
       setAutoThumbnail(uri?.uri?.toString());
+      let file = {uri: uri?.uri?.toString(), type: 'multipart/form-data', name: 'image.png'};
+      let fmData = new FormData();
+      // @ts-ignore
+      fmData.append('thumbnail', file);
+      const { data } = await ImageApi.upload(imagesResUrl, fmData);
+      setThumbnail(data.id);
     } catch (e) {
       console.warn(e);
     }
@@ -295,10 +321,10 @@ const UploadVideo: React.FC<Props> = (props) => {
     });
   };
 
-  const uploadVideo = async (file: Video) => {
+  const uploadVideo = async (file: Video, blob: Blob) => {
     console.log('uploadVideo', file);
     if (!config) return;
-    setShowSelect(false);
+    // setShowSelect(false);
     try {
       setUploading(true);
       setStatusTip('Uploading the file to local node');
@@ -307,7 +333,8 @@ const UploadVideo: React.FC<Props> = (props) => {
       // const fileData = await RnFs.readFile(file.sourceURL as string, 'ascii');
       // const buffer = Buffer.from(fileData, 'binary');
 
-      let data = await Api.uploadFile(api, file, null);
+      let data = await Api.uploadFile(api, file, blob);
+      // console.log('data----', data);
       let hash: string = data.data.reference;
       console.log('hash', hash);
       let uploadedList = JSON.parse(
@@ -320,20 +347,23 @@ const UploadVideo: React.FC<Props> = (props) => {
         let len: number = fileInfo.data.list[0].bitVector.len;
         // @ts-ignore
         const { text, overlay } = await uploadToStorageNode(hash, len);
+        setStatusTip(text);
         Toast.show({ type: 'success', text1: text });
         uploadOverlay = overlay;
         uploadedList[hash] = overlay;
         SessionStorage.setItem('uploaded_list', JSON.stringify(uploadedList));
       } else {
+        setProgressValue(100);
+        setStatusTip('Upload successful');
         Toast.show({ type: 'success', text1: 'Upload successful' });
       }
       setVideo(`${hash}?oracles=${uploadOverlay}`);
     } catch (e) {
+      setProgressValue(0);
       Toast.show({ type: 'error', text1: e instanceof Error ? e.message : JSON.stringify(e) });
       setVideo('');
       // setShowVideoList(false);
     } finally {
-      setProgressValue(0);
       setUploading(false);
     }
   };
@@ -365,25 +395,25 @@ const UploadVideo: React.FC<Props> = (props) => {
               </View>
             </View>
             <View style={[styles.frameView, styles.buttonFlexBox]}>
-              <Image
-                style={styles.frameChild}
-                resizeMode="cover"
-                source={{ uri: autoThumbnail }}
-              />
+              { autoThumbnail ? <>
+                <Image
+                  style={styles.frameChild}
+                  resizeMode="cover"
+                  source={{ uri: autoThumbnail }}
+                />
+              </> : <>
+                <View style={[styles.frameChild, { backgroundColor: Color.lightGrayscaleContent3 }]}></View>
+              </> }
               <View style={[styles.xBasefileStateWrapper, styles.basefileLayout]}>
                 <View style={[styles.xBasefileState, styles.basefileLayout]}>
                   <View style={styles.drop}>
-                    <Image
-                      style={styles.iconLayout}
-                      resizeMode="cover"
-                      source={require("../assets/loading.png")}
-                    />
+                    <LoadingSpinner isLoading={uploading} />
                     <Text style={[styles.text2, styles.secTypo]}>
-                      { videoName }
+                      { videoName ? omitAddress(videoName, 5, 6) : '' }
                     </Text>
                     <View style={[styles.counter1, styles.counterBorder]}>
                       <Text style={[styles.text1, styles.textFlexBox]}>
-                        { videoSize }
+                        { getSize(videoSize) }
                       </Text>
                     </View>
                     <Image
@@ -392,14 +422,8 @@ const UploadVideo: React.FC<Props> = (props) => {
                       source={require("../assets/right-icon.png")}
                     />
                   </View>
-                  <Text style={[styles.sec, styles.secTypo]}>{ progressValue } %</Text>
-                  <TouchableOpacity onPress={() => {
-                    setProgressValue(0);
-                    setAutoThumbnail('');
-                    setVideoName('');
-                    setVideoSize('');
-                    setShowSelect(true);
-                  }}>
+                  <Text style={[styles.sec, styles.secTypo]}>{ progressValue.toFixed(2) }% / { statusTip }</Text>
+                  <TouchableOpacity onPress={init}>
                     <Image
                       style={[styles.cancelIcon, styles.iconLayout]}
                       resizeMode="cover"
@@ -413,7 +437,6 @@ const UploadVideo: React.FC<Props> = (props) => {
               </View>
             </View>
           </View>
-          <Text>tips: { statusTip }</Text>
         </View>
       </> }
     </View>
@@ -538,6 +561,7 @@ const styles = StyleSheet.create({
   frameChild: {
     width: 69,
     height: 71,
+    borderRadius: 10
   },
   text2: {
     fontSize: FontSize.size_mini,
@@ -566,7 +590,7 @@ const styles = StyleSheet.create({
   sec: {
     top: 40,
     color: Color.lightGrayscaleContent3,
-    fontSize: FontSize.paragraphP313_size,
+    fontSize: FontSize.size_2xs,
     fontFamily: FontFamily.paragraphP313,
     left: 0,
     position: "absolute",
