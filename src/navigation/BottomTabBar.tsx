@@ -19,6 +19,7 @@ import SettingActiveSvg from '../assets/svg/setting_active.svg';
 import SettingInActiveSvg from '../assets/svg/setting_inactive.svg';
 import {Color} from "../GlobalStyles";
 import {useIsLogin} from "../utils/hook";
+import {CometChatGroupListWithMessages} from "../cometchat-pro-react-native-ui-kit/CometChatWorkspace"
 
 const BottomTabBar = createBottomTabNavigator();
 
@@ -53,7 +54,7 @@ export function BottomTabNavigator() {
           />
           <BottomTabBar.Screen
             name={Screens.Main.Chat}
-            component={ChatScreen}
+            component={CometChatGroupListWithMessages}
             options={{
                 tabBarLabel: 'Chat',
                 tabBarIcon: ({focused, color, size}) => (
