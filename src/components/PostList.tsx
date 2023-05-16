@@ -12,6 +12,7 @@ import VideoBlock from "./VideoBlock";
 import ReTransfer from "./ReTransfer";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
+import NoDataShow from "./NoDataShow";
 
 export type Props = {
   type?: number | string;
@@ -19,10 +20,12 @@ export type Props = {
   focus?: boolean;
   query?: string;
   isHome?: boolean;
+  isNewsFocus?: boolean;
+  setIsNewsFocus?: (b: boolean) => void;
 };
 
 const PostList: React.FC<Props> = (props) => {
-  const { type, daoId, focus = false, query, isHome = false } = props;
+  const { type, daoId, focus = false, query, isHome = false, isNewsFocus, setIsNewsFocus} = props;
   const url = useUrl();
 
   const [pageData, setPageData] = useState<Page>({
@@ -35,6 +38,7 @@ const PostList: React.FC<Props> = (props) => {
   const [refreshing, setRefreshing] = React.useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loading,setLoading] = useState(false);
+
 
   const loadMore = async () => {
     try {
@@ -92,9 +96,9 @@ const PostList: React.FC<Props> = (props) => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await sleep(2000);
-    setRefreshing(false);
+    // await sleep(2000);
     await refreshPage();
+    setRefreshing(false);
   };
 
   const handleLoadMore = async () => {
@@ -106,12 +110,19 @@ const PostList: React.FC<Props> = (props) => {
     }
   };
 
+  // useEffect(() => {
+  //   loadMore();
+  // },[])
+
   useEffect(() => {
-    loadMore();
-  },[])
+    onRefresh()
+    if(isNewsFocus) {
+      setIsNewsFocus?.(false);
+    }
+  },[query,isNewsFocus])
 
   return (
-      <View>
+      <View style={styles.container}>
         <FlatList
           style={styles.postList}
           data={postListArr}
@@ -148,13 +159,28 @@ const PostList: React.FC<Props> = (props) => {
               }
             </>
           )}
+          ListEmptyComponent={!postListArr.length && !refreshing ?
+            <View style={styles.noData}>
+              <NoDataShow/>
+            </View>
+            : null
+          }
         />
       </View>
   )
 }
 
 const styles = StyleSheet.create({
-  postList: {},
+  container: {
+    flex: 1,
+  },
+  postList: {
+    flex: 1,
+  },
+  noData: {
+    flex: 1,
+    marginTop: '40%',
+  },
   footer: {
     width: '100%',
     height: 60,

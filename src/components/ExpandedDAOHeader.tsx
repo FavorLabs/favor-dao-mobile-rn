@@ -10,7 +10,7 @@ import BtnChatToggle from "./BtnChatToggle";
 import { Color, Padding } from "../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
 import {DaoInfo} from "../declare/api/DAOApi";
-import {useResourceUrl} from "../utils/hook";
+import {useIsLogin, useResourceUrl} from "../utils/hook";
 import {getDebounce} from "../utils/util";
 import {useEffect, useState} from "react";
 import DaoInfoHeader from "./DaoInfoHeader";
@@ -25,6 +25,7 @@ type Props = {
 const ExpandedDAOHeader: React.FC<Props> = (props) => {
   const { daoInfo } = props;
   const navigation = useNavigation();
+  const [isLogin, gotoLogin] = useIsLogin()
 
   const imagesResUrl = useResourceUrl('images');
   const [isShow,setIsShow] = useState<boolean>(false);
@@ -34,6 +35,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
   }
 
   const toFeedsOfDao = () => {
+    if(!isLogin) return gotoLogin();
     setIsShow(true);
   }
 
@@ -74,9 +76,10 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   channelDao: {
-    width: 343,
+    flex: 1,
     padding: Padding.p_xs,
     alignItems: "center",
+    justifyContent: 'center',
     backgroundColor: Color.color1,
   },
   maskeddaoinfoLayout: {

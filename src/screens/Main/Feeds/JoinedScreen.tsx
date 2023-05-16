@@ -1,41 +1,52 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Color} from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 import {useIsFocused} from "@react-navigation/native";
 import {useIsLogin} from "../../../utils/hook";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
+import {updateState as globalUpdateState} from "../../../store/global";
 
 export type Props = {};
 const JoinedScreen: React.FC<Props> = (props) => {
-    const [isLogin, gotoLogin] = useIsLogin()
-    const isFocused = useIsFocused();
-    const { dao } = useSelector((state: Models) => state.global);
+  const [isLogin, gotoLogin] = useIsLogin()
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const { feedsSearch } = useSelector((state: Models) => state.search);
+  const { newsJoinStatus } = useSelector((state: Models) => state.global);
+  const [isNewsFocus, setIsNewsFocus] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (isFocused && !isLogin) {
-            gotoLogin();
-        }
-    }, [isLogin, isFocused])
+  useEffect(() => {
+    if (isFocused && !isLogin) {
+      gotoLogin();
+    }
+    if(isFocused && newsJoinStatus) {
+      setIsNewsFocus(true);
 
-    return (
-      <View style={styles.container}>
-          {
-              isLogin ?
-                <View style={styles.container}>
-                    <PostList type={'post'} focus/>
-                </View> : null
-          }
-      </View>
-    )
+      dispatch(globalUpdateState({
+        newsJoinStatus: false
+      }))
+    }
+  }, [isLogin, isFocused])
+
+  return (
+    <View style={styles.container}>
+      {
+        isLogin ?
+          <View style={styles.container}>
+            <PostList type={'post'} focus query={feedsSearch} isNewsFocus={isNewsFocus} setIsNewsFocus={setIsNewsFocus}/>
+          </View> : null
+      }
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Color.color1,
-    },
+  container: {
+    flex: 1,
+    backgroundColor: Color.color1,
+  },
 });
 
 export default JoinedScreen;

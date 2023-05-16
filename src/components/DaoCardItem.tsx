@@ -38,8 +38,8 @@ const DaoCardItem: React.FC<Props> = (props) => {
         />
         <View style={[styles.groupParent, styles.labelFlexBox]}>
           <View style={styles.subtitleParent}>
-            <Text style={styles.subtitle}>joined: {daoInfo.follow_count}</Text>
-            <Text style={[styles.title, styles.titleClr]}>{daoInfo.name}</Text>
+            <Text style={styles.subtitle} numberOfLines={1}>joined: {daoInfo.follow_count}</Text>
+            <Text style={[styles.title, styles.titleClr]} numberOfLines={1}>{daoInfo.name}</Text>
           </View>
           <View style={styles.labelWrapper}>
 
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mini,
     left: 0,
     position: "absolute",
-    width: 114,
+    width: '100%',
   },
   title: {
     top: 0,
@@ -114,11 +114,11 @@ const styles = StyleSheet.create({
     color: Color.iOSSystemLabelsLightPrimary,
     left: 0,
     position: "absolute",
-    width: 114,
+    width: '100%'
   },
   subtitleParent: {
     height: 46,
-    width: 114,
+    flex: 1,
   },
   label1: {
     fontSize: FontSize.paragraphP313_size,
