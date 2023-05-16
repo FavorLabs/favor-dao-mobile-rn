@@ -1,30 +1,40 @@
 import * as React from "react";
-import { Text, StyleSheet, Image, View } from "react-native";
+import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
 
-const SingleChoice = () => {
+type Props = {
+  member: number;
+  setMember: React.Dispatch<React.SetStateAction<number>>;
+}
+const SingleChoice: React.FC<Props> = (props) => {
+  const { member, setMember } = props;
+
   return (
     <View style={styles.titleParent}>
       <Text style={[styles.title, styles.titleFlexBox]}>Permission</Text>
       <View style={[styles.frameParent, styles.frameParentFlexBox]}>
         <View style={styles.descriptionFlexBox}>
           <Text style={[styles.description, styles.titleFlexBox]}>Free</Text>
-          <Image
-            style={[styles.checkboxIcon, styles.frameParentFlexBox]}
-            resizeMode="cover"
-            source={require("../assets/checkbox.png")}
-          />
+          <TouchableOpacity onPress={() => setMember(0) }>
+            <Image
+              style={[styles.checkboxIcon, styles.frameParentFlexBox]}
+              resizeMode="cover"
+              source={ member === 0 ? require("../assets/checkbox1.png") : require("../assets/checkbox.png")}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.frameChild} />
         <View style={[styles.descriptionGroup, styles.descriptionFlexBox]}>
           <Text style={[styles.description, styles.titleFlexBox]}>
             Subscribe member
           </Text>
-          <Image
-            style={[styles.checkboxIcon, styles.frameParentFlexBox]}
-            resizeMode="cover"
-            source={require("../assets/checkbox1.png")}
-          />
+          <TouchableOpacity onPress={() => setMember(1) }>
+            <Image
+              style={[styles.checkboxIcon, styles.frameParentFlexBox]}
+              resizeMode="cover"
+              source={ member === 1 ? require("../assets/checkbox1.png") : require("../assets/checkbox.png") }
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
