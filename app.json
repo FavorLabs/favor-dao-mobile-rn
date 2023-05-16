@@ -16,17 +16,36 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.favorlabs.favorDao"
+      "bundleIdentifier": "com.favorlabs.favorDao",
+      "infoPlist": {
+        "NSCameraUsageDescription": "$(PRODUCT_NAME) want to use your camera",
+        "NSAppleMusicUsageDescription": "$(PRODUCT_NAME) want to select image or videos from your media library",
+        "NSMotionUsageDescription": "Allow $(PRODUCT_NAME) to access your device motion.",
+        "NSPhotoLibraryUsageDescription": "$(PRODUCT_NAME) want to select photo from your media library",
+        "NSMicrophoneUsageDescription": "This is for Mic permission"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.favorlabs.favorDao"
+      "package": "com.favorlabs.favorDao",
+      "permissions": [
+        "INTERNET",
+        "CAMERA",
+        "MODIFY_AUDIO_SETTINGS",
+        "RECORD_AUDIO",
+        "ACCESS_NETWORK_STATE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f68f929e-9d9f-4edd-8f2f-91d756b11ab2"
+      }
     }
   }
 }

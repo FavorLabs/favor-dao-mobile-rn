@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-// import * as FavorX from 'react-native-favor';
-import {Text, View, StyleSheet, TouchableOpacity, Modal} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, Platform, PermissionsAndroid} from "react-native";
 import FavorlabsApi from "../services/FavorlabsApi";
 import {CheckBox} from '@rneui/themed'
 import {FavorXConfig} from "../declare/global";
@@ -11,7 +10,8 @@ import Screens from "../navigation/RouteNames";
 import {Padding, Color, FontFamily, FontSize, Border} from "../GlobalStyles";
 import Loading from "../components/Loading";
 import Favor from "../libs/favor";
-import {EXTERNAL_CONFIG_NAME} from '@env'
+import {EXTERNAL_CONFIG_NAME} from '@env';
+import {CometChat} from '@cometchat-pro/react-native-chat';
 
 const StartNode = () => {
     const navigation = useNavigation<StackNavigationProp<any>>()
@@ -38,6 +38,39 @@ const StartNode = () => {
         }
 
     }
+    const initChat = (region: string, appId: string) => {
+        const appSetting = new CometChat.AppSettingsBuilder()
+          .subscribePresenceForAllUsers()
+          .setRegion(region)
+          .build();
+        CometChat.init(appId, appSetting)
+          .then(() => {
+              CometChat.setSource?.('ui-kit', Platform.OS, 'react-native');
+          })
+          .catch(() => {
+              return null;
+          });
+        const getPermissions = async () => {
+            if (Platform.OS === 'android') {
+                let granted = await PermissionsAndroid.requestMultiple([
+                    PermissionsAndroid.PERMISSIONS.CAMERA,
+                    PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                ]);
+                // @ts-ignore
+                if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+                    granted = await PermissionsAndroid.requestMultiple([
+                        PermissionsAndroid.PERMISSIONS.CAMERA,
+                        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+                        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    ]);
+                }
+            }
+        };
+        getPermissions();
+    }
     const start = async () => {
         try {
             setVisible(true);
@@ -62,6 +95,7 @@ const StartNode = () => {
             console.log("Node start success");
             await Favor.getConfig(fc["network-id"], EXTERNAL_CONFIG_NAME || 'FavorDAO');
             await Favor.subProxy();
+            initChat(fc.chat.region, fc.chat.appId);
             navigation.replace(Screens.Root);
         } catch (e) {
             console.error(e)

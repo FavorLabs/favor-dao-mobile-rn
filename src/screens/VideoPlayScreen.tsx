@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Image, StyleSheet, View, Text, Pressable, SafeAreaView} from "react-native";
+import {Image, StyleSheet, View, Text, Pressable, SafeAreaView, ScrollView} from "react-native";
 import VideoDetailButton from "../components/VideoDetailButton";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {FontSize, FontFamily, Color, Border} from "../GlobalStyles";

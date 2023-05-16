@@ -23,6 +23,9 @@ import DaoApi from '../services/DAOApi/Dao'
 import {useIsLogin, useUrl} from "../utils/hook";
 import {useDispatch, useSelector} from "react-redux";
 import {updateState as globalUpdateState} from "../store/global"
+import {CometChat} from '@cometchat-pro/react-native-chat';
+import WalletController from "../libs/walletController";
+import {CometChatMessages} from "../cometchat-pro-react-native-ui-kit/CometChatWorkspace"
 
 const Stack = createStackNavigator();
 
@@ -38,6 +41,7 @@ function RootStack() {
     const [routeName, setRouteName] = useState(Screens.StartNode);
     useEffect(() => {
         Favor.on(group_sub_method, (res) => {
+            console.log(res)
             setRequestLoading(!res.connected?.length)
         })
         return () => {
@@ -66,6 +70,7 @@ function RootStack() {
                     user: info.data.data,
                     dao: dao?.data.data.list?.[0] || null
                 }));
+                await CometChat.login(WalletController.token)
             }
         }
 
@@ -101,8 +106,9 @@ function RootStack() {
               <Stack.Screen name={Screens.InputWalletPassword} component={InputWalletPasswordScreen}/>
               <Stack.Screen name={Screens.MnemonicBackup} component={MnemonicBackupScreen}/>
               <Stack.Screen name={Screens.DAOSetting} component={DAOSettingScreen}/>
-              <Stack.Screen name={Screens.QuoteEdit} component={QuoteEditScreen} />
-              <Stack.Screen name={Screens.FeedsOfDAO} component={FeedsOfDAO} />
+              <Stack.Screen name={Screens.QuoteEdit} component={QuoteEditScreen}/>
+              <Stack.Screen name={Screens.FeedsOfDAO} component={FeedsOfDAO}/>
+              <Stack.Screen name={"CometChatMessages"} component={CometChatMessages}/>
           </Stack.Navigator>
           <Loading visible={visible} text={'Connecting to a p2p network'}/>
       </>

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import BottomSheetM from "./BottomSheet";
 import SubscribeBlock from "./SubscribeBlock";
 import InputPassword from "./InputPassword";
+import {ScrollView} from "react-native";
 
 
 export type Props = {
@@ -21,7 +22,9 @@ const SubscribeModal = ({show, daoCardInfo, fn}: Props) => {
           showCancel
           snapPoints={['60%']}
         >
-            <SubscribeBlock daoCardInfo={daoCardInfo} subFn={subFn}/>
+            <ScrollView style={{paddingHorizontal: 20}}>
+                <SubscribeBlock daoCardInfo={daoCardInfo} subFn={subFn}/>
+            </ScrollView>
         </BottomSheetM>
 
         <BottomSheetM
@@ -29,7 +32,9 @@ const SubscribeModal = ({show, daoCardInfo, fn}: Props) => {
           showCancel
           snapPoints={['60%']}
         >
-            <InputPassword fn={fn}/>
+            <ScrollView style={{paddingHorizontal: 20}}>
+                <InputPassword fn={fn}/>
+            </ScrollView>
         </BottomSheetM>
     </>
 };
