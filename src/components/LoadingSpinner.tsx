@@ -13,7 +13,6 @@ const LoadingSpinner: React.FC<Props> = (props) => {
   const [spinValue] = useState(new Animated.Value(0));
   const [animatedStyle, setAnimatedStyle] = useState({});
 
-  // 开始旋转动画
   useEffect(() => {
     if (isLoading) {
       const spinAnimation = Animated.loop(
@@ -32,7 +31,6 @@ const LoadingSpinner: React.FC<Props> = (props) => {
     }
   }, [isLoading, spinValue]);
 
-  // 定义旋转动画样式
   useEffect(() => {
     setAnimatedStyle({
       transform: [
