@@ -63,19 +63,17 @@ const VideoBlockItem: React.FC<Props> = (props) => {
           />
 
           { postInfo.member === 1 &&
-            <View style={[styles.rectangleParent, styles.groupChildLayout]}>
-              <View style={[styles.groupChild, styles.lockIconPosition]} />
-                <View style={styles.subtitleParent}>
-                  <Text style={styles.subtitle}>Unlock</Text>
-                    <Image
-                       style={[styles.lockIcon, styles.lockIconPosition]}
-                       resizeMode="cover"
-                       source={require("../assets/lock.png")}
-                    />
-                </View>
+            <View style={styles.rectangleParent}>
+              <View style={styles.subtitleParent}>
+                <Text style={styles.subtitle}>{ postInfo.dao.is_subscribed ? 'Unlock' : 'Locked' }</Text>
+                <Image
+                  style={styles.lockIcon}
+                  resizeMode="cover"
+                  source={postInfo.dao.is_subscribed ? require("../assets/unlock.png") : require("../assets/lock.png")}
+                />
+              </View>
             </View>
           }
-
 
           <Image
             style={styles.playCircleIcon}
@@ -94,14 +92,6 @@ const styles = StyleSheet.create({
   likeSpaceBlock: {
     marginTop: 14,
     alignSelf: "stretch",
-  },
-  groupChildLayout: {
-    width: 82,
-    height: 24,
-  },
-  lockIconPosition: {
-    left: 0,
-    position: "absolute",
   },
   description1: {
     fontSize: FontSize.bodyBody17_size,
@@ -129,49 +119,34 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     position: "absolute",
   },
-  groupChild: {
-    borderRadius: Border.br_xs,
-    top: 0,
-    left: 0,
-    height: 24,
-    width: 82,
-    backgroundColor: Color.color1,
-  },
   subtitle: {
-    left: 21,
     fontSize: FontSize.size_xs,
     fontWeight: "500",
     fontFamily: FontFamily.headingH613,
     color: Color.darkslategray_400,
-    textAlign: "center",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: 46,
     lineHeight: 20,
-    height: 19,
-    top: 0,
-    position: "absolute",
     letterSpacing: 0,
+    marginRight: 2,
   },
   lockIcon: {
-    top: 1,
-    width: 16,
+    marginLeft: 2,
+    width: 15,
     height: 15,
-    overflow: "hidden",
   },
   subtitleParent: {
-    top: 3,
-    left: 7,
-    width: 67,
-    height: 19,
-    position: "absolute",
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   rectangleParent: {
     top: 14,
     right: 14,
     height: 24,
     position: "absolute",
+    borderRadius: Border.br_xs,
+    width: 82,
+    backgroundColor: Color.color1,
   },
   playCircleIcon: {
     top: 84,

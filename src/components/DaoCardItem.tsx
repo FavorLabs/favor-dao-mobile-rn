@@ -12,10 +12,11 @@ type Props = {
   daoInfo: DaoInfo;
   handle: () => void;
   joinStatus: boolean;
+  btnLoading?: boolean
 };
 
 const DaoCardItem: React.FC<Props> = (props) => {
-  const { daoInfo, handle, joinStatus } = props;
+  const { daoInfo, handle, joinStatus, btnLoading } = props;
   const { dao } = useSelector((state: Models) => state.global);
 
   const avatarsResUrl = useResourceUrl('avatars');
@@ -44,7 +45,7 @@ const DaoCardItem: React.FC<Props> = (props) => {
           <View style={styles.labelWrapper}>
 
             { dao?.id !== daoInfo.id &&
-                <JoinButton isJoin={joinStatus} handle={handle}/>
+                <JoinButton isJoin={joinStatus} handle={handle} isLoading={btnLoading}/>
             }
 
             <View style={[styles.label, styles.labelFlexBox]}>

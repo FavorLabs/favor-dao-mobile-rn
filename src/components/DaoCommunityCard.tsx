@@ -50,8 +50,8 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
         />
         <View style={[styles.groupParent, styles.labelFlexBox]}>
           <View style={styles.subtitleParent}>
-            <Text style={styles.subtitle}>joined: {dao.follow_count}</Text>
-            <Text style={[styles.title, styles.titleClr]}>{dao.name}</Text>
+            <Text style={styles.subtitle} numberOfLines={1}>joined: {dao.follow_count}</Text>
+            <Text style={[styles.title, styles.titleClr]} numberOfLines={1}>{dao.name}</Text>
           </View>
           <View style={styles.labelWrapper}>
             <View style={[styles.label, styles.labelFlexBox]}>
@@ -170,8 +170,6 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   frameParent: {
-    marginRight: 10,
-    marginBottom: 20,
     shadowColor: "rgba(0, 0, 0, 0.08)",
     shadowOffset: {
       width: 0,
@@ -179,9 +177,6 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 16,
     shadowOpacity: 1,
-    width: 240,
-    height: 240,
-    // overflow: 'hidden',
   },
 });
 

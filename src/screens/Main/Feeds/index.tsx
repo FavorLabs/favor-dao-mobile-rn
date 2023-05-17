@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity,TextInput } from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity, TextInput, StatusBar} from 'react-native';
 import {FeedsTopTabNavigator} from '../../../navigation/TopTabBar';
 import {FontSize, Color, Border, FontFamily, Padding} from "../../../GlobalStyles";
 // @ts-ignore
@@ -15,6 +15,7 @@ import {updateState as searchUpdateState} from "../../../store/search"
 
 export type Props = {};
 const FeedsScreen: React.FC<Props> = (props) => {
+    const statusBarHeight = StatusBar.currentHeight;
     const dispatch = useDispatch()
     const navigation = useNavigation<StackNavigationProp<any>>();
     const actionSheetRef = useRef<ActionSheet>(null);
@@ -129,16 +130,6 @@ const styles = StyleSheet.create({
         top: 0,
         height: 24,
     },
-    placeholderLabel: {
-        marginTop: -11,
-        top: "50%",
-        width: 241,
-        color: Color.iOSSystemLabelsLightSecondary,
-        left: 26,
-        lineHeight: 22,
-        position: "absolute",
-        fontSize: FontSize.bodyBody17_size,
-    },
     searchParent: {
         width: 267,
         height: 24,
@@ -167,7 +158,6 @@ const styles = StyleSheet.create({
         alignSelf: "stretch",
     },
     titleParent: {
-        paddingTop: Padding.p_11xl,
         paddingBottom: Padding.p_3xs,
         justifyContent: "flex-end",
         paddingHorizontal: Padding.p_base,

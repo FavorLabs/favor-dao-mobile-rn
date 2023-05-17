@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   titleParent: {
-    paddingTop: Padding.p_11xl,
     paddingBottom: Padding.p_3xs,
     justifyContent: "flex-end",
     paddingHorizontal: Padding.p_base,

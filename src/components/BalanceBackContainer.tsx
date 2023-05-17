@@ -16,7 +16,7 @@ const BalanceBackContainer: React.FC<Props> = (props) => {
     try {
       const {data} = await UserApi.getAccounts(url);
       console.log(data,'data')
-      setBalance(data.data[0].balance)
+      // setBalance(data.data[0].balance)
     } catch (e) {
       if (e instanceof Error) console.error(e)
     }
@@ -34,11 +34,11 @@ const BalanceBackContainer: React.FC<Props> = (props) => {
           <Image
             style={styles.tokenavatarIcon}
             resizeMode="cover"
-            source={require("../assets/eth-icon.png")}
+            source={require("../assets/subtract.png")}
           />
           <View style={styles.values}>
             <Text style={[styles.valuesofusdt]}>
-              $ { addDecimal(balance) }
+              { addDecimal(balance) } FavT
             </Text>
           </View>
         </View>
@@ -61,9 +61,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   tokenavatarIcon: {
-    borderRadius: Border.br_21xl,
-    width: 48,
-    height: 48,
+    // borderRadius: Border.br_21xl,
+    width: 50,
+    height: 56,
   },
   valuesofusdt: {
     fontSize: FontSize.size_15xl,
