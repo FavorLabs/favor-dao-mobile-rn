@@ -18,6 +18,7 @@ import {useNavigation} from "@react-navigation/native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import SwitchButton from "../components/SwitchButton";
 import {RegExps} from "../components/TextInputParsed";
+import FavorDaoButton from "../components/FavorDaoButton";
 
 export type Props = {};
 const CreateVideoScreen: React.FC<Props> = (props) => {
@@ -122,14 +123,19 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
         <UploadImage imageType={'thumbnail'} setUpImage={setThumbnail} autoThumbnail={autoThumbnail} multiple={false} />
         <SingleChoice member={member} setMember={setMember} />
         <SwitchButton mode={daoMode} setMode={setDaoMode} />
-        <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
-          <TouchableOpacity onPress={createHandle}>
-            <View style={[styles.createWrapper, styles.wrapperFlexBox]}>
-              <Text style={styles.create}>Post</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
+
+      <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
+        <TouchableOpacity onPress={createHandle}>
+          <FavorDaoButton
+            textValue="Post"
+            frame1171275771BackgroundColor="#ff8d1a"
+            cancelColor="#fff"
+            isLoading={postLoading}
+          />
+        </TouchableOpacity>
+      </View>
+
     </View>
   )
 }
@@ -166,8 +172,9 @@ const styles = StyleSheet.create({
   },
   instanceParent: {
     marginTop: 20,
-    alignSelf: "stretch",
+    marginBottom: 20,
     alignItems: "center",
+    alignSelf: "stretch",
   },
 });
 

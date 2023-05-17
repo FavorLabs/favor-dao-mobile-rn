@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
+import {Image, StyleSheet, View, Text, TouchableOpacity, ActivityIndicator} from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {getDebounce} from "../utils/util";
@@ -9,11 +9,12 @@ import {useDispatch} from "react-redux";
 type Props = {
   isJoin: boolean;
   handle: () => void;
+  isLoading?: boolean;
 };
 
 const JoinButton: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
-  const { isJoin, handle } = props;
+  const { isJoin, handle, isLoading} = props;
 
   const onPress = () => {
     handle();
@@ -26,9 +27,12 @@ const JoinButton: React.FC<Props> = (props) => {
   return (
     <TouchableOpacity onPress={getDebounce(onPress)}>
       <View style={[styles.joinButton, isJoin ? styles.joined : styles.join]}>
-        <Text style={[styles.joinText, isJoin ? styles.joined : styles.join]}>
-          {isJoin ? 'joined' : 'join'}
-        </Text>
+        {
+          isLoading ? <ActivityIndicator size="small"/> :
+            <Text style={[styles.joinText, isJoin ? styles.joined : styles.join]}>
+              {isJoin ? 'joined' : 'join'}
+            </Text>
+        }
       </View>
     </TouchableOpacity>
   )

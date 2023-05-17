@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
   },
   titleWrapper: {
     paddingHorizontal: Padding.p_3xs,
-    paddingTop: Padding.p_11xl,
     paddingBottom: Padding.p_3xs,
     flexDirection: "row",
     alignSelf: "stretch",

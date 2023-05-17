@@ -139,7 +139,16 @@ const ChunkSourceInfo: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sourceInfoTitle}>Data source of this video</Text>
+      {currentVideoInfo && (
+        <View style={styles.hashId}>
+          <Text style={styles.rcid}>RCID:{' '}</Text>
+          <Text style={styles.hashText}>{currentVideoInfo.rootCid}</Text>
+        </View>
+      )}
+      <View style={styles.chunkSourceInfo}>
+        <Text style={styles.sourceInfoTitle}>Chunk Source Info</Text>
+        <Text style={styles.chunkText}>{totalPercent.toFixed(2)}%</Text>
+      </View>
       <View style={styles.sourceListWrap}>
         <ScrollView>
           {
@@ -187,14 +196,35 @@ const ChunkSourceInfo: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    paddingRight: 32,
+    paddingHorizontal: 16,
     height: '100%'
+  },
+  hashId: {
+    flexDirection: 'row',
+    paddingVertical: 10,
+  },
+  rcid: {
+    fontSize: 20,
+    fontWeight: '600',
+    lineHeight: 26,
+  },
+  hashText: {
+    width: '85%',
+    fontSize: 18,
+  },
+  chunkSourceInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   sourceInfoTitle: {
     fontSize: 20,
     fontWeight: '600',
     lineHeight: 26,
     letterSpacing: -0.41
+  },
+  chunkText: {
+    fontSize: 18,
+    color: 'orange',
   },
   sourceListWrap: {
     flex: 1,

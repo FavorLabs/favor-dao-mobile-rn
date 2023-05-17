@@ -38,16 +38,22 @@ const PostDetailHeader = ({
 
   const createTime = getTime(postInfo ? postInfo?.created_on : 0);
   const [isJoin, setIsJoin] = useState(false);
+  const [btnLoading,setBtnLoading] = useState<boolean>(false);
   const [isLogin, gotoLogin] = useIsLogin();
 
   const bookmarkHandle = async () => {
     if(!isLogin) return gotoLogin();
-    if(postInfo?.dao.id)
-    try {
-      const { data } = await DaoApi.bookmark(url, postInfo.dao.id);
-      setIsJoin(data.data.status);
-    } catch (e) {
-      if (e instanceof Error) console.error(e.message);
+    if (btnLoading) return ;
+    if(postInfo?.dao.id){
+      setBtnLoading(true)
+      try {
+        const { data } = await DaoApi.bookmark(url, postInfo.dao.id);
+        setIsJoin(data.data.status);
+        setBtnLoading(false)
+      } catch (e) {
+        if (e instanceof Error) console.error(e.message);
+        setBtnLoading(false)
+      }
     }
   };
 
@@ -102,7 +108,7 @@ const PostDetailHeader = ({
 
       {
         postInfo?.dao.id !== dao?.id &&
-          <JoinButton isJoin={isJoin} handle={bookmarkHandle}/>
+          <JoinButton isJoin={isJoin} handle={bookmarkHandle} isLoading={btnLoading}/>
       }
     </View>
   );

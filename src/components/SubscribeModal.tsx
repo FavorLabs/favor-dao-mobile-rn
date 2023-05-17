@@ -19,7 +19,7 @@ const SubscribeModal = ({show, daoCardInfo, fn}: Props) => {
     return <>
         <BottomSheetM
           show={show}
-          showCancel
+          // showCancel
           snapPoints={['60%']}
         >
             <ScrollView style={{paddingHorizontal: 20}}>

@@ -30,24 +30,17 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   });
 
   const [daoInfo, setDaoInfo] = useState<DaoInfo>();
-  // @ts-ignore
+
   const [activeId, setActiveId] = useState<string>('');
+  const [btnLoading,setBtnLoading] = useState<boolean>(false);
 
   const getBookmarkList = async () => {
     try {
       const { data } = await DaoApi.getBookmarkList(url, daoPageData);
       if(data.data?.list) {
         const newsData = data.data.list;
-        const firstItem: DaoInfo | undefined = newsData?.find(item => item.id === dao?.id);
         const otherItems: DaoInfo[] = newsData.filter(item => item.id !== dao?.id);
-        // @ts-ignore
-        let sortedData: DaoInfo[] = [];
-        if(firstItem) {
-          sortedData = [firstItem, ...otherItems];
-        } else {
-          sortedData = [...otherItems];
-        }
-        setBookmarkList(() => [...bookmarkList,...sortedData]);
+        setBookmarkList(() => [...bookmarkList,...otherItems]);
       }
       setIsLoadingMore(
         data.data.pager.total_rows > daoPageData.page * daoPageData.page_size,
@@ -64,9 +57,9 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
       const { data } = await DaoApi.getBookmarkList(url, pageData);
       if(data.data?.list) {
         const newsData = data.data.list;
-        const firstItem: DaoInfo | undefined = newsData?.find(item => item.id === dao?.id);
+        // const firstItem: DaoInfo | undefined = newsData?.find(item => item.id === dao?.id);
+        const firstItem: DaoInfo | null = dao;
         const otherItems: DaoInfo[] = newsData.filter(item => item.id !== dao?.id);
-        // @ts-ignore
         let sortedData: DaoInfo[] = [];
         if(firstItem) {
           sortedData = [firstItem, ...otherItems];
@@ -113,13 +106,22 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   };
 
   const bookmarkHandle = async () => {
+    if(btnLoading) return;
     if(!activeId) return;
+    setBtnLoading(true);
     try {
       const { data } = await DaoApi.bookmark(url, activeId);
-      await refreshList();
-      setIsJoin(data.data.status);
+      if(data.data) {
+        await refreshList();
+        setIsJoin(data.data.status);
+        setBtnLoading(false);
+      }
+
     } catch (e) {
-      if (e instanceof Error) console.error(e.message);
+      if (e instanceof Error) {
+        console.error(e.message);
+        setBtnLoading(false);
+      }
     }
   };
 
@@ -166,7 +168,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
               {
                 daoInfo &&
                   <View style={styles.daoDetail}>
-                      <DaoCardItem daoInfo={daoInfo} handle={bookmarkHandle} joinStatus={isJoin}/>
+                      <DaoCardItem daoInfo={daoInfo} handle={bookmarkHandle} joinStatus={isJoin} btnLoading={btnLoading}/>
                       <View style={styles.channelsofdao}>
                           <PublishContainer daoInfo={daoInfo}/>
                           <Chats/>

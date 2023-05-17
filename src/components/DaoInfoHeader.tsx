@@ -21,13 +21,20 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
   const avatarsResUrl = useResourceUrl('avatars');
 
   const [isJoin, setIsJoin] = useState(false);
+  const [btnLoading,setBtnLoading] = useState<boolean>(false);
 
   const bookmarkHandle = async () => {
+    if(btnLoading) return;
+    setBtnLoading(true);
     try {
       const { data } = await DaoApi.bookmark(url, daoInfo.id);
       setIsJoin(data.data.status);
+      setBtnLoading(false);
     } catch (e) {
-      if (e instanceof Error) console.error(e.message);
+      if (e instanceof Error) {
+        console.error(e.message);
+        setBtnLoading(false);
+      }
     }
   };
 
@@ -62,7 +69,7 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
         <View style={styles.topRight}>
 
           { dao?.id !== daoInfo.id &&
-              <JoinButton isJoin={isJoin} handle={bookmarkHandle}/>
+              <JoinButton isJoin={isJoin} handle={bookmarkHandle} isLoading={btnLoading}/>
           }
 
           <View style={styles.level}>

@@ -1,5 +1,5 @@
 import React, {useState, useMemo, useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import Toast from 'react-native-toast-message';
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
@@ -13,16 +13,16 @@ import {useNavigation} from "@react-navigation/native";
 import {DaoParams} from "../declare/api/DAOApi";
 import {useDispatch} from "react-redux";
 import {updateState as globalUpdateState} from "../store/global";
-import {getMatchedStrings} from "../utils/util";
+import {getMatchedStrings, sleep} from "../utils/util";
 import {RegExps} from "../components/TextInputParsed";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";
+import FavorDaoButton from "../components/FavorDaoButton";
 
 export type Props = {};
 const CreateDAOScreen: React.FC<Props> = (props) => {
   const url = useUrl();
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const avatarsResUrl = useResourceUrl('avatars');
 
   const [daoName, setDaoName] = useState<string>('');
   const [daoDescription, setDaoDescription] = useState<string>('');
@@ -30,6 +30,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
   const [daoBanner, setBanner] = useState<string>('');
   const [daoMode, setDaoMode] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
+  const [btnLoading,setBtnLoading] = useState<boolean>(false);
 
   const createDisable = useMemo(() => {
     return !(
@@ -40,27 +41,15 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
     )
   }, [daoName, daoDescription, daoAvatar, daoBanner]);
 
-  // const uploadAvatar = async () => {
-  //   let file = {uri: daoAvatar.path, type: 'multipart/form-data', name:'image.png' };
-  //   try {
-  //     let fmData = new FormData();
-  //     // @ts-ignore
-  //     fmData.append('avatar', file);
-  //     const { data } = await ImageApi.upload(avatarsResUrl, fmData);
-  //     setDaoAvatarId(data.id);
-  //   } catch (e){
-  //     console.log(e)
-  //   }
-  // };
-
   const createHandle = async () => {
+    if (btnLoading) return ;
     if (createDisable) {
       return Toast.show({
         type: 'info',
         text1: 'Please complete all options',
       })
     }
-
+    setBtnLoading(true);
     try {
       const params: DaoParams = {
         name: daoName,
@@ -71,7 +60,6 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         tags,
       }
       console.log(params,'create DAO')
-      // @ts-ignore
       const { data } = await DaoApi.create(url, params);
       if(data.data) {
         Toast.show({
@@ -89,15 +77,10 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           type: 'error',
           text1: e.message
         });
+        setBtnLoading(false);
       }
     }
   };
-
-  // useEffect(() => {
-  //   if(daoAvatar) {
-  //     uploadAvatar()
-  //   }
-  // },[daoAvatar])
 
   useEffect(() => {
     setTags(getMatchedStrings(daoDescription, RegExps.tag));
@@ -127,17 +110,18 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         <UploadImage imageType={'avatar'} isShowSelector={false} setUpImage={setDaoAvatar} multiple={false}/>
         <UploadImage imageType={'banner'} isShowSelector={false} setUpImage={setBanner} multiple={false}/>
         <SwitchButton mode={daoMode} setMode={setDaoMode} />
-        <View style={styles.instanceParent2}>
-          <TouchableWithoutFeedback onPress={createHandle}>
-            <View style={[styles.createWrapper, createDisable && { opacity: 0.5 }]}>
-              <Text style={styles.create}>Create</Text>
-            </View>
-          </TouchableWithoutFeedback>
-          <View style={styles.homeIndicator}>
-            <View style={styles.background} />
-          </View>
-        </View>
       </ScrollView>
+
+      <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
+        <TouchableOpacity onPress={createHandle}>
+          <FavorDaoButton
+            textValue="Create"
+            frame1171275771BackgroundColor="#ff8d1a"
+            cancelColor="#fff"
+            isLoading={btnLoading}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -166,8 +150,8 @@ const styles = StyleSheet.create({
   },
   instanceParent: {
     alignSelf: "stretch",
-    paddingTop: 119,
     marginTop: 20,
+    marginBottom: 20,
     alignItems: "center",
   },
   create: {

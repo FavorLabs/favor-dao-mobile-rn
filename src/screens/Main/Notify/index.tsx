@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.whitesmoke_300,
   },
   titleParent: {
-    paddingTop: Padding.p_11xl,
     paddingBottom: Padding.p_3xs,
     justifyContent: "flex-end",
     paddingHorizontal: Padding.p_base,

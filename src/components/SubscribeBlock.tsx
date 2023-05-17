@@ -77,7 +77,7 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
                   </View>
               </View>
           </View>
-          <TouchableOpacity onPress={subscribe}>
+          <TouchableOpacity onPress={subscribe} style={styles.button}>
               <FavorDaoButton
                 textValue="Subscribe"
                 frame1171275771BackgroundColor="#ff8d1a"
@@ -89,6 +89,9 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
 };
 
 const styles = StyleSheet.create({
+    button: {
+      marginTop: 20,
+    },
     titleFlexBox: {
         textAlign: "left",
         color: Color.iOSSystemLabelsLightPrimary,

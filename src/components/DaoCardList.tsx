@@ -50,7 +50,7 @@ const DaoCardList: React.FC<Props> = (props) => {
         <FlatList
           style={styles.postList}
           data={postListArr}
-          renderItem={({ item }) => <DaoCommunityCard daoCardInfo={item} />}
+          renderItem={({ item }) => <View style={styles.daoBlock}><DaoCommunityCard daoCardInfo={item} /></View>}
           horizontal={true}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
@@ -63,6 +63,12 @@ const DaoCardList: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   postList: {
     // backgroundColor: Color.color1
+  },
+  daoBlock: {
+    width: 240,
+    height: 240,
+    marginRight: 10,
+    marginBottom: 20,
   },
   frameContainer: {
     paddingLeft: 10,
