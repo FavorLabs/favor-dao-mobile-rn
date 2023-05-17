@@ -21,6 +21,7 @@ class Favor extends EventEmitter {
     api?: string
     debugApi?: string
     ws?: WebsocketProvider
+    networkId?: number
     config?: Config
     bucket?: BucketRes
 
@@ -91,6 +92,7 @@ class Favor extends EventEmitter {
 
     async getConfig(id: number, name?: string) {
         const {data} = await favorlabsApi.getConfig(id, name);
+        this.networkId = id;
         this.config = data.data;
     }
 

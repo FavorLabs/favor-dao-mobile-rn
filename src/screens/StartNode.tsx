@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, StyleSheet, TouchableOpacity, Platform, PermissionsAndroid} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, Platform, PermissionsAndroid, ActivityIndicator} from "react-native";
 import FavorlabsApi from "../services/FavorlabsApi";
-import {CheckBox} from '@rneui/themed'
+import {CheckBox, Icon} from '@rneui/themed'
 import {FavorXConfig} from "../declare/global";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {useNavigation} from "@react-navigation/native";
@@ -20,6 +20,7 @@ const StartNode = () => {
     const [checked, setChecked] = useState(false);
     const [visible, setVisible] = useState(false);
     const [version, setVersion] = useState('');
+    const [configLoaded, setConfigLoaded] = useState(false);
 
     useEffect(() => {
         getConfig();
@@ -30,11 +31,30 @@ const StartNode = () => {
         setVersion(version);
     }
     const getConfig = async () => {
+        setConfigLoaded(false);
         try {
             const {data} = await FavorlabsApi.getFavorXConfig()
             setConfig(data);
         } catch (e) {
-            console.error(e);
+            // console.error(e);
+            setConfig([{
+                "name": "Polygon Mainnet",
+                "bootnode": ["/ip4/94.103.5.122/tcp/1818/p2p/12D3KooWA9J6uL7xjgYD1j8ybHqVeHMAstTzZXsNpDAU4VqRScwU", "/ip4/107.167.2.249/tcp/1800/p2p/12D3KooWEnr66XXK4Y85J1oRZasJUMLj41iexzXSE7DPKwJD3Ao3", "/ip6/2610:150:c066::b5f7:4c24/tcp/1800/p2p/12D3KooWEnr66XXK4Y85J1oRZasJUMLj41iexzXSE7DPKwJD3Ao3"],
+                "chain-endpoint": "https://polygon-mainnet.public.blastapi.io",
+                "network-id": 18,
+                "oracle-contract-addr": "0xDecc6cCfe1E5369EF8e0d30033EF476b075E49bB",
+                "traffic": false,
+                "traffic-contract-addr": "",
+                "proxy-group": "dao-proxy",
+                "proxy-nodes": ["69e1256d685f684c5b903b70dc75b09c3a865a093bf18411973e42fc87fe682f", "ad02ef8199addd00b50c56445f7e22e6e3a5803261c0ff4fecec966867e7dd47"],
+                "unipass": {
+                    "nodeRPC": "https://node.wallet.unipass.id/polygon-mainnet",
+                    "domain": "wallet.unipass.id"
+                },
+                "chat": {"region": "us", "appId": "235461af0053efb9"}
+            }])
+        } finally {
+            setConfigLoaded(true);
         }
 
     }
@@ -105,25 +125,33 @@ const StartNode = () => {
         }
     }
 
+
     return <View style={styles.container}>
-        <Text style={styles.title}>
-            Select Network
-        </Text>
+        <View style={styles.header}>
+            <Text style={styles.title}>
+                Select Network
+            </Text>
+            <TouchableOpacity onPress={getConfig}>
+                <Icon size={25} color={Color.color} name='refresh-circle-sharp' type='ionicon'/>
+            </TouchableOpacity>
+        </View>
         <View style={styles.networks}>
             {
-                config.map((item, index) => (
-                  <View style={[styles.network, index !== 1 && styles.selectorChild]} key={item.name}>
-                      <Text style={styles.name}>{item.name}</Text>
-                      <CheckBox
-                        checked={selectedIndex === index}
-                        onPress={() => setIndex(index)}
-                        checkedIcon="check-circle-o"
-                        uncheckedIcon="circle-o"
-                        containerStyle={{backgroundColor: 'transparent'}}
-                        checkedColor={'#ff8d1a'}
-                      />
-                  </View>
-                ))
+                configLoaded ?
+                  config.map((item, index) => (
+                    <View style={[styles.network, index !== 1 && styles.selectorChild]} key={item.name}>
+                        <Text style={styles.name}>{item.name}</Text>
+                        <CheckBox
+                          checked={selectedIndex === index}
+                          onPress={() => setIndex(index)}
+                          checkedIcon="check-circle-o"
+                          uncheckedIcon="circle-o"
+                          containerStyle={{backgroundColor: 'transparent'}}
+                          checkedColor={'#ff8d1a'}
+                        />
+                    </View>
+                  )) :
+                  <ActivityIndicator size="large" color={Color.color}/>
             }
         </View>
         <TouchableOpacity style={{marginTop: 20}} onPress={start}>
@@ -144,6 +172,11 @@ const styles = StyleSheet.create({
         padding: 20,
         justifyContent: 'center',
         backgroundColor: Color.color2,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: "space-between",
+        alignItems: "center"
     },
     title: {
         fontSize: 28,

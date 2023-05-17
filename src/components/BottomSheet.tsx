@@ -8,6 +8,7 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import FavorDaoButton from "./FavorDaoButton";
 import {Color} from "../GlobalStyles";
+import {useScreenDimensions} from "../utils/hook";
 
 type Props = Partial<React.ComponentProps<typeof BottomSheetModal>> & {
     show?: boolean
@@ -18,13 +19,14 @@ type Props = Partial<React.ComponentProps<typeof BottomSheetModal>> & {
 
 const BottomSheet = (props: Props, ref?: React.Ref<any>) => {
     const {showCancel = false, children, show, footer, ...bsmProps} = props
+    const {screenWidth, screenHeight} = useScreenDimensions()
     const insets = useSafeAreaInsets();
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
     const snapPoints = useMemo(() => bsmProps.snapPoints ?? ['50%'], []);
 
     useEffect(() => {
-        show ? bottomSheetModalRef.current?.present() : bottomSheetModalRef.current?.dismiss();
-    }, [show])
+        show && bottomSheetModalRef.current?.present()
+    }, [bottomSheetModalRef.current])
 
     useImperativeHandle(ref, () => bottomSheetModalRef.current)
 
@@ -41,6 +43,14 @@ const BottomSheet = (props: Props, ref?: React.Ref<any>) => {
         }
         bottomInset={insets.bottom}
         snapPoints={snapPoints}
+        backdropComponent={() => {
+            return <View style={{
+                position: 'absolute',
+                width: screenWidth,
+                height: screenHeight,
+                backgroundColor: Color.whiteTransparent
+            }}></View>
+        }}
       >
           <View style={[styles.contentContainer]}>
               <View style={{flex: 1, alignSelf: 'stretch'}}>
@@ -53,9 +63,6 @@ const BottomSheet = (props: Props, ref?: React.Ref<any>) => {
                       <FavorDaoButton textValue="Cancel"></FavorDaoButton>
                   </TouchableOpacity>
               }
-              <View>
-                  {footer}
-              </View>
           </View>
       </BottomSheetModal>
     );
