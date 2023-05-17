@@ -28,8 +28,14 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
   const imagesResUrl = useResourceUrl('images');
 
   const onPress = () => {
-    // @ts-ignore
-    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao, type : 'Mixed'});
+    if(dao.type === 0) {
+      // @ts-ignore
+      navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao, type : 'Mixed'});
+    } else {
+      // @ts-ignore
+      navigation.navigate(Screens.ToolDaoDetail, { daoInfo: dao});
+    }
+
   }
 
   return (
