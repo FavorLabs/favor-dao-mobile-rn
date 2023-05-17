@@ -4,7 +4,7 @@ import { Border, Color, FontFamily, FontSize, Padding } from "../../../GlobalSty
 import FollowDAOHeader from "../../../components/FollowDAOHeader";
 import PublishContainer from "../../../components/PublishContainer";
 import Chats from "../../../components/Chats";
-import {DaoInfo, Page} from "../../../declare/api/DAOApi";
+import {DaoInfo, Page, Post} from "../../../declare/api/DAOApi";
 import DaoApi from "../../../services/DAOApi/Dao";
 import {useUrl} from "../../../utils/hook";
 import DaoCardItem from "../../../components/DaoCardItem";
@@ -13,6 +13,7 @@ import Models from "../../../declare/storeTypes";
 import NoDataShow from "../../../components/NoDataShow";
 import {updateState as globalUpdateState} from "../../../store/global";
 import {useIsFocused} from "@react-navigation/native";
+import {getContent, getTime} from "../../../utils/util";
 
 export type Props = {};
 const JoinedDAOListScreen: React.FC<Props> = (props) => {
@@ -27,6 +28,16 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   const [daoPageData, setDaoPageData] = useState<Page>({
     page: 1,
     page_size: 10,
+  });
+
+  const [lastPostNews, setLastPostNews] = useState({
+    text: 'no news',
+    createTime: '',
+  });
+
+  const [lastPostVideo, setLastPostVideo] = useState({
+    text: 'no video',
+    createTime: '',
   });
 
   const [daoInfo, setDaoInfo] = useState<DaoInfo>();
@@ -83,11 +94,63 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
       const { data } = await DaoApi.getById(url, activeId);
       if (data.data) {
         setDaoInfo(data.data);
+        processMessage(data.data);
       }
     } catch (e) {
       if (e instanceof Error) console.error(e.message);
     }
   }
+
+  const processMessage = (arrData: DaoInfo) => {
+    if (arrData.last_posts?.length > 1) {
+      arrData.last_posts.forEach((item) => {
+        let obj = getContent(item.contents as Post[]);
+        if (item.type === 0) {
+          setLastPostNews({
+            text: obj[2]?.[0]?.content,
+            createTime: getTime(item.created_on),
+          });
+        } else {
+          setLastPostVideo({
+            text: obj[1][0]?.content,
+            createTime: getTime(item.created_on),
+          });
+        }
+      });
+    } else if (arrData.last_posts?.length === 1) {
+      arrData.last_posts.forEach((item) => {
+        let obj = getContent(item.contents as Post[]);
+        if (item.type === 0) {
+          setLastPostNews({
+            text: obj[2]?.[0]?.content,
+            createTime: getTime(item.created_on),
+          });
+          setLastPostVideo({
+            text: 'no video',
+            createTime: '',
+          });
+        } else {
+          setLastPostVideo({
+            text: obj[1][0]?.content,
+            createTime: getTime(item.created_on),
+          });
+          setLastPostNews({
+            text: 'no news',
+            createTime: '',
+          });
+        }
+      });
+    } else {
+      setLastPostNews({
+        text: 'no news',
+        createTime: '',
+      });
+      setLastPostVideo({
+        text: 'no video',
+        createTime: '',
+      });
+    }
+  };
 
   const handleLoadMore = () => {
     if (isLoadingMore) {
@@ -170,7 +233,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
                   <View style={styles.daoDetail}>
                       <DaoCardItem daoInfo={daoInfo} handle={bookmarkHandle} joinStatus={isJoin} btnLoading={btnLoading}/>
                       <View style={styles.channelsofdao}>
-                          <PublishContainer daoInfo={daoInfo}/>
+                          <PublishContainer daoInfo={daoInfo} lastPostNews={lastPostNews} lastPostVideo={lastPostVideo}/>
                           <Chats/>
                       </View>
                   </View>

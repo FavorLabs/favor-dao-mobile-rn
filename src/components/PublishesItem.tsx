@@ -9,14 +9,24 @@ import Screens from "../navigation/RouteNames";
 type Props = {
   type: string;
   daoInfo: DaoInfo;
+  lastPost?: {
+    text: string;
+    createTime: string;
+  };
 };
 const PublishesItem: React.FC<Props> = (props) => {
-  const { type, daoInfo } = props;
+  const { type, daoInfo, lastPost } = props;
   const navigation = useNavigation();
 
   const onPress = () => {
-    // @ts-ignore
-    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : type});
+    if(daoInfo.type === 0 ){
+      // @ts-ignore
+      navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : type});
+    } else {
+      // @ts-ignore
+      navigation.navigate(Screens.ToolDaoDetail,{ daoInfo : daoInfo});
+    }
+
   }
 
   return (
@@ -31,13 +41,13 @@ const PublishesItem: React.FC<Props> = (props) => {
         <View style={styles.publishes}>
           <View style={styles.channelnamelLasttime}>
             <Text style={styles.channelname}>{type}</Text>
-            <Text style={[styles.lastmsgtime, styles.subtitleTypo]}>
-              5d ago
+            <Text style={[styles.lastmsgtime, styles.subtitleTypo]} numberOfLines={1}>
+              { lastPost?.createTime }
             </Text>
           </View>
           <View style={styles.lastmessage}>
-            <Text style={[styles.messageinfo, styles.subtitleLayout]}>
-              Get Accurate and...
+            <Text style={[styles.messageinfo, styles.subtitleLayout]} numberOfLines={1}>
+              { lastPost?.text }
             </Text>
             <View style={styles.msgcountParent}>
               <View style={styles.msgcount}>
@@ -102,7 +112,6 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: '#939393',
     textAlign: "right",
-    width: 70,
     marginLeft: 12,
   },
   channelnamelLasttime: {

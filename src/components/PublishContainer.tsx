@@ -6,15 +6,30 @@ import {DaoInfo} from "../declare/api/DAOApi";
 
 type Props = {
   daoInfo: DaoInfo;
+  lastPostNews: {
+    text: string;
+    createTime: string;
+  };
+  lastPostVideo: {
+    text: string;
+    createTime: string;
+  };
 };
 const PublishContainer: React.FC<Props> = (props) => {
-  const { daoInfo } = props;
+  const { daoInfo, lastPostNews, lastPostVideo } = props;
 
   return (
     <View style={styles.publishes}>
       <Text style={styles.title}>Publishes</Text>
-      <PublishesItem type={'News'} daoInfo={daoInfo}/>
-      <PublishesItem type={'Videos'} daoInfo={daoInfo}/>
+      {
+        daoInfo.type === 0 ?
+          <>
+            <PublishesItem type={'News'} daoInfo={daoInfo} lastPost={lastPostNews}/>
+            <PublishesItem type={'Videos'} daoInfo={daoInfo} lastPost={lastPostVideo}/>
+          </>
+          :
+          <PublishesItem type={'HomePage'} daoInfo={daoInfo}/>
+      }
     </View>
   );
 };
