@@ -1814,9 +1814,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@react-native-async-storage/async-storage@react-native-async-storage/async-storage":
+"@react-native-async-storage/async-storage@^1.18.1":
   version "1.18.1"
-  resolved "https://codeload.github.com/react-native-async-storage/async-storage/tar.gz/18a4a5bfc7a3d132b5a06dda63c980ea4999ade7"
+  resolved "https://registry.npmmirror.com/@react-native-async-storage/async-storage/-/async-storage-1.18.1.tgz#b1aea4f07fb1dba3325b857b770671517ddab221"
+  integrity sha512-70aFW8fVCKl+oA1AKPFDpE6s4t9pulj2QeLX+MabEmzfT3urd/3cckv45WJvtocdoIH/oXA3Y+YcCRJCcNa8mA==
   dependencies:
     merge-options "^3.0.4"
 
@@ -8031,9 +8032,9 @@ react-native-fast-image@^8.6.3:
   resolved "https://registry.npmmirror.com/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz#6edc3f9190092a909d636d93eecbcc54a8822255"
   integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
 
-"react-native-favor@git+ssh:git@github.com:FavorLabs/react-native-favor.git":
+"react-native-favor@https://github.com/FavorLabs/react-native-favor.git":
   version "1.4.1"
-  resolved "git+ssh:git@github.com:FavorLabs/react-native-favor.git#6bdd03da29b1f3147d11d1350b0575dd70ead972"
+  resolved "https://github.com/FavorLabs/react-native-favor.git#6bdd03da29b1f3147d11d1350b0575dd70ead972"
 
 react-native-fs@^2.20.0:
   version "2.20.0"
@@ -8062,9 +8063,9 @@ react-native-get-random-values@^1.8.0:
     fast-base64-decode "^1.0.0"
 
 react-native-gradle-plugin@^0.71.17:
-  version "0.71.17"
-  resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.17.tgz#cf780a27270f0a32dca8184eff91555d7627dd00"
-  integrity sha512-OXXYgpISEqERwjSlaCiaQY6cTY5CH6j73gdkWpK0hedxtiWMWgH+i5TOi4hIGYitm9kQBeyDu+wim9fA8ROFJA==
+  version "0.71.18"
+  resolved "https://registry.npmmirror.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.18.tgz#20ef199bc85be32e45bb6cc069ec2e7dcb1a74a6"
+  integrity sha512-7F6bD7B8Xsn3JllxcwHhFcsl9aHIig47+3eN4IHFNqfLhZr++3ElDrcqfMzugM+niWbaMi7bJ0kAkAL8eCpdWg==
 
 react-native-image-crop-picker@^0.39.0:
   version "0.39.0"
