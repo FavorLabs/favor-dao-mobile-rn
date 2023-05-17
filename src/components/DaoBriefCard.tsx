@@ -17,87 +17,14 @@ type Props = {
 }
 
 const DaoBriefCard: React.FC<Props> = (props) => {
-  const url = useUrl();
   const { dao } = props.daoCardInfo;
   const avatarsResUrl = useResourceUrl('avatars');
   const navigation = useNavigation();
 
   const [isShow,setIsShow] = useState<boolean>(false);
-  const [lastPostNews, setLastPostNews] = useState({
-    text: 'no news',
-    createTime: '',
-  });
-
-  const [lastPostVideo, setLastPostVideo] = useState({
-    text: 'no video',
-    createTime: '',
-  });
-
-  const getDaoInfo = async () => {
-    try {
-      const { data } = await DaoApi.getById(url, dao.id);
-      if (data.data) {
-        processMessage(data.data);
-      }
-    } catch (e) {
-      if (e instanceof Error) console.error(e.message);
-    }
-  }
-
-  const processMessage = (arrData: DaoInfo) => {
-    if (arrData.last_posts?.length > 1) {
-      arrData.last_posts.forEach((item) => {
-        let obj = getContent(item.contents as Post[]);
-        if (item.type === 0) {
-          setLastPostNews({
-            text: obj[2]?.[0]?.content,
-            createTime: getTime(item.created_on),
-          });
-        } else {
-          setLastPostVideo({
-            text: obj[1][0]?.content,
-            createTime: getTime(item.created_on),
-          });
-        }
-      });
-    } else if (arrData.last_posts?.length === 1) {
-      arrData.last_posts.forEach((item) => {
-        let obj = getContent(item.contents as Post[]);
-        if (item.type === 0) {
-          setLastPostNews({
-            text: obj[2]?.[0]?.content,
-            createTime: getTime(item.created_on),
-          });
-          setLastPostVideo({
-            text: 'no video',
-            createTime: '',
-          });
-        } else {
-          setLastPostVideo({
-            text: obj[1][0]?.content,
-            createTime: getTime(item.created_on),
-          });
-          setLastPostNews({
-            text: 'no news',
-            createTime: '',
-          });
-        }
-      });
-    } else {
-      setLastPostNews({
-        text: 'no news',
-        createTime: '',
-      });
-      setLastPostVideo({
-        text: 'no video',
-        createTime: '',
-      });
-    }
-  };
 
   const toFeedsOfDao = async () => {
     setIsShow(true);
-    await getDaoInfo();
   }
 
   return (
@@ -126,7 +53,7 @@ const DaoBriefCard: React.FC<Props> = (props) => {
       <BottomSheet show={isShow}>
         <DaoInfoHeader daoInfo={dao}/>
         <View style={styles.channelDao}>
-          <PublishContainer daoInfo={dao} lastPostNews={lastPostNews} lastPostVideo={lastPostVideo}/>
+          <PublishContainer daoInfo={dao}/>
           <Chats/>
         </View>
       </BottomSheet>

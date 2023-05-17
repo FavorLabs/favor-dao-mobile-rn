@@ -9,14 +9,15 @@ import DAOInfo from "./DAOInfo";
 import BtnChatToggle from "./BtnChatToggle";
 import { Color, Padding } from "../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
-import {DaoInfo} from "../declare/api/DAOApi";
-import {useIsLogin, useResourceUrl} from "../utils/hook";
-import {getDebounce} from "../utils/util";
+import {DaoInfo, Post} from "../declare/api/DAOApi";
+import {useIsLogin, useResourceUrl, useUrl} from "../utils/hook";
+import {getContent, getDebounce, getTime} from "../utils/util";
 import {useEffect, useState} from "react";
 import DaoInfoHeader from "./DaoInfoHeader";
 import PublishContainer from "./PublishContainer";
 import Chats from "./Chats";
 import BottomSheet from "./BottomSheet";
+import DaoApi from "../services/DAOApi/Dao";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -26,7 +27,8 @@ type Props = {
 const ExpandedDAOHeader: React.FC<Props> = (props) => {
   const { daoInfo, isShowBtnChatToggle = true } = props;
   const navigation = useNavigation();
-  const [isLogin, gotoLogin] = useIsLogin()
+  const [isLogin, gotoLogin] = useIsLogin();
+  const url = useUrl();
 
   const imagesResUrl = useResourceUrl('images');
   const [isShow,setIsShow] = useState<boolean>(false);
@@ -39,10 +41,6 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
     if(!isLogin) return gotoLogin();
     setIsShow(true);
   }
-
-  useEffect(() => {
-    setIsShow(false);
-  },[])
 
   return (
     <ImageBackground

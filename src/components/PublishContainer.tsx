@@ -2,21 +2,93 @@ import * as React from "react";
 import { Text, StyleSheet, Image, View } from "react-native";
 import { FontFamily, Color, FontSize, Border } from "../GlobalStyles";
 import PublishesItem from "./PublishesItem";
-import {DaoInfo} from "../declare/api/DAOApi";
+import {DaoInfo, Post} from "../declare/api/DAOApi";
+import DaoApi from "../services/DAOApi/Dao";
+import {getContent, getTime} from "../utils/util";
+import {useEffect, useState} from "react";
+import {useUrl} from "../utils/hook";
 
 type Props = {
   daoInfo: DaoInfo;
-  lastPostNews: {
-    text: string;
-    createTime: string;
-  };
-  lastPostVideo: {
-    text: string;
-    createTime: string;
-  };
 };
 const PublishContainer: React.FC<Props> = (props) => {
-  const { daoInfo, lastPostNews, lastPostVideo } = props;
+  const { daoInfo } = props;
+  const url = useUrl();
+  const [lastPostNews, setLastPostNews] = useState({
+    text: 'no news',
+    createTime: '',
+  });
+
+  const [lastPostVideo, setLastPostVideo] = useState({
+    text: 'no video',
+    createTime: '',
+  });
+
+  const getDaoInfo = async () => {
+    try {
+      const { data } = await DaoApi.getById(url, daoInfo.id);
+      if (data.data) {
+        processMessage(data.data);
+      }
+    } catch (e) {
+      if (e instanceof Error) console.error(e.message);
+    }
+  }
+
+  const processMessage = (arrData: DaoInfo) => {
+    if (arrData.last_posts?.length > 1) {
+      arrData.last_posts.forEach((item) => {
+        let obj = getContent(item.contents as Post[]);
+        if (item.type === 0) {
+          setLastPostNews({
+            text: obj[2]?.[0]?.content,
+            createTime: getTime(item.created_on),
+          });
+        } else {
+          setLastPostVideo({
+            text: obj[1][0]?.content,
+            createTime: getTime(item.created_on),
+          });
+        }
+      });
+    } else if (arrData.last_posts?.length === 1) {
+      arrData.last_posts.forEach((item) => {
+        let obj = getContent(item.contents as Post[]);
+        if (item.type === 0) {
+          setLastPostNews({
+            text: obj[2]?.[0]?.content,
+            createTime: getTime(item.created_on),
+          });
+          setLastPostVideo({
+            text: 'no video',
+            createTime: '',
+          });
+        } else {
+          setLastPostVideo({
+            text: obj[1][0]?.content,
+            createTime: getTime(item.created_on),
+          });
+          setLastPostNews({
+            text: 'no news',
+            createTime: '',
+          });
+        }
+      });
+    } else {
+      setLastPostNews({
+        text: 'no news',
+        createTime: '',
+      });
+      setLastPostVideo({
+        text: 'no video',
+        createTime: '',
+      });
+    }
+  };
+
+  useEffect(() => {
+    getDaoInfo();
+  },[daoInfo])
 
   return (
     <View style={styles.publishes}>
