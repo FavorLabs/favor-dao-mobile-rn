@@ -62,16 +62,20 @@ function RootStack() {
     useEffect(() => {
         async function fetch() {
             if (isLogin && !requestLoading) {
-                let info = await UserApi.getInfo(Favor.url);
-                let dao = null;
-                if (info.data) {
-                    dao = await DaoApi.get(Favor.url);
+                try {
+                    await CometChat.login(WalletController.token)
+                    let info = await UserApi.getInfo(Favor.url);
+                    let dao = null;
+                    if (info.data) {
+                        dao = await DaoApi.get(Favor.url);
+                    }
+                    dispatch(globalUpdateState({
+                        user: info.data.data,
+                        dao: dao?.data.data.list?.[0] || null
+                    }));
+                } catch (e) {
+                    console.error(e)
                 }
-                dispatch(globalUpdateState({
-                    user: info.data.data,
-                    dao: dao?.data.data.list?.[0] || null
-                }));
-                await CometChat.login(WalletController.token)
             }
         }
 

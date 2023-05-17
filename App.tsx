@@ -15,7 +15,7 @@ import WalletBottomSheet from "./src/components/WalletBottomSheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function App() {
-    // AsyncStorage.clear()
+    // AsyncStorage.clear().catch(console.error)
     const [fontsLoaded, setFontsLoader] = useState(false);
     const loadFont = async () => {
         SplashScreen.preventAutoHideAsync();

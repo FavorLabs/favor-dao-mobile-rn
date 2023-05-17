@@ -5,10 +5,8 @@ import searchReducer from './search';
 import controllersReducer from './controllers';
 import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {combineReducers, createStore} from 'redux';
 import WalletController from "../libs/walletController";
-
 
 const persistConfig = {
     key: 'root',
@@ -25,7 +23,7 @@ const rootReducer = combineReducers({
 export const store = createStore(rootReducer);
 
 const initPStore = async () => {
-    console.log(store.getState())
+    console.log(store.getState().wallet)
     WalletController.init(store)
 }
 

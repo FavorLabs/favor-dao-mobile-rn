@@ -6,14 +6,16 @@ import {SignatureData} from "../declare/api/DAOApi";
 const bip39 = require('bip39');
 const {ecsign, toRpcSig, hashPersonalMessage} = require('ethereumjs-util');
 import {encrypt, decrypt} from '../utils/crypto'
+import Favor from "./favor";
+import _ from 'lodash'
 
 export type State = {
     data?: string;
-    token?: string
+    token?: Record<number, string>
 }
 
 class WalletController {
-    private state: State;
+    state: State;
 
     constructor() {
         this.state = {};
@@ -21,10 +23,11 @@ class WalletController {
 
     init(store: any) {
         const reduxState = store?.getState?.();
-        const state = Object.assign({}, reduxState?.wallet);
+        const state = _.cloneDeep(reduxState?.wallet);
         this.state = new Proxy(state, {
             set(target: State, p: keyof State, newValue: any, receiver: any): boolean {
                 target[p] = newValue;
+                console.log(p, newValue)
                 store.dispatch(updateState({key: p, value: newValue}));
                 return true
             }
@@ -32,7 +35,7 @@ class WalletController {
     }
 
     get token() {
-        return this.state.token
+        return this.state.token?.[Favor.networkId!]
     }
 
     createMnemonic() {
@@ -70,17 +73,14 @@ class WalletController {
         return mnemonic;
     }
 
-    passwordVerify(password: string) {
-        try {
+    async login(url: string, sign: Buffer | SignatureData) {
 
-        } catch (e) {
-
-        }
-    }
-
-    async login(url: string, privateKey: Buffer) {
-        const {data} = await UserApi.signIn(url, this.getSignatureData(privateKey));
-        this.state.token = data.data.token
+        const {data} = await UserApi.signIn(url,
+          Buffer.isBuffer(sign) ? this.getSignatureData(sign) : sign
+        );
+        this.state.token = Object.assign(this.state.token ?? {}, {
+            [Favor.networkId!]: data.data.token
+        })
     }
 
     getSignatureData(privateKey: Buffer, index = 0): SignatureData {

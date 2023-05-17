@@ -10,43 +10,37 @@ import {updateState as globalUpdateState} from "../../../store/global";
 
 export type Props = {};
 const JoinedScreen: React.FC<Props> = (props) => {
-  const [isLogin, gotoLogin] = useIsLogin()
-  const isFocused = useIsFocused();
-  const dispatch = useDispatch();
-  const { feedsSearch } = useSelector((state: Models) => state.search);
-  const { newsJoinStatus } = useSelector((state: Models) => state.global);
-  const [isNewsFocus, setIsNewsFocus] = useState<boolean>(false);
+    const isFocused = useIsFocused();
+    const dispatch = useDispatch();
+    const {feedsSearch} = useSelector((state: Models) => state.search);
+    const {newsJoinStatus} = useSelector((state: Models) => state.global);
+    const [isNewsFocus, setIsNewsFocus] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (isFocused && !isLogin) {
-      gotoLogin();
-    }
-    if(isFocused && newsJoinStatus) {
-      setIsNewsFocus(true);
+    useEffect(() => {
+        if (isFocused && newsJoinStatus) {
+            setIsNewsFocus(true);
 
-      dispatch(globalUpdateState({
-        newsJoinStatus: false
-      }))
-    }
-  }, [isLogin, isFocused])
+            dispatch(globalUpdateState({
+                newsJoinStatus: false
+            }))
+        }
+    }, [isFocused])
 
-  return (
-    <View style={styles.container}>
-      {
-        isLogin ?
+    return (
+      <View style={styles.container}>
           <View style={styles.container}>
-            <PostList type={'post'} focus query={feedsSearch} isNewsFocus={isNewsFocus} setIsNewsFocus={setIsNewsFocus}/>
-          </View> : null
-      }
-    </View>
-  )
+              <PostList type={'post'} focus query={feedsSearch} isNewsFocus={isNewsFocus}
+                        setIsNewsFocus={setIsNewsFocus}/>
+          </View>
+      </View>
+    )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Color.color1,
-  },
+    container: {
+        flex: 1,
+        backgroundColor: Color.color1,
+    },
 });
 
 export default JoinedScreen;

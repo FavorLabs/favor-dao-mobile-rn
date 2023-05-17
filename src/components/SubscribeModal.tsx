@@ -1,25 +1,33 @@
-import React, {useState} from 'react';
+import React, {useImperativeHandle, useRef, useState} from 'react';
 import BottomSheetM from "./BottomSheet";
 import SubscribeBlock from "./SubscribeBlock";
 import InputPassword from "./InputPassword";
 import {ScrollView} from "react-native";
+import {BottomSheetModal} from "@gorhom/bottom-sheet";
+import {SignatureData} from "../declare/api/DAOApi";
 
 
 export type Props = {
     show: boolean
-} & React.ComponentProps<typeof SubscribeBlock> & React.ComponentProps<typeof InputPassword>
-const SubscribeModal = ({show, daoCardInfo, fn}: Props) => {
+} & React.ComponentProps<typeof SubscribeBlock> & Partial<React.ComponentProps<typeof InputPassword>>
+const SubscribeModal = ({show, daoCardInfo, fn}: Props, ref: React.Ref<any>) => {
+    const bsRef = useRef<BottomSheetModal>()
+    const pwdRef = useRef<BottomSheetModal>()
 
-    const [pwdModal, setPwdModal] = useState(false);
-
+    useImperativeHandle(ref, () => bsRef.current)
     const subFn = () => {
-        setPwdModal(true);
+        pwdRef.current?.present();
+    }
+
+    const success = (signatureData:SignatureData)=>{
+        pwdRef.current?.dismiss();
+        fn?.(signatureData)
     }
 
     return <>
         <BottomSheetM
+          ref={bsRef}
           show={show}
-          // showCancel
           snapPoints={['60%']}
         >
             <ScrollView style={{paddingHorizontal: 20}}>
@@ -28,15 +36,14 @@ const SubscribeModal = ({show, daoCardInfo, fn}: Props) => {
         </BottomSheetM>
 
         <BottomSheetM
-          show={show && pwdModal}
-          showCancel
+          ref={pwdRef}
           snapPoints={['60%']}
         >
             <ScrollView style={{paddingHorizontal: 20}}>
-                <InputPassword fn={fn}/>
+                <InputPassword type={1} fn={success}/>
             </ScrollView>
         </BottomSheetM>
     </>
 };
 
-export default SubscribeModal;
+export default React.forwardRef(SubscribeModal);

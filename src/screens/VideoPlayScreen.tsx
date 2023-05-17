@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState, useRef} from 'react';
 import {Image, StyleSheet, View, Text, Pressable, SafeAreaView, ScrollView} from "react-native";
 import VideoDetailButton from "../components/VideoDetailButton";
 import {useNavigation, useRoute} from "@react-navigation/native";
@@ -9,13 +9,11 @@ import {PostInfo} from "../declare/api/DAOApi";
 import {getContent} from "../utils/util";
 import Video from 'react-native-video';
 import {Icon} from "@rneui/themed";
-import SubscribeBlock from "../components/SubscribeBlock";
-import BottomSheetM from "../components/BottomSheet";
-import InputPassword from "../components/InputPassword";
 import Favor from "../libs/favor";
 import DaoApi from '../services/DAOApi/Dao'
 import {SignatureData} from "../declare/api/DAOApi";
 import SubscribeModal from "../components/SubscribeModal";
+import {BottomSheetModal} from "@gorhom/bottom-sheet";
 
 export type Props = {};
 const VideoPlayScreen: React.FC<Props> = (props) => {
@@ -28,7 +26,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
     const [videoData, setVideoData] = useState<PostInfo | null>(null);
     const [isSelf, setIsSelf] = useState<boolean>(true);
     const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
-    const [i, setI] = useState(0);
+    const subRef = useRef<BottomSheetModal>();
 
     const playable = useMemo(() => videoData?.member === 0 ? true : videoData?.dao.is_subscribed, [videoData])
 
@@ -64,17 +62,17 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
 
     const confirm = async (signatureData: SignatureData) => {
         if (!videoData) return;
-        const {data} = await DaoApi.subscribe(url, videoData.dao_id, signatureData);
-        if (data.data?.status) {
-            getVideoById(postId);
+        try {
+            const {data} = await DaoApi.subscribe(url, videoData.dao_id, signatureData);
+            if (data.data?.status) {
+                await getVideoById(postId);
+            }
+            subRef.current?.dismiss();
+        } catch (e) {
+            console.error(e)
         }
+
     }
-
-    const subModal = useMemo(() => {
-        if (!videoData) return null;
-        return <SubscribeModal show={!playable} daoCardInfo={videoData} fn={confirm}/>
-    }, [videoData, i])
-
 
     if (!videoData) return null;
 
@@ -91,7 +89,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
               <View style={styles.videoBox}>
                   {
                     !playable && <Pressable onPress={() => {
-                        setI(v => v + 1);
+                        subRef.current?.present();
                     }} style={styles.playIcon}>
                           <Icon name={'play-circle'} type={'feather'} color={'#fff'} size={50}/>
                       </Pressable>
@@ -107,10 +105,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
                   />
               </View>
           </View>
-          {
-              subModal
-          }
-          {/*<SubscribeModal show={!playable} daoCardInfo={videoData} fn={confirm}/>*/}
+          <SubscribeModal ref={subRef} show={!playable} daoCardInfo={videoData} fn={confirm}/>
           <View style={styles.groupParent}>
               <Text style={[styles.name, styles.largeTypo]}>
                   @{isReTransfer ? videoData?.author_dao.name : videoData?.dao.name}
