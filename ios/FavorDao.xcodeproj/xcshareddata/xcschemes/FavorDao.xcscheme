@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "favordaomobilern.app"
-               BlueprintName = "favordaomobilern"
-               ReferencedContainer = "container:favordaomobilern.xcodeproj">
+               BuildableName = "FavorDao.app"
+               BlueprintName = "FavorDao"
+               ReferencedContainer = "container:FavorDao.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "favordaomobilernTests.xctest"
-               BlueprintName = "favordaomobilernTests"
-               ReferencedContainer = "container:favordaomobilern.xcodeproj">
+               BuildableName = "FavorDaoTests.xctest"
+               BlueprintName = "FavorDaoTests"
+               ReferencedContainer = "container:FavorDao.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "favordaomobilern.app"
-            BlueprintName = "favordaomobilern"
-            ReferencedContainer = "container:favordaomobilern.xcodeproj">
+            BuildableName = "FavorDao.app"
+            BlueprintName = "FavorDao"
+            ReferencedContainer = "container:FavorDao.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "favordaomobilern.app"
-            BlueprintName = "favordaomobilern"
-            ReferencedContainer = "container:favordaomobilern.xcodeproj">
+            BuildableName = "FavorDao.app"
+            BlueprintName = "FavorDao"
+            ReferencedContainer = "container:FavorDao.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

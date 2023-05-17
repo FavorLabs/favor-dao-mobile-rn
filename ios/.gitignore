@@ -28,5 +28,3 @@ project.xcworkspace
 
 # CocoaPods
 /Pods/
-
-/Podfile.lock

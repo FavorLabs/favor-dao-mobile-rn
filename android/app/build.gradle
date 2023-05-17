@@ -113,7 +113,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'com.favorlabs.favorDao'
+    namespace "com.favorlabs.favorDao"
     defaultConfig {
         applicationId 'com.favorlabs.favorDao'
         minSdkVersion rootProject.ext.minSdkVersion
