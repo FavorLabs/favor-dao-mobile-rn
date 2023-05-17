@@ -21,6 +21,7 @@ const Screens = {
   StartNode:'StartNode',
   QuoteEdit: 'QuoteEdit',
   FeedsOfDAO: 'FeedsOfDAO',
+  ToolDaoDetail: 'ToolDaoDetail',
 }
 
 export default Screens;

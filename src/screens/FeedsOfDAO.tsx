@@ -19,14 +19,12 @@ const FeedsOfDAO: React.FC<Props> = (props) => {
   const { daoInfo, type } = route.params as { daoInfo: DaoInfo, type: string};
 
   return (
-    // <SafeAreaView style={styles.safeAreaView} >
     <View style={styles.feedsOfDao}>
       <ExpandedDAOHeader daoInfo={daoInfo}/>
 
       <FeedsOfDaoNavigator daoInfo={daoInfo} type={type}/>
 
     </View>
-    // </SafeAreaView>
   );
 };
 
@@ -40,40 +38,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
-  select: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    height: 60,
-    backgroundColor: '#EAEAEA',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-  },
-  option: {
-    height: 30,
-    paddingHorizontal: 11,
-    paddingVertical: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  optionText: {
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "600",
-    color: '#939393',
-    fontSize: FontSize.size_sm
-  },
-  active: {
-    backgroundColor: '#FF8D1A',
-    borderRadius: 14,
-  },
-  activeText: {
-    color: Color.color1
-  },
-  daoUnderLine: {
-    borderBottomWidth: 1,
-    borderColor: '#E6E5EB',
-  }
 });
 
 export default FeedsOfDAO;

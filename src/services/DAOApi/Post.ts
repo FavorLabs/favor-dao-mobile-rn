@@ -12,7 +12,7 @@ import {
   PostInfo,
   ResData,
   Status,
-  ReTransferPost,
+  ReTransferPost, DaoInfo,
 } from '../../declare/api/DAOApi';
 export default {
   createPost(url: string, data: CreatePost): ResData<PostInfo> {
@@ -126,4 +126,11 @@ export default {
       data,
     });
   },
+  getToolDao(url: string, params: Page): ResData<ListData<DaoInfo>> {
+    return request({
+      method: 'get',
+      url: url + '/dao/recommend',
+      params,
+    })
+  }
 };
