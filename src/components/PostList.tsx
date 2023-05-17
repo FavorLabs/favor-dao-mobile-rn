@@ -13,6 +13,7 @@ import ReTransfer from "./ReTransfer";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import NoDataShow from "./NoDataShow";
+import ToolDaoList from "./ToolDaoList";
 
 export type Props = {
   type?: number | string;
@@ -128,7 +129,15 @@ const PostList: React.FC<Props> = (props) => {
           data={postListArr}
           // @ts-ignore
           renderItem={({item, index}) => {
-            if(index === 1 && isHome) {
+            if(index === 0 && isHome) {
+              return (
+                <>
+                  <ToolDaoList/>
+                  {renderItem(item)}
+                </>
+              )
+            }
+            else if (index === 1 && isHome) {
               return (
                 <>
                   <DaoCardList/>

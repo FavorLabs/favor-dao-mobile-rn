@@ -57,6 +57,8 @@ export type DaoInfo = {
     is_joined: boolean;
     is_subscribed: boolean;
     tags: string[];
+    home_page: string;
+    type: number;
 };
 
 export type User = {

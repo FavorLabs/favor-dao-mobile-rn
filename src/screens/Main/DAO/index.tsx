@@ -1,19 +1,25 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image} from 'react-native';
-import {DAOTopTabNavigator, FeedsTopTabNavigator} from "../../../navigation/TopTabBar";
+import { DAOTopTabNavigator } from "../../../navigation/TopTabBar";
 import {getDebounce} from "../../../utils/util";
 import {Border, Color, FontFamily, FontSize, Padding} from "../../../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
-import Screens from '../../../navigation/RouteNames';
+import Screens from "../../../navigation/RouteNames";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import Toast from "react-native-toast-message";
 import {updateState as searchUpdateState} from "../../../store/search";
+import {useIsLogin} from "../../../utils/hook";
+// @ts-ignore
+import ActionSheet from 'react-native-actionsheet';
 
 export type Props = {};
 const DAOScreen: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
   const navigation = useNavigation();
+  const actionSheetRef = useRef<ActionSheet>(null);
+  const screens = [Screens.CreateVideo, Screens.CreateNews];
+  const [isLogin, gotoLogin] = useIsLogin();
   const [searchValue, setSearchValue] = useState<string>('');
   const { dao } = useSelector((state: Models) => state.global);
 
@@ -23,18 +29,20 @@ const DAOScreen: React.FC<Props> = (props) => {
     }))
   }
 
-  const toCreateDao = () => {
-    if(!dao) {
-      // @ts-ignore
-      navigation.navigate(Screens.CreateDAO)
+  const showActionSheet = (e: { preventDefault: () => void; }) => {
+    if(isLogin) {
+      if(dao) {
+        actionSheetRef.current?.show();
+      } else {
+        // @ts-ignore
+        navigation.navigate(Screens.CreateDAO);
+        e.preventDefault()
+      }
     } else {
-      Toast.show({
-        type: 'error',
-        text1: 'dao community already exists!'
-      });
+      gotoLogin();
+      e.preventDefault()
     }
   }
-
 
   return (
   <View style={styles.container}>
@@ -53,7 +61,7 @@ const DAOScreen: React.FC<Props> = (props) => {
               />
             </View>
           </View>
-          <TouchableOpacity onPress={getDebounce(toCreateDao)}>
+          <TouchableOpacity onPress={showActionSheet}>
             <View style={[styles.frameWrapper, styles.wrapperBg]}>
               <Image
                 style={styles.frameChild}
@@ -66,6 +74,17 @@ const DAOScreen: React.FC<Props> = (props) => {
       </View>
       <DAOTopTabNavigator />
     </View>
+    <ActionSheet
+      ref={actionSheetRef}
+      title={'Create post now!'}
+      options={['Video Post', 'News Post', 'Cancel']}
+      cancelButtonIndex={2}
+      onPress={(index: number) => {
+        if (index < screens.length) { // @ts-ignore
+          navigation.navigate(screens[index]);
+        }
+      }}
+    />
   </View>
   )
 }

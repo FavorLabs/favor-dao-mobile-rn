@@ -20,10 +20,11 @@ import BottomSheet from "./BottomSheet";
 
 type Props = {
   daoInfo: DaoInfo;
+  isShowBtnChatToggle?: boolean;
 };
 
 const ExpandedDAOHeader: React.FC<Props> = (props) => {
-  const { daoInfo } = props;
+  const { daoInfo, isShowBtnChatToggle = true } = props;
   const navigation = useNavigation();
   const [isLogin, gotoLogin] = useIsLogin()
 
@@ -56,9 +57,13 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
 
         <DAOInfo daoInfo={daoInfo}/>
 
-        <TouchableOpacity onPress={getDebounce(toFeedsOfDao)}>
-        <BtnChatToggle />
-        </TouchableOpacity>
+        {
+          isShowBtnChatToggle ?
+            <TouchableOpacity onPress={getDebounce(toFeedsOfDao)}>
+              <BtnChatToggle />
+            </TouchableOpacity>
+            : <View></View>
+        }
 
       </View>
 
