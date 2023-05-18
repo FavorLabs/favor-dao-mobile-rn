@@ -18,9 +18,9 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log(error);
+    console.log(error.response.data);
     return Promise.reject(
-      error.response?.data?.msg ? Error(error.response?.data.msg) : error,
+      error.response?.data ? Error(error.response?.data) : error,
     );
   },
 );

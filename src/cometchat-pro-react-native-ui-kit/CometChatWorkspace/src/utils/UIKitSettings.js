@@ -49,13 +49,13 @@ export class UIKitSettings {
     this.viewShareMedia = true;
 
     this.groupCreation = false;
-    this.allowDeleteGroup = true;
-    this.joinOrLeaveGroup = true;
+    this.allowDeleteGroup = false;
+    this.joinOrLeaveGroup = false;
     this.viewGroupMembers = true;
     this.kickMember = true;
     this.banMember = true;
     this.allowPromoteDemoteMembers = true;
-    this.allowAddMembers = true;
+    this.allowAddMembers = false;
 
     this.callNotifications = true;
     this.joinLeaveNotifications = true;

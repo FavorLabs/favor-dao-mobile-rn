@@ -387,7 +387,7 @@ class CometChatMessageHeader extends React.Component {
           </View>
           {videoCallBtn}
           {audioCallBtn}
-          {info}
+          {/*{info}*/}
         </View>
       </View>
     );
