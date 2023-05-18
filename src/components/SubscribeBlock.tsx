@@ -11,8 +11,9 @@ import Toast from "react-native-toast-message";
 
 type Props = React.ComponentProps<typeof DaoCommunityCard> & {
     subFn?: Function
+    loading?: boolean
 }
-const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
+const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
     const url = useUrl();
     const [balance, setBalance] = useState<string>('0');
     const [isLogin, gotoLogin] = useIsLogin()
@@ -22,7 +23,7 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
     }, [])
     const getBalance = async () => {
         const {data} = await UserApi.getAccounts(url);
-        console.log(data)
+        console.log(data.data)
         setBalance(data.data[0].balance)
     }
     const subscribe = () => {
@@ -31,7 +32,7 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
             return;
         }
 
-        if(compareNumber(daoCardInfo.dao.price,balance)) {
+        if (compareNumber(daoCardInfo.dao.price, balance)) {
             Toast.show({
                 type: 'info',
                 text1: 'Insufficient balance!'
@@ -63,13 +64,13 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
                           Balance
                       </Text>
                       <Text style={[styles.description2, styles.descriptionTypo]}>
-                          { addDecimal(balance) } FavT
+                          {addDecimal(balance)} FavT
                       </Text>
                   </View>
                   <View style={styles.frameItem}/>
                   <View style={styles.descriptionGroup}>
                       <Text style={[styles.description1, styles.descriptionTypo]}>
-                          price
+                          Price
                       </Text>
                       <Text style={[styles.description2, styles.descriptionTypo]}>
                           {addDecimal(daoCardInfo.dao.price)} FavT
@@ -77,8 +78,9 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
                   </View>
               </View>
           </View>
-          <TouchableOpacity onPress={subscribe} style={styles.button}>
+          <TouchableOpacity onPress={subscribe} style={styles.button} >
               <FavorDaoButton
+                isLoading={loading}
                 textValue="Subscribe"
                 frame1171275771BackgroundColor="#ff8d1a"
                 cancelColor="#fff"
@@ -90,7 +92,7 @@ const SubscribeBlock = ({daoCardInfo, subFn}: Props) => {
 
 const styles = StyleSheet.create({
     button: {
-      marginTop: 20,
+        marginTop: 20,
     },
     titleFlexBox: {
         textAlign: "left",

@@ -5,7 +5,7 @@ import LocalWallet from "../components/LocalWallet";
 
 const WalletConnect = () => {
     return (
-      <View style={{paddingHorizontal: 20}}>
+      <View>
           <LocalWallet/>
       </View>
     );

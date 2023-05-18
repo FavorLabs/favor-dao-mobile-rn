@@ -5,7 +5,6 @@ import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {getDebounce} from "../utils/util";
 import {useEffect, useState} from "react";
-import BottomSheet from "./BottomSheet";
 import TextInputBlock from "./TextInputBlock";
 import FavorDaoButton from "./FavorDaoButton";
 import Toast from "react-native-toast-message";
@@ -13,6 +12,7 @@ import WalletController from "../libs/walletController";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 import {useResourceUrl} from "../utils/hook";
+import BottomSheetModal from "./BottomSheetModal";
 
 type Props = {};
 const WalletUser: React.FC<Props> = (props) => {
@@ -77,15 +77,8 @@ const WalletUser: React.FC<Props> = (props) => {
         </TouchableOpacity>
       </View>
 
-      <BottomSheet show={isBackUpShow}>
+      <BottomSheetModal visible={isBackUpShow} setVisible={setBackUpIsShow}>
         <View style={styles.backUpDialog}>
-          <TouchableOpacity onPress={() => setBackUpIsShow(false)}>
-            <Image
-              style={styles.closeIcon}
-              resizeMode="cover"
-              source={require("../assets/x-circle.png")}
-            />
-          </TouchableOpacity>
           <Text style={styles.forMnemonic}>For mnemonic</Text>
           <TextInputBlock
             title={'Password'}
@@ -94,7 +87,7 @@ const WalletUser: React.FC<Props> = (props) => {
             setValue={setPassword}
             secureTextEntry={true}
           />
-          <TouchableOpacity onPress={Confirm}>
+          <TouchableOpacity style={{marginTop:20}} onPress={Confirm}>
             <FavorDaoButton
               textValue="Confirm"
               frame1171275771BackgroundColor="#ff8d1a"
@@ -102,7 +95,7 @@ const WalletUser: React.FC<Props> = (props) => {
             />
           </TouchableOpacity>
         </View>
-      </BottomSheet>
+      </BottomSheetModal>
     </View>
   );
 };
@@ -111,7 +104,6 @@ const styles = StyleSheet.create({
   backUpDialog: {
     flex: 1,
     paddingTop: 10,
-    paddingHorizontal: 20,
   },
   closeIcon: {
     width: 40,

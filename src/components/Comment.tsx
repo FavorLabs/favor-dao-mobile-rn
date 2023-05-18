@@ -12,15 +12,13 @@ import {
 import {useSelector} from 'react-redux';
 import PostApi from '../services/DAOApi/Post';
 import {GetCommentsParams, CommentInfo, CommentReplyRes} from '../declare/api/DAOApi';
-import {useUrl, useResourceUrl, useScreenDimensions, useIsLogin} from "../utils/hook";
+import {useUrl,useIsLogin} from "../utils/hook";
 import {Color} from "../GlobalStyles";
 import Toast from "react-native-toast-message";
-import BottomSheet from '../components/BottomSheet';
 import {getDebounce, getTime} from "../utils/util";
 import Models from "../declare/storeTypes";
 import CommentItem from "./CommentItem";
 import ReplyModal from "./ReplyModal";
-import {BottomSheetModal} from "@gorhom/bottom-sheet";
 
 export type Props = {
     postId: string;
@@ -42,7 +40,8 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
 
     const [selectCommentIndex, setSelectCommentIndex] = useState<number>(0)
 
-    const replyRef = useRef<BottomSheetModal>();
+    // const replyRef = useRef<BottomSheetModal>();
+    const [replyModal, setReplyModal] = useState(false);
     const loadData = async () => {
         const {data} = await PostApi.getPostComments(url, pageData);
         if (data.data.list) {
@@ -60,9 +59,7 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
           commentInfo={item}
           clickReplyHandel={() => {
               setSelectCommentIndex(index);
-              setTimeout(() => {
-                  replyRef.current?.present();
-              })
+              setReplyModal(true);
           }}/>
     };
 
@@ -148,7 +145,8 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
             </TouchableOpacity>
         </View>
         <ReplyModal
-          ref={replyRef}
+          visible={replyModal}
+          setVisible={setReplyModal}
           commentInfo={list[selectCommentIndex]}
           sendSuccess={sendReplySuccess}
         />
@@ -284,7 +282,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
         padding: 10,
         borderRadius: 20,
-        backgroundColor: Color.color1
+        backgroundColor: Color.color1,
     }
 })
 

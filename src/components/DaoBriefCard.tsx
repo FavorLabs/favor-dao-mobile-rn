@@ -1,16 +1,14 @@
 import * as React from "react";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View,ScrollView} from "react-native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
-import {DaoInfo, Post, PostInfo} from "../declare/api/DAOApi";
-import {useResourceUrl, useUrl} from "../utils/hook";
-import {getContent, getDebounce, getTime} from "../utils/util";
-import {useNavigation} from "@react-navigation/native";
-import BottomSheet from "./BottomSheet";
-import {useEffect, useState} from "react";
+import {PostInfo} from "../declare/api/DAOApi";
+import {useResourceUrl} from "../utils/hook";
+import {getDebounce} from "../utils/util";
+import {useState} from "react";
 import PublishContainer from "./PublishContainer";
 import Chats from "./Chats";
 import DaoInfoHeader from "./DaoInfoHeader";
-import DaoApi from "../services/DAOApi/Dao";
+import BottomSheetModal from "./BottomSheetModal";
 
 type Props = {
   daoCardInfo: PostInfo
@@ -19,7 +17,6 @@ type Props = {
 const DaoBriefCard: React.FC<Props> = (props) => {
   const { dao } = props.daoCardInfo;
   const avatarsResUrl = useResourceUrl('avatars');
-  const navigation = useNavigation();
 
   const [isShow,setIsShow] = useState<boolean>(false);
 
@@ -50,13 +47,15 @@ const DaoBriefCard: React.FC<Props> = (props) => {
         </View>
       </TouchableOpacity>
 
-      <BottomSheet show={isShow}>
-        <DaoInfoHeader daoInfo={dao}/>
-        <View style={styles.channelDao}>
-          <PublishContainer daoInfo={dao}/>
-          <Chats/>
-        </View>
-      </BottomSheet>
+      <BottomSheetModal visible={isShow} setVisible={setIsShow}>
+        <ScrollView>
+            <DaoInfoHeader daoInfo={dao}/>
+            <View style={styles.channelDao}>
+                <PublishContainer daoInfo={dao}/>
+                <Chats/>
+            </View>
+        </ScrollView>
+      </BottomSheetModal>
 
     </View>
   );

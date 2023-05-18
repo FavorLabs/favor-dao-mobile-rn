@@ -9,7 +9,7 @@ import {
 } from '../../declare/api/DAOApi';
 
 export default {
-    get(url: string):ResData<ListData<DaoInfo>> {
+    get(url: string): ResData<ListData<DaoInfo>> {
         return request({
             url: url + '/dao/my',
         });
@@ -52,11 +52,12 @@ export default {
             params: {query: text},
         });
     },
-    subscribe(url: string, id: string, data: SignatureData):ResData<Status> {
+    subscribe(url: string, id: string, data: SignatureData): ResData<Status> {
         return request({
             url: url + '/dao/sub/' + id,
             data,
-            method: 'post'
+            method: 'post',
+            timeout: 0
         })
     },
     modifyDao(url: string, data: DaoParams): ResData<DaoInfo> {
