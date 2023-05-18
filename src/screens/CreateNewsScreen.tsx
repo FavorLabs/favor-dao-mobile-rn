@@ -12,16 +12,18 @@ import { CreatePost } from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";
 import SwitchButton from "../components/SwitchButton";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {useNavigation} from "@react-navigation/native";
 import {getMatchedStrings} from "../utils/util";
 import {RegExps} from "../components/TextInputParsed";
+import {updateState as globalUpdateState} from "../store/global";
 
 export type Props = {};
 const CreateNewsScreen: React.FC<Props> = (props) => {
   const url = useUrl();
   const navigation = useNavigation();
+  const dispatch = useDispatch()
 
   const [description, setDescription] = useState<string>('');
   const [imageList, setImageList] = useState([]);
@@ -60,7 +62,7 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
         tags,
         type: 0,
         users: [],
-        visibility: daoMode ? 0 : 1,
+        visibility: daoMode ? 2 : 1,
       };
       console.log(postData,'postData')
       const { data } = await PostApi.createPost(url, postData);
@@ -69,6 +71,10 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
           type: 'info',
           text1: 'Post successfully'
         });
+        dispatch(globalUpdateState({
+          joinStatus: true,
+          newsJoinStatus: true
+        }));
         navigation.goBack();
       }
     } catch (e) {

@@ -30,7 +30,7 @@ const OperationBlock: React.FC<Props> = (props) => {
   const { postInfo, type } = props;
   const {id} = props.postInfo;
   const url = useUrl();
-  const { token } = useSelector((state: any) => state.wallet);
+  // const { token } = useSelector((state: any) => state.wallet);
   const { dao } = useSelector((state: Models) => state.global);
   const [isLogin, gotoLogin] = useIsLogin();
 
@@ -46,6 +46,8 @@ const OperationBlock: React.FC<Props> = (props) => {
   const [isPostLike, setIsPostLike] = useState<boolean>(true);
   const [likeCount, setLikeCount] = useState<number>(postInfo?.upvote_count);
   const [watchCount, setWatchCount] = useState<number>(postInfo?.view_count);
+  const [refCount, setRefCount] = useState<number>(postInfo.ref_count);
+  const [commentOnCount, setCommentOnCount] = useState<number>(postInfo.comment_count);
 
   const showActionSheet = (e: { preventDefault: () => void; }) => {
     if(isLogin) {
@@ -89,15 +91,13 @@ const OperationBlock: React.FC<Props> = (props) => {
   };
 
   const postView = async () => {
-    if (token) {
-      try {
-        const {data} = await PostApi.addPostView(url, id);
-        if (data.data.status) setWatchCount(watchCount + 1);
-      } catch (e) {}
-    }
+    try {
+      const {data} = await PostApi.addPostView(url, id);
+      if (data.data.status) setWatchCount(watchCount + 1);} catch (e) {}
   };
 
   const reTransferFun = async () => {
+    if(!isLogin) return gotoLogin();
     try {
       if (dao) {
         const postData: ReTransferPost = {
@@ -129,6 +129,7 @@ const OperationBlock: React.FC<Props> = (props) => {
   };
 
   const toQuoteEdit = async () => {
+    if(!isLogin) return gotoLogin();
     // @ts-ignore
     navigation.navigate(Screens.QuoteEdit, {postId: id});
   };
@@ -141,15 +142,15 @@ const OperationBlock: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    if (token) getPostLikeStatus()
-  }, [token]);
+    if (isLogin) getPostLikeStatus()
+  }, [isLogin]);
 
   useEffect(() => {
-    if (token) setIsPostLike(true);
-  }, [like, token]);
+    if (isLogin) setIsPostLike(true);
+  }, [like]);
 
   useEffect(() => {
-    if (id) {
+    if (isLogin && id) {
       postView();
     }
   }, [id]);

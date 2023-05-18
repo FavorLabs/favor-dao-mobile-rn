@@ -156,7 +156,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   return (
     <View style={[styles.followeddao]}>
       {
-        bookmarkList ?
+        bookmarkList.length ?
           <View style={styles.frameParentFlexBox}>
             <FollowDAOHeader
               bookmarkList={bookmarkList}

@@ -111,10 +111,6 @@ const PostList: React.FC<Props> = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   loadMore();
-  // },[])
-
   useEffect(() => {
     onRefresh()
     if(isNewsFocus) {
