@@ -1,15 +1,13 @@
 import * as React from "react";
-import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Color, FontFamily, FontSize} from "../GlobalStyles";
 // @ts-ignore
 import ActionSheet from 'react-native-actionsheet'
 import {PostInfo} from "../declare/api/DAOApi";
 import {useIsLogin, useResourceUrl, useScreenDimensions, useUrl} from "../utils/hook";
-import {createRef, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import PostApi from "../services/DAOApi/Post";
 import {getDebounce} from "../utils/util";
-import BottomSheet from "./BottomSheet";
-import Comment from "./Comment";
 import ChunkSourceInfo from "./ChunkSourceInfo";
 import Screens from "../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
@@ -17,8 +15,8 @@ import {ReTransferPost} from "../declare/api/DAOApi";
 import Toast from "react-native-toast-message";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
-import {BottomSheetModal} from "@gorhom/bottom-sheet";
 import CommentModal from "./CommentModal";
+import BottomSheetModal from "./BottomSheetModal";
 
 type Props = {
     postInfo: PostInfo;
@@ -37,15 +35,14 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     const [like, setLike] = useState<boolean>(false);
     const [isPostLike, setIsPostLike] = useState<boolean>(true);
     const [likeCount, setLikeCount] = useState<number>(postInfo.upvote_count);
-    // const [watchCount, setWatchCount] = useState<number>(postInfo.view_count);
     const [refCount, setRefCount] = useState<number>(postInfo.ref_count);
     const [commentOnCount, setCommentOnCount] = useState<number>(postInfo.comment_count);
 
     const [videoHash, setVideoHash] = useState<string>('');
     const [oracleArr, setOracleArr] = useState<string[]>([]);
 
-    const commentRef = useRef<BottomSheetModal>();
-    const sourceInfoRef = useRef<BottomSheetModal>();
+    const [commentModal, setCommentModal] = useState(false);
+    const [sourceInfoModal, setSourceInfoModal] = useState(false);
     const actionSheetRef = useRef<ActionSheet>(null);
     const screens = ['', Screens.QuoteEdit];
 
@@ -188,11 +185,8 @@ const VideoDetailButton: React.FC<Props> = (props) => {
 
               <View style={[styles.threeButton]}>
                   <TouchableOpacity onPress={() => {
-                      if (isLogin) {
-                          commentRef.current?.present();
-                      } else {
-                          gotoLogin();
-                      }
+                      if (!isLogin) return gotoLogin();
+                      setCommentModal(true)
                   }}>
                       <Image
                         style={[styles.image]}
@@ -216,7 +210,7 @@ const VideoDetailButton: React.FC<Props> = (props) => {
           </View>
           <View>
               <TouchableOpacity onPress={() => {
-                  sourceInfoRef.current?.present();
+                  if (videoHash) setSourceInfoModal(true);
               }}>
                   <Image
                     style={[styles.alertCircleIcon]}
@@ -241,22 +235,21 @@ const VideoDetailButton: React.FC<Props> = (props) => {
                 }
             }}
           />
-          <CommentModal ref={commentRef} postId={postInfo.id} postType={postInfo.type}/>
-          {/*<BottomSheet*/}
-          {/*  ref={commentRef}*/}
-          {/*>*/}
-          {/*    <Comment postId={postInfo.id} postType={postInfo.type}/>*/}
-          {/*</BottomSheet>*/}
-          <BottomSheet
-            ref={sourceInfoRef}
+          <CommentModal
+            visible={commentModal}
+            setVisible={setCommentModal}
+            postId={postInfo.id}
+            postType={postInfo.type}
+          />
+          <BottomSheetModal
+            visible={sourceInfoModal}
+            setVisible={setSourceInfoModal}
           >
-              <View style={[styles.sourceInfoWrap, {width: screenWidth, height: screenHeight / 2 - 80}]}>
-                  <ChunkSourceInfo
-                    videoHash={videoHash}
-                    oracleArr={oracleArr}
-                  />
-              </View>
-          </BottomSheet>
+              <ChunkSourceInfo
+                videoHash={videoHash}
+                oracleArr={oracleArr}
+              />
+          </BottomSheetModal>
       </View>
     );
 };
@@ -326,10 +319,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: Color.color1
     },
-
-    sourceInfoWrap: {
-        marginTop: 10,
-    }
 });
 
 export default VideoDetailButton;

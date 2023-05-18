@@ -249,13 +249,9 @@ export type ChatInfo = {
 
 
 export type UserAccounts = {
-    "user": string
-    "wallet": string
-    "created_at": string
-    "updated_at": string
     "balance": string
-    "frozen": number
-    "decimal": number
+    "frozen": string
+    "asset": string
 }
 
 export type SignatureData = {

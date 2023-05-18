@@ -18,25 +18,26 @@ import {BottomSheetModal} from "@gorhom/bottom-sheet";
 export type Props = {};
 const VideoPlayScreen: React.FC<Props> = (props) => {
     const navigation = useNavigation();
+    const route = useRoute();
     const url = useUrl();
     const resourceUrl = useResourceUrl('images')
-    const route = useRoute();
     const {postId} = route.params as { postId: string };
-
+    console.log(postId)
     const [videoData, setVideoData] = useState<PostInfo | null>(null);
-    const [isSelf, setIsSelf] = useState<boolean>(true);
     const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
-    const subRef = useRef<BottomSheetModal>();
+    const [subModal, setSubModal] = useState(false);
 
     const playable = useMemo(() => videoData?.member === 0 ? true : videoData?.dao.is_subscribed, [videoData])
 
     const getVideoById = async (id: string) => {
         try {
             const {data} = await PostApi.getPostById(url, id);
-            console.log(data.data)
-            if (data.data) {
-                setVideoData(data.data);
-                if (data.data.author_dao.id) setIsReTransfer(true);
+            const videoData = data.data;
+            console.log(videoData)
+            if (videoData) {
+                setVideoData(videoData);
+                if (videoData.author_dao.id) setIsReTransfer(true);
+                if (videoData.member !== 0 && !videoData.dao.is_subscribed) setSubModal(true);
             }
         } catch (e) {
             console.error(e);
@@ -60,18 +61,9 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
         }
     }, [postId]);
 
-    const confirm = async (signatureData: SignatureData) => {
-        if (!videoData) return;
-        try {
-            const {data} = await DaoApi.subscribe(url, videoData.dao_id, signatureData);
-            if (data.data?.status) {
-                await getVideoById(postId);
-            }
-            subRef.current?.dismiss();
-        } catch (e) {
-            console.error(e)
-        }
-
+    const subSuccess = async () => {
+        await getVideoById(postId);
+        setSubModal(false);
     }
 
     if (!videoData) return null;
@@ -88,9 +80,10 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
           <View style={styles.box}>
               <View style={styles.videoBox}>
                   {
-                    !playable && <Pressable onPress={() => {
-                        subRef.current?.present();
-                    }} style={styles.playIcon}>
+                    !playable &&
+                      <Pressable onPress={() => {
+                          setSubModal(true)
+                      }} style={styles.playIcon}>
                           <Icon name={'play-circle'} type={'feather'} color={'#fff'} size={50}/>
                       </Pressable>
                   }
@@ -105,7 +98,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
                   />
               </View>
           </View>
-          <SubscribeModal ref={subRef} show={!playable} daoCardInfo={videoData} fn={confirm}/>
+          <SubscribeModal visible={subModal} setVisible={setSubModal} daoCardInfo={videoData} subSuccess={subSuccess}/>
           <View style={styles.groupParent}>
               <Text style={[styles.name, styles.largeTypo]}>
                   @{isReTransfer ? videoData?.author_dao.name : videoData?.dao.name}

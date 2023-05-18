@@ -1,16 +1,15 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect,useState} from "react";
 import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Alert, Text} from 'react-native';
+import {StyleSheet, Alert} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import RootStack from "./src/navigation";
-import {store,persiStore} from './src/store';
-import {Provider, useSelector} from 'react-redux';
+import {store, persiStore} from './src/store';
+import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
 import {NavigationContainer} from "@react-navigation/native";
-import {BottomSheetModalProvider} from "@gorhom/bottom-sheet";
 import WalletBottomSheet from "./src/components/WalletBottomSheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -43,22 +42,20 @@ export default function App() {
     if (!fontsLoaded) return null;
 
     return (
-        <Provider store={store}>
-            <PersistGate persistor={persiStore}>
-                <SafeAreaProvider initialMetrics={null} style={styles.container}>
-                    <SafeAreaView style={{flex: 1}}>
-                        <StatusBar style="auto"/>
-                        <NavigationContainer>
-                            <BottomSheetModalProvider>
-                                <RootStack/>
-                                <WalletBottomSheet />
-                            </BottomSheetModalProvider>
-                        </NavigationContainer>
-                        <Toast/>
-                    </SafeAreaView>
-                </SafeAreaProvider>
-            </PersistGate>
-        </Provider>
+      <Provider store={store}>
+          <PersistGate persistor={persiStore}>
+              <SafeAreaProvider initialMetrics={null} style={styles.container}>
+                  <SafeAreaView style={{flex: 1}}>
+                      <StatusBar style="auto"/>
+                      <NavigationContainer>
+                          <RootStack/>
+                          <WalletBottomSheet/>
+                      </NavigationContainer>
+                      <Toast/>
+                  </SafeAreaView>
+              </SafeAreaProvider>
+          </PersistGate>
+      </Provider>
     );
 }
 

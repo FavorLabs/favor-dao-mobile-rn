@@ -1,8 +1,7 @@
-import React, {useImperativeHandle, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, TouchableOpacity, Text, TextInput, FlatList, Image, ListRenderItem} from "react-native";
 import {Color} from "../GlobalStyles";
 import {CommentInfo, CommentReplyRes} from "../declare/api/DAOApi";
-import BottomSheet from "./BottomSheet";
 import {getDebounce, getTime} from "../utils/util";
 import {useIsLogin, useResourceUrl, useUrl} from "../utils/hook";
 import Toast from "react-native-toast-message";
@@ -10,20 +9,21 @@ import PostApi from '../services/DAOApi/Post';
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import CommentItem from "./CommentItem";
-import {BottomSheetModal} from "@gorhom/bottom-sheet";
+import BottomSheetModal from './BottomSheetModal';
 
 export type Props = {
     commentInfo: CommentInfo,
     sendSuccess?: (commentReply: CommentReplyRes) => void
-}
-const ReplyModal = ({commentInfo, sendSuccess}: Props, ref: React.Ref<any>) => {
+} & React.ComponentProps<typeof BottomSheetModal>
+const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props, ref: React.Ref<any>) => {
     if (!commentInfo) return null;
     const avatarsResUrl = useResourceUrl('avatars');
     const {user} = useSelector((state: Models) => state.global)
     const url = useUrl();
     const [isLogin, gotoLogin] = useIsLogin();
     const [reply, setReply] = useState<string>('');
-    const bottomSheetRef = useRef<BottomSheetModal>()
+    // const [replyModal,setReplyModal] = useState(false);
+    // const bottomSheetRef = useRef<BottomSheetModal>()
     const sendReply = async () => {
         if (!isLogin) return gotoLogin();
         if (!reply) return Toast.show({type: 'info', text1: 'Please enter your reply!'});
@@ -78,21 +78,14 @@ const ReplyModal = ({commentInfo, sendSuccess}: Props, ref: React.Ref<any>) => {
         )
     };
 
-    useImperativeHandle(ref, () => bottomSheetRef.current)
-
     return <>
-        <BottomSheet
-          ref={bottomSheetRef}
+        <BottomSheetModal
+          isPadding={false}
+          visible={visible}
+          setVisible={setVisible}
         >
             <View style={{flex: 1}}>
                 <View style={[styles.commentReplyWrap]}>
-                    <TouchableOpacity onPress={() => {
-                        bottomSheetRef.current?.dismiss();
-                    }}>
-                        <View style={styles.closeReplyBtn}>
-                            <Text style={styles.closeReplyBtnText}>x</Text>
-                        </View>
-                    </TouchableOpacity>
                     <FlatList
                       style={styles.replyModalListWrap}
                       ListHeaderComponent={
@@ -131,7 +124,7 @@ const ReplyModal = ({commentInfo, sendSuccess}: Props, ref: React.Ref<any>) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </BottomSheet>
+        </BottomSheetModal>
     </>
 };
 
@@ -230,7 +223,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginHorizontal: 16,
         paddingVertical: 8,
         backgroundColor: Color.color2
     },

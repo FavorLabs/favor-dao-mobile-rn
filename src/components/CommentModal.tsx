@@ -1,21 +1,16 @@
-import React, {useImperativeHandle, useRef, useState} from 'react';
+import React from 'react';
 import {StyleSheet} from "react-native";
 
-import BottomSheet from "./BottomSheet";
+import BottomSheetModal from "./BottomSheetModal";
 
 import Comment from "./Comment";
 
-export type Props = React.ComponentProps<typeof Comment>
-const CommentModal = ({postId, postType}: Props, ref: React.Ref<any>) => {
-    const bottomSheetRef = useRef();
-    useImperativeHandle(ref, () => bottomSheetRef.current)
-
+export type Props = React.ComponentProps<typeof Comment> & React.ComponentProps<typeof BottomSheetModal>
+const CommentModal = ({visible, setVisible, postId, postType}: Props, ref: React.Ref<any>) => {
     return <>
-        <BottomSheet
-          ref={bottomSheetRef}
-        >
+        <BottomSheetModal visible={visible} setVisible={setVisible} isPadding={false}>
             <Comment postId={postId} postType={postType}/>
-        </BottomSheet>
+        </BottomSheetModal>
     </>
 };
 

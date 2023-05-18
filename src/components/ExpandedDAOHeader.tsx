@@ -16,8 +16,7 @@ import {useEffect, useState} from "react";
 import DaoInfoHeader from "./DaoInfoHeader";
 import PublishContainer from "./PublishContainer";
 import Chats from "./Chats";
-import BottomSheet from "./BottomSheet";
-import DaoApi from "../services/DAOApi/Dao";
+import BottomSheetModal from "./BottomSheetModal";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -65,13 +64,13 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
 
       </View>
 
-      <BottomSheet show={isShow}>
+      <BottomSheetModal visible={isShow} setVisible={setIsShow}>
         <DaoInfoHeader daoInfo={daoInfo}/>
         <View style={styles.channelDao}>
           <PublishContainer daoInfo={daoInfo}/>
           <Chats/>
         </View>
-      </BottomSheet>
+      </BottomSheetModal>
 
     </ImageBackground>
   );
