@@ -341,33 +341,39 @@ export default class ComposerActions extends Component {
     const { visible, close } = this.props;
     return (
       <Modal transparent animated animationType="fade" visible={visible}
-          onRequestClose={() => { 
+          onRequestClose={() => {
             this.sheetRef?.current?.snapTo(1);
             this.props.close()
           }}>
         <View style={style.bottomSheetContainer}>
           <TouchableWithoutFeedback
             onPress={() => {
-              this.sheetRef?.current?.snapTo(1);
+              // this.sheetRef?.current?.snapTo(1);
               this.props.close();
             }}>
             <View style={style.fullFlex}>
-              {this.state.snapPoints ? (
-                <BottomSheet
-                  ref={this.sheetRef}
-                  snapPoints={this.state.snapPoints}
-                  borderRadius={30}
-                  initialSnap={1}
-                  enabledInnerScrolling={false}
-                  enabledContentTapInteraction
-                  overdragResistanceFactor={10}
-                  renderContent={this.renderContent}
-                  renderHeader={this.renderHeader}
-                  onCloseEnd={() => {
-                    close();
-                  }}
-                />
-              ) : null}
+                {
+                    this.renderHeader()
+                }
+                {
+                    this.renderContent()
+                }
+              {/*{this.state.snapPoints ? (*/}
+              {/*  <BottomSheet*/}
+              {/*    ref={this.sheetRef}*/}
+              {/*    snapPoints={this.state.snapPoints}*/}
+              {/*    borderRadius={30}*/}
+              {/*    initialSnap={1}*/}
+              {/*    enabledInnerScrolling={false}*/}
+              {/*    enabledContentTapInteraction*/}
+              {/*    overdragResistanceFactor={10}*/}
+              {/*    renderContent={this.renderContent}*/}
+              {/*    renderHeader={this.renderHeader}*/}
+              {/*    onCloseEnd={() => {*/}
+              {/*      close();*/}
+              {/*    }}*/}
+              {/*  />*/}
+              {/*) : null}*/}
             </View>
           </TouchableWithoutFeedback>
         </View>

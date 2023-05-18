@@ -42,16 +42,9 @@ const ImportWallet = () => {
                 title="Import wallet"
                 vector={require("../assets/vector6.png")}
             />
-            {/*<TextInputBlock*/}
-            {/*    title={'Mnemonic words'}*/}
-            {/*    placeholder={`Please enter mnemonic words，Separate with semicolons...`}*/}
-            {/*    value={mnemonic}*/}
-            {/*    setValue={setMnemonic}*/}
-            {/*    multiline={true}*/}
-            {/*/>*/}
             <TextInputBlock
-                title={'Private Key'}
-                placeholder={`Please enter private key`}
+                title={'Mnemonic words'}
+                placeholder={`Please enter mnemonic words，Separate with semicolons...`}
                 value={mnemonic}
                 setValue={setMnemonic}
                 multiline={true}
@@ -73,7 +66,7 @@ const ImportWallet = () => {
             <ProtocolRadioSelect value={agree} setValue={setAgree}/>
             <TouchableOpacity onPress={importMnemonic}>
                 <FavorDaoButton
-                    textValue="Create"
+                    textValue="Import"
                     frame1171275771BackgroundColor="#ff8d1a"
                     cancelColor="#fff"
                 />

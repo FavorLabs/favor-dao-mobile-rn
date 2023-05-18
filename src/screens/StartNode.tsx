@@ -139,7 +139,7 @@ const StartNode = () => {
             {
                 configLoaded ?
                   config.map((item, index) => (
-                    <View style={[styles.network, index !== 1 && styles.selectorChild]} key={item.name}>
+                    <View style={[styles.network, index !== 0 && styles.selectorChild]} key={item.name}>
                         <Text style={styles.name}>{item.name}</Text>
                         <CheckBox
                           checked={selectedIndex === index}
@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
     },
     selectorChild: {
         borderStyle: "solid",
-        borderBottomColor: "rgba(0, 0, 0, 0.1)",
-        borderBottomWidth: 0.5,
+        borderTopColor: "rgba(0, 0, 0, 0.1)",
+        borderTopWidth: 0.5,
     },
 })
 
