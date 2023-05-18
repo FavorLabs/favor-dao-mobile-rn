@@ -9,7 +9,7 @@ import SingleChoice from "../components/SingleChoice";
 import {Border, Color, FontFamily, FontSize, Padding} from "../GlobalStyles";
 import Toast from "react-native-toast-message";
 import { CreatePost, Post } from '../declare/api/DAOApi';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import PostApi from '../services/DAOApi/Post';
 import {useUrl} from "../utils/hook";
@@ -19,11 +19,13 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import SwitchButton from "../components/SwitchButton";
 import {RegExps} from "../components/TextInputParsed";
 import FavorDaoButton from "../components/FavorDaoButton";
+import {updateState as globalUpdateState} from "../store/global";
 
 export type Props = {};
 const CreateVideoScreen: React.FC<Props> = (props) => {
   const url = useUrl();
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const dispatch = useDispatch()
 
   const [videoTitle, setVideoTitle] = useState<string>('');
   const [videoDesc, setVideoDesc] = useState<string>('');
@@ -67,7 +69,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
         tags,
         type: 1,
         users: [],
-        visibility: daoMode ? 0 : 1,
+        visibility: daoMode ? 2 : 1,
         member
       };
       const { data } = await PostApi.createPost(url, postData);
@@ -77,6 +79,10 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
           text1: 'Post successfully'
         })
         eventEmitter.emit('menuRefreshRecommend');
+        dispatch(globalUpdateState({
+          joinStatus: true,
+          newsJoinStatus: true
+        }));
         navigation.goBack();
       }
     } catch (e) {

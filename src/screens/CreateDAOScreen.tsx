@@ -51,6 +51,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
     }
     setBtnLoading(true);
     try {
+      // @ts-ignore
       const params: DaoParams = {
         name: daoName,
         introduction: daoDescription,
@@ -67,7 +68,8 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           text1: 'create dao success!'
         });
         dispatch(globalUpdateState({
-          dao: data.data
+          dao: data.data,
+          joinStatus: true,
         }))
         navigation.goBack();
       }

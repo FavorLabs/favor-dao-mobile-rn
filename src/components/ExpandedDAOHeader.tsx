@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.color1,
   },
   maskeddaoinfoLayout: {
-    height: 90,
+    height: 60,
     alignSelf: "stretch",
   },
   maskeddaoinfo: {

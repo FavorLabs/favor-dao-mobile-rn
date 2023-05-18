@@ -82,6 +82,11 @@ class WalletController {
             [Favor.networkId!]: data.data.token
         })
     }
+    logout(){
+        let obj = _.cloneDeep(this.state.token);
+        delete obj?.[Favor.networkId!]
+        this.state.token = obj;
+    }
 
     getSignatureData(privateKey: Buffer, index = 0): SignatureData {
         const signatureMsg = ['login FavorDAO at', 'subscribe DAO at']
