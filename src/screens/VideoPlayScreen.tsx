@@ -10,10 +10,7 @@ import {getContent} from "../utils/util";
 import Video from 'react-native-video';
 import {Icon} from "@rneui/themed";
 import Favor from "../libs/favor";
-import DaoApi from '../services/DAOApi/Dao'
-import {SignatureData} from "../declare/api/DAOApi";
 import SubscribeModal from "../components/SubscribeModal";
-import {BottomSheetModal} from "@gorhom/bottom-sheet";
 
 export type Props = {};
 const VideoPlayScreen: React.FC<Props> = (props) => {
@@ -22,7 +19,6 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
     const url = useUrl();
     const resourceUrl = useResourceUrl('images')
     const {postId} = route.params as { postId: string };
-    console.log(postId)
     const [videoData, setVideoData] = useState<PostInfo | null>(null);
     const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
     const [subModal, setSubModal] = useState(false);
@@ -116,7 +112,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
               </View>
 
           </View>
-          <VideoDetailButton postInfo={videoData} vSrc={info.hash as string}/>
+          <VideoDetailButton postInfo={videoData} vSrc={info.hash!}/>
       </View>
     )
 }

@@ -14,7 +14,7 @@ export type Props =
   } &
   React.ComponentProps<typeof BottomSheetModal> &
   React.ComponentProps<typeof SubscribeBlock>
-const SubscribeModal = ({visible, setVisible, daoCardInfo, subSuccess}: Props, ref: React.Ref<any>) => {
+const SubscribeModal = ({visible, setVisible, daoCardInfo, subSuccess}: Props) => {
     const url = useUrl();
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -44,37 +44,17 @@ const SubscribeModal = ({visible, setVisible, daoCardInfo, subSuccess}: Props, r
           setVisible={setVisible}
         >
             <ScrollView>
-                {
-                  passwordModalVisible &&
+                <SubscribeBlock loading={loading} daoCardInfo={daoCardInfo} subFn={subFn}/>
+                <BottomSheetModal
+                  visible={passwordModalVisible}
+                  setVisible={setPasswordModalVisible}
+                >
                     <InputPassword type={1} fn={pwdSuccess}/>
-                }
-                <View style={[passwordModalVisible && {display: 'none'}]}>
-                    <SubscribeBlock loading={loading} daoCardInfo={daoCardInfo} subFn={subFn}/>
-                </View>
+                </BottomSheetModal>
             </ScrollView>
         </BottomSheetModal>
-        {/*<BottomSheetModal visible={passwordModalVisible} setVisible={setPasswordModalVisible}>*/}
-        {/*    <InputPassword type={1} fn={success}/>*/}
-        {/*</BottomSheetModal>*/}
-        {/*<BottomSheetM*/}
-        {/*  ref={bsRef}*/}
-        {/*  show={show}*/}
-        {/*  snapPoints={['60%']}*/}
-        {/*>*/}
-        {/*    <ScrollView style={{paddingHorizontal: 20}}>*/}
-        {/*        <SubscribeBlock daoCardInfo={daoCardInfo} subFn={subFn}/>*/}
-        {/*    </ScrollView>*/}
-        {/*</BottomSheetM>*/}
 
-        {/*<BottomSheetM*/}
-        {/*  ref={pwdRef}*/}
-        {/*  snapPoints={['60%']}*/}
-        {/*>*/}
-        {/*    <ScrollView style={{paddingHorizontal: 20}}>*/}
-        {/*        <InputPassword type={1} fn={success}/>*/}
-        {/*    </ScrollView>*/}
-        {/*</BottomSheetM>*/}
     </>
 };
 
-export default React.forwardRef(SubscribeModal);
+export default SubscribeModal;
