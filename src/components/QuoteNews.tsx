@@ -9,6 +9,7 @@ import NewsDescription from "./NewsDescription";
 import VideoBlock from "./VideoBlock";
 import VideoBlockItem from "./VideoBlockItem";
 import QuoteBlock from "./QuoteBlock";
+import {useEffect} from "react";
 
 type Props = {
   postInfo: PostInfo
@@ -17,6 +18,7 @@ type Props = {
 const QuoteNews: React.FC<Props> = (props) => {
   const { postInfo } = props;
   const { dao, created_on} = props.postInfo;
+
   return (
     <View style={[styles.frameParent]}>
       <View style={[styles.groupParent, styles.likeSpaceBlock]}>

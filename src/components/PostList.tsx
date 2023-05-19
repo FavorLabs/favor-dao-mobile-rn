@@ -40,7 +40,6 @@ const PostList: React.FC<Props> = (props) => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loading,setLoading] = useState(false);
 
-
   const loadMore = async () => {
     try {
       const request = focus ? (params: Page) => PostApi.getFollow(url, params)
@@ -88,9 +87,11 @@ const PostList: React.FC<Props> = (props) => {
     } else if(item.type === 1) {
       return <VideoBlock postInfo={item}/>
     } else if(item.type === 2) {
-      return <ReTransfer postInfo={item}/>
+      // return <ReTransfer postInfo={item}/>
+      return <NewsCard postInfo={item}/>
     } else if(item.type === 3) {
-      return <QuoteNews postInfo={item}/>
+      // return <QuoteNews postInfo={item}/>
+      return <NewsCard postInfo={item}/>
     }
 
   }

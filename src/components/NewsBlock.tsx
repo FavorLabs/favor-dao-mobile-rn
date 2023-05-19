@@ -32,7 +32,7 @@ const NewsBlock: React.FC<Props> = (props) => {
 
   return(
     <View>
-      <TouchableOpacity onPress={toPostDerail}>
+      <TouchableOpacity onPress={toPostDerail} style={styles.text}>
         <NewsDescription postInfo={props.postInfo} isQuote={isQuote} isReTransfer={isReTransfer}/>
       </TouchableOpacity>
 
@@ -44,7 +44,9 @@ const NewsBlock: React.FC<Props> = (props) => {
 }
 
 const styles = StyleSheet.create({
-
+  text: {
+    paddingBottom: 12
+  }
 });
 
 export default NewsBlock;

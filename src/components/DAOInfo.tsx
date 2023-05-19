@@ -14,16 +14,22 @@ const DAOInfo: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.daoinfo}>
-      <Image
-        style={styles.userImageIcon}
-        resizeMode="cover"
-        // source={require("../assets/user-image.png")}
-        source={{uri: `${avatarsResUrl}/${daoInfo.avatar}`}}
-      />
-      <View style={styles.daoname}>
-        <Text style={styles.title}>{daoInfo.name}</Text>
-        <Text style={styles.subtitle}>{daoInfo.follow_count} members</Text>
-      </View>
+      {
+        daoInfo ?
+          <>
+            <Image
+              style={styles.userImageIcon}
+              resizeMode="cover"
+              source={{uri: `${avatarsResUrl}/${daoInfo.avatar}`}}
+            />
+            <View style={styles.daoname}>
+              <Text style={styles.title}>{daoInfo.name}</Text>
+              <Text style={styles.subtitle}>{daoInfo.follow_count} members</Text>
+            </View>
+          </>
+          :
+          <></>
+      }
     </View>
   );
 };

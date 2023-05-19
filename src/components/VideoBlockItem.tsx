@@ -27,25 +27,21 @@ const VideoBlockItem: React.FC<Props> = (props) => {
     if(postInfo.member === 1) {
       if(isLogin) {
         // @ts-ignore
-        navigation.navigate(Screens.VideoPlay,{ postId: props.postInfo.id});
+        navigation.navigate(Screens.VideoPlay,{ postId: isQuote ? postInfo.ref_id : postInfo.id});
       } else {
         gotoLogin();
       }
     } else {
       // @ts-ignore
-      navigation.navigate(Screens.VideoPlay,{ postId: props.postInfo.id});
+      navigation.navigate(Screens.VideoPlay,{ postId: isQuote ? postInfo.ref_id : postInfo.id});
     }
   }
 
   return (
-    <View style={styles.rowUserParent}>
+    <View style={[styles.rowUserParent, {backgroundColor: isQuote || isReTransfer ? '#eaeaea' : '#fff'}]}>
       <RowUser
         time={created_on}
         daoInfo={isQuote || isReTransfer ? author_dao : dao}
-        postInfo={postInfo}
-        isReTransfer={isReTransfer}
-        isQuote={isQuote}
-        userDao={dao}
       />
       <TouchableOpacity onPress={toVideoDetail}>
 
@@ -161,7 +157,7 @@ const styles = StyleSheet.create({
   },
   rowUserParent: {
     paddingHorizontal: 0,
-    // backgroundColor: Color.color1,
+    paddingTop: 12,
     alignSelf: "stretch",
   },
 });

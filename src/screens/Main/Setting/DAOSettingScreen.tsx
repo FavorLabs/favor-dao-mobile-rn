@@ -32,8 +32,11 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
   const [daoBanner, setBanner] = useState<string>('');
   const [daoMode, setDaoMode] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
+  const [postLoading, setPostLoading] = useState<boolean>(false);
 
   const settingDao = async () => {
+    if(postLoading) return;
+    setPostLoading(true);
     try {
       const params: DaoParams & { id: string } = {
         name: dao?.name as string,
@@ -69,6 +72,7 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
           type: 'error',
           text1: e.message
         });
+        setPostLoading(false);
       }
     }
     navigation.goBack();
@@ -119,6 +123,7 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
             textValue="Done"
             frame1171275771BackgroundColor="#ff8d1a"
             cancelColor="#fff"
+            isLoading={postLoading}
           />
         </TouchableOpacity>
       </View>

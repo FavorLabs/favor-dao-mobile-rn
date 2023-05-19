@@ -30,12 +30,6 @@ const DAOSettingHeader: React.FC<Props> = (props) => {
         <TouchableOpacity onPress={toBack}>
           <Back />
         </TouchableOpacity>
-
-        {/*<Image*/}
-        {/*  style={styles.captionChild}*/}
-        {/*  resizeMode="cover"*/}
-        {/*  source={require("../assets/editDao-icon.png")}*/}
-        {/*/>*/}
       </View>
     </ImageBackground>
   );
@@ -54,7 +48,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   maskeddaoinfoLayout: {
-    height: 90,
+    height: 60,
     alignSelf: "stretch",
   },
   captionChild: {

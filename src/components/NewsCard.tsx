@@ -1,9 +1,12 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import {StyleSheet, View, Image, Text, TouchableOpacity} from "react-native";
 import NewsContent from "./NewsContent";
 import OperationBlock from "./OperationBlock";
 import { Color, Padding } from "../GlobalStyles";
 import { PostInfo } from "../declare/api/DAOApi";
+import VideoBlockItem from "./VideoBlockItem";
+import Screens from "../navigation/RouteNames";
+import {useNavigation} from "@react-navigation/native";
 
 export type Props = {
   postInfo: PostInfo;
@@ -12,11 +15,42 @@ export type Props = {
 
 const NewsCard: React.FC<Props> = (props) => {
   const { postInfo, isReTransfer = false } = props;
+  const { contents, orig_contents, type, orig_type, dao } = props.postInfo;
+  const navigation = useNavigation();
+
+  const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
+    // @ts-ignore
+    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao , type : 'Mixed'});
+    event.stopPropagation();
+  };
+
   return (
     <View style={styles.feedsJoinedInner}>
       <View style={styles.groupParent}>
-        <NewsContent postInfo={postInfo} isReTransfer={isReTransfer}/>
-        <OperationBlock postInfo={postInfo} type={0}/>
+        {
+          !contents &&
+            <TouchableOpacity onPress={toDaoCommunity}>
+              <View style={styles.retransRow}>
+                <Image source={require('../assets/reTransFerIcon.png')} style={styles.retransImg}/>
+                <Text style={styles.daoName} numberOfLines={1}>{dao.name}</Text>
+                <Text style={styles.retranText}>retransfer this</Text>
+              </View>
+            </TouchableOpacity>
+        }
+
+        {
+          contents?.length &&
+            <NewsContent postInfo={postInfo} isReTransfer={isReTransfer}/>
+        }
+
+        {
+          orig_contents?.length ?
+            orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}/>
+              : orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true}/> : <></>
+            : <></>
+        }
+
+        <OperationBlock postInfo={postInfo} type={orig_type}/>
         <View style={styles.frameChild} />
       </View>
     </View>
@@ -43,6 +77,27 @@ const styles = StyleSheet.create({
     marginTop: 14,
     alignSelf: "stretch",
   },
+  retransImg: {
+    width: 24,
+    height: 20,
+  },
+  retransRow: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingHorizontal: Padding.p_base,
+    paddingVertical: 10,
+  },
+  daoName: {
+    fontSize: 17,
+    fontWeight: '500',
+    color: '#000',
+    marginHorizontal: 5,
+  },
+  retranText: {
+    fontSize: 17,
+    fontWeight: '500',
+    color: '#999'
+  }
 });
 
 export default NewsCard;

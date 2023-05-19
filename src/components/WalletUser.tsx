@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
   avatarIcon: {
     width: 101,
     height: 100,
+    borderRadius: 100,
   },
   username: {
     marginTop: 6,
