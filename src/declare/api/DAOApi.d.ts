@@ -29,6 +29,8 @@ export type PostInfo = {
     author_dao: DaoInfo;
     ref_id: string;
     ref_type: number;
+
+    origCreatedAt: number;
 };
 
 export type Post = {

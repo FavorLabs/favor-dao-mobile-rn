@@ -17,7 +17,7 @@ type Props = {
 
 const VideoBlockItem: React.FC<Props> = (props) => {
   const { postInfo, isReTransfer, isQuote } = props;
-  const { contents, orig_contents, created_on, dao, author_dao } = props.postInfo;
+  const { contents, orig_contents, created_on, dao, author_dao, origCreatedAt } = props.postInfo;
   const imagesResUrl = useResourceUrl('images');
   const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
   const navigation = useNavigation();
@@ -40,7 +40,7 @@ const VideoBlockItem: React.FC<Props> = (props) => {
   return (
     <View style={[styles.rowUserParent, {backgroundColor: isQuote || isReTransfer ? '#eaeaea' : '#fff'}]}>
       <RowUser
-        time={created_on}
+        time={isQuote ? origCreatedAt : created_on}
         daoInfo={isQuote || isReTransfer ? author_dao : dao}
       />
       <TouchableOpacity onPress={toVideoDetail}>

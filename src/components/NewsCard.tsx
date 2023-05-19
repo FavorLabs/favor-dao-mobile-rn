@@ -10,11 +10,10 @@ import {useNavigation} from "@react-navigation/native";
 
 export type Props = {
   postInfo: PostInfo;
-  isReTransfer?: boolean;
 };
 
 const NewsCard: React.FC<Props> = (props) => {
-  const { postInfo, isReTransfer = false } = props;
+  const { postInfo } = props;
   const { contents, orig_contents, type, orig_type, dao } = props.postInfo;
   const navigation = useNavigation();
 
@@ -40,7 +39,7 @@ const NewsCard: React.FC<Props> = (props) => {
 
         {
           contents?.length &&
-            <NewsContent postInfo={postInfo} isReTransfer={isReTransfer}/>
+            <NewsContent postInfo={postInfo} />
         }
 
         {
