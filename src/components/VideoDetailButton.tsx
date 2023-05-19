@@ -96,7 +96,7 @@ const VideoDetailButton: React.FC<Props> = (props) => {
             if (dao) {
                 const postData: ReTransferPost = {
                     dao_id: dao?.id,
-                    type: 2,
+                    type: 0,
                     ref_id: postInfo.id,
                     ref_type: 0,
                     visibility: 1,
