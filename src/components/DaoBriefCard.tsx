@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View,ScrollView} from "react-native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
-import {PostInfo} from "../declare/api/DAOApi";
+import {DaoInfo, PostInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 import {getDebounce} from "../utils/util";
 import {useState} from "react";
@@ -11,61 +11,40 @@ import DaoInfoHeader from "./DaoInfoHeader";
 import BottomSheetModal from "./BottomSheetModal";
 
 type Props = {
-  daoCardInfo: PostInfo
+  daoCardInfo: DaoInfo
 }
 
 const DaoBriefCard: React.FC<Props> = (props) => {
-  const { dao } = props.daoCardInfo;
+  const { daoCardInfo } = props
   const avatarsResUrl = useResourceUrl('avatars');
-
-  const [isShow,setIsShow] = useState<boolean>(false);
-
-  const toFeedsOfDao = async () => {
-    setIsShow(true);
-  }
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={getDebounce(toFeedsOfDao)}>
         <View style={styles.daoBriefCard}>
           <View style={styles.infowithavatar}>
             <Image
               style={styles.avatarIcon}
               resizeMode="cover"
-              source={{uri: `${avatarsResUrl}/${dao.avatar}`}}
+              source={{uri: `${avatarsResUrl}/${daoCardInfo.avatar}`}}
             />
             <View style={styles.briefinfo}>
-              <Text style={styles.title} numberOfLines={1}>{dao.name}</Text>
+              <Text style={styles.title} numberOfLines={1}>{daoCardInfo.name}</Text>
               <Text style={[styles.subtitle, styles.subtitleTypo]} numberOfLines={1}>
-                Joined: {dao.follow_count}
+                Joined: {daoCardInfo.follow_count}
               </Text>
             </View>
           </View>
           <Text style={[styles.subtitle1, styles.subtitleTypo]} numberOfLines={1}>
-            {dao.introduction}
+            {daoCardInfo.introduction}
           </Text>
         </View>
-      </TouchableOpacity>
-
-      <BottomSheetModal visible={isShow} setVisible={setIsShow}>
-        <ScrollView>
-            <DaoInfoHeader daoInfo={dao}/>
-            <View style={styles.channelDao}>
-                <PublishContainer daoInfo={dao}/>
-                <Chats/>
-            </View>
-        </ScrollView>
-      </BottomSheetModal>
-
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '47%',
-    marginHorizontal: 5,
-    marginVertical: 5,
+    flex: 1
   },
   channelDao: {
     flex: 1,

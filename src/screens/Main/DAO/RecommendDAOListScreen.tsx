@@ -1,16 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator} from 'react-native';
-import {Color} from "../../../GlobalStyles";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity
+} from 'react-native';
+import {Color, Padding} from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 import DaoBriefCard from "../../../components/DaoBriefCard";
 import DaoCommunityCard from "../../../components/DaoCommunityCard";
-import {Page, PostInfo} from "../../../declare/api/DAOApi";
+import {DaoInfo, Page, PostInfo} from "../../../declare/api/DAOApi";
 import PostApi from "../../../services/DAOApi/Post";
 import {useUrl} from "../../../utils/hook";
-import {query, sleep} from "../../../utils/util";
+import {getDebounce, query, sleep} from "../../../utils/util";
 import {useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import NoDataShow from "../../../components/NoDataShow";
+import DaoInfoHeader from "../../../components/DaoInfoHeader";
+import PublishContainer from "../../../components/PublishContainer";
+import Chats from "../../../components/Chats";
+import BottomSheetModal from "../../../components/BottomSheetModal";
 
 type Props = {};
 const RecommendDAOListScreen: React.FC<Props> = (props) => {
@@ -27,6 +40,8 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
   const [loading,setLoading] = useState(false);
+  const [isShow,setIsShow] = useState<boolean>(false);
+  const [daoInfo, setDaoInfo] = useState<DaoInfo>();
 
   const loadMore = async () => {
     try {
@@ -78,15 +93,25 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
   //   loadMore();
   // },[])
 
+  const toFeedsOfDao = async (item: PostInfo) => {
+    setDaoInfo(item.dao);
+    setIsShow(true);
+  }
+
   useEffect(() => {
     onRefresh()
   },[daoSearch])
+
 
   return (
     <View style={styles.container}>
       <FlatList
         data={postListArr}
-        renderItem={({ item }) => <DaoBriefCard daoCardInfo={item}/>}
+        renderItem={({ item }) =>
+          <TouchableOpacity onPress={() => (toFeedsOfDao(item))} style={styles.daoCard}>
+            <DaoBriefCard daoCardInfo={item.dao}/>
+          </TouchableOpacity>
+      }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         contentContainerStyle={styles.flautist}
@@ -113,6 +138,21 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
           </View>
           : null}
       />
+
+      <BottomSheetModal visible={isShow} setVisible={setIsShow}>
+        {
+          daoInfo &&
+            <ScrollView>
+                <DaoInfoHeader daoInfo={daoInfo}/>
+                <View style={styles.channelDao}>
+                    <PublishContainer daoInfo={daoInfo}
+                    />
+                    <Chats/>
+                </View>
+            </ScrollView>
+        }
+      </BottomSheetModal>
+
     </View>
   )
 }
@@ -136,6 +176,18 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  daoCard: {
+    width: '47%',
+    marginHorizontal: 5,
+    marginVertical: 5,
+  },
+  channelDao: {
+    flex: 1,
+    padding: Padding.p_xs,
+    alignItems: "center",
+    justifyContent: 'center',
+    backgroundColor: Color.color1,
   },
 });
 
