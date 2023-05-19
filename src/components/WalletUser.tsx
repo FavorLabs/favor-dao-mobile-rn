@@ -102,7 +102,7 @@ const WalletUser: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   backUpDialog: {
-    flex: 1,
+    // flex: 1,
     paddingTop: 10,
   },
   closeIcon: {

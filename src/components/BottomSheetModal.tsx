@@ -10,8 +10,9 @@ export type Props = {
     setVisible: (visible: boolean) => void
     isPadding?: boolean
     children?: React.ReactNode
+    height?: number | string
 }
-const BottomSheetModal = ({visible, setVisible, isPadding = true, children}: Props) => {
+const BottomSheetModal = ({visible, setVisible, isPadding = true, children, height}: Props) => {
     const insets = useSafeAreaInsets();
     const safeStyle = {
         paddingLeft: insets.left,
@@ -27,11 +28,18 @@ const BottomSheetModal = ({visible, setVisible, isPadding = true, children}: Pro
       animationType={'slide'}
     >
         <View style={[styles.container, safeStyle]}>
-            <View style={[styles.content, {paddingBottom: insets.bottom}]}>
+            <View style={[
+                styles.content,
+                {paddingBottom: insets.bottom},
+                !!height && {height: height},
+            ]}>
                 <TouchableOpacity style={styles.closeBox} onPress={close}>
                     <SvgIcon svg={<CloseSvg/>} width={25} height={25}/>
                 </TouchableOpacity>
-                <View style={[styles.main, isPadding && {paddingHorizontal: 10}]}>
+                <View style={[
+                    !!height && styles.main,
+                    isPadding && {paddingHorizontal: 10},
+                ]}>
                     {
                         children
                     }
@@ -49,9 +57,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     content: {
-        // maxHeight: '60%',
-        // minHeight: '30%',
-        height: '60%',
+        maxHeight: '60%',
+        minHeight: '30%',
+        // height: '60%',
         backgroundColor: Color.color1,
         paddingTop: 10,
         borderTopRightRadius: 10,

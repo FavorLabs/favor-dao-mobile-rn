@@ -47,12 +47,6 @@ const WalletBottomSheet = () => {
                   <WalletConnect/>
             }
         </BottomSheetModal>
-        {/*<BottomSheet ref={bsRef} show={globalBottomSheet} showCancel={true} onChange={(index) => {*/}
-        {/*    if (index === -1) close();*/}
-        {/*}}>*/}
-        {/*   */}
-
-        {/*</BottomSheet>*/}
     </>
 };
 
