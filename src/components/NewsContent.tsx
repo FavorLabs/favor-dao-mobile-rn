@@ -19,11 +19,11 @@ export type Props = {
 
 const NewsContent: React.FC<Props> = (props) => {
   const { isQuote, isReTransfer } = props;
-  const { created_on, dao, author_dao } = props.postInfo;
+  const { created_on, dao, author_dao, origCreatedAt } = props.postInfo;
   return (
     <View style={[styles.frameParent, {backgroundColor: isQuote || isReTransfer ? '#eaeaea' : '#fff'}]}>
       <RowUser
-        time={created_on}
+        time={isQuote ? origCreatedAt : created_on }
         daoInfo={isQuote || isReTransfer ? author_dao : dao}
       />
       <NewsBlock postInfo={props.postInfo} isQuote={isQuote} isReTransfer={isReTransfer}/>
