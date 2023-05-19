@@ -8,11 +8,10 @@ import VideoBlockItem from "./VideoBlockItem";
 type Props = {
   postInfo: PostInfo
   isReTransfer?: boolean
-  isQuote?: boolean
 };
 
 const VideoBlock: React.FC<Props> = (props) => {
-  const { postInfo, isReTransfer, isQuote } = props;
+  const { postInfo, isReTransfer } = props;
   return (
     <View style={styles.rowUserParent}>
       <VideoBlockItem postInfo={postInfo} isReTransfer={isReTransfer}/>
