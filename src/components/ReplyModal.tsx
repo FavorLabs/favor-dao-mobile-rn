@@ -15,15 +15,13 @@ export type Props = {
     commentInfo: CommentInfo,
     sendSuccess?: (commentReply: CommentReplyRes) => void
 } & React.ComponentProps<typeof BottomSheetModal>
-const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props, ref: React.Ref<any>) => {
+const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
     if (!commentInfo) return null;
     const avatarsResUrl = useResourceUrl('avatars');
     const {user} = useSelector((state: Models) => state.global)
     const url = useUrl();
     const [isLogin, gotoLogin] = useIsLogin();
     const [reply, setReply] = useState<string>('');
-    // const [replyModal,setReplyModal] = useState(false);
-    // const bottomSheetRef = useRef<BottomSheetModal>()
     const sendReply = async () => {
         if (!isLogin) return gotoLogin();
         if (!reply) return Toast.show({type: 'info', text1: 'Please enter your reply!'});
@@ -80,6 +78,7 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props, ref: 
 
     return <>
         <BottomSheetModal
+          height={'60%'}
           isPadding={false}
           visible={visible}
           setVisible={setVisible}
@@ -235,4 +234,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default React.forwardRef(ReplyModal);
+export default ReplyModal;

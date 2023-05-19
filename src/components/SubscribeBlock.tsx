@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, StyleSheet, View, TouchableOpacity} from "react-native";
+import {Text, StyleSheet, View, TouchableOpacity, Pressable} from "react-native";
 import {Color, Border, Padding, FontFamily, FontSize} from "../GlobalStyles";
 import FavorDaoButton from "./FavorDaoButton";
 import DaoCommunityCard from "./DaoCommunityCard";
@@ -78,14 +78,14 @@ const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
                   </View>
               </View>
           </View>
-          <TouchableOpacity onPress={subscribe} style={styles.button} >
+          <Pressable disabled={loading}  onPress={subscribe} style={styles.button} >
               <FavorDaoButton
                 isLoading={loading}
                 textValue="Subscribe"
                 frame1171275771BackgroundColor="#ff8d1a"
                 cancelColor="#fff"
               />
-          </TouchableOpacity>
+          </Pressable>
       </View>
     );
 };

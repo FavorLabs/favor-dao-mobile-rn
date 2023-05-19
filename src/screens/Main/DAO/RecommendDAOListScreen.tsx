@@ -139,7 +139,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
           : null}
       />
 
-      <BottomSheetModal visible={isShow} setVisible={setIsShow}>
+      <BottomSheetModal height={'60%'} visible={isShow} setVisible={setIsShow}>
         {
           daoInfo &&
             <ScrollView>

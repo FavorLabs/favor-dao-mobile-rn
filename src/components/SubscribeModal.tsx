@@ -34,18 +34,19 @@ const SubscribeModal = ({visible, setVisible, daoCardInfo, subSuccess}: Props) =
         }
     }
     const subFn = () => {
-        if (loading) return;
         setPasswordModalVisible(true);
     }
 
     return <>
         <BottomSheetModal
+          height={'60%'}
           visible={visible}
           setVisible={setVisible}
         >
             <ScrollView>
                 <SubscribeBlock loading={loading} daoCardInfo={daoCardInfo} subFn={subFn}/>
                 <BottomSheetModal
+                  height={'60%'}
                   visible={passwordModalVisible}
                   setVisible={setPasswordModalVisible}
                 >

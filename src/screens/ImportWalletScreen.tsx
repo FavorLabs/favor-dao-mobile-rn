@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StyleSheet, View,TouchableOpacity} from "react-native";
+import {StyleSheet, View, Pressable} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
@@ -18,7 +18,7 @@ const ImportWallet = () => {
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [agree, setAgree] = useState(false);
-
+    const [loading, setLoading] = useState(false);
     const importMnemonic = async () => {
         if (!password || password !== repeatPassword) {
             return console.error('Password Invalid')
@@ -26,6 +26,7 @@ const ImportWallet = () => {
         if (!agree) {
             return console.error('Please check the box')
         }
+        setLoading(true);
         try {
             WalletController.importMnemonic(password, mnemonic);
             const privateKey = WalletController.exportPrivateKey(password)
@@ -33,45 +34,48 @@ const ImportWallet = () => {
             navigation.goBack();
         } catch (e) {
             console.error(e);
+        } finally {
+            setLoading(false)
         }
     }
 
     return (
-        <View style={[styles.importWallet, styles.importWalletSpaceBlock]}>
-            <FavorDaoNavBar
-                title="Import wallet"
-                vector={require("../assets/vector6.png")}
-            />
-            <TextInputBlock
-                title={'Mnemonic words'}
-                placeholder={`Please enter mnemonic words，Separate with semicolons...`}
-                value={mnemonic}
-                setValue={setMnemonic}
-                multiline={true}
-            />
-            <TextInputBlock
-                title={'Password'}
-                placeholder={`Please enter passwords`}
-                value={password}
-                setValue={setPassword}
-                secureTextEntry={true}
-            />
-            <TextInputBlock
-                title={'Confirm Password'}
-                placeholder={`Please enter passwords again`}
-                value={repeatPassword}
-                setValue={setRepeatPassword}
-                secureTextEntry={true}
-            />
-            <ProtocolRadioSelect value={agree} setValue={setAgree}/>
-            <TouchableOpacity onPress={importMnemonic}>
-                <FavorDaoButton
-                    textValue="Import"
-                    frame1171275771BackgroundColor="#ff8d1a"
-                    cancelColor="#fff"
-                />
-            </TouchableOpacity>
-        </View>
+      <View style={[styles.importWallet, styles.importWalletSpaceBlock]}>
+          <FavorDaoNavBar
+            title="Import wallet"
+            vector={require("../assets/vector6.png")}
+          />
+          <TextInputBlock
+            title={'Mnemonic words'}
+            placeholder={`Please enter mnemonic words，Separate with semicolons...`}
+            value={mnemonic}
+            setValue={setMnemonic}
+            multiline={true}
+          />
+          <TextInputBlock
+            title={'Password'}
+            placeholder={`Please enter passwords`}
+            value={password}
+            setValue={setPassword}
+            secureTextEntry={true}
+          />
+          <TextInputBlock
+            title={'Confirm Password'}
+            placeholder={`Please enter passwords again`}
+            value={repeatPassword}
+            setValue={setRepeatPassword}
+            secureTextEntry={true}
+          />
+          <ProtocolRadioSelect value={agree} setValue={setAgree}/>
+          <Pressable disabled={loading} onPress={importMnemonic}>
+              <FavorDaoButton
+                isLoading={loading}
+                textValue="Import"
+                frame1171275771BackgroundColor="#ff8d1a"
+                cancelColor="#fff"
+              />
+          </Pressable>
+      </View>
     );
 };
 

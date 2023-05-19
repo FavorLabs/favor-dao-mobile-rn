@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StyleSheet, TouchableOpacity, View} from "react-native";
+import {Pressable, StyleSheet, View} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
@@ -19,6 +19,7 @@ const CreateWallet = () => {
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [agree, setAgree] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const createPK = () => {
         try {
@@ -35,6 +36,7 @@ const CreateWallet = () => {
         if (!agree) {
             return console.error('Please check the box')
         }
+        setLoading(true);
         try {
             WalletController.importMnemonic(password, mnemonic);
             const privateKey = WalletController.exportPrivateKey(password)
@@ -42,6 +44,8 @@ const CreateWallet = () => {
             navigation.goBack();
         } catch (e) {
             console.error(e);
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -71,13 +75,14 @@ const CreateWallet = () => {
               secureTextEntry={true}
             />
             <ProtocolRadioSelect value={agree} setValue={setAgree}/>
-            <TouchableOpacity onPress={create}>
+            <Pressable disabled={loading} onPress={create}>
                 <FavorDaoButton
+                  isLoading={loading}
                   textValue="Create"
                   frame1171275771BackgroundColor="#ff8d1a"
                   cancelColor="#fff"
                 />
-            </TouchableOpacity>
+            </Pressable>
         </View>
     </>
 };
