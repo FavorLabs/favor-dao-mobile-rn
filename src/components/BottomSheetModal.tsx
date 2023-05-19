@@ -57,9 +57,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     content: {
-        maxHeight: '60%',
-        minHeight: '30%',
-        // height: '60%',
         backgroundColor: Color.color1,
         paddingTop: 10,
         borderTopRightRadius: 10,
