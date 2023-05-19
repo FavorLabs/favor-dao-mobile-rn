@@ -27,7 +27,6 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
   const { daoInfo, isShowBtnChatToggle = true } = props;
   const navigation = useNavigation();
   const [isLogin, gotoLogin] = useIsLogin();
-  const url = useUrl();
 
   const imagesResUrl = useResourceUrl('images');
   const [isShow,setIsShow] = useState<boolean>(false);
@@ -45,7 +44,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
     <ImageBackground
       style={[styles.expandeddaoheaderIcon, styles.maskeddaoinfoLayout]}
       resizeMode="cover"
-      source={{uri: `${imagesResUrl}/${daoInfo.banner}`}}
+      source={{uri: `${imagesResUrl}/${daoInfo?.banner}`}}
     >
       <View style={[styles.maskeddaoinfo, styles.maskeddaoinfoLayout]}>
         <TouchableOpacity onPress={toBack}>

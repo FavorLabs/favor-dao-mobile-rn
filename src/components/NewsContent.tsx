@@ -21,13 +21,10 @@ const NewsContent: React.FC<Props> = (props) => {
   const { isQuote, isReTransfer } = props;
   const { created_on, dao, author_dao } = props.postInfo;
   return (
-    <View style={styles.frameParent}>
+    <View style={[styles.frameParent, {backgroundColor: isQuote || isReTransfer ? '#eaeaea' : '#fff'}]}>
       <RowUser
         time={created_on}
         daoInfo={isQuote || isReTransfer ? author_dao : dao}
-        isReTransfer={isReTransfer}
-        postInfo={props.postInfo}
-        userDao={dao}
       />
       <NewsBlock postInfo={props.postInfo} isQuote={isQuote} isReTransfer={isReTransfer}/>
     </View>
@@ -38,6 +35,7 @@ const styles = StyleSheet.create({
   frameParent: {
     flex: 1,
     alignSelf: "stretch",
+    paddingTop: 12
   },
 });
 

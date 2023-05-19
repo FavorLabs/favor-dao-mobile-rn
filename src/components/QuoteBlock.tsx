@@ -38,10 +38,10 @@ const QuoteBlock: React.FC<Props> = (props) => {
       </TouchableOpacity>
       <View style={styles.groupWrapper}>
         {
-          postInfo?.orig_type === 0 ? (
-            <NewsContent postInfo={postInfo} isQuote={true}/>
-          ) : (
+          postInfo?.orig_type === 1 ? (
             <VideoBlockItem postInfo={postInfo} isQuote={true}/>
+          ) : (
+            <NewsContent postInfo={postInfo} isQuote={true}/>
           )
         }
       </View>

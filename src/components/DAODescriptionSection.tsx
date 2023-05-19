@@ -25,7 +25,6 @@ const DAODescriptionSection: React.FC<Props> = (props) => {
   } = props;
 
   const avatarsResUrl = useResourceUrl('avatars');
-  const imagesResUrl = useResourceUrl('images');
 
   return (
     <View style={[styles.daoinfoParent, styles.content1SpaceBlock]}>
@@ -34,7 +33,7 @@ const DAODescriptionSection: React.FC<Props> = (props) => {
         <Image
           style={styles.userImageIcon}
           resizeMode="cover"
-          source={{uri: `${imagesResUrl}/${daoInfo.avatar}`}}
+          source={{uri: `${avatarsResUrl}/${daoInfo.avatar}`}}
         />
         <View style={styles.daoname}>
           <Text style={styles.title}>{daoInfo.name}</Text>

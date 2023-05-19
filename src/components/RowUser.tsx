@@ -18,48 +18,33 @@ import Models from "../declare/storeTypes";
 type Props = {
   time: number;
   daoInfo?: DaoInfo;
-  userDao?: DaoInfo;
-  isReTransfer?: boolean;
-  postInfo?: PostInfo;
-  isQuote?: boolean;
 };
 
 const RowUser: React.FC<Props> = (props) => {
-  const { time,  postInfo , isReTransfer, isQuote, daoInfo, userDao} = props;
+  const { time , daoInfo } = props;
   const navigation = useNavigation();
   const avatarsResUrl = useResourceUrl('avatars');
   const createTime = getTime(time);
-  const { dao } = useSelector((state: Models) => state.global);
 
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
     // @ts-ignore
-    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : postInfo?.dao , type : 'Mixed'});
+    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : 'Mixed'});
     event.stopPropagation();
   };
 
   return (
     <TouchableOpacity onPress={toDaoCommunity}>
-    <View style={styles.rowUser}>
-      <View style={styles.imageParent}>
-        <Image style={styles.imageIcon} resizeMode="cover" source={{uri: `${avatarsResUrl}/${daoInfo?.avatar}`}} />
-        <View style={styles.subtitleParent}>
-          <View style={styles.row}>
-            <Text style={[styles.title, styles.titleTypo]} numberOfLines={1}>{daoInfo?.name}</Text>
-            {
-              isReTransfer && (
-                <View style={styles.reTransfer}>
-                  <Text style={styles.retTransferText} numberOfLines={1}>was retransfered by</Text>
-                  <Text style={styles.daoName} numberOfLines={1}>
-                    { dao?.id === userDao?.id ? 'Me' : userDao?.name}
-                  </Text>
-                </View>
-              )
-            }
+      <View style={styles.rowUser}>
+        <View style={styles.imageParent}>
+          <Image style={styles.imageIcon} resizeMode="cover" source={{uri: `${avatarsResUrl}/${daoInfo?.avatar}`}} />
+          <View style={styles.subtitleParent}>
+            <View style={styles.row}>
+              <Text style={[styles.title, styles.titleTypo]} numberOfLines={1}>{daoInfo?.name}</Text>
+            </View>
+            <Text style={[styles.subtitle, styles.titleTypo]}>{createTime}</Text>
           </View>
-          <Text style={[styles.subtitle, styles.titleTypo]}>{createTime}</Text>
         </View>
       </View>
-    </View>
     </TouchableOpacity>
   );
 };
