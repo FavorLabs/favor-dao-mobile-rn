@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {StyleSheet, Text, View} from "react-native";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 const TopTab = createMaterialTopTabNavigator();
@@ -6,7 +6,6 @@ import { FontSize, Color, Border, FontFamily, Padding } from "../../../GlobalSty
 import Mixed from '../FeedsOfDAOs/Mixed';
 import News from "./News";
 import Videos from "./Viedos";
-import {DaoInfo} from "../../../declare/api/DAOApi";
 
 export const TopBarOptions = {
   header: () => null,
@@ -25,17 +24,17 @@ export const TopBarOptions = {
 }
 
 type FeedsOfDaoProps = {
-  daoInfo: DaoInfo;
   type: string;
 }
 export function FeedsOfDaoNavigator(props: FeedsOfDaoProps) {
-  const { daoInfo, type } = props;
+  const { type } = props;
+
   return (
     // @ts-ignore
     <TopTab.Navigator screenOptions={TopBarOptions} initialRouteName={type}>
-      <TopTab.Screen name="Mixed" component={Mixed} initialParams={{daoInfo:daoInfo}} />
-      <TopTab.Screen name="News" component={News} initialParams={{daoInfo:daoInfo}}/>
-      <TopTab.Screen name="Videos" component={Videos} initialParams={{daoInfo:daoInfo}}/>
+      <TopTab.Screen name="Mixed" component={Mixed}/>
+      <TopTab.Screen name="News" component={News}/>
+      <TopTab.Screen name="Videos" component={Videos}/>
     </TopTab.Navigator>
   );
 }

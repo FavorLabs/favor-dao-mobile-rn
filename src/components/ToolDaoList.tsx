@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -18,17 +18,19 @@ import PostApi from "../services/DAOApi/Post";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 
-type Props = {};
+type Props = {
+  refreshing: boolean;
+};
 
 const ToolDaoList: React.FC<Props> = (props) => {
   const navigation = useNavigation();
   const url = useUrl();
+  const avatarsResUrl = useResourceUrl('avatars');
+
   const [pageData, setPageData] = useState<Page>({
     page: 1,
     page_size: 10,
   });
-  const avatarsResUrl = useResourceUrl('avatars');
-
   const [daoListArr,setDaoListArr] = useState<DaoInfo[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -45,6 +47,20 @@ const ToolDaoList: React.FC<Props> = (props) => {
     }
   };
 
+  const refresh = async () => {
+    const pageInfo = { page: 1, page_size: 10 };
+    try {
+      const request = (params: Page) => PostApi.getToolDao(url, params);
+      const { data } = await request(pageInfo);
+      const listArr: DaoInfo[] = data.data.list;
+      setDaoListArr(() => [...listArr]);
+      setIsLoadingMore(data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,);
+      setPageData((pageData) => ({ ...pageData, page: 2 }));
+    } catch (e) {
+      if (e instanceof Error) console.error(e)
+    }
+  };
+
   const handleLoadMore = () => {
     if (isLoadingMore) {
       loadMore();
@@ -56,15 +72,17 @@ const ToolDaoList: React.FC<Props> = (props) => {
     navigation.navigate(Screens.ToolDaoDetail,{ daoInfo: daoInfo});
   }
 
-  useEffect(  () => {
-    loadMore();
-  },[])
+  useEffect(() => {
+    if(!props.refreshing) {
+      refresh()
+    }
+  },[props.refreshing])
 
   return (
     <View style={styles.frameContainer}>
       <FlatList
-        style={styles.postList}
         data={daoListArr}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => toDetail(item)}>
             <View style={styles.daoBlock}>
@@ -86,9 +104,6 @@ const ToolDaoList: React.FC<Props> = (props) => {
 }
 
 const styles = StyleSheet.create({
-  postList: {
-    // backgroundColor: Color.color1
-  },
   daoBlock: {
     alignItems: 'center',
     marginRight: 10,

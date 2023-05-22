@@ -88,7 +88,7 @@ const PublishContainer: React.FC<Props> = (props) => {
 
   useEffect(() => {
     getDaoInfo();
-  },[daoInfo])
+  },[daoInfo]);
 
   return (
     <View style={styles.publishes}>

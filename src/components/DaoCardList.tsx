@@ -6,7 +6,9 @@ import {Page, PostInfo} from "../declare/api/DAOApi";
 import {useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
 
-type Props = {};
+type Props = {
+  refreshing: boolean;
+};
 
 const DaoCardList: React.FC<Props> = (props) => {
   const url = useUrl();
@@ -35,6 +37,27 @@ const DaoCardList: React.FC<Props> = (props) => {
     }
   };
 
+  const refresh = async () => {
+    const pageInfo = {
+      page: 1,
+      page_size: 5,
+      type: -1,
+      query: undefined,
+    };
+    try {
+      const request = (params: Page) => PostApi.getPostListByType(url, params);
+      const { data } = await request(pageInfo);
+      const listArr: PostInfo[] = data.data.list;
+      setPostListArr(() => [...listArr]);
+      setIsLoadingMore(
+        data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,
+      );
+      setPageData((pageData) => ({ ...pageData, page: 2 }));
+    } catch (e) {
+      if (e instanceof Error) console.error(e)
+    }
+  };
+
   const handleLoadMore = () => {
     if (isLoadingMore) {
       loadMore();
@@ -42,18 +65,20 @@ const DaoCardList: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    loadMore();
-  },[])
+    if(!props.refreshing) {
+      refresh();
+    }
+  },[props.refreshing])
 
   return (
       <View style={styles.frameContainer}>
         <FlatList
-          style={styles.postList}
           data={postListArr}
           renderItem={({ item }) => <View style={styles.daoBlock}><DaoCommunityCard daoCardInfo={item} /></View>}
           horizontal={true}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
+          // keyExtractor={item => item.id}
         />
         <View style={[styles.frameInner, styles.lineViewBorder]} />
       </View>
@@ -61,9 +86,6 @@ const DaoCardList: React.FC<Props> = (props) => {
 }
 
 const styles = StyleSheet.create({
-  postList: {
-    // backgroundColor: Color.color1
-  },
   daoBlock: {
     width: 240,
     height: 240,

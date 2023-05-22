@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import JoinButton from "./JoinButton";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
+import TextParsed from "./TextParsed";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -54,9 +55,8 @@ const DaoCardItem: React.FC<Props> = (props) => {
           </View>
         </View>
         <View style={[styles.groupParent, styles.labelFlexBox]}>
-          <Text style={[styles.description, styles.titleClr]} numberOfLines={3}>
-            {daoInfo.introduction}
-          </Text>
+          {/* @ts-ignore */}
+          <TextParsed content={daoInfo.introduction} style={[styles.description, styles.titleClr]} numberOfLines={3} />
         </View>
       </View>
     </View>
