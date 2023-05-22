@@ -87,7 +87,8 @@
     "rn-nodeify": "^10.3.0",
     "stream-browserify": "^1.0.0",
     "url": "~0.10.1",
-    "web3": "^1.9.0"
+    "web3": "^1.9.0",
+    "xxhashjs": "^0.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -98,6 +99,7 @@
     "@types/react-native": "^0.71.6",
     "@types/react-native-dotenv": "^0.2.0",
     "@types/react-native-video": "^5.0.14",
+    "@types/xxhashjs": "^0.2.2",
     "babel-plugin-filter-imports": "^4.0.0",
     "react-native-dotenv": "^3.4.8",
     "react-native-svg-transformer": "^1.0.0",
