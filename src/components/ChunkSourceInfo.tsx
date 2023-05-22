@@ -157,16 +157,6 @@ const ChunkSourceInfo: React.FC<Props> = (props) => {
                                 <Text style={styles.percent}>{((item.downloadLen / len) * 100).toFixed(2)}%</Text>
                             </View>
                           ))}
-                          {chunkArr.map((item, index) => (
-                            <View style={styles.sourceItem} key={item.overlay}>
-                                <View style={styles.sourceItemLeft}>
-                                    <View
-                                      style={[styles.colorBlock, {backgroundColor: index < 5 ? colorArr[index + 1] : colorArr[6]}]}></View>
-                                    <Text style={styles.address}>{omitAddress(item.overlay, 10, 8)}</Text>
-                                </View>
-                                <Text style={styles.percent}>{((item.downloadLen / len) * 100).toFixed(2)}%</Text>
-                            </View>
-                          ))}
                       </View>
                   }
               </ScrollView>
