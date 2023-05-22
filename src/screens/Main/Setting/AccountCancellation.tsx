@@ -28,7 +28,6 @@ const AccountCancellation: React.FC<Props> = (props) => {
   const { user } = useSelector((state: Models) => state.global);
 
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
-  const [nickName,setNickName] = useState<string>('');
 
   const unregister = async () => {
     if(btnLoading) return;
@@ -42,12 +41,6 @@ const AccountCancellation: React.FC<Props> = (props) => {
     }
 
   }
-
-  useEffect(() => {
-    if(user) {
-      setNickName(user.nickname)
-    }
-  },[])
 
   return (
     <View style={styles.container}>
