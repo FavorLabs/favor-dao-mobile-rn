@@ -68,7 +68,6 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
         <View style={[styles.groupParent, styles.labelFlexBox]}>
           {/* @ts-ignore */}
           <TextParsed content={dao.introduction} style={[styles.description, styles.titleClr]} numberOfLines={3} />
-
         </View>
       </View>
     </View>

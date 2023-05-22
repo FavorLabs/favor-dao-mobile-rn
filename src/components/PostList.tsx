@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator, Animated} from 'react-native';
 import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
 import { Page, PostInfo } from "../declare/api/DAOApi";
 import PostApi from '../services/DAOApi/Post';
@@ -10,8 +10,6 @@ import DaoCardList from "./DaoCardList";
 import QuoteNews from "./QuoteNews";
 import VideoBlock from "./VideoBlock";
 import ReTransfer from "./ReTransfer";
-import {useSelector} from "react-redux";
-import Models from "../declare/storeTypes";
 import NoDataShow from "./NoDataShow";
 import ToolDaoList from "./ToolDaoList";
 
@@ -117,7 +115,7 @@ const PostList: React.FC<Props> = (props) => {
     if(isNewsFocus) {
       setIsNewsFocus?.(false);
     }
-  },[query,isNewsFocus])
+  },[query,isNewsFocus,daoId])
 
   return (
       <View style={styles.container}>
@@ -129,7 +127,7 @@ const PostList: React.FC<Props> = (props) => {
             if(index === 0 && isHome) {
               return (
                 <>
-                  <ToolDaoList/>
+                  <ToolDaoList refreshing={refreshing}/>
                   {renderItem(item)}
                 </>
               )
@@ -137,7 +135,7 @@ const PostList: React.FC<Props> = (props) => {
             else if (index === 1 && isHome) {
               return (
                 <>
-                  <DaoCardList/>
+                  <DaoCardList refreshing={refreshing}/>
                   {renderItem(item)}
                 </>
               )

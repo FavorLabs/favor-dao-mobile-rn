@@ -63,7 +63,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
 
       </View>
 
-      <BottomSheetModal visible={isShow} setVisible={setIsShow}>
+      <BottomSheetModal visible={isShow} setVisible={setIsShow} height={'60%'}>
         <DaoInfoHeader daoInfo={daoInfo}/>
         <View style={styles.channelDao}>
           <PublishContainer daoInfo={daoInfo}/>

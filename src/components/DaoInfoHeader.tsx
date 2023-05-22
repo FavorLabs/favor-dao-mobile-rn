@@ -8,6 +8,7 @@ import DaoApi from "../services/DAOApi/Dao";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
+import TextParsed from "./TextParsed";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -79,9 +80,8 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
       </View>
 
       <View style={styles.bottom}>
-        <Text numberOfLines={2} style={styles.introduction}>
-          {daoInfo.introduction}
-        </Text>
+        {/* @ts-ignore */}
+        <TextParsed content={daoInfo.introduction} style={styles.introduction} numberOfLines={2} />
       </View>
     </View>
   )

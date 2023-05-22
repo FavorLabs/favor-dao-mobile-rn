@@ -23,7 +23,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   const { dao, joinStatus } = useSelector((state: Models) => state.global);
 
   const [bookmarkList, setBookmarkList] = useState<DaoInfo[]>([]);
-  const [isJoin, setIsJoin] = useState(false);
+  const [isJoin, setIsJoin] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [daoPageData, setDaoPageData] = useState<Page>({
     page: 1,
@@ -58,7 +58,6 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
       const { data } = await DaoApi.getBookmarkList(url, pageData);
       if(data.data?.list) {
         const newsData = data.data.list;
-        // const firstItem: DaoInfo | undefined = newsData?.find(item => item.id === dao?.id);
         const firstItem: DaoInfo | null = dao;
         const otherItems: DaoInfo[] = newsData.filter(item => item.id !== dao?.id);
         let sortedData: DaoInfo[] = [];
@@ -116,6 +115,11 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
         await refreshList();
         setIsJoin(data.data.status);
         setBtnLoading(false);
+        if(activeId === bookmarkList[0].id) {
+          setActiveId(bookmarkList[1].id);
+        } else {
+          setActiveId(bookmarkList[0].id)
+        }
       }
 
     } catch (e) {
@@ -129,17 +133,22 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   useEffect(() => {
       if(bookmarkList[0] && !activeId){
         setActiveId(bookmarkList[0].id)
+        setDaoInfo(bookmarkList[0])
       }
-      getDaoInfo();
-      checkJoinStatus();
-  },[activeId,bookmarkList]);
+      // getDaoInfo();
+      // checkJoinStatus();
+  },[bookmarkList]);
+
+  useEffect(() => {
+    if (activeId) {
+      const info = bookmarkList.find(obj => obj.id === activeId);
+      setDaoInfo(info)
+    }
+  },[activeId])
 
   useEffect(() => {
     if (isFocused && joinStatus) {
       refreshList();
-      if(bookmarkList[0]){
-        setActiveId(bookmarkList[0].id)
-      }
       dispatch(globalUpdateState({
         joinStatus: false
       }))
@@ -148,9 +157,6 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
 
   useEffect(() => {
     refreshList();
-    if(bookmarkList[0]){
-      setActiveId(bookmarkList[0].id)
-    }
   },[])
 
   return (
@@ -169,7 +175,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
               {
                 daoInfo &&
                   <View style={styles.daoDetail}>
-                      <DaoCardItem daoInfo={daoInfo} handle={bookmarkHandle} joinStatus={isJoin} btnLoading={btnLoading}/>
+                      <DaoCardItem daoInfo={daoInfo} handle={bookmarkHandle} joinStatus={true} btnLoading={btnLoading}/>
                       <View style={styles.channelsofdao}>
                           <PublishContainer daoInfo={daoInfo}/>
                           <Chats/>
