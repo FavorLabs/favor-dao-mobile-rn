@@ -4,7 +4,7 @@ import {FontSize, FontFamily, Color, Border, Padding} from "../GlobalStyles";
 import TextInputParsed from "./TextInputParsed";
 
 type TextInputBlockType = React.ComponentProps<typeof TextInput> & {
-    title: string
+    title?: string
     value: string
     setValue?: (value: string) => void
     height?: number
@@ -19,17 +19,17 @@ const TextInputBlock = (props: TextInputBlockType) => {
         ...inputProps
     } = props;
     return (
-        <View style={styles.createWalletInner}>
-            <Text style={styles.title}>{title}</Text>
-            <TextInput
-                style={[styles.input, inputProps.multiline && {height: height}]}
-                value={value}
-                onChangeText={setValue}
-                {
-                    ...inputProps
-                }
-            />
-        </View>
+      <View style={styles.createWalletInner}>
+          <Text style={styles.title}>{title}</Text>
+          <TextInput
+            style={[styles.input, inputProps.multiline && {height: height}]}
+            value={value}
+            onChangeText={setValue}
+            {
+                ...inputProps
+            }
+          />
+      </View>
     );
 };
 
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily.capsCaps310SemiBold,
         color: Color.iOSSystemLabelsLightPrimary,
         display: "flex",
-        width: 343,
+        width: '100%',
         alignItems: "center",
     },
     input: {
