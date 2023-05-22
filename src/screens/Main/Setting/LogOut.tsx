@@ -14,14 +14,14 @@ import {updateState as globalUpdateState} from "../../../store/global";
 import Toast from "react-native-toast-message";
 import {Color, FontFamily} from "../../../GlobalStyles";
 import {
-  AccountCancellationIntroduction,
-  AccountCancellationOne,
-  AccountCancellationTitle, AccountCancellationTwo
+  LogOutIntroduction, LogOutText,
+  LogOutTitle
+
 } from "../../../config/constants";
 
 type Props = {};
 
-const AccountCancellation: React.FC<Props> = (props) => {
+const LogOut: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const url = useUrl();
@@ -29,42 +29,41 @@ const AccountCancellation: React.FC<Props> = (props) => {
 
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
 
-  const unregister = async () => {
+  const logOut = async () => {
     if (btnLoading) return;
   }
 
   return (
     <View style={styles.container}>
       <FavorDaoNavBar
-        title="Account cancellation"
+        title="Log out"
         vector={require("../../../assets/vector6.png")}
       />
 
       <ScrollView>
         <View style={styles.topBlock}>
           <View style={styles.titleRow}>
-            <Text style={styles.title}>{AccountCancellationTitle}</Text>
+            <Text style={styles.title}>{LogOutTitle}</Text>
             <Image
               style={styles.accountIcon}
               resizeMode="cover"
-              source={require("../../../assets/AccountIcon.png")}
+              source={require("../../../assets/logOutIcon.png")}
             />
           </View>
           <Text style={styles.introduction}>
-            {AccountCancellationIntroduction}
+            {LogOutIntroduction}
           </Text>
         </View>
 
         <View style={styles.description}>
-          <Text style={[styles.descriptionText,styles.topText]}>{AccountCancellationOne}</Text>
-          <Text style={styles.descriptionText}>{AccountCancellationTwo}</Text>
+          <Text style={styles.descriptionText}>{LogOutText}</Text>
         </View>
       </ScrollView>
 
       <View style={styles.instanceParent}>
-        <TouchableOpacity onPress={unregister}>
+        <TouchableOpacity onPress={logOut}>
           <FavorDaoButton
-            textValue="Unregister"
+            textValue="Log out"
             frame1171275771BackgroundColor="#FF564F"
             cancelColor="#fff"
             isLoading={btnLoading}
@@ -97,12 +96,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 41,
     color: Color.iOSSystemLabelsLightPrimary,
-    width: '50%',
   },
   accountIcon: {
-    width: 60,
-    height: 51,
-    marginLeft: 10,
+    width: 40,
+    height: 41,
+    marginLeft: 20,
   },
   introduction: {
     marginTop: 5,
@@ -128,4 +126,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default AccountCancellation;
+export default LogOut;

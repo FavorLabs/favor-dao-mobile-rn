@@ -15,3 +15,6 @@ export const AccountCancellationIntroduction = 'Unfortunately, Favordao is unabl
 export const AccountCancellationTitle = 'Account cancellation';
 export const AccountCancellationOne = '1. After the cancellation application is   submitted, it will be reviewed within 10 days. During this period you will not be able to log in to the FavorDAO APP!'
 export const AccountCancellationTwo = '2.After the logout is successful, all FavorDAO-related information on the account will be cleared!';
+export const LogOutTitle = 'Log out';
+export const LogOutIntroduction = 'Please read the following information before logging out';
+export const LogOutText = 'Has the mnemonic word been exported? If the mnemonic word is not exported, you will not be able to log in to this account next time. Please operate with caution'

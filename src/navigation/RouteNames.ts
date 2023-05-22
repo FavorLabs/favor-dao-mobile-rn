@@ -27,6 +27,7 @@ const Screens = {
   UserSetting: 'UserSetting',
   ModifyName: 'ModifyName',
   AccountCancellation: 'AccountCancellation',
+  LogOut: 'LogOut',
 }
 
 export default Screens;

@@ -26,7 +26,7 @@ const UserSetting: React.FC<Props> = (props) => {
 
   const goToLogOut = () => {
     // @ts-ignore
-    navigation.navigate(Screens.ModifyName);
+    navigation.navigate(Screens.LogOut);
   }
 
 
