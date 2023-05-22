@@ -16,13 +16,13 @@ export default StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
     justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
     height: '100%',
   },
   bottomSheetContainer: {
     backgroundColor: 'white',
-    height: deviceHeight * 0.9,
+    // height: deviceHeight * 0.9,
+      flex:1
   },
   crossImgContainer: {
     alignSelf: 'flex-end',
