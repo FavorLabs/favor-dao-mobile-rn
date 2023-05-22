@@ -1,3 +1,5 @@
+import UserSetting from "../screens/Main/Setting/UserSetting";
+
 const Screens = {
   Root: 'Root',
   Main: {
@@ -22,6 +24,9 @@ const Screens = {
   QuoteEdit: 'QuoteEdit',
   FeedsOfDAO: 'FeedsOfDAO',
   ToolDaoDetail: 'ToolDaoDetail',
+  UserSetting: 'UserSetting',
+  ModifyName: 'ModifyName',
+  AccountCancellation: 'AccountCancellation',
 }
 
 export default Screens;
