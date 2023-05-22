@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
 import { FontSize, FontFamily, Color, Padding, Border } from "../../../GlobalStyles";
 import WalletUser from "../../../components/WalletUser";
 import Receive from "../../../components/Receive";
@@ -7,18 +7,32 @@ import Send from "../../../components/Send";
 import Transactions from "../../../components/Transactions";
 import BalanceBackContainer from "../../../components/BalanceBackContainer";
 import DAOManagementContainer from "../../../components/DAOManagementContainer";
-import {useSelector} from "react-redux";
-import Models from "../../../declare/storeTypes";
+import {useNavigation} from "@react-navigation/native";
+import Screens from "../../../navigation/RouteNames";
 // import ServiceComponent from "../../../components/ServiceComponent";
 // import PromotionTasks from "../../../components/PromotionTasks";
 
 export type Props = {};
 const SettingScreen: React.FC<Props> = (props) => {
+  const navigation = useNavigation();
+  const goToSetting = () => {
+    // @ts-ignore
+    navigation.navigate(Screens.UserSetting)
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView>
       <View style={styles.titleWrapper}>
         <Text style={styles.title}>Profile</Text>
+
+        <TouchableOpacity onPress={goToSetting}>
+          <Image
+            style={styles.settingIcon}
+            resizeMode="cover"
+            source={require("../../../assets/union-Setting.png")}
+          />
+        </TouchableOpacity>
       </View>
       <WalletUser />
       <View style={styles.sendbar}>
@@ -50,7 +64,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_3xs,
     paddingBottom: Padding.p_3xs,
     flexDirection: "row",
-    alignSelf: "stretch",
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   title: {
     fontSize: FontSize.size_15xl,
@@ -60,6 +75,11 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.interBold,
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "left",
+  },
+  settingIcon: {
+    width: 22,
+    height: 22,
+    marginRight: 6
   },
   sendbar: {
     marginTop: 30,

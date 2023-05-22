@@ -27,6 +27,9 @@ import {CometChat} from '@cometchat-pro/react-native-chat';
 import WalletController from "../libs/walletController";
 import {CometChatMessages} from "../cometchat-pro-react-native-ui-kit/CometChatWorkspace"
 import ToolDaoDetailScreen from "../screens/ToolDaoDetailScreen";
+import UserSetting from "../screens/Main/Setting/UserSetting";
+import ModifyName from "../screens/Main/Setting/ModifyName";
+import AccountCancellation from "../screens/Main/Setting/AccountCancellation";
 
 const Stack = createStackNavigator();
 
@@ -115,6 +118,9 @@ function RootStack() {
               <Stack.Screen name={Screens.FeedsOfDAO} component={FeedsOfDAO}/>
               <Stack.Screen name={"CometChatMessages"} component={CometChatMessages}/>
               <Stack.Screen name={Screens.ToolDaoDetail} component={ToolDaoDetailScreen}/>
+              <Stack.Screen name={Screens.UserSetting} component={UserSetting}/>
+              <Stack.Screen name={Screens.ModifyName} component={ModifyName}/>
+              <Stack.Screen name={Screens.AccountCancellation} component={AccountCancellation}/>
           </Stack.Navigator>
           <Loading visible={visible} text={'Connecting to a p2p network'}/>
       </>
