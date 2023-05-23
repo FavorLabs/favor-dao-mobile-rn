@@ -3,6 +3,7 @@
     "name": "FavorDao",
     "slug": "FavorDao",
     "version": "1.0.1",
+    "jsEngine": "hermes",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
