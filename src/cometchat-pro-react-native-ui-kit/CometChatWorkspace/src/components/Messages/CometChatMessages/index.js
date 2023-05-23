@@ -1126,6 +1126,7 @@ class CometChatMessages extends React.PureComponent {
               // widgetsettings={route.params.widgetsettings}
               loggedInUser={params.loggedInUser}
               actionGenerated={this.actionHandler}
+              navigation={this.props.navigation}
             />
             <CometChatMessageList
               theme={this.theme}
