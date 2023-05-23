@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, StyleSheet, Image, View } from "react-native";
+import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
@@ -15,21 +15,25 @@ const BalanceBackContainer: React.FC<Props> = (props) => {
   const getBalance = async () => {
     try {
       const {data} = await UserApi.getAccounts(url);
-      console.log(data,'data')
-      // setBalance(data.data[0].balance)
+      setBalance(data.data[0].balance)
     } catch (e) {
       if (e instanceof Error) console.error(e)
     }
   }
 
   useEffect(() => {
-    // getBalance()
+    getBalance()
   }, [])
 
   return (
     <View style={styles.balanceback}>
       <View>
-        <Text style={styles.title}>Balance</Text>
+        <View style={styles.row}>
+          <Text style={styles.title}>Balance</Text>
+          <TouchableOpacity onPress={getBalance}>
+            <Image source={require('../assets/reTransFerIcon.png')} style={styles.retransImg}/>
+          </TouchableOpacity>
+        </View>
         <View style={styles.balances}>
           <Image
             style={styles.tokenavatarIcon}
@@ -37,9 +41,10 @@ const BalanceBackContainer: React.FC<Props> = (props) => {
             source={require("../assets/subtract.png")}
           />
           <View style={styles.values}>
-            <Text style={[styles.valuesofusdt]}>
-              { addDecimal(balance) } FavT
+            <Text style={styles.balanceNum} numberOfLines={1}>
+              { addDecimal(balance) }
             </Text>
+            <Text style={styles.valuesofusdt}>FavT</Text>
           </View>
         </View>
       </View>
@@ -48,6 +53,11 @@ const BalanceBackContainer: React.FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   valuesofusdtFlexBox: {
     textAlign: "left",
     position: "absolute",
@@ -67,7 +77,14 @@ const styles = StyleSheet.create({
   },
   valuesofusdt: {
     fontSize: FontSize.size_15xl,
-    letterSpacing: -1,
+    lineHeight: 41,
+    fontWeight: "700",
+    fontFamily: FontFamily.interBold,
+    color: Color.iOSSystemLabelsLightPrimary,
+  },
+  balanceNum: {
+    flex: 1,
+    fontSize: FontSize.size_15xl,
     lineHeight: 41,
     fontWeight: "700",
     fontFamily: FontFamily.interBold,
@@ -87,10 +104,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 65,
     marginLeft: 12,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   balances: {
-    width: 224,
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
@@ -102,6 +120,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_base,
     paddingVertical: Padding.p_3xl,
   },
+  retransImg: {
+    width: 18,
+    height: 15,
+  }
 });
 
 export default BalanceBackContainer;
