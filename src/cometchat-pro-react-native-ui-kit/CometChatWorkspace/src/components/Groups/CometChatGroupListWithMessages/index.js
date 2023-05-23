@@ -1,17 +1,12 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable react/no-unused-state */
-import React, {useMemo,useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {SafeAreaView} from 'react-native';
 import {CometChat} from '@cometchat-pro/react-native-chat';
 import {CometChatManager} from '../../../utils/controller';
 import * as enums from '../../../utils/enums';
 import * as actions from '../../../utils/actions';
-import {
-    CometChatIncomingCall,
-    CometChatOutgoingCall,
-    CometChatOutgoingDirectCall,
-    CometChatIncomingDirectCall,
-} from '../../Calls';
+import {CometChatIncomingCall, CometChatIncomingDirectCall, CometChatOutgoingDirectCall,} from '../../Calls';
 import CometChatGroupList from '../CometChatGroupList';
 import CometChatImageViewer from '../../Messages/CometChatImageViewer';
 
@@ -20,8 +15,13 @@ import theme from '../../../resources/theme';
 import style from './styles';
 import {logger} from '../../../utils/common';
 import {CometChatContextProvider} from '../../../utils/CometChatContext';
-import {useNavigation, useRoute} from '@react-navigation/native';
-
+import {useFocusEffect, useRoute} from '@react-navigation/native';
+import DaoApi from "../../../../../../services/DAOApi/Dao"
+import {useUrl} from "../../../../../../utils/hook"
+import Favor from "../../../../../../libs/favor";
+import {h64} from "xxhashjs";
+import {useDispatch} from 'react-redux';
+import {addGuid} from '../../../../../../store/global'
 
 class CometChatGroupListWithMessages extends React.Component {
     loggedInUser = null;
@@ -774,8 +774,31 @@ class CometChatGroupListWithMessages extends React.Component {
 
 
 const CometChatGroupListWithMessagesFn = (props) => {
+    const dispatch = useDispatch();
     const route = useRoute();
-    const {group,time} = route.params ?? {}
+    const url = useUrl();
+    const {group, time} = route.params ?? {}
+
+    useFocusEffect(
+        useCallback(() => {
+            async function fetch() {
+                const {data} = await DaoApi.getBookmarkList(url, {
+                    page: 1,
+                    page_size: 10,
+                })
+                const guidToDao = (data.data.list ?? []).reduce((prev, item) => {
+                    const str = `${Favor.bucket?.Settings.TagRegion.split('_')[1]}-${Favor.networkId}-group_${item.id}`;
+                    prev[h64(Buffer.from(str), 0).toString()] = {
+                        ...item,
+                        is_joined: true
+                    };
+                    return prev;
+                }, {})
+                dispatch(addGuid(guidToDao))
+            }
+            fetch()
+        }, [])
+    )
 
     return (
         <>
