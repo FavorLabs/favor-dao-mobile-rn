@@ -19,7 +19,7 @@ const TextInputBlock = (props: TextInputBlockType) => {
         ...inputProps
     } = props;
     return (
-      <View style={styles.createWalletInner}>
+      <View style={[styles.createWalletInner, !title && {marginTop: -10} ]}>
           <Text style={styles.title}>{title}</Text>
           <TextInput
             style={[styles.input, inputProps.multiline && {height: height}]}

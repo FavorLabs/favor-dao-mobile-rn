@@ -6,18 +6,24 @@ import WalletController from "../libs/walletController";
 import {SignatureData} from "../declare/api/DAOApi";
 
 export type Props = {
-    fn: (signatureData: SignatureData) => void
+    fn?: (signatureData: SignatureData) => void
     btnText?: string
-    type: number
+    type?: number
+    psd?: () => void
 }
-const InputPassword = ({fn, btnText = 'Confirm', type}: Props) => {
+const InputPassword = ({fn, btnText = 'Confirm', type, psd}: Props) => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const confirm = () => {
         try {
             setLoading(true);
-            const privateKey = WalletController.exportPrivateKey(password);
-            fn(WalletController.getSignatureData(privateKey, type));
+            if(type) {
+                const privateKey = WalletController.exportPrivateKey(password);
+                fn?.(WalletController.getSignatureData(privateKey, type));
+            } else {
+                const m = WalletController.exportMnemonic(password);
+                if(m) psd?.();
+            }
         } catch (e) {
             console.error('Password Error')
         } finally {

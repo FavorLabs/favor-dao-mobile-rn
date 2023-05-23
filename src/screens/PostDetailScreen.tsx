@@ -59,11 +59,6 @@ const PostDetailScreen: React.FC<Props> = (props) => {
                 postType={postInfo.type}
                 headerComponents={() => {
                     return <View style={styles.content}>
-                        {/*{*/}
-                        {/*    postInfo.type === 0 || postInfo.type === 2 ?*/}
-                        {/*      <NewsBlock postInfo={postInfo} isReTransfer={isReTransfer}/> :*/}
-                        {/*      <QuoteBlock postInfo={postInfo}/>*/}
-                        {/*}*/}
                         <NewsBlock postInfo={postInfo}/>
                         {
                           postInfo.orig_contents?.length ?

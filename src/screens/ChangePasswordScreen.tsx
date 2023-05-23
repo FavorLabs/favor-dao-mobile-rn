@@ -7,8 +7,10 @@ import {Padding, Color} from "../GlobalStyles";
 import {useState} from "react";
 import WalletController from "../libs/walletController";
 import Toast from "react-native-toast-message";
+import {useNavigation} from "@react-navigation/native";
 
 const ImportWallet = () => {
+    const navigation = useNavigation();
     const [oldPassword, setOldPassword] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -23,6 +25,7 @@ const ImportWallet = () => {
                 throw new Error('Two inconsistent passwords');
             }
             WalletController.changePassword(password, oldPassword);
+            navigation.goBack();
         } catch (e) {
             Toast.show({
                 type:'info',
@@ -55,19 +58,17 @@ const ImportWallet = () => {
                     setValue={setPassword}
                     secureTextEntry={true}
                   />
-                  <View style={{marginTop: -30}}>
-                      <TextInputBlock
-                        placeholder={`Please enter passwords again`}
-                        value={repeatPassword}
-                        setValue={setRepeatPassword}
-                        secureTextEntry={true}
-                      />
-                  </View>
+                  <TextInputBlock
+                    placeholder={`Please enter passwords again`}
+                    value={repeatPassword}
+                    setValue={setRepeatPassword}
+                    secureTextEntry={true}
+                  />
               </View>
               <Pressable style={{marginTop: 20}} disabled={loading} onPress={change}>
                   <FavorDaoButton
                     isLoading={loading}
-                    textValue="Import"
+                    textValue="Confirm"
                     frame1171275771BackgroundColor="#ff8d1a"
                     cancelColor="#fff"
                   />

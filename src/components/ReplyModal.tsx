@@ -1,5 +1,15 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text, TextInput, FlatList, Image, ListRenderItem} from "react-native";
+import {
+    StyleSheet,
+    View,
+    TouchableOpacity,
+    Text,
+    TextInput,
+    FlatList,
+    Image,
+    ListRenderItem,
+    ActivityIndicator
+} from "react-native";
 import {Color} from "../GlobalStyles";
 import {CommentInfo, CommentReplyRes} from "../declare/api/DAOApi";
 import {getDebounce, getTime} from "../utils/util";
@@ -22,10 +32,13 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
     const url = useUrl();
     const [isLogin, gotoLogin] = useIsLogin();
     const [reply, setReply] = useState<string>('');
+    const [isLoading,setIsLoading] = useState<boolean>(false);
     const sendReply = async () => {
         if (!isLogin) return gotoLogin();
         if (!reply) return Toast.show({type: 'info', text1: 'Please enter your reply!'});
+        if (isLoading) return ;
         try {
+            setIsLoading(true);
             const {data} = await PostApi.addCommentReply(url, {
                 comment_id: commentInfo.id,
                 content: reply,
@@ -41,9 +54,12 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
                 };
                 sendSuccess?.(commentReply)
                 setReply('');
+                Toast.show({type: 'info', text1: 'reply success!'})
             }
         } catch (e) {
             if (e instanceof Error) Toast.show({type: 'error', text1: e.message});
+        } finally {
+            setIsLoading(false);
         }
     };
     const getCommentReplyItem: ListRenderItem<CommentReplyRes> = ({item}) => {
@@ -119,7 +135,9 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
                     <TouchableOpacity onPress={getDebounce(() => {
                         sendReply();
                     })}>
-                        <Text>Send</Text>
+                        {
+                            isLoading ? <ActivityIndicator size="small"/> :<Text>Send</Text>
+                        }
                     </TouchableOpacity>
                 </View>
             </View>
@@ -223,7 +241,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 8,
-        backgroundColor: Color.color2
+        paddingHorizontal: 10,
+        backgroundColor: Color.color2,
     },
     footerInput: {
         flex: 1,

@@ -16,7 +16,7 @@ const UserSetting: React.FC<Props> = (props) => {
 
   const goToChangePassword = () => {
     // @ts-ignore
-    navigation.navigate(Screens.AccountCancellation);
+    navigation.navigate(Screens.ChangePassword);
   }
 
   const goToAccountCancellation = () => {

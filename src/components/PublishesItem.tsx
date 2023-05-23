@@ -13,12 +13,14 @@ type Props = {
     text: string;
     createTime: string;
   };
+  setIsShow?: (a: boolean) => void;
 };
 const PublishesItem: React.FC<Props> = (props) => {
-  const { type, daoInfo, lastPost } = props;
+  const { type, daoInfo, lastPost, setIsShow } = props;
   const navigation = useNavigation();
 
   const onPress = () => {
+    if (setIsShow) setIsShow(false)
     if(daoInfo.type === 0 ){
       // @ts-ignore
       navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : type});
@@ -26,7 +28,6 @@ const PublishesItem: React.FC<Props> = (props) => {
       // @ts-ignore
       navigation.navigate(Screens.ToolDaoDetail,{ daoInfo : daoInfo});
     }
-
   }
 
   return (
