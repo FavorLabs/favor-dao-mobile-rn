@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    width: '80%'
   },
   retTransferText: {
     color: Color.iOSSystemTintsDisableLight,

@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState, useRef} from 'react';
-import {Image, StyleSheet, View, Text, Pressable, SafeAreaView, ScrollView} from "react-native";
+import {Image, StyleSheet, View, Text, Pressable, SafeAreaView, ScrollView, TouchableOpacity} from "react-native";
 import VideoDetailButton from "../components/VideoDetailButton";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {FontSize, FontFamily, Color, Border} from "../GlobalStyles";
@@ -22,6 +22,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
     const [videoData, setVideoData] = useState<PostInfo | null>(null);
     const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
     const [subModal, setSubModal] = useState(false);
+    const [seeMoreStatus, setSeeMoreStatus] = useState<boolean>(false);
 
     const playable = useMemo(() => videoData?.member === 0 ? true : videoData?.dao.is_subscribed, [videoData])
 
@@ -50,6 +51,10 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
             hash: obj[4][0].content
         }
     }, [videoData])
+
+    const seeMoreClick = () => {
+        setSeeMoreStatus(!seeMoreStatus)
+    }
 
     useEffect(() => {
         if (postId) {
@@ -99,16 +104,20 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
               <Text style={[styles.name, styles.largeTypo]}>
                   @{isReTransfer ? videoData?.author_dao.name : videoData?.dao.name}
               </Text>
-              <Text style={styles.description} numberOfLines={1}>{info.description}</Text>
+              <Text style={styles.description} numberOfLines={ seeMoreStatus ? undefined : 1}>
+                  {info.description}
+              </Text>
               <View style={styles.tags}>
                   {
                       Object.keys(videoData.tags).map(item => (
                         item && <Text style={[styles.tag, styles.largeTypo]} key={item}>#{item}</Text>
                       ))
                   }
-                  <Text style={[styles.tag, styles.largeTypo]}>
-                      See more
-                  </Text>
+                  <TouchableOpacity onPress={seeMoreClick}>
+                    <Text style={[styles.tag, styles.largeTypo]}>
+                        {seeMoreStatus ? 'Put away' : 'See more'}
+                    </Text>
+                  </TouchableOpacity>
               </View>
 
           </View>

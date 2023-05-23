@@ -18,6 +18,10 @@ import {
   AccountCancellationOne,
   AccountCancellationTitle, AccountCancellationTwo
 } from "../../../config/constants";
+import InputPassword from "../../../components/InputPassword";
+import BottomSheetModal from "../../../components/BottomSheetModal";
+import {SignatureData} from "../../../declare/api/DAOApi";
+import WalletController from "../../../libs/walletController";
 
 type Props = {};
 
@@ -26,12 +30,44 @@ const AccountCancellation: React.FC<Props> = (props) => {
   const navigation = useNavigation();
   const url = useUrl();
   const { user } = useSelector((state: Models) => state.global);
+  const [globalBottomSheet, setGlobalBottomSheet] = useState<boolean>(false);
 
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
 
-  const unregister = async () => {
-    if (btnLoading) return;
+  const showBottomSheet = async () => {
+    setGlobalBottomSheet(true);
   }
+
+  const close = () => {
+    setGlobalBottomSheet(false)
+  }
+
+  const AccountCancellation = async (signatureData: SignatureData) => {
+    close();
+    try {
+      setBtnLoading(true);
+      await UserApi.accountCancellation(url, signatureData);
+      await WalletController.logout();
+      dispatch(globalUpdateState({
+        user: null,
+        dao: null,
+      }));
+      Toast.show({
+        type:'info',
+        text1: 'account cancellation success!'
+      })
+      // @ts-ignore
+      navigation.navigate(Screens.Main.Feeds);
+    } catch (e) {
+      Toast.show({
+        type:'error',
+        // @ts-ignore
+        text1: e.message
+      })
+    } finally {
+      setBtnLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -62,7 +98,7 @@ const AccountCancellation: React.FC<Props> = (props) => {
       </ScrollView>
 
       <View style={styles.instanceParent}>
-        <TouchableOpacity onPress={unregister}>
+        <TouchableOpacity onPress={showBottomSheet}>
           <FavorDaoButton
             textValue="Unregister"
             frame1171275771BackgroundColor="#FF564F"
@@ -71,6 +107,13 @@ const AccountCancellation: React.FC<Props> = (props) => {
           />
         </TouchableOpacity>
       </View>
+
+      <BottomSheetModal
+        visible={globalBottomSheet}
+        setVisible={close}
+      >
+        <InputPassword fn={AccountCancellation} type={2}/>
+      </BottomSheetModal>
     </View>
   )
 }

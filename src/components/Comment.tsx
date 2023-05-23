@@ -7,7 +7,7 @@ import {
     Image,
     TouchableWithoutFeedback,
     TouchableOpacity,
-    TextInput, FlatListProps, ListRenderItem
+    TextInput, FlatListProps, ListRenderItem, ActivityIndicator
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import PostApi from '../services/DAOApi/Post';
@@ -37,6 +37,7 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
     });
     const [list, setList] = useState<CommentInfo[]>([]);
     const [comment, setComment] = useState<string>('');
+    const [isLoading,setIsLoading] = useState<boolean>(false);
 
     const [selectCommentIndex, setSelectCommentIndex] = useState<number>(0)
 
@@ -66,7 +67,9 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
     const sendComment = async () => {
         if (!isLogin) return gotoLogin();
         if (!comment) return Toast.show({type: 'info', text1: 'Please enter your comment!'});
+        if(isLoading) return ;
         try {
+            setIsLoading(true);
             const content = {
                 content: comment,
                 type: postType,
@@ -98,9 +101,12 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
                 }
                 setList(list => [...list, commentInfo])
                 setComment('');
+                Toast.show({type: 'info', text1: 'comment success!'})
             }
         } catch (e) {
             if (e instanceof Error) Toast.show({type: 'error', text1: e.message});
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -141,7 +147,9 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
               }}
             />
             <TouchableOpacity onPress={getDebounce(sendComment)}>
-                <Text>Send</Text>
+                {
+                    isLoading ? <ActivityIndicator size="small"/> :<Text>Send</Text>
+                }
             </TouchableOpacity>
         </View>
         <ReplyModal
@@ -274,6 +282,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // marginHorizontal: 16,
         paddingVertical: 8,
+        paddingHorizontal: 10,
         backgroundColor: Color.color2,
         marginTop: 10
     },

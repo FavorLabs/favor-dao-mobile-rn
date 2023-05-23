@@ -16,8 +16,11 @@ import {Color, FontFamily} from "../../../GlobalStyles";
 import {
   LogOutIntroduction, LogOutText,
   LogOutTitle
-
 } from "../../../config/constants";
+import WalletController from '../../../libs/walletController';
+import BottomSheetModal from "../../../components/BottomSheetModal";
+import InputPassword from "../../../components/InputPassword";
+import {updateState as controllersUpdateState} from "../../../store/controllers";
 
 type Props = {};
 
@@ -28,9 +31,40 @@ const LogOut: React.FC<Props> = (props) => {
   const { user } = useSelector((state: Models) => state.global);
 
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
+  const [globalBottomSheet, setGlobalBottomSheet] = useState<boolean>(false);
+
+  const showBottomSheet = async () => {
+    setGlobalBottomSheet(true);
+  }
 
   const logOut = async () => {
-    if (btnLoading) return;
+    close();
+    try {
+      setBtnLoading(true);
+      await WalletController.logout();
+      Toast.show({
+        type:'info',
+        text1: 'logOut success!'
+      })
+      dispatch(globalUpdateState({
+        user: null,
+        dao: null,
+      }));
+      // @ts-ignore
+      navigation.navigate(Screens.Main.Feeds);
+    } catch (e) {
+      Toast.show({
+        type:'error',
+        // @ts-ignore
+        text1: e.message
+      })
+    } finally {
+      setBtnLoading(false)
+    }
+  };
+
+  const close = () => {
+    setGlobalBottomSheet(false)
   }
 
   return (
@@ -61,7 +95,7 @@ const LogOut: React.FC<Props> = (props) => {
       </ScrollView>
 
       <View style={styles.instanceParent}>
-        <TouchableOpacity onPress={logOut}>
+        <TouchableOpacity onPress={showBottomSheet}>
           <FavorDaoButton
             textValue="Log out"
             frame1171275771BackgroundColor="#FF564F"
@@ -70,6 +104,13 @@ const LogOut: React.FC<Props> = (props) => {
           />
         </TouchableOpacity>
       </View>
+
+      <BottomSheetModal
+        visible={globalBottomSheet}
+        setVisible={close}
+      >
+        <InputPassword psd={logOut} />
+      </BottomSheetModal>
     </View>
   )
 }

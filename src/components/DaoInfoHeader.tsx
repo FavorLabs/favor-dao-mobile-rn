@@ -62,8 +62,8 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
             source={{uri: `${avatarsResUrl}/${daoInfo.avatar}`}}
           />
           <View style={styles.topLeftRight}>
-            <Text style={styles.name}>{daoInfo.name}</Text>
-            <Text style={styles.joined}>joined: {daoInfo.follow_count}</Text>
+            <Text style={styles.name} numberOfLines={1}>{daoInfo.name}</Text>
+            <Text style={styles.joined} numberOfLines={1}>joined: {daoInfo.follow_count}</Text>
           </View>
         </View>
 
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: "row",
     justifyContent: 'space-between',
+    flex: 1,
   },
   topLeft: {
     flexDirection: 'row',
@@ -108,7 +109,8 @@ const styles = StyleSheet.create({
     borderRadius: 64,
   },
   topLeftRight: {
-    marginLeft: 12
+    marginLeft: 12,
+    width: '65%',
   },
   name: {
     fontSize: FontSize.bodyBody17_size,

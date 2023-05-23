@@ -10,9 +10,10 @@ import {useUrl} from "../utils/hook";
 
 type Props = {
   daoInfo: DaoInfo;
+  setIsShow?: (a: boolean) => void;
 };
 const PublishContainer: React.FC<Props> = (props) => {
-  const { daoInfo } = props;
+  const { daoInfo, setIsShow } = props;
   const url = useUrl();
   const [lastPostNews, setLastPostNews] = useState({
     text: 'no news',
@@ -96,8 +97,8 @@ const PublishContainer: React.FC<Props> = (props) => {
       {
         daoInfo.type === 0 ?
           <>
-            <PublishesItem type={'News'} daoInfo={daoInfo} lastPost={lastPostNews}/>
-            <PublishesItem type={'Videos'} daoInfo={daoInfo} lastPost={lastPostVideo}/>
+            <PublishesItem type={'News'} daoInfo={daoInfo} lastPost={lastPostNews} setIsShow={setIsShow}/>
+            <PublishesItem type={'Videos'} daoInfo={daoInfo} lastPost={lastPostVideo} setIsShow={setIsShow}/>
           </>
           :
           <PublishesItem type={'HomePage'} daoInfo={daoInfo}/>

@@ -13,7 +13,7 @@ import {Color, Padding} from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 import DaoBriefCard from "../../../components/DaoBriefCard";
 import DaoCommunityCard from "../../../components/DaoCommunityCard";
-import {DaoInfo, Page, PostInfo} from "../../../declare/api/DAOApi";
+import {DaoInfo, DAOPage, Page, PostInfo} from "../../../declare/api/DAOApi";
 import PostApi from "../../../services/DAOApi/Post";
 import {useUrl} from "../../../utils/hook";
 import {getDebounce, query, sleep} from "../../../utils/util";
@@ -24,16 +24,18 @@ import DaoInfoHeader from "../../../components/DaoInfoHeader";
 import PublishContainer from "../../../components/PublishContainer";
 import Chats from "../../../components/Chats";
 import BottomSheetModal from "../../../components/BottomSheetModal";
+import {useNavigation} from "@react-navigation/native";
 
 type Props = {};
 const RecommendDAOListScreen: React.FC<Props> = (props) => {
   const url = useUrl();
   const { daoSearch } = useSelector((state: Models) => state.search);
-  const [pageData, setPageData] = useState<Page>({
+  const [pageData, setPageData] = useState<DAOPage>({
     page: 1,
     page_size: 20,
     type: -1,
     query: daoSearch,
+    sort: 'dao_follow_count:desc,created_on:desc'
   });
 
   const [postListArr,setPostListArr] = useState<PostInfo[]>([]);
@@ -60,7 +62,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
 
   const refreshPage = async () => {
     try {
-      const pageInfo = { page: 1, page_size: 20, type:-1 , query: daoSearch};
+      const pageInfo = { page: 1, page_size: 20, type:-1 , query: daoSearch ,sort: 'dao_follow_count:desc,created_on:desc'};
       const request = (params: Page) => PostApi.getPostListByType(url, params);
       const { data } = await request(pageInfo);
       const listArr: PostInfo[] = data.data.list;
@@ -89,10 +91,6 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   loadMore();
-  // },[])
-
   const toFeedsOfDao = async (item: PostInfo) => {
     setDaoInfo(item.dao);
     setIsShow(true);
@@ -100,8 +98,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
 
   useEffect(() => {
     onRefresh()
-  },[daoSearch])
-
+  },[daoSearch]);
 
   return (
     <View style={styles.container}>
@@ -145,8 +142,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
             <ScrollView>
                 <DaoInfoHeader daoInfo={daoInfo}/>
                 <View style={styles.channelDao}>
-                    <PublishContainer daoInfo={daoInfo}
-                    />
+                    <PublishContainer daoInfo={daoInfo} setIsShow={setIsShow}/>
                     <Chats/>
                 </View>
             </ScrollView>
