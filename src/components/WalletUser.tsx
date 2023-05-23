@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
 import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
@@ -13,6 +13,7 @@ import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 import {useResourceUrl} from "../utils/hook";
 import BottomSheetModal from "./BottomSheetModal";
+import Clipboard from '@react-native-clipboard/clipboard';
 
 type Props = {};
 const WalletUser: React.FC<Props> = (props) => {
@@ -55,6 +56,7 @@ const WalletUser: React.FC<Props> = (props) => {
     setBackUpIsShow(false);
   },[])
 
+
   return (
     <View style={styles.user}>
       <Image
@@ -64,7 +66,9 @@ const WalletUser: React.FC<Props> = (props) => {
       />
       <Text style={[styles.username, styles.xc8320fTypo]}>{user?.nickname}</Text>
       <View style={[styles.addressline, styles.addresslineFlexBox]}>
-        <Text style={styles.shortaddress} numberOfLines={1}>{user?.address}</Text>
+        <TouchableWithoutFeedback onPress={() => Clipboard.setString(user?.address as string)}>
+          <Text style={styles.shortaddress} numberOfLines={1}>{user?.address}</Text>
+        </TouchableWithoutFeedback>
         <TouchableOpacity onPress={getDebounce(toBackUp)}>
         <View style={[styles.backupbutton, styles.addresslineFlexBox]}>
           <Image
