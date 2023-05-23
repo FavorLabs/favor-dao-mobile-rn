@@ -28,6 +28,7 @@ const Screens = {
   ModifyName: 'ModifyName',
   AccountCancellation: 'AccountCancellation',
   LogOut: 'LogOut',
+  ChangePassword: 'ChangePassword',
 }
 
 export default Screens;

@@ -82,17 +82,18 @@ class WalletController {
             [Favor.networkId!]: data.data.token
         })
     }
-    logout(){
-        let obj = _.cloneDeep(this.state.token);
-        delete obj?.[Favor.networkId!]
-        this.state.token = obj;
-    }
 
-    getSignatureData(privateKey: Buffer, index = 0): SignatureData {
-        const signatureMsg = ['login FavorDAO at', 'subscribe DAO at']
+    getSignatureData(privateKey: Buffer, type = 0): SignatureData {
         const address = Wallet.fromPrivateKey(privateKey).getAddressString();
         const timestamp = Date.parse(new Date().toUTCString());
-        const msg = `${address} ${signatureMsg[index]} ${timestamp}`;
+        let msg = '';
+        if (type === 0) {
+            msg = `${address} login FavorDAO at ${timestamp}`;
+        } else if (type === 1) {
+            msg = `${address} subscribe DAO at ${timestamp}`;
+        } else if (type === 2) {
+            msg = `delete ${address} account at ${timestamp}`;
+        }
         const signature = this.signMessage(msg, privateKey);
         return {
             timestamp,
@@ -100,6 +101,17 @@ class WalletController {
             wallet_addr: address,
             type: 'meta_mask',
         }
+    }
+
+    logout() {
+        Object.keys(this.state).map((item) => {
+            this.state[item as keyof State] = undefined
+        })
+    }
+
+    changePassword(newPassword: string, oldPassword: string) {
+        const mnemonic = this.exportMnemonic(oldPassword);
+        this.importMnemonic(newPassword, mnemonic);
     }
 }
 
