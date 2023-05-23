@@ -57,7 +57,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
     try {
       const { data } = await DaoApi.getBookmarkList(url, pageData);
       if(data.data?.list) {
-        const newsData = data.data.list;
+        const newsData = data.data.list.map(item=>({...item,is_joined:true}));
         const firstItem: DaoInfo | null = dao;
         const otherItems: DaoInfo[] = newsData.filter(item => item.id !== dao?.id);
         let sortedData: DaoInfo[] = [];

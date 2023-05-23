@@ -1,4 +1,4 @@
-import * as React from "react";
+import React,{useEffect} from "react";
 import {Pressable, StyleSheet, View} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
@@ -21,6 +21,9 @@ const CreateWallet = () => {
     const [agree, setAgree] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    useEffect(()=>{
+        createPK();
+    },[])
     const createPK = () => {
         try {
             const mnemonic = WalletController.createMnemonic();
@@ -54,7 +57,7 @@ const CreateWallet = () => {
     }, [mnemonic])
 
     return <>
-        <View style={styles.createWallet} onLayout={createPK}>
+        <View style={styles.createWallet}>
             <FavorDaoNavBar
               title="Create wallet"
               vector={require("../assets/vector6.png")}
