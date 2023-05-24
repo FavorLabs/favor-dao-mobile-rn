@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+  ActivityIndicator,
   Image,
   StyleSheet,
   Text, TouchableOpacity,
@@ -49,6 +50,7 @@ const OperationBlock: React.FC<Props> = (props) => {
   const [watchCount, setWatchCount] = useState<number>(postInfo?.view_count);
   const [refCount, setRefCount] = useState<number>(postInfo.ref_count);
   const [commentOnCount, setCommentOnCount] = useState<number>(postInfo.comment_count);
+  const [isLikeLoading,setIsLikeLoading] = useState<boolean>(false);
 
   const showActionSheet = (e: { preventDefault: () => void; }) => {
     if(isLogin) {
@@ -76,8 +78,10 @@ const OperationBlock: React.FC<Props> = (props) => {
 
   const postLike = async () => {
     if(!isLogin) return  gotoLogin();
+    if(isLikeLoading) return;
     if (isPostLike) {
       try {
+        setIsLikeLoading(true);
         setIsPostLike(false);
         const {data} = await PostApi.postLike(url, postId);
         if (data.data) {
@@ -92,6 +96,7 @@ const OperationBlock: React.FC<Props> = (props) => {
         })
       } finally {
         setIsPostLike(true);
+        setIsLikeLoading(false);
       }
     }
   };
@@ -203,12 +208,15 @@ const OperationBlock: React.FC<Props> = (props) => {
       </View>
 
       <View style={styles.look}>
-        <TouchableOpacity onPress={getDebounce(postLike)} style={styles.touch}>
-          <Image
-            style={styles.icons8Share1}
-            resizeMode="cover"
-            source={like ? require("../assets/icons8facebooklike-1.png") : require("../assets/like.png")}
-          />
+        <TouchableOpacity onPress={postLike} style={styles.touch}>
+          {
+            isLikeLoading ? <ActivityIndicator size="small"/> :
+              <Image
+                style={styles.icons8Share1}
+                resizeMode="cover"
+                source={like ? require("../assets/icons8facebooklike-1.png") : require("../assets/like.png")}
+              />
+          }
           <Text style={[styles.symbol3, styles.symbolTypo]} numberOfLines={1}>{likeCount}</Text>
         </TouchableOpacity>
       </View>

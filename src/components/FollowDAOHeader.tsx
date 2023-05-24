@@ -56,6 +56,7 @@ const FollowDAOHeader: React.FC<Props> = (props) => {
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         contentContainerStyle={styles.flautist}
+        keyExtractor={item => item.id}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

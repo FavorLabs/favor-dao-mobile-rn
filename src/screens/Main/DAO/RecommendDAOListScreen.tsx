@@ -108,11 +108,12 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
           <TouchableOpacity onPress={() => (toFeedsOfDao(item))} style={styles.daoCard}>
             <DaoBriefCard daoCardInfo={item.dao}/>
           </TouchableOpacity>
-      }
+        }
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.5}
         contentContainerStyle={styles.flautist}
         numColumns={2}
+        keyExtractor={item => item.id}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -143,7 +144,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
                 <DaoInfoHeader daoInfo={daoInfo}/>
                 <View style={styles.channelDao}>
                     <PublishContainer daoInfo={daoInfo} setIsShow={setIsShow}/>
-                    <Chats/>
+                    <Chats daoInfo={daoInfo}/>
                 </View>
             </ScrollView>
         }
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f8f8',
     paddingTop: 5,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   flautist: {
 

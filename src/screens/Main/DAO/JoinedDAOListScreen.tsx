@@ -176,7 +176,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
                       <DaoCardItem daoInfo={daoInfo} handle={bookmarkHandle} joinStatus={true} btnLoading={btnLoading}/>
                       <View style={styles.channelsofdao}>
                           <PublishContainer daoInfo={daoInfo}/>
-                          <Chats/>
+                          <Chats daoInfo={daoInfo}/>
                       </View>
                   </View>
               }

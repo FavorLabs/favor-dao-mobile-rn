@@ -50,8 +50,8 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
       })
     }
 
-    setPostLoading(true);
     try {
+      setPostLoading(true);
       const contents: Post[] = [];
       contents.push({ content: description, type: 2, sort: 0 });
       imageList.forEach((item, index) => {

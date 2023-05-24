@@ -8,6 +8,7 @@ const {ecsign, toRpcSig, hashPersonalMessage} = require('ethereumjs-util');
 import {encrypt, decrypt} from '../utils/crypto'
 import Favor from "./favor";
 import _ from 'lodash'
+import Toast from "react-native-toast-message";
 
 export type State = {
     data?: string;
@@ -68,7 +69,11 @@ class WalletController {
     exportMnemonic(password: string) {
         const mnemonic = decrypt(this.state.data!, password);
         if (!mnemonic) {
-            throw new Error('Password Invalid')
+            // throw new Error('Password Invalid')
+            Toast.show({
+                type:'error',
+                text1: 'Password Invalid!'
+            })
         }
         return mnemonic;
     }

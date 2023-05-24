@@ -56,8 +56,8 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
       })
     }
 
-    setPostLoading(true);
     try {
+      setPostLoading(true);
       const contents: Post[] = [];
       contents.push({ content: videoTitle, type: 1, sort: 0 });
       contents.push({ content: videoDesc, type: 2, sort: 0 });
@@ -87,6 +87,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
       }
     } catch (e) {
       if (e instanceof Error) Toast.show({ type: 'error', text1: e.message });
+    } finally {
       setPostLoading(false);
     }
   };
