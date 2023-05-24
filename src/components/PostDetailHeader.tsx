@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import { Image, StyleSheet, Pressable, Text, View } from "react-native";
+import {Image, StyleSheet, Pressable, Text, View, TouchableOpacity} from "react-native";
 import { FontFamily, Padding, Border, FontSize, Color } from "../GlobalStyles";
 import {useIsLogin, useResourceUrl, useUrl} from "../utils/hook";
 import {PostInfo} from "../declare/api/DAOApi";
@@ -8,6 +8,8 @@ import JoinButton from "./JoinButton";
 import DaoApi from "../services/DAOApi/Dao";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
+import Screens from "../navigation/RouteNames";
+import {useNavigation} from "@react-navigation/native";
 
 type PostDetailHeaderType = {
   postInfo: PostInfo | null;
@@ -35,6 +37,7 @@ const PostDetailHeader = ({
   const url = useUrl();
   const { dao } = useSelector((state: Models) => state.global);
   const avatarsResUrl = useResourceUrl('avatars');
+  const navigation = useNavigation();
 
   const createTime = getTime(postInfo ? postInfo?.created_on : 0);
   const [isJoin, setIsJoin] = useState(false);
@@ -67,6 +70,12 @@ const PostDetailHeader = ({
     }
   };
 
+  const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
+    // @ts-ignore
+    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : postInfo?.dao , type : 'Mixed'});
+    event.stopPropagation();
+  };
+
   useEffect(() =>  {
     if(isLogin) checkJoinStatus();
   },[postInfo?.dao.id])
@@ -92,19 +101,21 @@ const PostDetailHeader = ({
           source={require("../assets/back1.png")}
         />
       </Pressable>
-      <Image
-        style={styles.imageIcon}
-        resizeMode="cover"
-        source={{uri: `${avatarsResUrl}/${postInfo?.dao.avatar}`}}
-      />
-      <View style={styles.info}>
-        <Text style={[styles.title, styles.titleTypo]} numberOfLines={1}>
-          {postInfo?.dao.name}
-        </Text>
-        <Text style={[styles.subtitle, styles.titleTypo]} numberOfLines={1}>
-          {createTime}
-        </Text>
-      </View>
+      <TouchableOpacity style={styles.centerContent} onPress={toDaoCommunity}>
+        <Image
+          style={styles.imageIcon}
+          resizeMode="cover"
+          source={{uri: `${avatarsResUrl}/${postInfo?.dao.avatar}`}}
+        />
+        <View style={styles.info}>
+          <Text style={[styles.title, styles.titleTypo]} numberOfLines={1}>
+            {postInfo?.dao.name}
+          </Text>
+          <Text style={[styles.subtitle, styles.titleTypo]} numberOfLines={1}>
+            {createTime}
+          </Text>
+        </View>
+      </TouchableOpacity>
 
       {
         postInfo?.dao.id !== dao?.id &&
@@ -115,6 +126,10 @@ const PostDetailHeader = ({
 };
 
 const styles = StyleSheet.create({
+  centerContent: {
+    flex: 1,
+    flexDirection: 'row'
+  },
   titleTypo: {
     textAlign: "left",
     fontFamily: FontFamily.paragraphP313,

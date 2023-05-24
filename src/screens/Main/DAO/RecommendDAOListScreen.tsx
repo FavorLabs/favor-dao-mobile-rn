@@ -44,6 +44,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
   const [loading,setLoading] = useState(false);
   const [isShow,setIsShow] = useState<boolean>(false);
   const [daoInfo, setDaoInfo] = useState<DaoInfo>();
+  const [isJoin, setIsJoin] = useState(false);
 
   const loadMore = async () => {
     try {
@@ -141,10 +142,10 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
         {
           daoInfo &&
             <ScrollView>
-                <DaoInfoHeader daoInfo={daoInfo}/>
+                <DaoInfoHeader daoInfo={daoInfo} isJoin={isJoin} setIsJoin={setIsJoin}/>
                 <View style={styles.channelDao}>
                     <PublishContainer daoInfo={daoInfo} setIsShow={setIsShow}/>
-                    <Chats daoInfo={daoInfo}/>
+                    <Chats daoInfo={daoInfo} setIsShow={setIsShow} isJoin={isJoin}/>
                 </View>
             </ScrollView>
         }
@@ -159,7 +160,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f8f8',
     paddingTop: 5,
-    alignItems: 'center',
   },
   flautist: {
 

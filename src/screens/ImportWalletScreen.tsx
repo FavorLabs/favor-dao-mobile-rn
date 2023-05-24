@@ -4,13 +4,14 @@ import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {Padding, Color} from "../GlobalStyles";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {useNavigation} from '@react-navigation/native';
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import WalletController from "../libs/walletController";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useUrl} from "../utils/hook";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
+import Toast from "react-native-toast-message";
 
 const ImportWallet = () => {
     const url = useUrl();
@@ -20,12 +21,22 @@ const ImportWallet = () => {
     const [repeatPassword, setRepeatPassword] = useState('');
     const [agree, setAgree] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const createDisable = useMemo(() => {
+        return !(
+          agree && password && repeatPassword && mnemonic
+        )
+    }, [agree,password,repeatPassword,mnemonic]);
+
     const importMnemonic = async () => {
-        if (!password || password !== repeatPassword) {
-            return console.error('Password Invalid')
+        if (createDisable) {
+            return Toast.show({
+                type: 'error',
+                text1: 'Please complete all options',
+            })
         }
-        if (!agree) {
-            return console.error('Please check the box')
+        if (!password || password !== repeatPassword) {
+            return Toast.show({type: 'error', text1: 'Two inconsistent passwords'});
         }
         await setLoading(true);
         try {
@@ -34,7 +45,7 @@ const ImportWallet = () => {
             await WalletController.login(url, privateKey);
             navigation.goBack();
         } catch (e) {
-            console.error(e);
+            Toast.show({type: 'error', text1: 'Get privateKey error'});
         } finally {
             setLoading(false)
         }
@@ -72,7 +83,7 @@ const ImportWallet = () => {
               </View>
               <View>
                   <ProtocolRadioSelect value={agree} setValue={setAgree}/>
-                  <TouchableOpacity style={{marginTop: 10}} disabled={loading} onPress={importMnemonic}>
+                  <TouchableOpacity style={[{marginTop: 10},createDisable && { opacity: 0.5 }]} disabled={loading} onPress={importMnemonic}>
                       <FavorDaoButton
                         isLoading={loading}
                         textValue="Import"

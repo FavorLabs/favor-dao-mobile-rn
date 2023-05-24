@@ -22,7 +22,8 @@ const ImportWallet = () => {
         try {
             WalletController.exportMnemonic(oldPassword);
             if (password !== repeatPassword) {
-                throw new Error('Two inconsistent passwords');
+                // throw new Error('Two inconsistent passwords');
+                return Toast.show({ type: 'error', text1: 'Two inconsistent passwords'});
             }
             WalletController.changePassword(password, oldPassword);
             navigation.goBack();

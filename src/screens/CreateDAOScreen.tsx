@@ -45,7 +45,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
     if (btnLoading) return ;
     if (createDisable) {
       return Toast.show({
-        type: 'info',
+        type: 'error',
         text1: 'Please complete all options',
       })
     }
@@ -53,8 +53,8 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
       setBtnLoading(true);
       // @ts-ignore
       const params: DaoParams = {
-        name: daoName,
-        introduction: daoDescription,
+        name: daoName.trim(),
+        introduction: daoDescription.trim(),
         avatar: daoAvatar,
         banner: daoBanner,
         visibility: daoMode,
@@ -65,7 +65,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
       if(data.data) {
         Toast.show({
           type: 'info',
-          text1: 'create dao success!'
+          text1: 'Create dao success!'
         });
         dispatch(globalUpdateState({
           dao: data.data,

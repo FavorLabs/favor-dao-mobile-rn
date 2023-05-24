@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, StyleSheet, View, Text } from "react-native";
+import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
@@ -22,6 +22,32 @@ const DaoCardItem: React.FC<Props> = (props) => {
 
   const avatarsResUrl = useResourceUrl('avatars');
   const imagesResUrl = useResourceUrl('images');
+
+  const [isMore, setIsMore] = useState<boolean>(false);
+  const [introductionRow, setIntroductionRow] = useState<number>(3);
+  const [showMore, setShowMore] = useState<boolean>(false);
+  const [moreText, setMoreText] = useState<string>('More');
+
+  const handleTextLayout = (event: { nativeEvent: { lines: any; }; }) => {
+    const { lines } = event.nativeEvent;
+    if (lines.length >= introductionRow) {
+      setIsMore(true)
+    } else {
+      setIsMore(false)
+    }
+  }
+
+  const switchMore = () => {
+    setShowMore(!showMore)
+  }
+
+  useEffect(() => {
+    if(showMore) {
+      setMoreText('Put away');
+    } else {
+      setMoreText('More');
+    }
+  },[showMore])
 
   return (
     <View style={[styles.frameParent, styles.frameParentBg]}>
@@ -49,21 +75,39 @@ const DaoCardItem: React.FC<Props> = (props) => {
                 <JoinButton isJoin={joinStatus} handle={handle} isLoading={btnLoading}/>
             }
 
-            <View style={[styles.label, styles.labelFlexBox]}>
-              <Text style={styles.label1}>8 level</Text>
-            </View>
+            {/*<View style={[styles.label, styles.labelFlexBox]}>*/}
+            {/*  <Text style={styles.label1}>8 level</Text>*/}
+            {/*</View>*/}
           </View>
         </View>
         <View style={[styles.groupParent, styles.labelFlexBox]}>
-          {/* @ts-ignore */}
-          <TextParsed content={daoInfo.introduction} style={[styles.description, styles.titleClr]} numberOfLines={3} />
+          <TextParsed
+            content={daoInfo.introduction}
+            /* @ts-ignore */
+            style={[styles.description, styles.titleClr]}
+            numberOfLines={showMore ? undefined : introductionRow}
+            onTextLayout={handleTextLayout}
+          />
         </View>
+        { isMore &&
+        <TouchableOpacity onPress={switchMore} style={styles.more}>
+          <Text style={styles.moreText}>{ moreText }</Text>
+        </TouchableOpacity>
+        }
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  more: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  moreText: {
+    fontSize: 16,
+    fontWeight: '400',
+  },
   frameParentBg: {
     backgroundColor: Color.color1,
     borderRadius: Border.br_3xs,
@@ -154,8 +198,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mini,
     color: Color.iOSSystemLabelsLightPrimary,
     flex: 1,
-    height: 63,
-    overflow: "hidden",
   },
   ellipseParent: {
     paddingHorizontal: Padding.p_base,
