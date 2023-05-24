@@ -1,9 +1,10 @@
 import React from 'react';
-import {Modal, View, Text, TouchableWithoutFeedback, StyleSheet, TouchableOpacity} from 'react-native'
+import {Modal, View, StyleSheet, TouchableOpacity} from 'react-native'
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 import {Color} from "../GlobalStyles";
 import SvgIcon from "./SvgIcon";
 import CloseSvg from "../assets/svg/close.svg"
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 export type Props = {
     visible: boolean
@@ -15,9 +16,9 @@ export type Props = {
 const BottomSheetModal = ({visible, setVisible, isPadding = true, children, height}: Props) => {
     const insets = useSafeAreaInsets();
     const safeStyle = {
-        paddingLeft: insets.left,
-        paddingTop: insets.top,
-        paddingRight: insets.right,
+        marginLeft: insets.left,
+        marginTop: insets.top,
+        marginRight: insets.right,
     }
     const close = () => {
         setVisible(false);
@@ -27,7 +28,7 @@ const BottomSheetModal = ({visible, setVisible, isPadding = true, children, heig
       transparent
       animationType={'slide'}
     >
-        <View style={[styles.container, safeStyle]}>
+        <KeyboardAwareScrollView scrollEnabled={false} contentContainerStyle={[styles.container, safeStyle]}>
             <View style={[
                 styles.content,
                 {paddingBottom: insets.bottom},
@@ -45,7 +46,7 @@ const BottomSheetModal = ({visible, setVisible, isPadding = true, children, heig
                     }
                 </View>
             </View>
-        </View>
+        </KeyboardAwareScrollView>
     </Modal>
 };
 

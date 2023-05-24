@@ -17,9 +17,9 @@ export type Props = {
 const InputPassword = ({fn, btnText = 'Confirm', type, psd}: Props) => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const confirm = () => {
+    const confirm = async () => {
+        await setLoading(true);
         try {
-            setLoading(true);
             if(type !== undefined) {
                 const privateKey = WalletController.exportPrivateKey(password);
                 fn?.(WalletController.getSignatureData(privateKey, type));

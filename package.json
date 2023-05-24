@@ -59,6 +59,7 @@
     "react-native-image-crop-picker": "^0.39.0",
     "react-native-image-picker": "^5.3.1",
     "react-native-keep-awake": "^4.0.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-pager-view": "^6.2.0",
     "react-native-parsed-text": "^0.0.22",
     "react-native-permissions": "^3.8.0",

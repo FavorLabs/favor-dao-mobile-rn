@@ -1,5 +1,5 @@
-import React,{useEffect} from "react";
-import {Pressable, StyleSheet, View} from "react-native";
+import React, {useEffect} from "react";
+import {StyleSheet, View, TouchableOpacity} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
@@ -11,6 +11,7 @@ import {useNavigation} from "@react-navigation/native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useUrl} from "../utils/hook";
 import WalletWords from "../components/WalletWords";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 
 const CreateWallet = () => {
     const url = useUrl();
@@ -21,9 +22,9 @@ const CreateWallet = () => {
     const [agree, setAgree] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         createPK();
-    },[])
+    }, [])
     const createPK = () => {
         try {
             const mnemonic = WalletController.createMnemonic();
@@ -39,7 +40,7 @@ const CreateWallet = () => {
         if (!agree) {
             return console.error('Please check the box')
         }
-        setLoading(true);
+        await setLoading(true);
         try {
             WalletController.importMnemonic(password, mnemonic);
             const privateKey = WalletController.exportPrivateKey(password)
@@ -57,63 +58,56 @@ const CreateWallet = () => {
     }, [mnemonic])
 
     return <>
-        <View style={styles.createWallet}>
+        <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
             <FavorDaoNavBar
               title="Create wallet"
               vector={require("../assets/vector6.png")}
             />
-            <WalletWords mnemonicArray={mnemonicArray}/>
-            <TextInputBlock
-              title={'Password'}
-              placeholder={`Please enter passwords`}
-              value={password}
-              setValue={setPassword}
-              secureTextEntry={true}
-            />
-            <TextInputBlock
-              title={'Confirm Password'}
-              placeholder={`Please enter passwords again`}
-              value={repeatPassword}
-              setValue={setRepeatPassword}
-              secureTextEntry={true}
-            />
-            <ProtocolRadioSelect value={agree} setValue={setAgree}/>
-            <Pressable disabled={loading} onPress={create}>
-                <FavorDaoButton
-                  isLoading={loading}
-                  textValue="Create"
-                  frame1171275771BackgroundColor="#ff8d1a"
-                  cancelColor="#fff"
-                />
-            </Pressable>
-        </View>
+            <View style={styles.content}>
+                <View>
+                    <WalletWords mnemonicArray={mnemonicArray}/>
+                    <TextInputBlock
+                      title={'Password'}
+                      placeholder={`Please enter passwords`}
+                      value={password}
+                      setValue={setPassword}
+                      secureTextEntry={true}
+                    />
+                    <TextInputBlock
+                      title={'Confirm Password'}
+                      placeholder={`Please enter passwords again`}
+                      value={repeatPassword}
+                      setValue={setRepeatPassword}
+                      secureTextEntry={true}
+                    />
+                </View>
+                <View>
+                    <ProtocolRadioSelect value={agree} setValue={setAgree}/>
+                    <TouchableOpacity style={{marginTop:10}} disabled={loading} onPress={create}>
+                        <FavorDaoButton
+                          isLoading={loading}
+                          textValue="Create"
+                          frame1171275771BackgroundColor="#ff8d1a"
+                          cancelColor="#fff"
+                        />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </KeyboardAwareScrollView>
     </>
 };
 
 const styles = StyleSheet.create({
-    backgroundIcon: {
-        height: 44,
-        width: 375,
-    },
-    background: {
-        height: "100%",
-        top: "0%",
-        right: "0%",
-        bottom: "0%",
-        left: "0%",
-        position: "absolute",
-        width: "100%",
-    },
     createWallet: {
         backgroundColor: Color.color2,
         flex: 1,
         overflow: "hidden",
         paddingHorizontal: Padding.p_base,
-        paddingVertical: 0,
-        alignItems: "center",
-        // justifyContent: "center",
-        width: "100%",
     },
+    content: {
+        flex: 1,
+        justifyContent: 'space-between',
+    }
 });
 
 export default CreateWallet;

@@ -33,6 +33,10 @@ class Favor extends EventEmitter {
         return `${this.api}/group/http/${this.config!.proxyGroup}/${AutumnDomainName}/${this.bucket!.Settings.Bucket}/`
     }
 
+    get networkName():string{
+        return `${this.networkId}_${this.bucket?.Settings.Region}`;
+    }
+
     async startNode(fc: FavorX.Options) {
         if (EXTERNAL_NODE !== undefined) {
             this.useExternalNode();

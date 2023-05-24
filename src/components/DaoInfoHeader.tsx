@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   },
   topLeftRight: {
     marginLeft: 12,
-    width: '65%',
+    // width: '65%',
   },
   name: {
     fontSize: FontSize.bodyBody17_size,

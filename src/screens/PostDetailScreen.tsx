@@ -13,9 +13,9 @@ import Comment from "../components/Comment";
 import {getDebounce} from "../utils/util";
 import NewsContent from "../components/NewsContent";
 import VideoBlockItem from "../components/VideoBlockItem";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
-export type Props = {};
-const PostDetailScreen: React.FC<Props> = (props) => {
+const PostDetailScreen = () => {
     const url = useUrl();
     const route = useRoute();
     const {postId} = route.params as { postId: string };
@@ -46,32 +46,35 @@ const PostDetailScreen: React.FC<Props> = (props) => {
     if (!postInfo) return null;
 
     return (
-      <View style={styles.container}>
-          <View>
-              <PostDetailHeader
-                onBackPress={() => navigation.goBack()}
-                postInfo={postInfo}
-              />
+      <KeyboardAwareScrollView scrollEnabled={false} contentContainerStyle={{flex:1}}>
+          <View style={styles.container}>
+              <View>
+                  <PostDetailHeader
+                    onBackPress={() => navigation.goBack()}
+                    postInfo={postInfo}
+                  />
+              </View>
+              <View style={{flex: 1, marginTop: 20}}>
+                  <Comment
+                    postId={postInfo.id}
+                    postType={postInfo.type}
+                    headerComponents={() => {
+                        return <View style={styles.content}>
+                            <NewsBlock postInfo={postInfo}/>
+                            {
+                                postInfo.orig_contents?.length ?
+                                  postInfo.orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}/>
+                                    : postInfo.orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true}/> : <></>
+                                  : <></>
+                            }
+                            <OperationBlock postInfo={postInfo} type={0}/>
+                        </View>
+                    }}
+                  />
+              </View>
           </View>
-          <View style={{flex: 1, marginTop: 20}}>
-              <Comment
-                postId={postInfo.id}
-                postType={postInfo.type}
-                headerComponents={() => {
-                    return <View style={styles.content}>
-                        <NewsBlock postInfo={postInfo}/>
-                        {
-                          postInfo.orig_contents?.length ?
-                            postInfo.orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}/>
-                              : postInfo.orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true}/> : <></>
-                            : <></>
-                        }
-                        <OperationBlock postInfo={postInfo} type={0}/>
-                    </View>
-                }}
-              />
-          </View>
-      </View>
+      </KeyboardAwareScrollView>
+
     )
 }
 const styles = StyleSheet.create({

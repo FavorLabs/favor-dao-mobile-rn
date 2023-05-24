@@ -25,33 +25,6 @@ export const useResourceUrl = (type: BucketsPath) => {
     return Favor.resourceUrl + type
 };
 
-export const useClick = (callback: any, doubleCallback: any) => {
-    const clickRef = useRef({
-        clickCount: 0,
-        time: 0,
-        timer: null,
-    });
-    return (...args: any[]) => {
-        clickRef.current.clickCount += 1;
-        clickRef.current.time = Date.now();
-        // @ts-ignore
-        clickRef.current.timer = setTimeout(() => {
-            if (
-              Date.now() - clickRef.current.time <= 200 &&
-              clickRef.current.clickCount === 2
-            ) {
-                doubleCallback && doubleCallback.apply(null, args);
-            }
-            if (clickRef.current.clickCount === 1) {
-                callback && callback.apply(null, args);
-            }
-            // @ts-ignore
-            clearTimeout(clickRef.current.timer);
-            clickRef.current.clickCount = 0;
-        }, 200);
-    };
-};
-
 export const usePermissions = (permissionType: Permission) => {
     const [status, setStatus] = useState('undetermined');
 
@@ -85,7 +58,7 @@ export const usePermissions = (permissionType: Permission) => {
 export const useIsLogin = (): [boolean, Function] => {
     const dispatch = useDispatch();
     const {token} = useSelector<any, any>(state => state.wallet)
-    const isLogin = useMemo(() => !!(token?.[Favor.networkId!]), [token,Favor.networkId]);
+    const isLogin = useMemo(() => !!(token?.[Favor.networkName]), [token,Favor.networkName]);
     const gotoLogin = () => {
         dispatch(controllersUpdateState({
             globalBottomSheet: true
