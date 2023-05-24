@@ -11,7 +11,7 @@ import _ from 'lodash'
 
 export type State = {
     data?: string;
-    token?: Record<number, string>
+    token?: Record<string, string>
 }
 
 class WalletController {
@@ -35,7 +35,7 @@ class WalletController {
     }
 
     get token() {
-        return this.state.token?.[Favor.networkId!]
+        return this.state.token?.[Favor.networkName]
     }
 
     createMnemonic() {
@@ -74,12 +74,11 @@ class WalletController {
     }
 
     async login(url: string, sign: Buffer | SignatureData) {
-
         const {data} = await UserApi.signIn(url,
           Buffer.isBuffer(sign) ? this.getSignatureData(sign) : sign
         );
         this.state.token = Object.assign(this.state.token ?? {}, {
-            [Favor.networkId!]: data.data.token
+            [Favor.networkName]: data.data.token
         })
     }
 
