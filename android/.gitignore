@@ -13,3 +13,5 @@ local.properties
 
 # Bundle artifacts
 *.jsbundle
+
+app/src/main/assets/index.android.bundle
