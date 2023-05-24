@@ -36,8 +36,8 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
 
   const settingDao = async () => {
     if(postLoading) return;
-    setPostLoading(true);
     try {
+      setPostLoading(true);
       const params: DaoParams & { id: string } = {
         name: dao?.name as string,
         introduction: daoDescription,
@@ -67,13 +67,13 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
       }
 
     } catch (e) {
-      if (e instanceof Error) {
+      if (e instanceof Error)
         Toast.show({
           type: 'error',
           text1: e.message
         });
-        setPostLoading(false);
-      }
+    } finally {
+      setPostLoading(false);
     }
     navigation.goBack();
   };

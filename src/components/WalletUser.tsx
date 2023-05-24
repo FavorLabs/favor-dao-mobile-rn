@@ -48,6 +48,16 @@ const WalletUser: React.FC<Props> = (props) => {
     }
   };
 
+  const copyClick = async () => {
+    Clipboard.setString(user?.address as string);
+    const content = await Clipboard.getString();
+    if (content === user?.address) {
+      Toast.show({type: 'info', text1: 'copy success!'});
+    } else {
+      Toast.show({type: 'error', text1: 'copy error!'});
+    }
+  };
+
   useEffect(() => {
     setPassword('');
   },[isBackUpShow])
@@ -66,7 +76,7 @@ const WalletUser: React.FC<Props> = (props) => {
       />
       <Text style={[styles.username, styles.xc8320fTypo]}>{user?.nickname}</Text>
       <View style={[styles.addressline, styles.addresslineFlexBox]}>
-        <TouchableWithoutFeedback onPress={() => Clipboard.setString(user?.address as string)}>
+        <TouchableWithoutFeedback onPress={copyClick}>
           <Text style={styles.shortaddress} numberOfLines={1}>{user?.address}</Text>
         </TouchableWithoutFeedback>
         <TouchableOpacity onPress={getDebounce(toBackUp)}>

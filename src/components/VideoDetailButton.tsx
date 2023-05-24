@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Color, FontFamily, FontSize} from "../GlobalStyles";
 // @ts-ignore
 import ActionSheet from 'react-native-actionsheet'
@@ -17,6 +17,7 @@ import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import CommentModal from "./CommentModal";
 import BottomSheetModal from "./BottomSheetModal";
+import loading from "./Loading";
 
 type Props = {
     postInfo: PostInfo;
@@ -45,6 +46,7 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     const [sourceInfoModal, setSourceInfoModal] = useState(false);
     const actionSheetRef = useRef<ActionSheet>(null);
     const screens = ['', Screens.QuoteEdit];
+    const [isLikeLoading,setIsLikeLoading] = useState<boolean>(false);
 
 
     const getPostLikeStatus = async () => {
@@ -55,26 +57,29 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     };
 
     const postLike = async () => {
-        if (isLogin) {
-            if (isPostLike && postInfo) {
-                try {
-                    setIsPostLike(false);
-                    const {data} = await PostApi.postLike(url, postInfo.id);
-                    if (data.data) {
-                        setLike(data.data.status);
-                        if (data.data.status) { // @ts-ignore
-                            setLikeCount(likeCount + 1);
-                        } else { // @ts-ignore
-                            setLikeCount(likeCount - 1);
-                        }
+        if(!isLogin) return gotoLogin();
+        if(isLikeLoading) return ;
+        if (isPostLike && postInfo) {
+            try {
+                setIsLikeLoading(true);
+                setIsPostLike(false);
+                const {data} = await PostApi.postLike(url, postInfo.id);
+                if (data.data) {
+                    setLike(data.data.status);
+                    if (data.data.status) { // @ts-ignore
+                        setLikeCount(likeCount + 1);
+                    } else { // @ts-ignore
+                        setLikeCount(likeCount - 1);
                     }
-                } catch (e) {
-                    setIsPostLike(true);
                 }
+            } catch (e) {
+                console.log(e)
+            } finally {
+                setIsPostLike(true);
+                setIsLikeLoading(false);
             }
-        } else {
-            gotoLogin();
         }
+
     };
 
     const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
@@ -173,12 +178,15 @@ const VideoDetailButton: React.FC<Props> = (props) => {
               </TouchableOpacity>
 
               <View style={[styles.threeButton]}>
-                  <TouchableOpacity onPress={getDebounce(postLike)}>
-                      <Image
-                        style={[styles.image]}
-                        resizeMode="cover"
-                        source={like ? require("../assets/frameLiked.png") : require("../assets/frame.png")}
-                      />
+                  <TouchableOpacity onPress={postLike}>
+                      {
+                          isLikeLoading ? <ActivityIndicator size="small"/> :
+                            <Image
+                              style={[styles.image]}
+                              resizeMode="cover"
+                              source={like ? require("../assets/frameLiked.png") : require("../assets/frame.png")}
+                            />
+                      }
                   </TouchableOpacity>
                   <Text style={[styles.text]}>{likeCount}</Text>
               </View>

@@ -11,14 +11,16 @@ import DaoApi from "../services/DAOApi/Dao";
 
 type Props = {
   daoInfo: DaoInfo;
+  joinStatus: boolean;
+  setJoinStatus: (a:boolean) => void;
 };
 
 const DAOInfo: React.FC<Props> = (props) => {
   const url = useUrl();
-  const { daoInfo } = props;
+  const { daoInfo, joinStatus, setJoinStatus } = props;
   const avatarsResUrl = useResourceUrl('avatars');
   const { dao } = useSelector((state: Models) => state.global);
-  const [joinStatus, setJoinStatus] = useState<boolean>(false);
+  // const [joinStatus, setJoinStatus] = useState<boolean>(false);
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
 
   const bookmarkHandle = async () => {

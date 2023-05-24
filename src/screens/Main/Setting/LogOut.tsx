@@ -20,7 +20,6 @@ import {
 import WalletController from '../../../libs/walletController';
 import BottomSheetModal from "../../../components/BottomSheetModal";
 import InputPassword from "../../../components/InputPassword";
-import {updateState as controllersUpdateState} from "../../../store/controllers";
 
 type Props = {};
 

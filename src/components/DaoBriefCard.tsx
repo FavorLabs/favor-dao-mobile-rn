@@ -5,10 +5,6 @@ import {DaoInfo, PostInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 import {getDebounce} from "../utils/util";
 import {useState} from "react";
-import PublishContainer from "./PublishContainer";
-import Chats from "./Chats";
-import DaoInfoHeader from "./DaoInfoHeader";
-import BottomSheetModal from "./BottomSheetModal";
 
 type Props = {
   daoCardInfo: DaoInfo

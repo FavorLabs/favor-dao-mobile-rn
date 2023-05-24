@@ -8,10 +8,14 @@ import {
 } from "react-native";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
 import {getDebounce} from "../utils/util";
+import {DaoInfo} from "../declare/api/DAOApi";
 
-type Props = {}
+type Props = {
+  daoInfo: DaoInfo
+}
 
 const ChatItem: React.FC<Props> = (props) => {
+  const { daoInfo } = props;
   const onPress = () => {}
 
   return (
@@ -23,23 +27,23 @@ const ChatItem: React.FC<Props> = (props) => {
           resizeMode="cover"
           source={require("../assets/user-image8.png")}
         />
-        <Text style={[styles.title, styles.titleClr]}>MM</Text>
+        <Text style={[styles.title, styles.titleClr]}>G</Text>
       </View>
       <View style={styles.channelinfoParent}>
         <View style={styles.channelinfo}>
           <View style={[styles.channelnamelLasttime, styles.parentFlexBox]}>
             <Text style={[styles.channelname, styles.subtitleFlexBox]}>
-              9 MM- C
+              General
             </Text>
             <Text style={[styles.lastmsgtime, styles.nehaTypo]}>5d ago</Text>
           </View>
           <View style={[styles.lastmessage, styles.parentFlexBox]}>
             <Text style={[styles.messageinfo, styles.subtitleFlexBox]}>
-              <Text style={[styles.neha, styles.nehaTypo]}>Neha</Text>
-              <Text style={styles.hiYeahI}>
-                <Text style={styles.text}>{` `}</Text>
-                <Text style={styles.hiYeahI1}>: Hi, yeah i...</Text>
-              </Text>
+              {/*<Text style={[styles.neha, styles.nehaTypo]}>Neha</Text>*/}
+              {/*<Text style={styles.hiYeahI}>*/}
+              {/*  <Text style={styles.text}>{` `}</Text>*/}
+              {/*  <Text style={styles.hiYeahI1}>: Hi, yeah i...</Text>*/}
+              {/*</Text>*/}
             </Text>
             <View style={[styles.msgcountParent, styles.parentFlexBox]}>
               <View style={styles.msgcount}>

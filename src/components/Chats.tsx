@@ -7,14 +7,18 @@ import {
 } from "react-native";
 import ChatItem from "./ChatItem";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
+import {DaoInfo} from "../declare/api/DAOApi";
 
-type Props = {}
+type Props = {
+  daoInfo: DaoInfo
+}
 
 const Chats: React.FC<Props> = (props) => {
+  const { daoInfo } = props;
   return (
     <View style={styles.chats}>
       <Text style={[styles.title, styles.titleClr]}>Chats</Text>
-      <ChatItem/>
+      <ChatItem daoInfo={daoInfo}/>
     </View>
   );
 };

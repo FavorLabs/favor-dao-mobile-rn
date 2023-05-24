@@ -49,8 +49,8 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         text1: 'Please complete all options',
       })
     }
-    setBtnLoading(true);
     try {
+      setBtnLoading(true);
       // @ts-ignore
       const params: DaoParams = {
         name: daoName,
@@ -79,8 +79,9 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           type: 'error',
           text1: e.message
         });
-        setBtnLoading(false);
       }
+    } finally {
+      setBtnLoading(false);
     }
   };
 

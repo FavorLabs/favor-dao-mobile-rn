@@ -17,6 +17,7 @@ import Favor from "../libs/favor";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import Screens from "../navigation/RouteNames";
 import Toast from "react-native-toast-message";
+import {useEffect, useState} from "react";
 
 type Props = {
     daoInfo: DaoInfo;
@@ -27,6 +28,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
     const {daoInfo, isShowBtnChatToggle = true} = props;
     const navigation = useNavigation();
     const [isLogin, gotoLogin] = useIsLogin();
+    const [isJoin,setIsJoin] = useState<boolean>(daoInfo.is_joined);
 
     const imagesResUrl = useResourceUrl('images');
 
@@ -36,7 +38,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
 
     const toFeedsOfDao = async () => {
         if (!isLogin) return gotoLogin();
-        if(!daoInfo.is_joined){
+        if(!isJoin){
             return Toast.show({
                 type:'info',
                 text1: 'You need to join this dao to enter the chat!!!'
@@ -63,7 +65,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
                   <Back/>
               </TouchableOpacity>
 
-              <DAOInfo daoInfo={daoInfo}/>
+              <DAOInfo daoInfo={daoInfo} joinStatus={isJoin} setJoinStatus={setIsJoin}/>
 
               {
                   isShowBtnChatToggle ?
