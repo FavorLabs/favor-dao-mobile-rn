@@ -86,6 +86,11 @@ const OperationBlock: React.FC<Props> = (props) => {
           else setLikeCount(likeCount - 1);
         }
       } catch (e) {
+        Toast.show({
+          type: 'error',
+          text1: 'post like error',
+        })
+      } finally {
         setIsPostLike(true);
       }
     }

@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBody17_size,
     letterSpacing: 0,
     lineHeight: 22,
-    fontFamily: FontFamily.paragraphP313,
+    // fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     textAlign: "left",
   },
   descriptionWrapper: {

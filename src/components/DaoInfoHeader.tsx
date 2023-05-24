@@ -26,16 +26,14 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
 
   const bookmarkHandle = async () => {
     if(btnLoading) return;
-    setBtnLoading(true);
     try {
+      setBtnLoading(true);
       const { data } = await DaoApi.bookmark(url, daoInfo.id);
       setIsJoin(data.data.status);
-      setBtnLoading(false);
     } catch (e) {
-      if (e instanceof Error) {
-        console.error(e.message);
-        setBtnLoading(false);
-      }
+      if (e instanceof Error) console.error(e.message);
+    } finally {
+      setBtnLoading(false);
     }
   };
 

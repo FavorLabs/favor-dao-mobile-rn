@@ -16,13 +16,14 @@ export type Props = {
   multiple?: boolean;
   cropping?: boolean;
   autoThumbnail?: string;
+  setImageLoading?: (a:boolean) => void;
 };
 const UploadImage: React.FC<Props> = (props) => {
   const url = useUrl();
   const imagesResUrl = useResourceUrl('images');
   const avatarsResUrl = useResourceUrl('avatars');
 
-  const { imageType, setUpImage, multiple = true, upImage, cropping = false, autoThumbnail } = props;
+  const { imageType, setUpImage, multiple = true, upImage, cropping = false, autoThumbnail, setImageLoading } = props;
   const [images, setImages] = useState<any[]>([]);
   const [isDisableUpImg,setIsDisableUpImg] = useState<boolean>(false);
   const imgArr = useRef<string[]>([])
@@ -41,6 +42,7 @@ const UploadImage: React.FC<Props> = (props) => {
     if(!multiple) {
       setUpImage('')
     } else {
+      setImageLoading?.(false);
       processImagesArr(img);
     }
   }
@@ -57,6 +59,7 @@ const UploadImage: React.FC<Props> = (props) => {
         maxFiles: 9,
       }).then((pickedImage) => {
         if(Array.isArray(pickedImage)) {
+          setImageLoading?.(false);
           processImagesArr(pickedImage)
           setIsDisableUpImg(false)
         } else {
@@ -92,27 +95,39 @@ const UploadImage: React.FC<Props> = (props) => {
   };
 
   const processImagesArr = async (pickedImage: any) => {
+    if(!pickedImage.length) {
+      setUpImage([])
+      setImageLoading?.(true)
+      return ;
+    }
+
     setImages([]);
     setUpImage([]);
     // setImgArr([]);
     imgArr.current = [];
-    pickedImage.map(async (item: any) => {
-      // @ts-ignore
-      setImages(images => [...images,item])
-      let file = {uri: item.path, type: 'multipart/form-data', name: 'image.png'};
-      try {
-        let fmData = new FormData();
+    await new Promise<void>(resolve => {
+      pickedImage.map(async (item: any,index: number) => {
+        let file = {uri: item.path, type: 'multipart/form-data', name: 'image.png'};
         // @ts-ignore
-        fmData.append(imageType, file);
-        const {data} = await ImageApi.upload(imagesResUrl, fmData);
-        // @ts-ignore
-        imgArr.current.push(data.id)
-      } catch (e) {
-        console.log(e)
-      }
-    });
+        setImages(images => [...images,item])
+        try {
+          let fmData = new FormData();
+          // @ts-ignore
+          fmData.append(imageType, file);
+          const {data} = await ImageApi.upload(imagesResUrl, fmData);
+          // @ts-ignore
+          imgArr.current.push(data.id)
+          if (index === pickedImage.length - 1) resolve()
+        } catch (e) {
+          console.log(e)
+        }
+      });
+    })
     setUpImage(imgArr.current);
+    setImageLoading?.(true)
   };
+
+
 
   useEffect(() => {
     setImages(autoThumbnail ? [{ sourceURL: autoThumbnail }] : [])

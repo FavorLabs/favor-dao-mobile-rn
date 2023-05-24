@@ -6,8 +6,11 @@ import WalletController from "../libs/walletController";
 import {SignatureData} from "../declare/api/DAOApi";
 
 export type Props = {
+    // fn?: <T=any>(data: T) => void
     fn?: (signatureData: SignatureData) => void
     btnText?: string
+    // signType?: number
+    // type: 'password' | 'm' | 'sign'
     type?: number
     psd?: () => void
 }
@@ -17,7 +20,7 @@ const InputPassword = ({fn, btnText = 'Confirm', type, psd}: Props) => {
     const confirm = () => {
         try {
             setLoading(true);
-            if(type) {
+            if(type !== undefined) {
                 const privateKey = WalletController.exportPrivateKey(password);
                 fn?.(WalletController.getSignatureData(privateKey, type));
             } else {

@@ -67,6 +67,7 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
           sortedData = [...otherItems];
         }
         setBookmarkList([...sortedData]);
+        setActiveId(bookmarkList[0].id);
       }
       setIsLoadingMore(
         data.data.pager.total_rows > pageData.page * pageData.page_size,
@@ -107,9 +108,8 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
 
   const bookmarkHandle = async () => {
     if(btnLoading) return;
-    if(!activeId) return;
-    setBtnLoading(true);
     try {
+      setBtnLoading(true);
       const { data } = await DaoApi.bookmark(url, activeId);
       if(data.data) {
         await refreshList();
@@ -118,15 +118,13 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
         if(activeId === bookmarkList[0].id) {
           setActiveId(bookmarkList[1].id);
         } else {
-          setActiveId(bookmarkList[0].id)
+          setActiveId(bookmarkList[0].id);
         }
       }
-
     } catch (e) {
-      if (e instanceof Error) {
-        console.error(e.message);
-        setBtnLoading(false);
-      }
+      if (e instanceof Error) console.error(e.message);
+    } finally {
+      setBtnLoading(false);
     }
   };
 
