@@ -1,7 +1,6 @@
 import * as React from "react";
 import {Text, StyleSheet, View, TextInput} from "react-native";
 import {FontSize, FontFamily, Color, Border, Padding} from "../GlobalStyles";
-import TextInputParsed from "./TextInputParsed";
 
 type TextInputBlockType = React.ComponentProps<typeof TextInput> & {
     title?: string
@@ -19,6 +18,7 @@ const TextInputBlock = (props: TextInputBlockType) => {
         ...inputProps
     } = props;
     return (
+
       <View style={[styles.createWalletInner, !title && {marginTop: -10} ]}>
           <Text style={styles.title}>{title}</Text>
           <TextInput

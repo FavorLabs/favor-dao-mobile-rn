@@ -210,6 +210,7 @@ export type Settings = {
     Bucket: string;
     TagNetwork: string;
     TagRegion: string;
+    Region: string;
 };
 
 export type GetMsgIdRes = {
@@ -260,5 +261,5 @@ export type SignatureData = {
     "timestamp": number
     "wallet_addr": string
     "signature": string
-    "type": "wallet_connect" | 'meta_mask' |'okx' | 'unipass_std' | 'unipass_eth'
+    "type": "wallet_connect" | 'meta_mask' | 'okx' | 'unipass_std' | 'unipass_eth'
 }

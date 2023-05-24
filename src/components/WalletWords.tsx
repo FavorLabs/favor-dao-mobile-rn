@@ -23,6 +23,7 @@ const WalletWords = ({mnemonicArray}: WalletWordsType) => {
                 numColumns={3}
                 contentContainerStyle={styles.container}
                 ItemSeparatorComponent={() => <View style={{height: 16}}/>}
+                scrollEnabled={false}
             />
         </View>
     );

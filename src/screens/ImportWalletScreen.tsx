@@ -1,15 +1,16 @@
 import * as React from "react";
-import {StyleSheet, View, Pressable} from "react-native";
+import {StyleSheet, View, TouchableOpacity} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
-import {Padding, FontFamily, FontSize, Color, Border} from "../GlobalStyles";
+import {Padding, Color} from "../GlobalStyles";
 import {useState} from "react";
 import {useNavigation} from '@react-navigation/native';
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import WalletController from "../libs/walletController";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useUrl} from "../utils/hook";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 
 const ImportWallet = () => {
     const url = useUrl();
@@ -26,7 +27,7 @@ const ImportWallet = () => {
         if (!agree) {
             return console.error('Please check the box')
         }
-        setLoading(true);
+        await setLoading(true);
         try {
             WalletController.importMnemonic(password, mnemonic);
             const privateKey = WalletController.exportPrivateKey(password)
@@ -40,42 +41,48 @@ const ImportWallet = () => {
     }
 
     return (
-      <View style={[styles.importWallet, styles.importWalletSpaceBlock]}>
+      <KeyboardAwareScrollView contentContainerStyle={[styles.importWallet, styles.importWalletSpaceBlock]}>
           <FavorDaoNavBar
             title="Import wallet"
             vector={require("../assets/vector6.png")}
           />
-          <TextInputBlock
-            title={'Mnemonic words'}
-            placeholder={`Please enter mnemonic words，Separate with semicolons...`}
-            value={mnemonic}
-            setValue={setMnemonic}
-            multiline={true}
-          />
-          <TextInputBlock
-            title={'Password'}
-            placeholder={`Please enter passwords`}
-            value={password}
-            setValue={setPassword}
-            secureTextEntry={true}
-          />
-          <TextInputBlock
-            title={'Confirm Password'}
-            placeholder={`Please enter passwords again`}
-            value={repeatPassword}
-            setValue={setRepeatPassword}
-            secureTextEntry={true}
-          />
-          <ProtocolRadioSelect value={agree} setValue={setAgree}/>
-          <Pressable disabled={loading} onPress={importMnemonic}>
-              <FavorDaoButton
-                isLoading={loading}
-                textValue="Import"
-                frame1171275771BackgroundColor="#ff8d1a"
-                cancelColor="#fff"
-              />
-          </Pressable>
-      </View>
+          <View style={styles.content}>
+              <View>
+                  <TextInputBlock
+                    title={'Mnemonic words'}
+                    placeholder={`Please enter mnemonic words，Separate with semicolons...`}
+                    value={mnemonic}
+                    setValue={setMnemonic}
+                    multiline={true}
+                  />
+                  <TextInputBlock
+                    title={'Password'}
+                    placeholder={`Please enter passwords`}
+                    value={password}
+                    setValue={setPassword}
+                    secureTextEntry={true}
+                  />
+                  <TextInputBlock
+                    title={'Confirm Password'}
+                    placeholder={`Please enter passwords again`}
+                    value={repeatPassword}
+                    setValue={setRepeatPassword}
+                    secureTextEntry={true}
+                  />
+              </View>
+              <View>
+                  <ProtocolRadioSelect value={agree} setValue={setAgree}/>
+                  <TouchableOpacity style={{marginTop: 10}} disabled={loading} onPress={importMnemonic}>
+                      <FavorDaoButton
+                        isLoading={loading}
+                        textValue="Import"
+                        frame1171275771BackgroundColor="#ff8d1a"
+                        cancelColor="#fff"
+                      />
+                  </TouchableOpacity>
+              </View>
+          </View>
+      </KeyboardAwareScrollView>
     );
 };
 
@@ -83,89 +90,6 @@ const styles = StyleSheet.create({
     importWalletSpaceBlock: {
         paddingHorizontal: Padding.p_base,
         overflow: "hidden",
-    },
-    title1Typo: {
-        fontFamily: FontFamily.paragraphP313,
-        textAlign: "left",
-        letterSpacing: 0,
-    },
-    backgroundIcon: {
-        height: 44,
-        width: 375,
-    },
-    title: {
-        fontSize: FontSize.bodyBody17_size,
-        fontWeight: "600",
-        fontFamily: FontFamily.capsCaps310SemiBold,
-        textAlign: "left",
-        letterSpacing: 0,
-        color: Color.iOSSystemLabelsLightPrimary,
-        lineHeight: 23,
-        alignSelf: "stretch",
-    },
-    title1: {
-        fontSize: FontSize.size_mini,
-        color: Color.color4,
-        width: 311,
-        lineHeight: 23,
-        fontFamily: FontFamily.paragraphP313,
-    },
-    titleWrapper: {
-        borderRadius: Border.br_3xs,
-        backgroundColor: Color.color1,
-        flexDirection: "row",
-        paddingVertical: Padding.p_smi,
-        marginTop: 10,
-        alignSelf: "stretch",
-    },
-    titleParent: {
-        alignSelf: "stretch",
-    },
-    importWalletInner: {
-        justifyContent: "center",
-        marginTop: 20,
-        alignSelf: "stretch",
-    },
-    controlstableViewrowxchecIcon: {
-        top: 2,
-        left: 0,
-        width: 17,
-        height: 16,
-        position: "absolute",
-    },
-    iHaveCarefully: {
-        color: Color.iOSSystemLabelsLightPrimary,
-    },
-    theUserAgreement: {
-        color: Color.color,
-    },
-    description: {
-        top: 0,
-        left: 28,
-        fontSize: FontSize.size_xs,
-        lineHeight: 20,
-        width: 315,
-        position: "absolute",
-    },
-    controlstableViewrowxchecParent: {
-        height: 20,
-        alignSelf: "stretch",
-        justifyContent: "center"
-    },
-    groupParent: {
-        paddingTop: Padding.p_70xl,
-        marginTop: 20,
-        alignSelf: "stretch",
-        alignItems: "center",
-    },
-    background: {
-        height: "100%",
-        top: "0%",
-        right: "0%",
-        bottom: "0%",
-        left: "0%",
-        position: "absolute",
-        width: "100%",
     },
     importWallet: {
         backgroundColor: Color.color2,
@@ -175,6 +99,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
     },
+    content: {
+        flex: 1,
+        justifyContent: 'space-between'
+    }
 });
 
 export default ImportWallet;
