@@ -5,6 +5,7 @@ import {DaoInfo} from "../declare/api/DAOApi";
 import {getDebounce} from "../utils/util";
 import {updateState as globalUpdateState} from "../store/global";
 import {useDispatch} from "react-redux";
+import Toast from "react-native-toast-message";
 
 type Props = {
   isJoin: boolean;
@@ -16,16 +17,17 @@ const JoinButton: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
   const { isJoin, handle, isLoading} = props;
 
-  const onPress = () => {
-    handle();
+  const onPress = async () => {
+    await handle();
     dispatch(globalUpdateState({
       joinStatus: true,
       newsJoinStatus: true
-    }))
+    }));
+    if(!isJoin) Toast.show({type: 'info', text1: 'join success!'});
   };
 
   return (
-    <TouchableOpacity onPress={getDebounce(onPress)}>
+    <TouchableOpacity onPress={onPress}>
       <View style={[styles.joinButton, isJoin ? styles.joined : styles.join]}>
         {
           isLoading ? <ActivityIndicator size="small"/> :

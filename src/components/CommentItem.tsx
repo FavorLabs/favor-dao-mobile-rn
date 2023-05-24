@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle} from "react-native";
 import {getTime} from "../utils/util";
-import {Color} from "../GlobalStyles";
+import {Color, FontFamily} from "../GlobalStyles";
 import {CommentInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 
@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontSize: 17,
         lineHeight: 20,
-        letterSpacing: -0.24
+        letterSpacing: -0.24,
+        // fontFamily: FontFamily.headingH613
     },
     replyCountTime: {
         display: 'flex',

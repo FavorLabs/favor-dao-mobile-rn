@@ -30,14 +30,15 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
   const [daoMode, setDaoMode] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
   const [postLoading, setPostLoading] = useState<boolean>(false);
+  const [imageLoading,setImageLoading] = useState<boolean>(true);
 
   const { dao } = useSelector((state: Models) => state.global);
 
   const createDisable = useMemo(() => {
     return !(
-      description
+      description && imageLoading
     )
-  }, [description]);
+  }, [description,imageLoading]);
 
   const createHandle = async () => {
     console.log('111',imageList, createDisable)
@@ -83,8 +84,9 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
           type: 'error',
           text1: e.message
         });
-        setPostLoading(false);
       }
+    } finally {
+      setPostLoading(false);
     }
   };
 
@@ -113,14 +115,14 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
           multiline={true}
           placeholder={'Your description...'}
         />
-        <UploadImage imageType={'image'} isShowSelector={false} setUpImage={setImageList} multiple={true}/>
+        <UploadImage imageType={'image'} isShowSelector={false} setUpImage={setImageList} multiple={true} setImageLoading={setImageLoading}/>
         <SwitchButton mode={daoMode} setMode={setDaoMode} />
       </ScrollView>
 
       <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
         <TouchableOpacity onPress={createHandle}>
           <FavorDaoButton
-            textValue="Post"
+            textValue={!imageLoading ? 'UpLoading' : "Post"}
             frame1171275771BackgroundColor="#ff8d1a"
             cancelColor="#fff"
             isLoading={postLoading}
