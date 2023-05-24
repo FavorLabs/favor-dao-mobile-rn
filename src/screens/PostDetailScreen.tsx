@@ -14,6 +14,7 @@ import {getDebounce} from "../utils/util";
 import NewsContent from "../components/NewsContent";
 import VideoBlockItem from "../components/VideoBlockItem";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import Toast from "react-native-toast-message";
 
 const PostDetailScreen = () => {
     const url = useUrl();
@@ -33,7 +34,11 @@ const PostDetailScreen = () => {
                 if (data.data.author_dao.id) setIsReTransfer(true);
             }
         } catch (e) {
-            if (e instanceof Error) console.error(e.message);
+            Toast.show({
+                type: 'error',
+                // @ts-ignore
+                text1: e.message
+            });
         }
     };
 

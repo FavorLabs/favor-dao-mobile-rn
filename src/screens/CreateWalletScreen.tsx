@@ -12,6 +12,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {useUrl} from "../utils/hook";
 import WalletWords from "../components/WalletWords";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
+import Toast from "react-native-toast-message";
 
 const CreateWallet = () => {
     const url = useUrl();
@@ -22,6 +23,12 @@ const CreateWallet = () => {
     const [agree, setAgree] = useState(false);
     const [loading, setLoading] = useState(false);
 
+    const createDisable = useMemo(() => {
+        return !(
+          agree && password && repeatPassword
+        )
+    }, [agree,password,repeatPassword]);
+
     useEffect(() => {
         createPK();
     }, [])
@@ -30,15 +37,21 @@ const CreateWallet = () => {
             const mnemonic = WalletController.createMnemonic();
             setMnemonic(mnemonic);
         } catch (e) {
-            console.error(e);
+            Toast.show({
+                type: 'error',
+                text1: 'Get mnemonic error'
+            });
         }
     }
     const create = async () => {
-        if (!password || password !== repeatPassword) {
-            return console.error('Password Invalid')
+        if (createDisable) {
+            return Toast.show({
+                type: 'error',
+                text1: 'Please complete all options',
+            })
         }
-        if (!agree) {
-            return console.error('Please check the box')
+        if (!password || password !== repeatPassword) {
+            return Toast.show({type: 'error', text1: 'Two inconsistent passwords'});
         }
         await setLoading(true);
         try {
@@ -47,7 +60,7 @@ const CreateWallet = () => {
             await WalletController.login(url, privateKey);
             navigation.goBack();
         } catch (e) {
-            console.error(e);
+            Toast.show({type: 'error', text1: 'Get privateKey error'});
         } finally {
             setLoading(false)
         }
@@ -83,7 +96,7 @@ const CreateWallet = () => {
                 </View>
                 <View>
                     <ProtocolRadioSelect value={agree} setValue={setAgree}/>
-                    <TouchableOpacity style={{marginTop:10}} disabled={loading} onPress={create}>
+                    <TouchableOpacity style={[{marginTop:10},createDisable && { opacity: 0.5 }]} disabled={loading} onPress={create}>
                         <FavorDaoButton
                           isLoading={loading}
                           textValue="Create"

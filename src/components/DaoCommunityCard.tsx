@@ -60,9 +60,9 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
             <Text style={[styles.title, styles.titleClr]} numberOfLines={1}>{dao.name}</Text>
           </View>
           <View style={styles.labelWrapper}>
-            <View style={[styles.label, styles.labelFlexBox]}>
-              <Text style={styles.label1}>8 level</Text>
-            </View>
+            {/*<View style={[styles.label, styles.labelFlexBox]}>*/}
+            {/*  <Text style={styles.label1}>8 level</Text>*/}
+            {/*</View>*/}
           </View>
         </View>
         <View style={[styles.groupParent, styles.labelFlexBox]}>

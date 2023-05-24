@@ -18,12 +18,16 @@ const JoinButton: React.FC<Props> = (props) => {
   const { isJoin, handle, isLoading} = props;
 
   const onPress = async () => {
-    await handle();
-    dispatch(globalUpdateState({
-      joinStatus: true,
-      newsJoinStatus: true
-    }));
-    if(!isJoin) Toast.show({type: 'info', text1: 'join success!'});
+    try {
+      await handle();
+      dispatch(globalUpdateState({
+        joinStatus: true,
+        newsJoinStatus: true
+      }));
+      if(!isJoin) Toast.show({type: 'info', text1: 'Join success!'});
+    } catch (e){
+
+    }
   };
 
   return (
@@ -32,7 +36,7 @@ const JoinButton: React.FC<Props> = (props) => {
         {
           isLoading ? <ActivityIndicator size="small"/> :
             <Text style={[styles.joinText, isJoin ? styles.joined : styles.join]}>
-              {isJoin ? 'joined' : 'join'}
+              {isJoin ? 'Joined' : 'Join'}
             </Text>
         }
       </View>

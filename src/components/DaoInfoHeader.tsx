@@ -12,16 +12,18 @@ import TextParsed from "./TextParsed";
 
 type Props = {
   daoInfo: DaoInfo;
+  isJoin: boolean;
+  setIsJoin: (a:boolean) => void;
 }
 
 const DaoInfoHeader: React.FC<Props> = (props) => {
   const url = useUrl();
   const { dao } = useSelector((state: Models) => state.global);
 
-  const { daoInfo } = props;
+  const { daoInfo, isJoin, setIsJoin } = props;
   const avatarsResUrl = useResourceUrl('avatars');
 
-  const [isJoin, setIsJoin] = useState(false);
+  // const [isJoin, setIsJoin] = useState(false);
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
 
   const bookmarkHandle = async () => {
@@ -71,9 +73,9 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
               <JoinButton isJoin={isJoin} handle={bookmarkHandle} isLoading={btnLoading}/>
           }
 
-          <View style={styles.level}>
-            <Text style={styles.levelText}>8 level</Text>
-          </View>
+          {/*<View style={styles.level}>*/}
+          {/*  <Text style={styles.levelText}>8 level</Text>*/}
+          {/*</View>*/}
         </View>
       </View>
 
