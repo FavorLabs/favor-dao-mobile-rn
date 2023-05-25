@@ -17,17 +17,19 @@ const FeedsOfDAO: React.FC<Props> = (props) => {
   const route = useRoute();
   // @ts-ignore
   const { daoInfo, type } = route.params as { daoInfo: DaoInfo, type: string};
+  const [isShow, setIsShow] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(globalUpdateState({
       feedsOfDAOId: daoInfo.id,
     }))
+    setIsShow(true)
   },[daoInfo])
 
   return (
     <View style={styles.feedsOfDao}>
       <ExpandedDAOHeader daoInfo={daoInfo}/>
-      <FeedsOfDaoNavigator type={type}/>
+      {isShow && <FeedsOfDaoNavigator type={type}/>}
     </View>
   );
 };

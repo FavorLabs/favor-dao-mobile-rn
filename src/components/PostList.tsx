@@ -111,10 +111,8 @@ const PostList: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    onRefresh()
-    if(isNewsFocus) {
-      setIsNewsFocus?.(false);
-    }
+    onRefresh();
+    if(isNewsFocus) setIsNewsFocus?.(false);
   },[query,isNewsFocus,daoId])
 
   return (

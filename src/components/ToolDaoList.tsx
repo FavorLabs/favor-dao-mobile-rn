@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 20,
     color: '#848488',
+    maxWidth: 70,
   },
   frameContainer: {
     paddingLeft: 16,

@@ -13,10 +13,15 @@ import {useUrl} from "../utils/hook";
 import WalletWords from "../components/WalletWords";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import Toast from "react-native-toast-message";
+import {useDispatch, useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
+import {updateState as globalUpdateState} from "../store/global";
 
 const CreateWallet = () => {
     const url = useUrl();
     const navigation = useNavigation<StackNavigationProp<any>>()
+    const dispatch = useDispatch();
+    const { userAgreement } = useSelector((state: Models) => state.global);
     const [mnemonic, setMnemonic] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -31,7 +36,17 @@ const CreateWallet = () => {
 
     useEffect(() => {
         createPK();
+        return () => {
+            dispatch(globalUpdateState({
+                userAgreement: false
+            }));
+        }
     }, [])
+
+    useEffect(() => {
+        setAgree(userAgreement)
+    },[userAgreement])
+
     const createPK = () => {
         try {
             const mnemonic = WalletController.createMnemonic();

@@ -4,7 +4,7 @@ import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {Padding, Color} from "../GlobalStyles";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useNavigation} from '@react-navigation/native';
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
 import WalletController from "../libs/walletController";
@@ -12,14 +12,19 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {useUrl} from "../utils/hook";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import Toast from "react-native-toast-message";
+import {useDispatch, useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
+import {updateState as globalUpdateState} from "../store/global";
 
 const ImportWallet = () => {
     const url = useUrl();
     const navigation = useNavigation<StackNavigationProp<any>>()
+    const dispatch = useDispatch();
+    const { userAgreement } = useSelector((state: Models) => state.global);
     const [mnemonic, setMnemonic] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
-    const [agree, setAgree] = useState(false);
+    const [agree, setAgree] = useState(userAgreement);
     const [loading, setLoading] = useState(false);
 
     const createDisable = useMemo(() => {
@@ -50,6 +55,18 @@ const ImportWallet = () => {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        return () => {
+            dispatch(globalUpdateState({
+                userAgreement: false
+            }));
+        }
+    },[])
+
+    useEffect(() => {
+        setAgree(userAgreement)
+    },[userAgreement])
 
     return (
       <KeyboardAwareScrollView contentContainerStyle={[styles.importWallet, styles.importWalletSpaceBlock]}>

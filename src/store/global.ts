@@ -8,7 +8,8 @@ export type State = {
     joinStatus: boolean,
     newsJoinStatus: boolean,
     feedsOfDAOId: string,
-    guidToDao: Record<string, DaoInfo>
+    guidToDao: Record<string, DaoInfo>,
+    userAgreement: boolean,
 }
 
 export const globalStore = createSlice({
@@ -20,6 +21,7 @@ export const globalStore = createSlice({
         newsJoinStatus: false,
         feedsOfDAOId: '',
         guidToDao: {},
+        userAgreement: false,
     } as State,
     reducers: {
         updateState: (state, action: PayloadAction<Partial<State>>) => {
