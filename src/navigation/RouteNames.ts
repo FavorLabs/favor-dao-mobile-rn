@@ -1,4 +1,5 @@
 import UserSetting from "../screens/Main/Setting/UserSetting";
+import UserAgreementScreen from "../screens/UserAgreementScreen";
 
 const Screens = {
   Root: 'Root',
@@ -29,6 +30,7 @@ const Screens = {
   AccountCancellation: 'AccountCancellation',
   LogOut: 'LogOut',
   ChangePassword: 'ChangePassword',
+  UserAgreement: 'UserAgreement',
 }
 
 export default Screens;
