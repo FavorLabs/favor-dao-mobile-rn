@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator, Ani
 import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
 import { Page, PostInfo } from "../declare/api/DAOApi";
 import PostApi from '../services/DAOApi/Post';
-import { useUrl } from '../utils/hook';
+import {useIsLogin, useUrl} from '../utils/hook';
 import { sleep } from '../utils/util';
 import NewsCard from "./NewsCard";
 import DaoCardList from "./DaoCardList";
@@ -26,6 +26,7 @@ export type Props = {
 const PostList: React.FC<Props> = (props) => {
   const { type, daoId, focus = false, query, isHome = false, isNewsFocus, setIsNewsFocus} = props;
   const url = useUrl();
+  const [isLogin, gotoLogin] = useIsLogin();
 
   const [pageData, setPageData] = useState<Page>({
     page: 1,
@@ -111,6 +112,7 @@ const PostList: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
+    if(!isLogin) return gotoLogin();
     onRefresh();
     if(isNewsFocus) setIsNewsFocus?.(false);
   },[query,isNewsFocus,daoId])

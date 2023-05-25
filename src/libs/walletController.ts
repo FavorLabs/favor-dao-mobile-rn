@@ -48,7 +48,7 @@ class WalletController {
             throw new Error('Password Invalid');
         }
         if (!bip39.validateMnemonic(mnemonic)) {
-            throw new Error('Private Key Invalid');
+            throw new Error('Mnemonic Invalid');
         }
         this.state.data = encrypt(mnemonic, password);
     }

@@ -49,7 +49,7 @@ const NewsCard: React.FC<Props> = (props) => {
             : <></>
         }
 
-        <OperationBlock postInfo={postInfo} type={orig_type}/>
+        <OperationBlock postInfo={postInfo} type={contents?.length && orig_contents?.length ? 0 : orig_type}/>
         <View style={styles.frameChild} />
       </View>
     </View>

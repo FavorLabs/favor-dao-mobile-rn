@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, StyleSheet, View, Text } from "react-native";
+import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {useResourceUrl, useUrl} from "../utils/hook";
@@ -9,6 +9,7 @@ import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import TextParsed from "./TextParsed";
+import Toast from "react-native-toast-message";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -23,8 +24,33 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
   const { daoInfo, isJoin, setIsJoin } = props;
   const avatarsResUrl = useResourceUrl('avatars');
 
-  // const [isJoin, setIsJoin] = useState(false);
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
+
+  const [isMore, setIsMore] = useState<boolean>(false);
+  const [introductionRow, setIntroductionRow] = useState<number>(2);
+  const [showMore, setShowMore] = useState<boolean>(false);
+  const [moreText, setMoreText] = useState<string>('More');
+
+  const handleTextLayout = (event: { nativeEvent: { lines: any; }; }) => {
+    const { lines } = event.nativeEvent;
+    if (lines.length >= introductionRow) {
+      setIsMore(true)
+    } else {
+      setIsMore(false)
+    }
+  }
+
+  const switchMore = () => {
+    setShowMore(!showMore)
+  }
+
+  useEffect(() => {
+    if(showMore) {
+      setMoreText('Show less');
+    } else {
+      setMoreText('Show More');
+    }
+  },[showMore])
 
   const bookmarkHandle = async () => {
     if(btnLoading) return;
@@ -32,6 +58,7 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
       setBtnLoading(true);
       const { data } = await DaoApi.bookmark(url, daoInfo.id);
       setIsJoin(data.data.status);
+      if(data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
     } catch (e) {
       if (e instanceof Error) console.error(e.message);
     } finally {
@@ -80,14 +107,32 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
       </View>
 
       <View style={styles.bottom}>
-        {/* @ts-ignore */}
-        <TextParsed content={daoInfo.introduction} style={styles.introduction} numberOfLines={2} />
+        <TextParsed
+          content={daoInfo.introduction}
+          /* @ts-ignore */
+          style={styles.introduction}
+          numberOfLines={showMore ? undefined : introductionRow}
+          onTextLayout={handleTextLayout}
+        />
       </View>
+      { isMore &&
+          <TouchableOpacity onPress={switchMore} style={styles.more}>
+              <Text style={styles.moreText}>{ moreText }</Text>
+          </TouchableOpacity>
+      }
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  more: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  moreText: {
+    fontSize: 16,
+    fontWeight: '400',
+  },
   container: {
     // backgroundColor: '#ccc',
     width: '100%',

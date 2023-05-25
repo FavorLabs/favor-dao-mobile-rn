@@ -43,9 +43,9 @@ const DaoCardItem: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if(showMore) {
-      setMoreText('Put away');
+      setMoreText('Show less');
     } else {
-      setMoreText('More');
+      setMoreText('Show More');
     }
   },[showMore])
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import { Border, Color, FontFamily, FontSize, Padding } from "../../../GlobalStyles";
 import FollowDAOHeader from "../../../components/FollowDAOHeader";
@@ -14,6 +14,7 @@ import NoDataShow from "../../../components/NoDataShow";
 import {updateState as globalUpdateState} from "../../../store/global";
 import {useIsFocused} from "@react-navigation/native";
 import {getContent, getTime} from "../../../utils/util";
+import Toast from "react-native-toast-message";
 
 export type Props = {};
 const JoinedDAOListScreen: React.FC<Props> = (props) => {
@@ -29,8 +30,6 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
     page: 1,
     page_size: 10,
   });
-
-  const [daoInfo, setDaoInfo] = useState<DaoInfo>();
 
   const [activeId, setActiveId] = useState<string>('');
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
@@ -59,32 +58,20 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
       if(data.data?.list) {
         const newsData = data.data.list.map(item=>({...item,is_joined:true}));
         const firstItem: DaoInfo | null = dao;
-        const otherItems: DaoInfo[] = newsData.filter(item => item.id !== dao?.id);
+        const otherItems: DaoInfo[] = newsData.filter(item => item?.id !== dao?.id);
         let sortedData: DaoInfo[] = [];
         if(firstItem) {
           sortedData = [firstItem, ...otherItems];
         } else {
           sortedData = [...otherItems];
         }
-        setBookmarkList([...sortedData]);
-        setActiveId(bookmarkList[0].id);
+        await setBookmarkList([...sortedData]);
+        setActiveId(sortedData[0] ? sortedData[0].id : '');
       }
       setIsLoadingMore(
         data.data.pager.total_rows > pageData.page * pageData.page_size,
       );
       setDaoPageData((daoPageData) => ({ ...daoPageData, page: 2 }));
-    } catch (e) {
-      if (e instanceof Error) console.error(e.message);
-    }
-  }
-
-  const getDaoInfo = async () => {
-    if(!activeId) return;
-    try {
-      const { data } = await DaoApi.getById(url, activeId);
-      if (data.data) {
-        setDaoInfo(data.data);
-      }
     } catch (e) {
       if (e instanceof Error) console.error(e.message);
     }
@@ -96,16 +83,6 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
     }
   };
 
-  const checkJoinStatus = async () => {
-    if(!activeId) return;
-    try {
-      const { data } = await DaoApi.checkBookmark(url, activeId);
-      setIsJoin(data.data.status);
-    } catch (e) {
-      if (e instanceof Error) console.error(e.message);
-    }
-  };
-
   const bookmarkHandle = async () => {
     if(btnLoading) return;
     try {
@@ -114,12 +91,9 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
       if(data.data) {
         await refreshList();
         setIsJoin(data.data.status);
+        if(data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
         setBtnLoading(false);
-        if(activeId === bookmarkList[0].id) {
-          setActiveId(bookmarkList[1].id);
-        } else {
-          setActiveId(bookmarkList[0].id);
-        }
+        setActiveId('');
       }
     } catch (e) {
       if (e instanceof Error) console.error(e.message);
@@ -129,20 +103,12 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-      if(bookmarkList[0] && !activeId){
+      if(bookmarkList.length>0 && !activeId){
         setActiveId(bookmarkList[0].id)
-        setDaoInfo(bookmarkList[0])
       }
-      // getDaoInfo();
-      // checkJoinStatus();
-  },[bookmarkList]);
+  },[bookmarkList,activeId]);
 
-  useEffect(() => {
-    if (activeId) {
-      const info = bookmarkList.find(obj => obj.id === activeId);
-      setDaoInfo(info)
-    }
-  },[activeId])
+  const daoInfo = useMemo(()=> activeId? bookmarkList.find(obj => obj.id === activeId):null,[activeId])
 
   useEffect(() => {
     if (isFocused && joinStatus) {

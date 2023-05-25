@@ -2,12 +2,13 @@ import * as React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { FontSize, FontFamily, Color } from "../GlobalStyles";
 import {DaoInfo} from "../declare/api/DAOApi";
-import {useResourceUrl, useUrl} from "../utils/hook";
+import {useIsLogin, useResourceUrl, useUrl} from "../utils/hook";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import JoinButton from "./JoinButton";
 import {useEffect, useState} from "react";
 import DaoApi from "../services/DAOApi/Dao";
+import Toast from "react-native-toast-message";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -17,6 +18,7 @@ type Props = {
 
 const DAOInfo: React.FC<Props> = (props) => {
   const url = useUrl();
+  const [isLogin, gotoLogin] = useIsLogin();
   const { daoInfo, joinStatus, setJoinStatus } = props;
   const avatarsResUrl = useResourceUrl('avatars');
   const { dao } = useSelector((state: Models) => state.global);
@@ -24,12 +26,14 @@ const DAOInfo: React.FC<Props> = (props) => {
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
 
   const bookmarkHandle = async () => {
+    if (!isLogin) return gotoLogin();
     if(btnLoading) return;
     setBtnLoading(true);
     try {
       const { data } = await DaoApi.bookmark(url, daoInfo.id);
       if(data.data) {
         setJoinStatus(data.data.status);
+        if(data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
       }
 
     } catch (e) {
@@ -49,7 +53,7 @@ const DAOInfo: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    checkJoinStatus()
+    if(isLogin) checkJoinStatus()
   },[daoInfo])
 
   return (

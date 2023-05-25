@@ -36,7 +36,7 @@ const DAODescriptionSection: React.FC<Props> = (props) => {
           source={{uri: `${avatarsResUrl}/${daoInfo.avatar}`}}
         />
         <View style={styles.daoname}>
-          <Text style={styles.title}>{daoInfo.name}</Text>
+          <Text style={styles.title} numberOfLines={1}>{daoInfo.name}</Text>
           <Text style={[styles.subtitle, styles.subtitleTypo]}>
             { daoInfo.follow_count } members
           </Text>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   daoinfo: {
-    width: 156,
+    flex: 1,
     alignItems: "center",
     flexDirection: "row",
   },
