@@ -48,6 +48,8 @@ const LogOut: React.FC<Props> = (props) => {
       dispatch(globalUpdateState({
         user: null,
         dao: null,
+        newsJoinStatus: true,
+        joinStatus: true,
       }));
       // @ts-ignore
       navigation.navigate(Screens.Main.Feeds);

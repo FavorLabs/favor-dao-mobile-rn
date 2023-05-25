@@ -66,7 +66,6 @@ const WalletUser: React.FC<Props> = (props) => {
     setBackUpIsShow(false);
   },[])
 
-
   return (
     <View style={styles.user}>
       <Image

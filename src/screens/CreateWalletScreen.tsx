@@ -75,7 +75,11 @@ const CreateWallet = () => {
             await WalletController.login(url, privateKey);
             navigation.goBack();
         } catch (e) {
-            Toast.show({type: 'error', text1: 'Get privateKey error'});
+            Toast.show({
+                type: 'error',
+                // @ts-ignore
+                text1: e.message,
+            });
         } finally {
             setLoading(false)
         }

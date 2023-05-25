@@ -1,11 +1,8 @@
 import * as React from "react";
 import {Image, StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, Alert} from "react-native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
-import {DaoInfo} from "../declare/api/DAOApi";
-import {getDebounce} from "../utils/util";
 import {updateState as globalUpdateState} from "../store/global";
 import {useDispatch} from "react-redux";
-import Toast from "react-native-toast-message";
 
 type Props = {
   isJoin: boolean;
@@ -13,7 +10,7 @@ type Props = {
   isLoading?: boolean;
 };
 
-const JoinButton: React.FC<Props> = (props) => {
+const VideoJoinButton: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
   const { isJoin, handle, isLoading} = props;
 
@@ -39,7 +36,7 @@ const JoinButton: React.FC<Props> = (props) => {
           }
         ],
         {
-          cancelable: false,
+          cancelable: false
         }
       );
     } else {
@@ -53,23 +50,32 @@ const JoinButton: React.FC<Props> = (props) => {
 
   return (
     <TouchableOpacity onPress={onClick}>
-      <View style={[styles.joinButton, isJoin ? styles.joined : styles.join]}>
-        {
-          isLoading ? <ActivityIndicator size="small"/> :
-            <Text style={[styles.joinText, isJoin ? styles.joined : styles.join]}>
-              {isJoin ? 'Joined' : 'Join'}
-            </Text>
-        }
-      </View>
+      {
+        isLoading ? <ActivityIndicator size="small"/> :
+        !isJoin ?
+          <View style={[styles.joinButton,styles.join]}>
+            <Text style={[styles.joinText, styles.join]}>Join</Text>
+          </View>
+          :
+          <Image
+            style={styles.joinedIcon}
+            resizeMode="cover"
+            source={require('../assets/joinedIcon.png')}
+          />
+      }
     </TouchableOpacity>
   )
 };
 
 const styles = StyleSheet.create({
+  joinedIcon: {
+    width: 16,
+    height: 16,
+    borderRadius: 16
+  },
   joinButton: {
-    width: 64,
-    height: 28,
-    borderRadius: 48,
+    paddingHorizontal: 4,
+    borderRadius: 16,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -93,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default JoinButton
+export default VideoJoinButton

@@ -115,7 +115,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
                   }
                   <TouchableOpacity onPress={seeMoreClick}>
                     <Text style={[styles.tag, styles.largeTypo]}>
-                        {seeMoreStatus ? 'Put away' : 'See more'}
+                        {seeMoreStatus ? 'Show Less' : 'See More'}
                     </Text>
                   </TouchableOpacity>
               </View>

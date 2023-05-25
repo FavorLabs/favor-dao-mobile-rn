@@ -51,6 +51,8 @@ const AccountCancellation: React.FC<Props> = (props) => {
       dispatch(globalUpdateState({
         user: null,
         dao: null,
+        newsJoinStatus: true,
+        joinStatus: true,
       }));
       Toast.show({
         type:'info',

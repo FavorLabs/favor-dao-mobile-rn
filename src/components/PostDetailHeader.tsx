@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import Screens from "../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 type PostDetailHeaderType = {
   postInfo: PostInfo | null;
@@ -52,6 +53,7 @@ const PostDetailHeader = ({
       try {
         const { data } = await DaoApi.bookmark(url, postInfo.dao.id);
         setIsJoin(data.data.status);
+        if(data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
         setBtnLoading(false)
       } catch (e) {
         if (e instanceof Error) console.error(e.message);
