@@ -112,7 +112,6 @@ const PostList: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    if(!isLogin) return gotoLogin();
     onRefresh();
     if(isNewsFocus) setIsNewsFocus?.(false);
   },[query,isNewsFocus,daoId])
