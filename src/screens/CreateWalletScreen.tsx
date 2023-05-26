@@ -16,6 +16,7 @@ import Toast from "react-native-toast-message";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {updateState as globalUpdateState} from "../store/global";
+import {getDAOInfo} from "../utils/util";
 
 const CreateWallet = () => {
     const url = useUrl();
@@ -73,6 +74,7 @@ const CreateWallet = () => {
             WalletController.importMnemonic(password, mnemonic);
             const privateKey = WalletController.exportPrivateKey(password)
             await WalletController.login(url, privateKey);
+            await getDAOInfo(dispatch);
             navigation.goBack();
         } catch (e) {
             Toast.show({

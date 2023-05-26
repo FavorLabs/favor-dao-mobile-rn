@@ -15,6 +15,11 @@ import Toast from "react-native-toast-message";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {updateState as globalUpdateState} from "../store/global";
+import {CometChat} from "@cometchat-pro/react-native-chat";
+import UserApi from "../services/DAOApi/User";
+import Favor from "../libs/favor";
+import DaoApi from "../services/DAOApi/Dao";
+import {getDAOInfo} from "../utils/util";
 
 const ImportWallet = () => {
     const url = useUrl();
@@ -33,6 +38,7 @@ const ImportWallet = () => {
         )
     }, [agree,password,repeatPassword,mnemonic]);
 
+
     const importMnemonic = async () => {
         if (createDisable) {
             return Toast.show({
@@ -48,6 +54,7 @@ const ImportWallet = () => {
             WalletController.importMnemonic(password, mnemonic);
             const privateKey = WalletController.exportPrivateKey(password)
             await WalletController.login(url, privateKey);
+            await getDAOInfo(dispatch);
             navigation.goBack();
         } catch (e) {
             Toast.show({

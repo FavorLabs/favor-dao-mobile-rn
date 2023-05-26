@@ -69,11 +69,7 @@ class WalletController {
     exportMnemonic(password: string) {
         const mnemonic = decrypt(this.state.data!, password);
         if (!mnemonic) {
-            // throw new Error('Password Invalid')
-            Toast.show({
-                type:'error',
-                text1: 'Password Invalid!'
-            })
+            throw new Error('Password Invalid')
         }
         return mnemonic;
     }

@@ -24,7 +24,6 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   const { dao, joinStatus } = useSelector((state: Models) => state.global);
 
   const [bookmarkList, setBookmarkList] = useState<DaoInfo[]>([]);
-  const [isJoin, setIsJoin] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [daoPageData, setDaoPageData] = useState<Page>({
     page: 1,
@@ -90,9 +89,6 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
       const { data } = await DaoApi.bookmark(url, activeId);
       if(data.data) {
         await refreshList();
-        setIsJoin(data.data.status);
-        if(data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
-        setBtnLoading(false);
         setActiveId('');
       }
     } catch (e) {
@@ -103,12 +99,12 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-      if(bookmarkList.length>0 && !activeId){
+      if(bookmarkList.length > 0 && !activeId){
         setActiveId(bookmarkList[0].id)
       }
   },[bookmarkList,activeId]);
 
-  const daoInfo = useMemo(()=> activeId? bookmarkList.find(obj => obj.id === activeId):null,[activeId])
+  const daoInfo = useMemo(()=> activeId ? bookmarkList.find(obj => obj.id === activeId):null,[activeId])
 
   useEffect(() => {
     if (isFocused && joinStatus) {

@@ -1,6 +1,5 @@
 import React, {useState, useRef, useEffect} from "react";
 import {Text, StyleSheet, Image, View, TouchableOpacity, Platform} from "react-native";
-import { Picker } from '@react-native-picker/picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import { PERMISSIONS } from 'react-native-permissions';
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
@@ -19,7 +18,6 @@ export type Props = {
   setImageLoading?: (a:boolean) => void;
 };
 const UploadImage: React.FC<Props> = (props) => {
-  const url = useUrl();
   const imagesResUrl = useResourceUrl('images');
   const avatarsResUrl = useResourceUrl('avatars');
 
@@ -36,15 +34,12 @@ const UploadImage: React.FC<Props> = (props) => {
 
   const removeImage = (index: number)=>{
     let img = images;
+    let upImg = imgArr.current;
     img.splice(index,1);
+    upImg.splice(index,1);
+    imgArr.current = upImg;
     setImages([...img]);
-    setIsDisableUpImg(false)
-    if(!multiple) {
-      setUpImage('')
-    } else {
-      setImageLoading?.(false);
-      processImagesArr(img);
-    }
+    setUpImage(imgArr.current)
   }
 
   const uploadImage = () => {
@@ -54,80 +49,46 @@ const UploadImage: React.FC<Props> = (props) => {
         width: 300,
         height: 400,
         cropping: cropping,
-        includeBase64:true,
+        includeBase64: false,
         multiple: multiple,
         maxFiles: 9,
       }).then((pickedImage) => {
-        if(Array.isArray(pickedImage)) {
-          setImageLoading?.(false);
-          processImagesArr(pickedImage)
-          setIsDisableUpImg(false)
-        } else {
-          processImages(pickedImage)
-          setIsDisableUpImg(true)
-        }
+        return(imageSetting(pickedImage));
       });
     // } else {
     //   requestPhotoPermission();
     // }
   };
 
-  const processImages = async (pickedImage: any) => {
-    // @ts-ignore
-    multiple ? setImages(images => [...images,pickedImage]) : setImages([pickedImage]);
-    let file = {uri: pickedImage.path, type: 'multipart/form-data', name:'image.png' };
+  const imageSetting = async (pickedImage: any) => {
+    setImages([]);
+    setUpImage([]);
+    imgArr.current = [];
+    setImageLoading?.(false)
+
+    if(!Array.isArray(pickedImage)) pickedImage= [pickedImage];
+    for (const item of pickedImage) {
+      await imagesProcess(item);
+      setImages(images => [...images,item])
+    }
+
+    setUpImage(imgArr.current);
+    setImageLoading?.(true);
+  }
+
+  const imagesProcess = async (pickedImage: any) => {
+    let imgName = pickedImage.path.split('/').pop();
+    let file = {uri: pickedImage.path, type: pickedImage.mime, name: imgName };
     try {
       let fmData = new FormData();
       // @ts-ignore
       fmData.append(imageType, file);
-      if(imageType === 'avatar') {
-        const { data } = await ImageApi.upload(avatarsResUrl, fmData);
-        setUpImage(data.id)
-        console.log(data,'upload Avatar')
-      } else {
-        const { data } = await ImageApi.upload(imagesResUrl, fmData);
-        setUpImage(data.id)
-        console.log(data,'upload Image')
-      }
-    } catch (e){
-      console.log(e)
+      const { data } = await ImageApi.upload(imageType === 'avatar' ? avatarsResUrl : imagesResUrl, fmData);
+      imgArr.current.push(data.id)
+    } catch (e) {
+      console.error(e)
     }
-  };
-
-  const processImagesArr = async (pickedImage: any) => {
-    if(!pickedImage.length) {
-      setUpImage([])
-      setImageLoading?.(true)
-      return ;
-    }
-
-    setImages([]);
-    setUpImage([]);
-    // setImgArr([]);
-    imgArr.current = [];
-    await new Promise<void>(resolve => {
-      pickedImage.map(async (item: any,index: number) => {
-        let file = {uri: item.path, type: 'multipart/form-data', name: 'image.png'};
-        // @ts-ignore
-        setImages(images => [...images,item])
-        try {
-          let fmData = new FormData();
-          // @ts-ignore
-          fmData.append(imageType, file);
-          const {data} = await ImageApi.upload(imagesResUrl, fmData);
-          // @ts-ignore
-          imgArr.current.push(data.id)
-          if (index === pickedImage.length - 1) resolve()
-        } catch (e) {
-          console.log(e)
-        }
-      });
-    })
-    setUpImage(imgArr.current);
-    setImageLoading?.(true)
-  };
-
-
+  }
 
   useEffect(() => {
     setImages(autoThumbnail ? [{ sourceURL: autoThumbnail }] : [])
@@ -155,7 +116,7 @@ const UploadImage: React.FC<Props> = (props) => {
               style={styles.imageItem}
               resizeMode="cover"
               // @ts-ignore
-              source={{uri: item.sourceURL}}
+              source={{uri: Platform.OS === 'ios' ? item.sourceURL : item.path }}
             />
             <TouchableOpacity
               // @ts-ignore
