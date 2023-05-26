@@ -12,6 +12,10 @@ request.interceptors.request.use((config) => {
     config.headers['x-session-token'] = token;
   }
 
+  if(!config.headers['Content-Type']){
+    config.headers['Content-Type'] = "application/json"
+  }
+
   return config;
 });
 
