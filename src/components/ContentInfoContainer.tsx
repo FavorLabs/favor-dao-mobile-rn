@@ -1,18 +1,23 @@
 import * as React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import {Text, StyleSheet, View, TextInput} from "react-native";
 import DefaultContentModeContainer from "./DefaultContentModeContainer";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
 import SwitchButton from "./SwitchButton";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
+import {DaoInfo} from "../declare/api/DAOApi";
+import {addDecimal, mulDecimal} from "../utils/balance";
+import {getDebounce} from "../utils/util";
 
 type Props = {
   daoMode: number;
   setDaoMode: React.Dispatch<React.SetStateAction<number>>;
+  daoPrice: string;
+  setDaoPrice: (a: string) => void;
 };
 const ContentInfoContainer: React.FC<Props> = (props) => {
-  const { daoMode, setDaoMode } = props;
+  const { daoMode, setDaoMode, daoPrice, setDaoPrice } = props;
 
   return (
     <View style={styles.contentinfo}>
@@ -24,7 +29,12 @@ const ContentInfoContainer: React.FC<Props> = (props) => {
         <View style={styles.frameParent}>
           <View style={styles.rectangleParent}>
             <View style={styles.frameChild} />
-            <Text style={[styles.text, styles.textFlexBox]}>3000</Text>
+            <TextInput
+              style={styles.searchInput}
+              placeholder={'Search'}
+              value={addDecimal(daoPrice)}
+              onChangeText={text => setDaoPrice(mulDecimal(text))}
+            />
           </View>
           <View style={[styles.favtWrapper, styles.priceFlexBox]}>
             <Text style={styles.favt}>FavT</Text>
@@ -36,6 +46,10 @@ const ContentInfoContainer: React.FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
+  searchInput: {
+    // backgroundColor: 'red',
+    flex: 1,
+  },
   priceFlexBox: {
     alignItems: "center",
     flexDirection: "row",

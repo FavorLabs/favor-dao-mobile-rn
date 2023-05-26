@@ -33,12 +33,13 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
   const [daoMode, setDaoMode] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
   const [postLoading, setPostLoading] = useState<boolean>(false);
+  const [daoPrice, setDaoPrice] = useState<string>('')
 
   const settingDao = async () => {
     if(postLoading) return;
     try {
       setPostLoading(true);
-      const params: DaoParams & { id: string } = {
+      const params: DaoParams & { id: string , price: string} = {
         name: dao?.name as string,
         introduction: daoDescription,
         avatar: daoAvatar,
@@ -46,6 +47,7 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
         id: dao?.id as string,
         visibility: daoMode,
         tags,
+        price: daoPrice,
       }
       // @ts-ignore
       const { data } = await DaoApi.modifyDao(url, params);
@@ -85,6 +87,7 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
       setDaoDescription(dao.introduction);
       setDaoAvatar(dao.avatar);
       setBanner(dao.banner);
+      setDaoPrice(dao.price)
     }
   },[dao])
 
@@ -111,7 +114,12 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
                 setBanner={setBanner}
               />
 
-              <ContentInfoContainer daoMode={daoMode} setDaoMode={setDaoMode}/>
+              <ContentInfoContainer
+                  daoMode={daoMode}
+                  setDaoMode={setDaoMode}
+                  daoPrice={daoPrice}
+                  setDaoPrice={setDaoPrice}
+              />
             {/*<ChatChannelsContainer />*/}
             {/*<SyncInfoContainer />*/}
           </ScrollView>
