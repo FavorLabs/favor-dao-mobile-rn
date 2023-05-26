@@ -4,6 +4,13 @@ import { Post } from '../declare/api/DAOApi';
 import EventEmitter from 'eventemitter3';
 import moment from 'moment';
 import { useRef } from 'react';
+import {CometChat} from "@cometchat-pro/react-native-chat";
+import WalletController from "../libs/walletController";
+import UserApi from "../services/DAOApi/User";
+import Favor from "../libs/favor";
+import DaoApi from "../services/DAOApi/Dao";
+import {updateState as globalUpdateState} from "../store/global";
+import {DispatchProp} from "react-redux";
 
 export const splitUrl = (url: string): [string, string, string] => {
   let i = new URL(url);
@@ -19,6 +26,19 @@ export const getEndPoint = (): boolean | string => {
     return false;
   }
 };
+
+export const getDAOInfo = async (dispatch: any) => {
+  await CometChat.login(WalletController.token)
+  let info = await UserApi.getInfo(Favor.url);
+  let dao = null;
+  if (info.data) {
+    dao = await DaoApi.get(Favor.url);
+  }
+  dispatch(globalUpdateState({
+    user: info.data.data,
+    dao: dao?.data.data.list?.[0] || null
+  }));
+}
 
 // export const appName = new URLSearchParams(location.search).get('name');
 
