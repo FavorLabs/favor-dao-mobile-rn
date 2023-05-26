@@ -69,10 +69,11 @@ const UploadImage: React.FC<Props> = (props) => {
     if(!Array.isArray(pickedImage)) pickedImage= [pickedImage];
     for (const item of pickedImage) {
       await imagesProcess(item);
-      setImages(images => [...images,item])
+
     }
 
-    setUpImage(imgArr.current);
+    if(!multiple) setUpImage(imgArr.current[0]);
+    else setUpImage(imgArr.current);
     setImageLoading?.(true);
   }
 
@@ -85,6 +86,8 @@ const UploadImage: React.FC<Props> = (props) => {
       fmData.append(imageType, file);
       const { data } = await ImageApi.upload(imageType === 'avatar' ? avatarsResUrl : imagesResUrl, fmData);
       imgArr.current.push(data.id)
+      setImages(images => [...images,pickedImage])
+      console.log(data.id,'daoId')
     } catch (e) {
       console.error(e)
     }

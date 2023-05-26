@@ -86,7 +86,7 @@ function RootStack() {
         }
 
         fetch()
-    }, [requestLoading])
+    }, [requestLoading,isLogin])
     const visible = useMemo(() => {
           return routeName === Screens.StartNode ? false : firstLoad || requestLoading
       },

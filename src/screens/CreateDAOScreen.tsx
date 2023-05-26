@@ -74,6 +74,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         navigation.goBack();
       }
     } catch (e) {
+      console.log(e)
       if (e instanceof Error) {
         Toast.show({
           type: 'error',
