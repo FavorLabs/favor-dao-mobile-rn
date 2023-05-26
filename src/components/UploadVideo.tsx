@@ -79,21 +79,25 @@ const UploadVideo: React.FC<Props> = (props) => {
 
   const pickVideo = async () => {
     init();
-    setShowSelect(false);
-    const video = await ImagePicker.openPicker({
+    ImagePicker.openPicker({
       mediaType: "video",
+    }).then(async video => {
+        setShowSelect(false);
+        console.log('video', video);
+        if (!checkVideoSize(video)) return;
+        setVideoName(video.filename as string);
+        setVideoSize(video.size);
+
+        const res = await fetch(video.path as string);
+        const blob = await res.blob();
+
+        await generateThumbnail(video.path);
+        // @ts-ignore
+        uploadVideo(video, blob);
+    }).catch(() => {
+        init();
     });
-    console.log('video', video);
-    if (!checkVideoSize(video)) return;
-    setVideoName(video.filename as string);
-    setVideoSize(video.size);
 
-    const res = await fetch(video.sourceURL as string);
-    const blob = await res.blob();
-
-    await generateThumbnail(video.sourceURL);
-    // @ts-ignore
-    uploadVideo(video, blob);
   };
 
   const checkVideoSize = (video: Video) => {
