@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     },
     titleTypo: {
         textAlign: "center",
-        fontFamily: FontFamily.paragraphP313,
+        fontWeight: '400',
         lineHeight: 23,
         letterSpacing: 0,
     },

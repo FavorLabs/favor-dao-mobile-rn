@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   subtitleTypo: {
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     fontSize: FontSize.size_mini,
     textAlign: "left",
     letterSpacing: 0,
@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mid,
     lineHeight: 23,
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     width: 114,
     textAlign: "left",
     color: Color.iOSSystemLabelsLightPrimary,
@@ -189,7 +188,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.paragraphP313_size,
     lineHeight: 18,
     fontWeight: "500",
-    fontFamily: FontFamily.headingH613,
     color: Color.color2,
     textAlign: "center",
     letterSpacing: 0,
@@ -215,7 +213,7 @@ const styles = StyleSheet.create({
   description: {
     lineHeight: 21,
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     fontSize: FontSize.size_mini,
     flex: 1,
   },

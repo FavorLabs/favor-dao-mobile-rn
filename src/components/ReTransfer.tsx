@@ -15,7 +15,7 @@ const ReTransfer: React.FC<Props> = (props) => {
     <View style={styles.feedsJoinedInner}>
       {
         postInfo?.orig_type === 0 ? (
-          <NewsCard postInfo={postInfo} isReTransfer={true}/>
+          <NewsCard postInfo={postInfo} />
         ) : postInfo?.orig_type === 1 ? (
           <VideoBlock postInfo={postInfo} isReTransfer={true}/>
         ) : (

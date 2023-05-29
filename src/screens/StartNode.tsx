@@ -182,8 +182,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
         textAlign: "left",
         color: Color.iOSSystemLabelsLightPrimary,
-        fontFamily: FontFamily.capsCaps310SemiBold,
-        fontWeight: "600",
+        fontWeight: '600',
         letterSpacing: 0,
     },
     networks: {
@@ -202,8 +201,7 @@ const styles = StyleSheet.create({
         fontSize: FontSize.size_xl,
         textAlign: "left",
         color: Color.iOSSystemLabelsLightPrimary,
-        fontFamily: FontFamily.capsCaps310SemiBold,
-        fontWeight: "600",
+        fontWeight: '600',
         letterSpacing: 0,
     },
     selectorChild: {

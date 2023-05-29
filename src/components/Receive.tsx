@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 23,
     fontWeight: "500",
-    fontFamily: FontFamily.headingH613,
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "center",
     marginTop: 4,

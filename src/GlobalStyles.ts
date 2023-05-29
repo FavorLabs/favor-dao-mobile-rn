@@ -1,13 +1,13 @@
 /* fonts */
 export const FontFamily = {
-  paragraphP313: "Inter_regular",
-  capsCaps310SemiBold: "Inter_semibold",
+  paragraphP313: "Inter_regular", // 400
+  capsCaps310SemiBold: "Inter_semibold", // 600
   bodyBody17: "SF Pro Text_regular",
-  interLight: "Inter_light",
-  headingH613: "Inter_medium",
-  interBold: "Inter_bold",
+  interLight: "Inter_light", // 300
+  headingH613: "Inter_medium", // 500
+  interBold: "Inter_bold", // 700
   sFProTextMedium: "SF Pro Text_medium",
-  aBeeZeeRegular: "ABeeZee_regular",
+  aBeeZeeRegular: "ABeeZee_regular", // 400
 };
 /* font sizes */
 export const FontSize = {

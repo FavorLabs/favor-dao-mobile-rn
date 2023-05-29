@@ -50,8 +50,7 @@ const styles = StyleSheet.create({
   },
   blockTitle: {
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.capsCaps310SemiBold,
-    fontWeight: "600",
+    fontWeight: '600',
     lineHeight: 23,
     letterSpacing: 0,
     fontSize: FontSize.bodyBody17_size,
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
   },
   switchText: {
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     lineHeight: 20,
     letterSpacing: 0,
     fontSize: FontSize.size_mini,

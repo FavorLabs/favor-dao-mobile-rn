@@ -39,8 +39,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FontSize.size_15xl,
     lineHeight: 41,
-    fontWeight: "700",
-    fontFamily: FontFamily.interBold,
+    fontWeight: '700',
     display: "flex",
     width: 343,
     alignItems: "center",

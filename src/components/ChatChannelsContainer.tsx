@@ -38,8 +38,7 @@ const styles = StyleSheet.create({
   mainChannelTypo: {
     textAlign: "left",
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.capsCaps310SemiBold,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 0,
   },
   chatChannels: {

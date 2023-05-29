@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_sm,
     letterSpacing: 0,
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "left",
   },

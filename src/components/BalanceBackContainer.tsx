@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mid,
     lineHeight: 23,
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     color: Color.iOSSystemLabelsLightPrimary,
     letterSpacing: 0,
   },
@@ -79,7 +78,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_15xl,
     lineHeight: 41,
     fontWeight: "700",
-    fontFamily: FontFamily.interBold,
     color: Color.iOSSystemLabelsLightPrimary,
   },
   balanceNum: {
@@ -87,7 +85,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_15xl,
     lineHeight: 41,
     fontWeight: "700",
-    fontFamily: FontFamily.interBold,
     color: Color.iOSSystemLabelsLightPrimary,
   },
   valueoftoken: {
@@ -95,7 +92,7 @@ const styles = StyleSheet.create({
     left: 0,
     fontSize: FontSize.paragraphP313_size,
     lineHeight: 20,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     color: '#939393',
     width: 88,
     letterSpacing: 0,

@@ -29,8 +29,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FontSize.size_mid,
     textAlign: "left",
-    fontFamily: FontFamily.capsCaps310SemiBold,
-    fontWeight: "600",
+    fontWeight: '600',
     color: Color.iOSSystemLabelsLightPrimary,
     lineHeight: 23,
     letterSpacing: 0,

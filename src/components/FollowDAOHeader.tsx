@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: FontSize.size_mini,
     fontWeight: "500",
-    fontFamily: FontFamily.headingH613,
     color: Color.gray_200,
     textAlign: "center",
     lineHeight: 20,

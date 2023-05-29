@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   subtitleTypo: {
     color: Color.iOSSystemLabelsLightSecondary,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     textAlign: "left",
     letterSpacing: 0,
   },
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mini,
     lineHeight: 23,
     fontWeight: "500",
-    fontFamily: FontFamily.headingH613,
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "left",
     letterSpacing: 0,

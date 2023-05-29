@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         fontSize: FontSize.size_xs,
         letterSpacing: 0,
         lineHeight: 20,
-        fontFamily: FontFamily.paragraphP313,
+        fontWeight: '400',
         textAlign: "left",
         marginLeft: 10,
     },

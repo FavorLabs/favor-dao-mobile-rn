@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 23,
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     color: Color.color5,
     textAlign: "center",
   },

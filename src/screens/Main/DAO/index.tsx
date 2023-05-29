@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   descriptionTypo: {
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     textAlign: "left",
     letterSpacing: 0,
   },
@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_15xl,
     lineHeight: 41,
     fontWeight: "700",
-    fontFamily: FontFamily.interBold,
     display: "flex",
     width: 343,
     alignItems: "center",

@@ -84,8 +84,7 @@ const WalletItem = ({
 const styles = StyleSheet.create({
     amountTypo: {
         textAlign: "left",
-        fontFamily: FontFamily.headingH613,
-        fontWeight: "500",
+        fontWeight: '500',
         lineHeight: 23,
         letterSpacing: 0,
         left: 0,

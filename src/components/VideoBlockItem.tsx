@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
     textAlign: "left",
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     letterSpacing: 0,
     color: Color.iOSSystemLabelsLightPrimary,
   },
@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: FontSize.size_xs,
     fontWeight: "500",
-    fontFamily: FontFamily.headingH613,
     color: Color.darkslategray_400,
     lineHeight: 20,
     letterSpacing: 0,

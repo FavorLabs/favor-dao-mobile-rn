@@ -69,11 +69,10 @@ const styles = StyleSheet.create({
     },
     replyContent: {
         marginVertical: 6,
-        fontWeight: '400',
         fontSize: 17,
         lineHeight: 20,
         letterSpacing: -0.24,
-        // fontFamily: FontFamily.headingH613
+        // fontWeight: '500'
     },
     replyCountTime: {
         display: 'flex',
