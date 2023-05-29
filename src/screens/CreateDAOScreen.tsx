@@ -17,6 +17,7 @@ import {getMatchedStrings, hasWhiteSpace, sleep} from "../utils/util";
 import {RegExps} from "../components/TextInputParsed";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
+import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
 export type Props = {};
 const CreateDAOScreen: React.FC<Props> = (props) => {
@@ -98,7 +99,8 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
   }, [daoDescription]);
 
   return (
-    <View style={styles.container}>
+    <BackgroundSafeAreaView>
+      <View style={styles.container}>
       <ScrollView style={styles.scrollWrap}>
         <FavorDaoNavBar
           title="Create DAO"
@@ -134,6 +136,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         </TouchableOpacity>
       </View>
     </View>
+    </BackgroundSafeAreaView>
   )
 }
 

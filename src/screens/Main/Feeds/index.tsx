@@ -46,7 +46,7 @@ const FeedsScreen: React.FC<Props> = (props) => {
   }
 
   return (
-    // <BackgroundSafeAreaView >
+    <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
       <View style={styles.container}>
       <View style={styles.frameParent}>
         <View style={[styles.titleParent, styles.selectionBg]}>
@@ -86,7 +86,7 @@ const FeedsScreen: React.FC<Props> = (props) => {
         }}
       />
     </View>
-    // </BackgroundSafeAreaView>
+    </BackgroundSafeAreaView>
   )
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
-import { FontSize, FontFamily, Color, Padding, Border } from "../../../GlobalStyles";
+import {FontSize, FontFamily, Color, Padding, Border} from "../../../GlobalStyles";
 import WalletUser from "../../../components/WalletUser";
 import Receive from "../../../components/Receive";
 import Send from "../../../components/Send";
@@ -9,6 +9,7 @@ import BalanceBackContainer from "../../../components/BalanceBackContainer";
 import DAOManagementContainer from "../../../components/DAOManagementContainer";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 // import ServiceComponent from "../../../components/ServiceComponent";
 // import PromotionTasks from "../../../components/PromotionTasks";
 
@@ -21,35 +22,37 @@ const SettingScreen: React.FC<Props> = (props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-      <View style={styles.titleWrapper}>
-        <Text style={styles.title}>Profile</Text>
+    <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.title}>Profile</Text>
 
-        <TouchableOpacity onPress={goToSetting}>
-          <Image
-            style={styles.settingIcon}
-            resizeMode="cover"
-            source={require("../../../assets/union-Setting.png")}
-          />
-        </TouchableOpacity>
+            <TouchableOpacity onPress={goToSetting}>
+              <Image
+                style={styles.settingIcon}
+                resizeMode="cover"
+                source={require("../../../assets/union-Setting.png")}
+              />
+            </TouchableOpacity>
+          </View>
+          <WalletUser/>
+          <View style={styles.sendbar}>
+            <Receive/>
+            <Send/>
+            <Transactions/>
+          </View>
+          <View style={styles.settings1}>
+            <BalanceBackContainer/>
+            <View style={styles.settingpannel}>
+              <DAOManagementContainer/>
+              {/*<ServiceComponent />*/}
+              {/*<PromotionTasks />*/}
+            </View>
+          </View>
+        </ScrollView>
       </View>
-      <WalletUser />
-      <View style={styles.sendbar}>
-        <Receive />
-        <Send />
-        <Transactions />
-      </View>
-      <View style={styles.settings1}>
-        <BalanceBackContainer />
-        <View style={styles.settingpannel}>
-          <DAOManagementContainer />
-          {/*<ServiceComponent />*/}
-          {/*<PromotionTasks />*/}
-        </View>
-      </View>
-      </ScrollView>
-    </View>
+    </BackgroundSafeAreaView>
   )
 }
 

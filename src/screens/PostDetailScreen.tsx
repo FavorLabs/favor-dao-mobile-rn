@@ -16,6 +16,7 @@ import VideoBlockItem from "../components/VideoBlockItem";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Toast from "react-native-toast-message";
 import show = Toast.show;
+import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
 const PostDetailScreen = () => {
     const url = useUrl();
@@ -52,7 +53,8 @@ const PostDetailScreen = () => {
     if (!postInfo) return null;
 
     return (
-      <KeyboardAwareScrollView scrollEnabled={false} contentContainerStyle={{flex:1}}>
+      <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color1}} footerStyle={{backgroundColor: Color.color1}}>
+        <KeyboardAwareScrollView scrollEnabled={false} contentContainerStyle={{flex:1}}>
           <View style={styles.container}>
               <View>
                   <PostDetailHeader
@@ -80,7 +82,7 @@ const PostDetailScreen = () => {
               </View>
           </View>
       </KeyboardAwareScrollView>
-
+      </BackgroundSafeAreaView>
     )
 }
 const styles = StyleSheet.create({

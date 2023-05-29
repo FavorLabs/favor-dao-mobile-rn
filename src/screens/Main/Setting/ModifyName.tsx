@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView} from "react-native";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
@@ -13,6 +13,7 @@ import {useUrl} from "../../../utils/hook";
 import {updateState as globalUpdateState} from "../../../store/global";
 import Toast from "react-native-toast-message";
 import {hasWhiteSpace} from "../../../utils/util";
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 type Props = {};
 
@@ -20,10 +21,10 @@ const ModifyName: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const url = useUrl();
-  const { user } = useSelector((state: Models) => state.global);
+  const {user} = useSelector((state: Models) => state.global);
 
-  const [btnLoading,setBtnLoading] = useState<boolean>(false);
-  const [nickName,setNickName] = useState<string>('');
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
+  const [nickName, setNickName] = useState<string>('');
 
   const confirmDisable = useMemo(() => {
     return !(
@@ -32,28 +33,34 @@ const ModifyName: React.FC<Props> = (props) => {
   }, [nickName]);
 
   const changeName = async () => {
-    if(btnLoading) return;
+    if (btnLoading) return;
     if (confirmDisable) {
       return Toast.show({
         type: 'error',
         text1: 'Please enter the user name',
       })
     }
-    if(hasWhiteSpace(nickName)) {
+    if (hasWhiteSpace(nickName)) {
       return Toast.show({
         type: 'error',
         text1: 'No spaces allowed in user name!',
       })
     }
+    if (user?.nickname === nickName){
+      return Toast.show({
+        type: 'error',
+        text1: 'The name is already occupied!',
+      })
+    }
 
     setBtnLoading(true);
     try {
-      const { data } = await UserApi.changeNickName(url, nickName);
+      const {data} = await UserApi.changeNickName(url, nickName);
       if (data.msg === 'success') {
         setNickName(nickName);
         dispatch(globalUpdateState({
           // @ts-ignore
-          user: { ...user, nickname: nickName }
+          user: {...user, nickname: nickName}
         }));
         Toast.show({
           type: 'info',
@@ -62,43 +69,48 @@ const ModifyName: React.FC<Props> = (props) => {
         navigation.goBack();
       }
     } catch (e) {
-      if (e instanceof Error) console.error(e.message);
+      if (e instanceof Error) Toast.show({
+        type: 'error',
+        text1: e.message
+      });
       setBtnLoading(false);
     }
 
   }
 
   useEffect(() => {
-    if(user) {
+    if (user) {
       setNickName(user.nickname)
     }
-  },[])
+  }, [])
 
   return (
-    <View style={styles.container}>
-      <FavorDaoNavBar
-        title="Modify name"
-        vector={require("../../../assets/vector6.png")}
-      />
-      <ScrollView>
-        <TextInputBlock
-          title={'Modify name'}
-          value={nickName}
-          setValue={setNickName}
-          placeholder={'Please enter a name'}
+    <BackgroundSafeAreaView>
+      <View style={styles.container}>
+        <FavorDaoNavBar
+          title="Modify name"
+          vector={require("../../../assets/vector6.png")}
         />
-      </ScrollView>
-      <View style={[styles.instanceParent, confirmDisable && {opacity: 0.5}]}>
-        <TouchableOpacity onPress={changeName}>
-          <FavorDaoButton
-            textValue="Confirm"
-            frame1171275771BackgroundColor="#ff8d1a"
-            cancelColor="#fff"
-            isLoading={btnLoading}
+        <ScrollView>
+          <TextInputBlock
+            title={'Modify name'}
+            value={nickName}
+            setValue={setNickName}
+            placeholder={'Please enter a name'}
           />
-        </TouchableOpacity>
+        </ScrollView>
+        <View style={[styles.instanceParent, confirmDisable && {opacity: 0.5}]}>
+          <TouchableOpacity onPress={changeName}>
+            <FavorDaoButton
+              textValue="Confirm"
+              frame1171275771BackgroundColor="#ff8d1a"
+              cancelColor="#fff"
+              isLoading={btnLoading}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </BackgroundSafeAreaView>
   )
 }
 

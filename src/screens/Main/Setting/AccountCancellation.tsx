@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, } from "react-native";
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image,} from "react-native";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
@@ -22,6 +22,7 @@ import InputPassword from "../../../components/InputPassword";
 import BottomSheetModal from "../../../components/BottomSheetModal";
 import {SignatureData} from "../../../declare/api/DAOApi";
 import WalletController from "../../../libs/walletController";
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 type Props = {};
 
@@ -29,10 +30,10 @@ const AccountCancellation: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const url = useUrl();
-  const { user } = useSelector((state: Models) => state.global);
+  const {user} = useSelector((state: Models) => state.global);
   const [globalBottomSheet, setGlobalBottomSheet] = useState<boolean>(false);
 
-  const [btnLoading,setBtnLoading] = useState<boolean>(false);
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
   const showBottomSheet = async () => {
     setGlobalBottomSheet(true);
@@ -56,14 +57,14 @@ const AccountCancellation: React.FC<Props> = (props) => {
         daoListStatus: true,
       }));
       Toast.show({
-        type:'info',
+        type: 'info',
         text1: 'Account cancellation success!'
       })
       // @ts-ignore
       navigation.navigate(Screens.Main.Feeds);
     } catch (e) {
       Toast.show({
-        type:'error',
+        type: 'error',
         // @ts-ignore
         text1: e.message
       })
@@ -73,51 +74,53 @@ const AccountCancellation: React.FC<Props> = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <FavorDaoNavBar
-        title="Account cancellation"
-        vector={require("../../../assets/vector6.png")}
-      />
+    <BackgroundSafeAreaView>
+      <View style={styles.container}>
+        <FavorDaoNavBar
+          title="Account cancellation"
+          vector={require("../../../assets/vector6.png")}
+        />
 
-      <ScrollView>
-        <View style={styles.topBlock}>
-          <View style={styles.titleRow}>
-            <Text style={styles.title}>{AccountCancellationTitle}</Text>
-            <Image
-              style={styles.accountIcon}
-              resizeMode="cover"
-              source={require("../../../assets/AccountIcon.png")}
-            />
+        <ScrollView>
+          <View style={styles.topBlock}>
+            <View style={styles.titleRow}>
+              <Text style={styles.title}>{AccountCancellationTitle}</Text>
+              <Image
+                style={styles.accountIcon}
+                resizeMode="cover"
+                source={require("../../../assets/AccountIcon.png")}
+              />
+            </View>
+            <Text style={styles.introduction}>
+              {AccountCancellationIntroduction}
+            </Text>
           </View>
-          <Text style={styles.introduction}>
-            {AccountCancellationIntroduction}
-          </Text>
+
+          <View style={styles.description}>
+            <Text style={[styles.descriptionText, styles.topText]}>{AccountCancellationOne}</Text>
+            <Text style={styles.descriptionText}>{AccountCancellationTwo}</Text>
+          </View>
+        </ScrollView>
+
+        <View style={styles.instanceParent}>
+          <TouchableOpacity onPress={showBottomSheet}>
+            <FavorDaoButton
+              textValue="Unregister"
+              frame1171275771BackgroundColor="#FF564F"
+              cancelColor="#fff"
+              isLoading={btnLoading}
+            />
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.description}>
-          <Text style={[styles.descriptionText,styles.topText]}>{AccountCancellationOne}</Text>
-          <Text style={styles.descriptionText}>{AccountCancellationTwo}</Text>
-        </View>
-      </ScrollView>
-
-      <View style={styles.instanceParent}>
-        <TouchableOpacity onPress={showBottomSheet}>
-          <FavorDaoButton
-            textValue="Unregister"
-            frame1171275771BackgroundColor="#FF564F"
-            cancelColor="#fff"
-            isLoading={btnLoading}
-          />
-        </TouchableOpacity>
+        <BottomSheetModal
+          visible={globalBottomSheet}
+          setVisible={close}
+        >
+          <InputPassword fn={AccountCancellation} type={2}/>
+        </BottomSheetModal>
       </View>
-
-      <BottomSheetModal
-        visible={globalBottomSheet}
-        setVisible={close}
-      >
-        <InputPassword fn={AccountCancellation} type={2}/>
-      </BottomSheetModal>
-    </View>
+    </BackgroundSafeAreaView>
   )
 }
 

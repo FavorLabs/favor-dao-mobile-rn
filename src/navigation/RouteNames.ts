@@ -17,8 +17,6 @@ const Screens = {
   CreateVideo: 'CreateVideo',
   VideoPlay: 'VideoPlay',
   PostDetail: 'PostDetail',
-  QuoteNews: 'QuoteNews',
-  InputWalletPassword: 'InputWalletPassword',
   MnemonicBackup: 'MnemonicBackup',
   DAOSetting: 'DAOSetting',
   StartNode:'StartNode',

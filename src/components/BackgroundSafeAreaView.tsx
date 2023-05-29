@@ -8,13 +8,14 @@ export type Props = {
     headerStyle?: ViewStyle
     footerComponent?: React.ReactNode
     footerStyle?: ViewStyle
+    showFooter?: boolean
 }
-const BackgroundSafeAreaView = ({children, headerComponent, headerStyle, footerComponent, footerStyle}: Props) => {
+const BackgroundSafeAreaView = ({children, headerComponent, headerStyle, footerComponent, footerStyle, showFooter = true}: Props) => {
     const {top, bottom} = useSafeAreaInsets();
     return <View style={{flex: 1}}>
         <View style={[
+            {paddingTop: top},
             headerStyle,
-            {paddingTop: top}
         ]}>
             {
                 headerComponent
@@ -23,14 +24,18 @@ const BackgroundSafeAreaView = ({children, headerComponent, headerStyle, footerC
         <View style={{flex:1}}>
             {children}
         </View>
-        <View style={[
-            footerStyle,
-            {paddingBottom: bottom}
-        ]}>
-            {
-                footerComponent
-            }
-        </View>
+        {
+            showFooter &&
+          <View style={[
+              {paddingBottom: bottom},
+              footerStyle,
+          ]}>
+              {
+                  footerComponent
+              }
+          </View>
+        }
+
     </View>
 };
 

@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   frameParent: {
     alignSelf: "stretch",
     // marginTop: 20,
-    paddingTop: 20,
+    // paddingTop: 20,
     marginHorizontal: 4
   },
 })

@@ -9,6 +9,7 @@ import Models from "../declare/storeTypes";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {addDecimal, mulDecimal} from "../utils/balance";
 import {getDebounce} from "../utils/util";
+import Toast from "react-native-toast-message";
 
 type Props = {
   daoMode: number;
@@ -30,10 +31,11 @@ const ContentInfoContainer: React.FC<Props> = (props) => {
           <View style={styles.rectangleParent}>
             <View style={styles.frameChild} />
             <TextInput
+              // keyboardType="numeric"
               style={styles.searchInput}
               placeholder={'Search'}
-              value={addDecimal(daoPrice)}
-              onChangeText={text => setDaoPrice(mulDecimal(text))}
+              value={daoPrice}
+              onChangeText={text => setDaoPrice(text)}
             />
           </View>
           <View style={[styles.favtWrapper, styles.priceFlexBox]}>
@@ -47,7 +49,6 @@ const ContentInfoContainer: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   searchInput: {
-    // backgroundColor: 'red',
     flex: 1,
   },
   priceFlexBox: {

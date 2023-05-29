@@ -2,18 +2,21 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {NotifyTopTabNavigator} from "../../../navigation/TopTabBar";
 import {Color, FontFamily, FontSize, Padding} from "../../../GlobalStyles";
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 export type Props = {};
 const NotifyScreen: React.FC<Props> = (props) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.frameParent}>
-        <View style={[styles.titleParent, styles.selectionBg]}>
-          <Text style={styles.title}>Notifications</Text>
+    <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
+      <View style={styles.container}>
+        <View style={styles.frameParent}>
+          <View style={[styles.titleParent, styles.selectionBg]}>
+            <Text style={styles.title}>Notifications</Text>
+          </View>
+          <NotifyTopTabNavigator/>
         </View>
-        <NotifyTopTabNavigator />
       </View>
-    </View>
+    </BackgroundSafeAreaView>
   )
 }
 

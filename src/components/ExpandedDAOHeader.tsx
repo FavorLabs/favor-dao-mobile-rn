@@ -18,6 +18,7 @@ import {CometChat} from "@cometchat-pro/react-native-chat";
 import Screens from "../navigation/RouteNames";
 import Toast from "react-native-toast-message";
 import {useEffect, useState} from "react";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 type Props = {
     daoInfo: DaoInfo;
@@ -25,6 +26,7 @@ type Props = {
 };
 
 const ExpandedDAOHeader: React.FC<Props> = (props) => {
+    const { top } = useSafeAreaInsets();
     const {daoInfo, isShowBtnChatToggle = true} = props;
     const navigation = useNavigation();
     const [isLogin, gotoLogin] = useIsLogin();
@@ -56,11 +58,11 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
 
     return (
       <ImageBackground
-        style={[styles.expandeddaoheaderIcon, styles.maskeddaoinfoLayout]}
+        style={[styles.expandeddaoheaderIcon, {height: top + 60}]}
         resizeMode="cover"
         source={{uri: `${imagesResUrl}/${daoInfo?.banner}`}}
       >
-          <View style={[styles.maskeddaoinfo, styles.maskeddaoinfoLayout]}>
+          <View style={[styles.maskeddaoinfo, {height: top + 60}]}>
               <TouchableOpacity onPress={toBack}>
                   <Back/>
               </TouchableOpacity>
@@ -88,20 +90,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: Color.color1,
     },
-    maskeddaoinfoLayout: {
-        height: 60,
-        alignSelf: "stretch",
-    },
     maskeddaoinfo: {
         backgroundColor: Color.gray_700,
         flexDirection: "row",
         padding: Padding.p_3xs,
         alignItems: "flex-end",
         justifyContent: "space-between",
+        alignSelf: "stretch",
     },
     expandeddaoheaderIcon: {
         alignItems: "center",
         justifyContent: "flex-end",
+        alignSelf: "stretch",
     },
 });
 
