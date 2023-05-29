@@ -86,7 +86,7 @@ export function BottomTabNavigator() {
             name={Screens.Main.Setting}
             component={SettingScreen}
             options={{
-                tabBarLabel: 'Setting',
+                tabBarLabel: 'Profile',
                 tabBarIcon: ({focused, color, size}) => (
                   <SvgIcon svg={focused ? <SettingActiveSvg/> : <SettingInActiveSvg/>}/>
                 )
