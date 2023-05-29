@@ -169,11 +169,10 @@ const styles = StyleSheet.create({
     description: {
         marginTop: 20,
         textAlign: "left",
-        fontFamily: FontFamily.paragraphP313,
+        fontWeight: '400',
         fontSize: FontSize.paragraphP313_size,
         color: Color.color1,
         lineHeight: 18,
-        fontWeight: "600",
     },
     tags: {
         flexDirection: 'row'
@@ -186,8 +185,7 @@ const styles = StyleSheet.create({
     },
 
     largeTypo: {
-        fontFamily: FontFamily.capsCaps310SemiBold,
-        fontWeight: "600",
+        fontWeight: '600',
         textAlign: "left",
         color: Color.color1,
     },

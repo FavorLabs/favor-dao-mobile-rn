@@ -385,7 +385,7 @@ const UploadVideo: React.FC<Props> = (props) => {
                 source={require("../assets/uploadcloud2.png")}
               />
               <Text style={styles.tips}>
-                Upload Video (s)
+                Upload Video
               </Text>
             </TouchableOpacity>
           </View>
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
     width: 232,
   },
   secTypo: {
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     lineHeight: 20,
     textAlign: "left",
   },
@@ -496,8 +496,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     textAlign: "left",
-    fontFamily: FontFamily.capsCaps310SemiBold,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 0,
     left: 0,
     width: 341,
@@ -505,7 +504,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: "500",
-    fontFamily: FontFamily.headingH613,
     marginLeft: 4,
     lineHeight: 20,
     textAlign: "center",
@@ -519,8 +517,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     textAlign: "center",
     color: Color.lightGrayscaleContent1,
-    fontFamily: FontFamily.capsCaps310SemiBold,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   counter: {
     backgroundColor: Color.lightGrayscaleContent3,
@@ -571,7 +568,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mini,
     color: Color.color4,
     marginLeft: 8,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     letterSpacing: 0,
   },
   counter1: {
@@ -595,7 +592,7 @@ const styles = StyleSheet.create({
     top: 40,
     color: Color.lightGrayscaleContent3,
     fontSize: FontSize.size_2xs,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     left: 0,
     position: "absolute",
   },
@@ -671,7 +668,7 @@ const styles = StyleSheet.create({
   },
   tips: {
     fontSize: FontSize.size_mini,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     color: Color.color4,
     textAlign: "center",
     lineHeight: 20,

@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   text: {
-    fontFamily: FontFamily.headingH613,
     fontWeight: '500',
     fontSize: 15,
     lineHeight: 20,

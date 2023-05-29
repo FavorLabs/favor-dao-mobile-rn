@@ -111,15 +111,14 @@ const styles = StyleSheet.create({
         alignSelf: "stretch",
     },
     descriptionTypo: {
-        fontFamily: FontFamily.paragraphP313,
+        fontWeight: '400',
         fontSize: FontSize.size_mini,
         letterSpacing: 0,
     },
     title1Typo: {
         lineHeight: 23,
         fontSize: FontSize.bodyBody17_size,
-        fontFamily: FontFamily.capsCaps310SemiBold,
-        fontWeight: "600",
+        fontWeight: '600',
     },
     label1FlexBox: {
         textAlign: "center",
@@ -128,8 +127,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: FontSize.size_xl,
         lineHeight: 22,
-        fontFamily: FontFamily.capsCaps310SemiBold,
-        fontWeight: "600",
+        fontWeight: '600',
         letterSpacing: 0,
         textAlign: "left",
         alignSelf: "stretch",
@@ -152,7 +150,7 @@ const styles = StyleSheet.create({
         top: 26,
         color: Color.iOSSystemLabelsLightSecondary,
         lineHeight: 20,
-        fontFamily: FontFamily.paragraphP313,
+        fontWeight: '400',
         fontSize: FontSize.size_mini,
         left: 0,
         position: "absolute",
@@ -178,7 +176,6 @@ const styles = StyleSheet.create({
         fontSize: FontSize.paragraphP313_size,
         lineHeight: 18,
         fontWeight: "500",
-        fontFamily: FontFamily.headingH613,
         color: Color.color,
     },
     label: {
@@ -205,7 +202,7 @@ const styles = StyleSheet.create({
     description: {
         lineHeight: 21,
         flex: 1,
-        fontFamily: FontFamily.paragraphP313,
+        fontWeight: '400',
         fontSize: FontSize.size_mini,
         textAlign: "left",
         color: Color.iOSSystemLabelsLightPrimary,
@@ -222,7 +219,7 @@ const styles = StyleSheet.create({
     description1: {
         // width: 213,
         lineHeight: 20,
-        fontFamily: FontFamily.paragraphP313,
+        fontWeight: '400',
         fontSize: FontSize.size_mini,
         textAlign: "left",
         color: Color.iOSSystemLabelsLightPrimary,
@@ -233,7 +230,7 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         flex: 1,
         lineHeight: 20,
-        fontFamily: FontFamily.paragraphP313,
+        fontWeight: '400',
         fontSize: FontSize.size_mini,
     },
     descriptionParent: {
@@ -268,8 +265,7 @@ const styles = StyleSheet.create({
         color: Color.color1,
         lineHeight: 23,
         fontSize: FontSize.bodyBody17_size,
-        fontFamily: FontFamily.capsCaps310SemiBold,
-        fontWeight: "600",
+        fontWeight: '600',
     },
     createWrapper: {
         borderRadius: Border.br_29xl,

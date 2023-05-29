@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   symbolTypo: {
     marginLeft: 6,
     textAlign: "left",
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     // lineHeight: 20,
     // letterSpacing: 0,
     fontSize: FontSize.size_mini,

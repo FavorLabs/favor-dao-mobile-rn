@@ -30,7 +30,7 @@ const DefaultContentModeContainer: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   descriptionTypo: {
     textAlign: "left",
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     lineHeight: 20,
     fontSize: FontSize.size_mini,
     color: Color.iOSSystemLabelsLightPrimary,

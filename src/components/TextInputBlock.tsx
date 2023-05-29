@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
         letterSpacing: 0,
         fontSize: FontSize.bodyBody17_size,
         fontWeight: "600",
-        fontFamily: FontFamily.capsCaps310SemiBold,
         color: Color.iOSSystemLabelsLightPrimary,
         display: "flex",
         width: '100%',

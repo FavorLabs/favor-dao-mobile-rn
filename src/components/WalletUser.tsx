@@ -37,9 +37,11 @@ const WalletUser: React.FC<Props> = (props) => {
     };
     try {
       const mnemonic =  WalletController.exportMnemonic(password);
+      if(mnemonic){
       // @ts-ignore
       navigation.navigate(Screens.MnemonicBackup,{mnemonic: mnemonic});
       setBackUpIsShow(false);
+      }
     } catch (e) {
       return Toast.show({
         type: 'error',
@@ -124,16 +126,14 @@ const styles = StyleSheet.create({
   },
   forMnemonic: {
     marginVertical: 20,
-    fontFamily:FontFamily.headingH613,
-    fontWeight: '600',
+    fontWeight: '500',
     fontSize: 20,
     lineHeight: 22,
   },
   xc8320fTypo: {
     textAlign: "center",
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: 23,
     letterSpacing: 0,
     fontSize: FontSize.size_mini,
@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 23,
     fontWeight: "500",
-    fontFamily: FontFamily.headingH613,
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "center",
     width: 130,

@@ -49,7 +49,7 @@ const LocalWallet = () => {
 
 const styles = StyleSheet.create({
     // amountTypo: {
-    //     fontFamily: FontFamily.headingH613,
+    //     fontWeight: '500',
     //     fontWeight: "500",
     //     lineHeight: 23,
     //     left: 0,
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
         fontSize: FontSize.size_xl,
         lineHeight: 22,
         fontWeight: "600",
-        fontFamily: FontFamily.capsCaps310SemiBold,
         width: 343,
         height: 22,
         textAlign: "left",
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
     //     fontSize: FontSize.size_mini,
     //     width: 105,
     //     color: Color.iOSSystemLabelsLightPrimary,
-    //     fontFamily: FontFamily.headingH613,
+    //     fontWeight: '500',
     //     fontWeight: "500",
     //     lineHeight: 23,
     //     left: 0,

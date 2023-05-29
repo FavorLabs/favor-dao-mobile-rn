@@ -4,7 +4,7 @@ import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
 import TextInputBlock from "../../../components/TextInputBlock";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import FavorDaoButton from "../../../components/FavorDaoButton";
@@ -12,6 +12,7 @@ import UserApi from '../../../services/DAOApi/User';
 import {useUrl} from "../../../utils/hook";
 import {updateState as globalUpdateState} from "../../../store/global";
 import Toast from "react-native-toast-message";
+import {hasWhiteSpace} from "../../../utils/util";
 
 type Props = {};
 
@@ -24,8 +25,26 @@ const ModifyName: React.FC<Props> = (props) => {
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
   const [nickName,setNickName] = useState<string>('');
 
+  const confirmDisable = useMemo(() => {
+    return !(
+      nickName
+    )
+  }, [nickName]);
+
   const changeName = async () => {
     if(btnLoading) return;
+    if (confirmDisable) {
+      return Toast.show({
+        type: 'error',
+        text1: 'Please enter the user name',
+      })
+    }
+    if(hasWhiteSpace(nickName)) {
+      return Toast.show({
+        type: 'error',
+        text1: 'No spaces allowed in user name!',
+      })
+    }
 
     setBtnLoading(true);
     try {
@@ -69,7 +88,7 @@ const ModifyName: React.FC<Props> = (props) => {
           placeholder={'Please enter a name'}
         />
       </ScrollView>
-      <View style={styles.instanceParent}>
+      <View style={[styles.instanceParent, confirmDisable && {opacity: 0.5}]}>
         <TouchableOpacity onPress={changeName}>
           <FavorDaoButton
             textValue="Confirm"

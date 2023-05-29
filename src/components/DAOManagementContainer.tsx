@@ -69,8 +69,7 @@ const DAOManagementContainer: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   addTypo: {
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "500",
+    fontWeight: '500',
     letterSpacing: 0,
   },
   daoManagement: {

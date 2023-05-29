@@ -6,6 +6,7 @@ import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
 import {usePermissions, useResourceUrl, useUrl} from "../utils/hook";
 import ImageApi from "../services/DAOApi/Image";
 import UploadBlockTitle from "./UploadBlockTitle";
+import Loading from "./Loading";
 
 export type Props = {
   imageType: string;
@@ -25,6 +26,7 @@ const UploadImage: React.FC<Props> = (props) => {
   const [images, setImages] = useState<any[]>([]);
   const [isDisableUpImg,setIsDisableUpImg] = useState<boolean>(false);
   const imgArr = useRef<string[]>([])
+  const [visible, setVisible] = useState<boolean>(false);
 
   // const PhotoPermission = usePermissions(
   //   Platform.OS === 'ios' ? PERMISSIONS.IOS.PHOTO_LIBRARY : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE
@@ -39,7 +41,8 @@ const UploadImage: React.FC<Props> = (props) => {
     upImg.splice(index,1);
     imgArr.current = upImg;
     setImages([...img]);
-    setUpImage(imgArr.current)
+    if(!multiple) setUpImage('');
+    else setUpImage(imgArr.current);
   }
 
   const uploadImage = () => {
@@ -65,16 +68,17 @@ const UploadImage: React.FC<Props> = (props) => {
     setUpImage([]);
     imgArr.current = [];
     setImageLoading?.(false)
+    setVisible(true);
 
     if(!Array.isArray(pickedImage)) pickedImage= [pickedImage];
     for (const item of pickedImage) {
       await imagesProcess(item);
-
     }
 
     if(!multiple) setUpImage(imgArr.current[0]);
     else setUpImage(imgArr.current);
     setImageLoading?.(true);
+    setVisible(false);
   }
 
   const imagesProcess = async (pickedImage: any) => {
@@ -144,12 +148,13 @@ const UploadImage: React.FC<Props> = (props) => {
                 source={require("../assets/uploadcloud2.png")}
               />
               <Text style={styles.tips}>
-                Upload { imageType } (s)
+                { multiple ? `Upload ${ imageType } (s)` : `Upload ${ imageType }` }
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       )}
+      <Loading visible={visible} text={'Image uploading in progress'}/>
     </View>
 
   );
@@ -209,7 +214,7 @@ const styles = StyleSheet.create({
   },
   tips: {
     fontSize: FontSize.size_mini,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     color: Color.color4,
     textAlign: "center",
     lineHeight: 20,

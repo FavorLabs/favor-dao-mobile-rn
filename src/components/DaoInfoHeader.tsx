@@ -161,14 +161,13 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     color: Color.iOSSystemLabelsLightPrimary,
   },
   joined: {
     lineHeight: 20,
     color: Color.iOSSystemLabelsLightSecondary,
     textAlign: "left",
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     letterSpacing: 0,
     fontSize: FontSize.size_mini,
   },
@@ -185,7 +184,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.paragraphP313_size,
     lineHeight: 18,
     fontWeight: "500",
-    fontFamily: FontFamily.headingH613,
     color: Color.color,
   },
   bottom: {
@@ -193,7 +191,7 @@ const styles = StyleSheet.create({
   },
   introduction: {
     lineHeight: 21,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     fontSize: FontSize.size_mini,
     color: Color.iOSSystemLabelsLightPrimary,
   }

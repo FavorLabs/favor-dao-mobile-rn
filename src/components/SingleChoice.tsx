@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     display: "flex",
     width: 343,
     alignItems: "center",
@@ -67,7 +66,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: FontSize.size_mini,
     lineHeight: 20,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     width: 157,
   },
   checkboxIcon: {

@@ -5,6 +5,9 @@ import DaoCommunityCard from "./DaoCommunityCard";
 import {Page, PostInfo} from "../declare/api/DAOApi";
 import {useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
+import {useDispatch, useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
+import {updateState as globalUpdateState} from "../store/global";
 
 type Props = {
   refreshing: boolean;
@@ -12,6 +15,7 @@ type Props = {
 
 const DaoCardList: React.FC<Props> = (props) => {
   const url = useUrl();
+  const dispatch = useDispatch();
   const [pageData, setPageData] = useState<Page>({
     page: 1,
     page_size: 5,
@@ -19,8 +23,10 @@ const DaoCardList: React.FC<Props> = (props) => {
     query: undefined,
   });
 
+
   const [postListArr,setPostListArr] = useState<PostInfo[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const { daoListStatus } = useSelector((state: Models) => state.global);
 
   const loadMore = async () => {
     try {
@@ -69,6 +75,15 @@ const DaoCardList: React.FC<Props> = (props) => {
       refresh();
     }
   },[props.refreshing])
+
+  useEffect(()=> {
+    if(daoListStatus) {
+      refresh();
+      dispatch(globalUpdateState({
+        daoListStatus: false
+      }))
+    }
+  },[daoListStatus])
 
   return (
       <View style={styles.frameContainer}>

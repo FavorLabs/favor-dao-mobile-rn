@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "left",
     marginLeft: 5,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     color: Color.iOSSystemLabelsLightPrimary,
   },
   nameandavatar: {

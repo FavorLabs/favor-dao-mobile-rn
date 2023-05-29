@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
   membershipPrice: {
     fontSize: FontSize.size_sm,
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     width: 110,
   },
   frameChild: {
@@ -88,7 +87,7 @@ const styles = StyleSheet.create({
   },
   favt: {
     fontSize: FontSize.size_xs,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     textAlign: "right",
     color: Color.iOSSystemLabelsLightPrimary,
     letterSpacing: 0,

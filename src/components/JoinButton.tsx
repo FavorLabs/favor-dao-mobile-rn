@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.paragraphP313_size,
     lineHeight: 18,
     fontWeight: "500",
-    fontFamily: FontFamily.headingH613,
     textAlign: 'center',
   },
 });
