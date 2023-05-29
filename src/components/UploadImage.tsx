@@ -41,7 +41,8 @@ const UploadImage: React.FC<Props> = (props) => {
     upImg.splice(index,1);
     imgArr.current = upImg;
     setImages([...img]);
-    setUpImage(imgArr.current)
+    if(!multiple) setUpImage('');
+    else setUpImage(imgArr.current);
   }
 
   const uploadImage = () => {
