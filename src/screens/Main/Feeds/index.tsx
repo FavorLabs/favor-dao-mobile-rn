@@ -12,6 +12,7 @@ import {useIsLogin} from "../../../utils/hook";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import {updateState as searchUpdateState} from "../../../store/search"
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 export type Props = {};
 const FeedsScreen: React.FC<Props> = (props) => {
@@ -45,7 +46,7 @@ const FeedsScreen: React.FC<Props> = (props) => {
   }
 
   return (
-    // <BackgroundSafeAreaView >
+    <BackgroundSafeAreaView >
       <View style={styles.container}>
       <View style={styles.frameParent}>
         <View style={[styles.titleParent, styles.selectionBg]}>
@@ -85,7 +86,7 @@ const FeedsScreen: React.FC<Props> = (props) => {
         }}
       />
     </View>
-    // </BackgroundSafeAreaView>
+    </BackgroundSafeAreaView>
   )
 }
 

@@ -34,7 +34,7 @@ const Mnemonic = () => {
             </View>
             <WalletWords mnemonicArray={mnemonicArray}/>
 
-            <TouchableOpacity onPress={backUp}>
+            <TouchableOpacity onPress={backUp} style={styles.backupButton}>
                 <FavorDaoButton
                     textValue="Backup"
                     frame1171275771BackgroundColor="#ff8d1a"
@@ -46,29 +46,25 @@ const Mnemonic = () => {
 };
 
 const styles = StyleSheet.create({
+    backupButton: {
+        position: "absolute",
+        bottom: 20,
+    },
     mnemonicFlexBox: {
         overflow: "hidden",
         alignItems: "center",
     },
     titleLayout: {
-        width: 343,
+        width: '85%',
         textAlign: "left",
         fontWeight: '400',
         lineHeight: 22,
         letterSpacing: 0,
     },
-    backgroundIcon: {
-        height: 44,
-        width: 375,
-    },
-    backgroundWrapper: {
-        alignSelf: "stretch",
-    },
     title: {
         color: Color.iOSSystemLabelsLightPrimary,
         height: 25,
         fontSize: FontSize.bodyBody17_size,
-        width: 343,
         textAlign: "left",
         fontWeight: '400',
         lineHeight: 22,

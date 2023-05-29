@@ -64,7 +64,8 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
             ...dao,
             ...params
           },
-          joinStatus: true
+          joinStatus: true,
+          daoListStatus: true
         }))
         navigation.goBack();
       }

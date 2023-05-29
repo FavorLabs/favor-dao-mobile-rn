@@ -37,9 +37,11 @@ const WalletUser: React.FC<Props> = (props) => {
     };
     try {
       const mnemonic =  WalletController.exportMnemonic(password);
+      if(mnemonic){
       // @ts-ignore
       navigation.navigate(Screens.MnemonicBackup,{mnemonic: mnemonic});
       setBackUpIsShow(false);
+      }
     } catch (e) {
       return Toast.show({
         type: 'error',

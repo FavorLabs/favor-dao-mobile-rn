@@ -195,3 +195,7 @@ export const getMatchedStrings = (str: string, regex: RegExp): string[] => {
   if (!matches) return [];
   return matches.map(match => match.slice(1));
 }
+
+export const hasWhiteSpace = (str:string) =>{
+  return str.indexOf(' ') >= 0;
+}

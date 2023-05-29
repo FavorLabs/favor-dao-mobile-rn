@@ -4,7 +4,7 @@ import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {Padding, Color} from "../GlobalStyles";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import WalletController from "../libs/walletController";
 import Toast from "react-native-toast-message";
 import {useNavigation} from "@react-navigation/native";
@@ -14,24 +14,39 @@ const ImportWallet = () => {
     const [oldPassword, setOldPassword] = useState('');
     const [password, setPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
-
     const [loading, setLoading] = useState(false);
 
+    const confirmDisable = useMemo(() => {
+        return !(
+          oldPassword && password && repeatPassword
+        )
+    }, [oldPassword,password,repeatPassword]);
+
     const change = () => {
+        if (confirmDisable) {
+            return Toast.show({
+                type: 'error',
+                text1: 'Please complete all options',
+            })
+        }
         setLoading(true)
         try {
             WalletController.exportMnemonic(oldPassword);
             if (password !== repeatPassword) {
-                // throw new Error('Two inconsistent passwords');
-                return Toast.show({ type: 'error', text1: 'Two inconsistent passwords'});
+                return Toast.show({type: 'error', text1: 'Two inconsistent passwords'})
             }
             WalletController.changePassword(password, oldPassword);
             navigation.goBack();
-        } catch (e) {
             Toast.show({
                 type:'info',
                 // @ts-ignore
-                text1: e.message
+                text1: 'Change password successfully'
+            })
+        } catch (e) {
+            Toast.show({
+                type:'error',
+                // @ts-ignore
+                text1: 'Original password is wrong'
             })
         } finally {
             setLoading(false);
@@ -66,7 +81,7 @@ const ImportWallet = () => {
                     secureTextEntry={true}
                   />
               </View>
-              <Pressable style={{marginTop: 20}} disabled={loading} onPress={change}>
+              <Pressable style={[{marginTop: 20}, confirmDisable && {opacity: 0.5}]} disabled={loading} onPress={change}>
                   <FavorDaoButton
                     isLoading={loading}
                     textValue="Confirm"
