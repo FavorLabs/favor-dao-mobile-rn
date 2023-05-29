@@ -10,6 +10,7 @@ export type State = {
     feedsOfDAOId: string,
     guidToDao: Record<string, DaoInfo>,
     userAgreement: boolean,
+    daoListStatus: boolean,
 }
 
 export const globalStore = createSlice({
@@ -22,6 +23,7 @@ export const globalStore = createSlice({
         feedsOfDAOId: '',
         guidToDao: {},
         userAgreement: false,
+        daoListStatus: false
     } as State,
     reducers: {
         updateState: (state, action: PayloadAction<Partial<State>>) => {

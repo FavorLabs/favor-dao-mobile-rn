@@ -53,10 +53,11 @@ const AccountCancellation: React.FC<Props> = (props) => {
         dao: null,
         newsJoinStatus: true,
         joinStatus: true,
+        daoListStatus: true,
       }));
       Toast.show({
         type:'info',
-        text1: 'account cancellation success!'
+        text1: 'Account cancellation success!'
       })
       // @ts-ignore
       navigation.navigate(Screens.Main.Feeds);

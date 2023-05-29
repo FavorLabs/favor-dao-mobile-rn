@@ -4,6 +4,7 @@ import FavorDaoButton from "./FavorDaoButton";
 import {Pressable} from "react-native";
 import WalletController from "../libs/walletController";
 import {SignatureData} from "../declare/api/DAOApi";
+import Toast from "react-native-toast-message";
 
 export type Props = {
     // fn?: <T=any>(data: T) => void
@@ -28,7 +29,10 @@ const InputPassword = ({fn, btnText = 'Confirm', type, psd}: Props) => {
                 if(m) psd?.();
             }
         } catch (e) {
-            console.error('Password Error')
+            Toast.show({
+                type:'error',
+                text1: 'Password Error'
+            })
         } finally {
             setLoading(false);
         }

@@ -43,7 +43,7 @@ const LogOut: React.FC<Props> = (props) => {
       await WalletController.logout();
       Toast.show({
         type:'info',
-        text1: 'logOut success!'
+        text1: 'LogOut success!'
       })
       dispatch(globalUpdateState({
         user: null,

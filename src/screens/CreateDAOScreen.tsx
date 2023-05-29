@@ -13,7 +13,7 @@ import {useNavigation} from "@react-navigation/native";
 import {DaoParams} from "../declare/api/DAOApi";
 import {useDispatch} from "react-redux";
 import {updateState as globalUpdateState} from "../store/global";
-import {getMatchedStrings, sleep} from "../utils/util";
+import {getMatchedStrings, hasWhiteSpace, sleep} from "../utils/util";
 import {RegExps} from "../components/TextInputParsed";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
@@ -49,11 +49,17 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         text1: 'Please complete all options',
       })
     }
+    if(hasWhiteSpace(daoName)) {
+      return Toast.show({
+        type: 'error',
+        text1: 'No spaces allowed in dao name!',
+      })
+    }
     try {
       setBtnLoading(true);
       // @ts-ignore
       const params: DaoParams = {
-        name: daoName.trim(),
+        name: daoName,
         introduction: daoDescription.trim(),
         avatar: daoAvatar,
         banner: daoBanner,
@@ -70,11 +76,12 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         dispatch(globalUpdateState({
           dao: data.data,
           joinStatus: true,
+          daoListStatus: true,
+          newsJoinStatus: true,
         }))
         navigation.goBack();
       }
     } catch (e) {
-      console.log(e)
       if (e instanceof Error) {
         Toast.show({
           type: 'error',

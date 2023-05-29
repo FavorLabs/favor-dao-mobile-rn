@@ -1,5 +1,6 @@
 import * as React from "react";
 import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image} from "react-native";
+import {Color, FontSize} from "../GlobalStyles";
 
 type Props = {
   title: string;
@@ -32,7 +33,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   text: {
-
+    fontWeight: '500',
+    fontSize: FontSize.bodyBody17_size,
+    color: Color.iOSSystemLabelsLightPrimary
   },
   icon: {
     width: 18,
