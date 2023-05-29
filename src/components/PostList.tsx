@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState ,createContext} from 'react';
+import {useDispatch,useSelector} from "react-redux";
 import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator, Animated} from 'react-native';
 import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
 import { Page, PostInfo } from "../declare/api/DAOApi";
@@ -12,6 +13,8 @@ import VideoBlock from "./VideoBlock";
 import ReTransfer from "./ReTransfer";
 import NoDataShow from "./NoDataShow";
 import ToolDaoList from "./ToolDaoList";
+import Models from "../declare/storeTypes";
+import {updateState as globalUpdateState} from "../store/global";
 
 export type Props = {
   type?: number | string;
@@ -21,13 +24,16 @@ export type Props = {
   isHome?: boolean;
   isNewsFocus?: boolean;
   setIsNewsFocus?: (b: boolean) => void;
+  delDaoMsgId?:string,
+  delStatus?:boolean
 };
 
 const PostList: React.FC<Props> = (props) => {
+  const dispatch=useDispatch()
   const { type, daoId, focus = false, query, isHome = false, isNewsFocus, setIsNewsFocus} = props;
   const url = useUrl();
+  const {delDaoMsgId,delStatus}=useSelector((state: Models) => state.global)
   const [isLogin, gotoLogin] = useIsLogin();
-
   const [pageData, setPageData] = useState<Page>({
     page: 1,
     page_size: 5,
@@ -57,6 +63,10 @@ const PostList: React.FC<Props> = (props) => {
       if (e instanceof Error) console.error(e)
     }
   };
+  const delDaoMsgById = (id:string)=>{
+    let newPostList = postListArr.filter(item=> item.id!= id)
+    setPostListArr(()=> [...newPostList]);
+  }
 
   const refreshPage = async () => {
     try {
@@ -115,6 +125,22 @@ const PostList: React.FC<Props> = (props) => {
     onRefresh();
     if(isNewsFocus) setIsNewsFocus?.(false);
   },[query,isNewsFocus,daoId])
+
+  useEffect(() => {
+    if(!delDaoMsgId) return;
+    delDaoMsgById(delDaoMsgId)
+    dispatch(globalUpdateState({
+      delDaoMsgId:''
+    }));
+  },[delDaoMsgId])
+
+  if(delStatus){
+    onRefresh();
+    dispatch(globalUpdateState({
+      delStatus:false
+    }));
+  }
+
 
   return (
       <View style={styles.container}>

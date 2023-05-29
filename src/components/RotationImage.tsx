@@ -1,5 +1,5 @@
 // @ts-ignore
-import React, { useMemo } from "react";
+import React, {useMemo, useState} from "react";
 import {
   Image,
   StyleSheet,
@@ -12,11 +12,12 @@ import {
   TouchableWithoutFeedback
 } from "react-native";
 import { SwiperFlatList } from 'react-native-swiper-flatlist';
-import {PostInfo} from "../declare/api/DAOApi";
+import {Post, PostInfo} from "../declare/api/DAOApi";
 import {getContent} from "../utils/util";
 import {useResourceUrl} from "../utils/hook";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
+import ImgViews from "./ImgViews";
 
 export type Props = {
   postInfo: PostInfo;
@@ -30,10 +31,22 @@ const RotationImage: React.FC<Props> = (props) => {
   const { contents, orig_contents } = props.postInfo;
   const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
   const imagesResUrl = useResourceUrl('images');
-
+  const [imgIndex,setImgIndex] = useState(0)
+  const [imgShowStatus,setImgShowStatus] = useState(false)
+  const setImgViewsData = (infoData: Post[]) => {
+    let imgData:any=[];
+    infoData.forEach( (item: Post) =>{
+      imgData.push({uri:`${imagesResUrl}/${item.content}`})
+    })
+    return imgData
+  }
   const Item = (item: any) => {
     return (
-      <TouchableWithoutFeedback onPress={()=> toPostDerail?.()}>
+      <TouchableWithoutFeedback onPress={()=>{
+        setImgIndex(item.sort);
+        setImgShowStatus(true);
+        }
+      }>
         <View style={styles.slide}>
           <Image
               style={styles.images}
@@ -46,18 +59,21 @@ const RotationImage: React.FC<Props> = (props) => {
   }
 
   return (
-      <View style={styles.container}>
-        <SwiperFlatList
-            // autoplay
-            // autoplayDelay={1}
-            // autoplayLoop
-            style={styles.swiper}
-            showPagination= { info[3].length > 1 ? true : false}
-            data={info[3]}
-            renderItem={({ item }) => Item(item)}
-            // vertical={false}
-        />
-      </View>
+      <>
+        <View style={styles.container}>
+          <SwiperFlatList
+              // autoplay
+              // autoplayDelay={1}
+              // autoplayLoop
+              style={styles.swiper}
+              showPagination= { info[3].length > 1 ? true : false}
+              data={info[3]}
+              renderItem={({ item }) => Item(item)}
+              // vertical={false}
+          />
+        </View>
+        <ImgViews visibleStatus={imgShowStatus} images={setImgViewsData(info[3])} imageIndex={imgIndex} setImgShowStatus={setImgShowStatus}/>
+      </>
   );
 };
 

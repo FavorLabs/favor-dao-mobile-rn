@@ -14,7 +14,7 @@ export type Props = {
 
 const NewsCard: React.FC<Props> = (props) => {
   const { postInfo } = props;
-  const { contents, orig_contents, type, orig_type, dao } = props.postInfo;
+  const { contents, orig_contents, type, orig_type, dao } = postInfo;
   const navigation = useNavigation();
 
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {

@@ -11,6 +11,8 @@ export type State = {
     guidToDao: Record<string, DaoInfo>,
     userAgreement: boolean,
     daoListStatus: boolean,
+    delStatus:boolean,
+    delDaoMsgId:string
 }
 
 export const globalStore = createSlice({
@@ -23,7 +25,9 @@ export const globalStore = createSlice({
         feedsOfDAOId: '',
         guidToDao: {},
         userAgreement: false,
-        daoListStatus: false
+        daoListStatus: false,
+        delStatus: false,
+        delDaoMsgId: '',
     } as State,
     reducers: {
         updateState: (state, action: PayloadAction<Partial<State>>) => {
@@ -40,7 +44,7 @@ export const globalStore = createSlice({
                     ...action.payload
                 }
             }
-        }
+        },
     }
 })
 export const {updateState,addGuid} = globalStore.actions

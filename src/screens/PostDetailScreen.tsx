@@ -15,6 +15,7 @@ import NewsContent from "../components/NewsContent";
 import VideoBlockItem from "../components/VideoBlockItem";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Toast from "react-native-toast-message";
+import show = Toast.show;
 
 const PostDetailScreen = () => {
     const url = useUrl();
