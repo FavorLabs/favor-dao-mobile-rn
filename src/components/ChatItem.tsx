@@ -102,12 +102,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
   },
   nehaTypo: {
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   title: {
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     textAlign: "center",
     letterSpacing: 0,
     color: Color.color,
@@ -126,8 +124,7 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     color: Color.iOSSystemLabelsLightPrimary,
     width: 81,
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   lastmsgtime: {
     lineHeight: 18,
@@ -147,10 +144,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: "700",
-    fontFamily: FontFamily.interBold,
   },
   hiYeahI1: {
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
   },
   hiYeahI: {
     color: Color.iOSSystemLabelsLightSecondary,
@@ -175,8 +171,7 @@ const styles = StyleSheet.create({
     left: "4.35%",
     fontSize: FontSize.capsCaps310SemiBold_size,
     display: "flex",
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "500",
+    fontWeight: '500',
     color: Color.color,
     lineHeight: 20,
     position: "absolute",

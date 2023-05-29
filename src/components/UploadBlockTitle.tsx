@@ -73,8 +73,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.capsCaps310SemiBold,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   selector: {
     display: 'flex',

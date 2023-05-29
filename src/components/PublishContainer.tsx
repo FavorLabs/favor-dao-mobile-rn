@@ -113,8 +113,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   subtitleTypo: {
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   subtitleLayout: {
     lineHeight: 20,
@@ -123,7 +122,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     color: Color.iOSSystemLabelsLightPrimary,
     lineHeight: 23,
     letterSpacing: 0,
@@ -142,8 +140,7 @@ const styles = StyleSheet.create({
   },
   channelname: {
     textAlign: "left",
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "500",
+    fontWeight: '500',
     flex: 1,
     color: Color.iOSSystemLabelsLightPrimary,
     lineHeight: 23,
@@ -165,7 +162,7 @@ const styles = StyleSheet.create({
   },
   messageinfo: {
     fontSize: FontSize.size_mini,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     color: Color.iOSSystemLabelsLightSecondary,
     flex: 1,
   },
@@ -187,8 +184,7 @@ const styles = StyleSheet.create({
     color: Color.color,
     display: "flex",
     position: "absolute",
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "500",
+    fontWeight: '500',
     alignItems: "center",
   },
   msgcount: {

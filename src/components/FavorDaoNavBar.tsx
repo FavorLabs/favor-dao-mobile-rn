@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   back: {
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     color: Color.royalblue_100,
     marginLeft: 5,
   },
@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_xl,
     lineHeight: 22,
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     color: Color.iOSSystemLabelsLightPrimary,
     marginLeft: -60,
   },

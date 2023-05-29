@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
   text: {
     // marginTop: 5,
     color: Color.color1,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     lineHeight: 20,
     letterSpacing: 0,
     fontSize: FontSize.size_mini,

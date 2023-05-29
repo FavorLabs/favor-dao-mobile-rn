@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     titleLayout: {
         width: 343,
         textAlign: "left",
-        fontFamily: FontFamily.aBeeZeeRegular,
+        fontWeight: '400',
         lineHeight: 22,
         letterSpacing: 0,
     },
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         fontSize: FontSize.bodyBody17_size,
         width: 343,
         textAlign: "left",
-        fontFamily: FontFamily.aBeeZeeRegular,
+        fontWeight: '400',
         lineHeight: 22,
     },
     title1: {
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     create: {
         lineHeight: 23,
         fontWeight: "600",
-        fontFamily: FontFamily.capsCaps310SemiBold,
         color: Color.color1,
         textAlign: "center",
         letterSpacing: 0,

@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
     lineHeight: 41,
     fontWeight: "700",
-    fontFamily: FontFamily.interBold,
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "left",
   },

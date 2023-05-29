@@ -12,7 +12,6 @@ import {useIsLogin} from "../../../utils/hook";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import {updateState as searchUpdateState} from "../../../store/search"
-import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 export type Props = {};
 const FeedsScreen: React.FC<Props> = (props) => {
@@ -110,15 +109,14 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   descriptionTypo: {
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     textAlign: "left",
     letterSpacing: 0,
   },
   title: {
     fontSize: FontSize.size_15xl,
     lineHeight: 41,
-    fontWeight: "700",
-    fontFamily: FontFamily.interBold,
+    fontWeight: '700',
     display: "flex",
     width: 343,
     alignItems: "center",

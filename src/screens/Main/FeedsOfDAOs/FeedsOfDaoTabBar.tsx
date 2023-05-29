@@ -49,8 +49,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   optionText: {
-    fontFamily: FontFamily.headingH613,
-    fontWeight: "600",
+    fontWeight: '500',
     color: '#939393',
     fontSize: FontSize.size_sm
   },

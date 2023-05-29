@@ -52,7 +52,7 @@ const RowUser: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   titleTypo: {
     textAlign: "left",
-    // fontFamily: FontFamily.paragraphP313,
+    // fontWeight: '400',
   },
   imageIcon: {
     borderRadius: 50,

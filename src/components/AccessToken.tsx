@@ -103,14 +103,14 @@ const styles = StyleSheet.create({
     textAlign: "left",
     letterSpacing: 0,
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     marginLeft: 15,
   },
   help: {
     textDecoration: "underline",
     color: Color.color2,
     fontSize: FontSize.capsCaps310SemiBold_size,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     marginLeft: 15,
   },
   header: {

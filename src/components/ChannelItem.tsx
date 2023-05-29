@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.capsCaps310SemiBold_size,
     letterSpacing: 0,
     fontWeight: "600",
-    fontFamily: FontFamily.capsCaps310SemiBold,
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "center",
   },

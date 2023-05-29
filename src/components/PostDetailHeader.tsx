@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   titleTypo: {
     textAlign: "left",
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     letterSpacing: 0,
   },
   join1FlexBox: {
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   joinTypo: {
     textAlign: "center",
     fontSize: FontSize.paragraphP313_size,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     lineHeight: 23,
     letterSpacing: 0,
   },
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     width: 158,
     lineHeight: 23,
     textAlign: "left",
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     letterSpacing: 0,
   },
   subtitle: {
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     color: Color.iOSSystemLabelsLightSecondary,
     width: 251,
     textAlign: "left",
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '400',
     letterSpacing: 0,
   },
   info: {

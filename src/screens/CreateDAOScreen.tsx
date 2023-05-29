@@ -160,8 +160,7 @@ const styles = StyleSheet.create({
   },
   create: {
     color: Color.color1,
-    fontFamily: FontFamily.capsCaps310SemiBold,
-    fontWeight: "600",
+    fontWeight: '600',
     textAlign: "center",
     lineHeight: 23,
     letterSpacing: 0,
