@@ -42,6 +42,7 @@ const VideoBlockItem: React.FC<Props> = (props) => {
       <RowUser
         time={isQuote ? origCreatedAt : created_on}
         daoInfo={isQuote || isReTransfer ? author_dao : dao}
+        postInfo={postInfo}
       />
       <TouchableOpacity onPress={toVideoDetail}>
 
