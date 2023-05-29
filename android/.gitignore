@@ -15,3 +15,5 @@ local.properties
 *.jsbundle
 
 app/src/main/assets/index.android.bundle
+
+app/google-services.json
