@@ -5,12 +5,12 @@ import DAODescriptionSection from "../../../components/DAODescriptionSection";
 import ContentInfoContainer from "../../../components/ContentInfoContainer";
 import ChatChannelsContainer from "../../../components/ChatChannelsContainer";
 import SyncInfoContainer from "../../../components/SyncInfoContainer";
-import { Color } from "../../../GlobalStyles";
+import {Color} from "../../../GlobalStyles";
 import FavorDaoButton from "../../../components/FavorDaoButton";
 import {useNavigation} from "@react-navigation/native";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import Toast from "react-native-toast-message";
 import DaoApi from "../../../services/DAOApi/Dao";
 import {updateState as globalUpdateState} from "../../../store/global";
@@ -18,6 +18,8 @@ import {useUrl} from "../../../utils/hook";
 import {DaoParams} from "../../../declare/api/DAOApi";
 import {getMatchedStrings} from "../../../utils/util";
 import {RegExps} from "../../../components/TextInputParsed";
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
+import {addDecimal, mulDecimal} from "../../../utils/balance";
 
 type Props = {};
 const DAOSettingScreen: React.FC<Props> = (props) => {
@@ -25,7 +27,7 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const { dao } = useSelector((state: Models) => state.global);
+  const {dao} = useSelector((state: Models) => state.global);
 
   const [daoDescription, setDaoDescription] = useState<string>('');
   const [daoAvatar, setDaoAvatar] = useState<string>('');
@@ -35,24 +37,53 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
   const [postLoading, setPostLoading] = useState<boolean>(false);
   const [daoPrice, setDaoPrice] = useState<string>('')
 
+  const doneDisable = useMemo(() => {
+    return !(
+      daoPrice &&
+      daoDescription &&
+      daoAvatar &&
+      daoBanner
+    )
+  }, [daoPrice, daoDescription, daoAvatar, daoBanner]);
+
+  const checkNumber = (str: any) => {
+    if(/^\d+$/.test(str)){
+      return true
+    }
+    return false;
+  };
+
   const settingDao = async () => {
-    if(postLoading) return;
+    if (postLoading) return;
+    if (doneDisable) {
+      return Toast.show({
+        type: 'error',
+        text1: 'Please complete all options',
+      })
+    };
+    if(!checkNumber(daoPrice)){
+      return Toast.show({
+        type: 'error',
+        text1: 'Price can only be entered as a number',
+      })
+    }
+
     try {
       setPostLoading(true);
-      const params: DaoParams & { id: string , price: string} = {
+      const params: DaoParams & { id: string, price: string } = {
         name: dao?.name as string,
-        introduction: daoDescription,
+        introduction: daoDescription.trim(),
         avatar: daoAvatar,
         banner: daoBanner,
         id: dao?.id as string,
         visibility: daoMode,
         tags,
-        price: daoPrice,
+        price: mulDecimal(daoPrice),
       }
       // @ts-ignore
-      const { data } = await DaoApi.modifyDao(url, params);
+      const {data} = await DaoApi.modifyDao(url, params);
 
-      if(data.msg === 'success') {
+      if (data.msg === 'success') {
         Toast.show({
           type: 'info',
           text1: 'modify dao success!'
@@ -67,9 +98,7 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
           joinStatus: true,
           daoListStatus: true
         }))
-        navigation.goBack();
       }
-
     } catch (e) {
       if (e instanceof Error)
         Toast.show({
@@ -78,8 +107,9 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
         });
     } finally {
       setPostLoading(false);
+      navigation.goBack();
     }
-    navigation.goBack();
+
   };
 
   useEffect(() => {
@@ -88,56 +118,61 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
       setDaoDescription(dao.introduction);
       setDaoAvatar(dao.avatar);
       setBanner(dao.banner);
-      setDaoPrice(dao.price)
+      setDaoPrice(addDecimal(dao.price))
     }
-  },[dao])
+  }, [dao])
 
   useEffect(() => {
     setTags(getMatchedStrings(daoDescription, RegExps.tag));
-    console.log('tags', getMatchedStrings(daoDescription, RegExps.tag))
   }, [daoDescription]);
 
 
   return (
-    <View style={styles.container}>
-      {
-        dao && <DAOSettingHeader daoBanner={daoBanner} />
-      }
+    <BackgroundSafeAreaView
+      footerStyle={{backgroundColor: Color.whitesmoke_300}}
+      headerComponent={<DAOSettingHeader daoBanner={daoBanner}/>}
+      headerStyle={{paddingTop: 0}}
+    >
+      <View style={styles.container}>
+        {/*{*/}
+        {/*  dao && <DAOSettingHeader daoBanner={daoBanner}/>*/}
+        {/*}*/}
 
-      { dao &&
-          <ScrollView>
+        {dao &&
+            <ScrollView>
 
-              <DAODescriptionSection
-                daoInfo={dao}
-                daoDescription={daoDescription}
-                setDaoDescription={setDaoDescription}
-                setDaoAvatar={setDaoAvatar}
-                setBanner={setBanner}
-              />
+                <DAODescriptionSection
+                    daoInfo={dao}
+                    daoDescription={daoDescription}
+                    setDaoDescription={setDaoDescription}
+                    setDaoAvatar={setDaoAvatar}
+                    setBanner={setBanner}
+                />
 
-              <ContentInfoContainer
-                  daoMode={daoMode}
-                  setDaoMode={setDaoMode}
-                  daoPrice={daoPrice}
-                  setDaoPrice={setDaoPrice}
-              />
-            {/*<ChatChannelsContainer />*/}
-            {/*<SyncInfoContainer />*/}
-          </ScrollView>
-      }
+                <ContentInfoContainer
+                    daoMode={daoMode}
+                    setDaoMode={setDaoMode}
+                    daoPrice={daoPrice}
+                    setDaoPrice={setDaoPrice}
+                />
+              {/*<ChatChannelsContainer />*/}
+              {/*<SyncInfoContainer />*/}
+            </ScrollView>
+        }
 
 
-      <View style={[styles.button]}>
-        <TouchableOpacity onPress={settingDao}>
-          <FavorDaoButton
-            textValue="Done"
-            frame1171275771BackgroundColor="#ff8d1a"
-            cancelColor="#fff"
-            isLoading={postLoading}
-          />
-        </TouchableOpacity>
+        <View style={[styles.button, doneDisable && {opacity: 0.5}]}>
+          <TouchableOpacity onPress={settingDao}>
+            <FavorDaoButton
+              textValue="Done"
+              frame1171275771BackgroundColor="#ff8d1a"
+              cancelColor="#fff"
+              isLoading={postLoading}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </BackgroundSafeAreaView>
   )
 }
 
@@ -151,7 +186,7 @@ const styles = StyleSheet.create({
   button: {
     alignSelf: "stretch",
     // marginTop: 20,
-    marginBottom: 20,
+    // marginBottom: 20,
     alignItems: "center",
     paddingHorizontal: 15,
   },

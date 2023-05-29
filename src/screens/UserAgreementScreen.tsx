@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, } from "react-native";
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image,} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
@@ -10,6 +10,7 @@ import FavorDaoButton from "../components/FavorDaoButton";
 import {useUrl} from "../utils/hook";
 import {updateState as globalUpdateState} from "../store/global";
 import {Color, FontFamily} from "../GlobalStyles";
+import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
 type Props = {};
 
@@ -17,7 +18,7 @@ const UserAgreementScreen: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const [btnLoading,setBtnLoading] = useState<boolean>(false);
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
   const confirmClick = () => {
     dispatch(globalUpdateState({
@@ -28,11 +29,12 @@ const UserAgreementScreen: React.FC<Props> = (props) => {
 
 
   return (
-    <View style={styles.container}>
-      <FavorDaoNavBar
-        title="User agreement"
-        vector={require("../assets/vector6.png")}
-      />
+    <BackgroundSafeAreaView>
+      <View style={styles.container}>
+        <FavorDaoNavBar
+          title="User agreement"
+          vector={require("../assets/vector6.png")}
+        />
 
         <View style={styles.topBlock}>
           <View style={styles.titleRow}>
@@ -48,37 +50,45 @@ const UserAgreementScreen: React.FC<Props> = (props) => {
           </Text>
         </View>
 
-      <ScrollView>
-        <View style={styles.description}>
-          <Text style={styles.descriptionText}>
-            1. Respect for others: When posting remarks or comments on the social software, please be careful not to offend or hurt other users. Please avoid making any uncomfortable or offensive comments.
-          </Text>
-          <Text style={styles.descriptionText}>
-            2. Protect privacy: Please do not disclose sensitive personal information such as addresses, phone numbers or bank account information. Any content posted on social media should be public or consistent with your privacy settings.
-          </Text>
-          <Text style={styles.descriptionText}>
-            3. Compliance: Please follow the rules for using social media platforms and do not post illegal, fraudulent or deceptive information. If you find that another user has violated the rules, please report it to the platform in a timely manner.
-          </Text>
-          <Text style={styles.descriptionText}>
-            4. Do not share false information: Please do not spread false information, including rumors, false news and inaccurate comments. This may cause harm to other users and lead to unnecessary panic and confusion.
-          </Text>
-          <Text style={styles.descriptionText}>
-            5. Pay attention to account security: Please protect your helper and password, and avoid using weak passwords and public networks.
-          </Text>
-        </View>
-      </ScrollView>
+        <ScrollView>
+          <View style={styles.description}>
+            <Text style={styles.descriptionText}>
+              1. Respect for others: When posting remarks or comments on the social software, please be careful not to
+              offend or hurt other users. Please avoid making any uncomfortable or offensive comments.
+            </Text>
+            <Text style={styles.descriptionText}>
+              2. Protect privacy: Please do not disclose sensitive personal information such as addresses, phone numbers
+              or bank account information. Any content posted on social media should be public or consistent with your
+              privacy settings.
+            </Text>
+            <Text style={styles.descriptionText}>
+              3. Compliance: Please follow the rules for using social media platforms and do not post illegal,
+              fraudulent or deceptive information. If you find that another user has violated the rules, please report
+              it to the platform in a timely manner.
+            </Text>
+            <Text style={styles.descriptionText}>
+              4. Do not share false information: Please do not spread false information, including rumors, false news
+              and inaccurate comments. This may cause harm to other users and lead to unnecessary panic and confusion.
+            </Text>
+            <Text style={styles.descriptionText}>
+              5. Pay attention to account security: Please protect your helper and password, and avoid using weak
+              passwords and public networks.
+            </Text>
+          </View>
+        </ScrollView>
 
-      <View style={styles.instanceParent}>
-        <TouchableOpacity onPress={confirmClick}>
-          <FavorDaoButton
-            textValue="Confirm"
-            frame1171275771BackgroundColor="#FF564F"
-            cancelColor="#fff"
-            isLoading={btnLoading}
-          />
-        </TouchableOpacity>
+        <View style={styles.instanceParent}>
+          <TouchableOpacity onPress={confirmClick}>
+            <FavorDaoButton
+              textValue="Confirm"
+              frame1171275771BackgroundColor="#FF564F"
+              cancelColor="#fff"
+              isLoading={btnLoading}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </BackgroundSafeAreaView>
   )
 }
 

@@ -11,7 +11,7 @@ const BtnChatToggle: React.FC<Props> = (props) => {
         <Image
           style={styles.alertCircleIcon}
           resizeMode="cover"
-          source={require("../assets/alertMore.png")}
+          source={require("../assets/toChatIcon.png")}
         />
       </View>
     </View>
@@ -29,9 +29,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   alertCircleIcon: {
-    width: 22,
-    height: 22,
-    overflow: "hidden",
+    width: 20,
+    height: 18,
   },
   btnchats: {
     // display: "none",

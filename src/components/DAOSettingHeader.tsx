@@ -7,11 +7,13 @@ import {useResourceUrl} from "../utils/hook";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {DaoInfo} from "../declare/api/DAOApi";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 type Props = {
   daoBanner: string;
 }
 const DAOSettingHeader: React.FC<Props> = (props) => {
+  const { top } = useSafeAreaInsets();
   const { daoBanner } = props;
   const navigation = useNavigation();
   const imagesResUrl = useResourceUrl('images');
@@ -22,12 +24,12 @@ const DAOSettingHeader: React.FC<Props> = (props) => {
 
   return (
     <ImageBackground
-      style={[styles.expandeddaoheaderIcon, styles.maskeddaoinfoLayout]}
+      style={[styles.imageBack, {height: top + 40}]}
       resizeMode="cover"
       source={{uri: `${imagesResUrl}/${daoBanner}`}}
     >
-      <View style={[styles.maskeddaoinfo, styles.maskeddaoinfoLayout]}>
-        <TouchableOpacity onPress={toBack}>
+      <View style={[styles.maskedDaoInfo, {height: top + 40}]}>
+        <TouchableOpacity onPress={toBack} style={styles.back}>
           <Back />
         </TouchableOpacity>
       </View>
@@ -36,26 +38,23 @@ const DAOSettingHeader: React.FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
-  maskeddaoinfo: {
+  back: {
+    height: 60,
+    alignItems: "center",
+    justifyContent: 'center',
+    padding: Padding.p_3xs,
+  },
+  maskedDaoInfo: {
     backgroundColor: Color.gray_700,
     flexDirection: "row",
-    padding: Padding.p_3xs,
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  expandeddaoheaderIcon: {
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-  maskeddaoinfoLayout: {
-    height: 60,
+    alignItems: "flex-end",
     alignSelf: "stretch",
   },
-  captionChild: {
-    width: 20,
-    height: 22,
+  imageBack: {
+    alignItems: "center",
+    justifyContent: "flex-end",
+    alignSelf: "stretch",
   },
-
 });
 
 export default DAOSettingHeader;

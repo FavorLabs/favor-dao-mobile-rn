@@ -1,6 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image} from 'react-native';
-import { DAOTopTabNavigator } from "../../../navigation/TopTabBar";
+import {DAOTopTabNavigator} from "../../../navigation/TopTabBar";
 import {getDebounce} from "../../../utils/util";
 import {Border, Color, FontFamily, FontSize, Padding} from "../../../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
@@ -12,6 +12,7 @@ import {updateState as searchUpdateState} from "../../../store/search";
 import {useIsLogin} from "../../../utils/hook";
 // @ts-ignore
 import ActionSheet from 'react-native-actionsheet';
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 export type Props = {};
 const DAOScreen: React.FC<Props> = (props) => {
@@ -21,7 +22,7 @@ const DAOScreen: React.FC<Props> = (props) => {
   const screens = [Screens.CreateVideo, Screens.CreateNews];
   const [isLogin, gotoLogin] = useIsLogin();
   const [searchValue, setSearchValue] = useState<string>('');
-  const { dao } = useSelector((state: Models) => state.global);
+  const {dao} = useSelector((state: Models) => state.global);
 
   const getSearch = () => {
     dispatch(searchUpdateState({
@@ -30,8 +31,8 @@ const DAOScreen: React.FC<Props> = (props) => {
   }
 
   const showActionSheet = (e: { preventDefault: () => void; }) => {
-    if(isLogin) {
-      if(dao) {
+    if (isLogin) {
+      if (dao) {
         actionSheetRef.current?.show();
       } else {
         // @ts-ignore
@@ -45,47 +46,49 @@ const DAOScreen: React.FC<Props> = (props) => {
   }
 
   return (
-  <View style={styles.container}>
-    <View style={styles.frameParent}>
-      <View style={[styles.titleParent, styles.selectionBg]}>
-        <Text style={styles.title}>DAO</Text>
-        <View style={styles.frameGroup}>
-          <View style={[styles.groupWrapper, styles.wrapperBg]}>
-            <View style={styles.searchParent}>
-              <TextInput
-                style={styles.searchInput}
-                placeholder={'Search'}
-                value={searchValue}
-                onChangeText={text => setSearchValue(text)}
-                onBlur={getDebounce(getSearch)}
-              />
+    <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
+      <View style={styles.container}>
+        <View style={styles.frameParent}>
+          <View style={[styles.titleParent, styles.selectionBg]}>
+            <Text style={styles.title}>DAO</Text>
+            <View style={styles.frameGroup}>
+              <View style={[styles.groupWrapper, styles.wrapperBg]}>
+                <View style={styles.searchParent}>
+                  <TextInput
+                    style={styles.searchInput}
+                    placeholder={'Search'}
+                    value={searchValue}
+                    onChangeText={text => setSearchValue(text)}
+                    onBlur={getDebounce(getSearch)}
+                  />
+                </View>
+              </View>
+              <TouchableOpacity onPress={showActionSheet}>
+                <View style={[styles.frameWrapper, styles.wrapperBg]}>
+                  <Image
+                    style={styles.frameChild}
+                    resizeMode="cover"
+                    source={require("../../../assets/frame-50.png")}
+                  />
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity onPress={showActionSheet}>
-            <View style={[styles.frameWrapper, styles.wrapperBg]}>
-              <Image
-                style={styles.frameChild}
-                resizeMode="cover"
-                source={require("../../../assets/frame-50.png")}
-              />
-            </View>
-          </TouchableOpacity>
+          <DAOTopTabNavigator/>
         </View>
+        <ActionSheet
+          ref={actionSheetRef}
+          title={'Create post now!'}
+          options={['Video Post', 'News Post', 'Cancel']}
+          cancelButtonIndex={2}
+          onPress={(index: number) => {
+            if (index < screens.length) { // @ts-ignore
+              navigation.navigate(screens[index]);
+            }
+          }}
+        />
       </View>
-      <DAOTopTabNavigator />
-    </View>
-    <ActionSheet
-      ref={actionSheetRef}
-      title={'Create post now!'}
-      options={['Video Post', 'News Post', 'Cancel']}
-      cancelButtonIndex={2}
-      onPress={(index: number) => {
-        if (index < screens.length) { // @ts-ignore
-          navigation.navigate(screens[index]);
-        }
-      }}
-    />
-  </View>
+    </BackgroundSafeAreaView>
   )
 }
 

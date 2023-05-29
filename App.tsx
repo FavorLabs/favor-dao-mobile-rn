@@ -56,14 +56,14 @@ export default function App() {
       <Provider store={store}>
           <PersistGate persistor={persiStore}>
               <SafeAreaProvider initialMetrics={null} style={styles.container}>
-                  <SafeAreaView style={{flex: 1}}>
+                  {/*<SafeAreaView style={{flex: 1}}>*/}
                       <StatusBar style="auto"/>
                       <NavigationContainer>
                           <RootStack/>
                           <WalletBottomSheet/>
                       </NavigationContainer>
                       <Toast/>
-                  </SafeAreaView>
+                  {/*</SafeAreaView>*/}
               </SafeAreaProvider>
           </PersistGate>
       </Provider>

@@ -5,6 +5,7 @@ import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
 import UserSettingItem from "../../../components/UserSettingItem";
 import {Color, FontSize} from "../../../GlobalStyles";
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 type Props = {};
 
@@ -32,22 +33,24 @@ const UserSetting: React.FC<Props> = (props) => {
 
 
   return (
-    <View style={styles.container}>
-      <FavorDaoNavBar
-        title="Setting"
-        vector={require("../../../assets/vector6.png")}
-      />
-      <ScrollView>
-        <UserSettingItem title={'Modify name'} onClick={goToModifyName}/>
-        <UserSettingItem title={'Change password'} onClick={goToChangePassword}/>
-        <UserSettingItem title={'Account cancellation'} onClick={goToAccountCancellation}/>
-        <UserSettingItem title={'Log out'} onClick={goToLogOut}/>
-        <View style={styles.version}>
-          <Text style={styles.about}>About</Text>
-          <Text style={styles.versionText}>version 1.0.2.0529</Text>
-        </View>
-      </ScrollView>
-    </View>
+    <BackgroundSafeAreaView>
+      <View style={styles.container}>
+        <FavorDaoNavBar
+          title="Setting"
+          vector={require("../../../assets/vector6.png")}
+        />
+        <ScrollView>
+          <UserSettingItem title={'Modify name'} onClick={goToModifyName}/>
+          <UserSettingItem title={'Change password'} onClick={goToChangePassword}/>
+          <UserSettingItem title={'Account cancellation'} onClick={goToAccountCancellation}/>
+          <UserSettingItem title={'Log out'} onClick={goToLogOut}/>
+          <View style={styles.version}>
+            <Text style={styles.about}>About</Text>
+            <Text style={styles.versionText}>version 1.0.2.0529</Text>
+          </View>
+        </ScrollView>
+      </View>
+    </BackgroundSafeAreaView>
   )
 }
 

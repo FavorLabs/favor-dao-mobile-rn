@@ -6,6 +6,7 @@ import {FontFamily, Color, FontSize, Border, Padding} from "../GlobalStyles";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {useMemo} from "react";
+import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
 const Mnemonic = () => {
     const navigation = useNavigation();
@@ -21,6 +22,7 @@ const Mnemonic = () => {
     };
 
     return (
+      <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
         <View style={[styles.mnemonic, styles.mnemonicFlexBox]}>
             <FavorDaoNavBar
                 title="Mnemonic words"
@@ -42,6 +44,7 @@ const Mnemonic = () => {
                 />
             </TouchableOpacity>
         </View>
+      </BackgroundSafeAreaView>
     );
 };
 

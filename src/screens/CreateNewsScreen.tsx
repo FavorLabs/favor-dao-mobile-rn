@@ -1,14 +1,14 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
 import Toast from 'react-native-toast-message';
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import FavorDaoButton from '../components/FavorDaoButton';
 import UploadImage from '../components/UploadImage';
 import TextInputBlock from '../components/TextInputBlock';
-import { Color, Border } from "../GlobalStyles";
+import {Color, Border} from "../GlobalStyles";
 import {useResourceUrl, useUrl} from "../utils/hook";
-import { Post } from "../declare/api/DAOApi";
-import { CreatePost } from "../declare/api/DAOApi";
+import {Post} from "../declare/api/DAOApi";
+import {CreatePost} from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";
 import SwitchButton from "../components/SwitchButton";
@@ -18,6 +18,7 @@ import {useNavigation} from "@react-navigation/native";
 import {getMatchedStrings} from "../utils/util";
 import {RegExps} from "../components/TextInputParsed";
 import {updateState as globalUpdateState} from "../store/global";
+import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
 export type Props = {};
 const CreateNewsScreen: React.FC<Props> = (props) => {
@@ -30,19 +31,19 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
   const [daoMode, setDaoMode] = useState<number>(0);
   const [tags, setTags] = useState<string[]>([]);
   const [postLoading, setPostLoading] = useState<boolean>(false);
-  const [imageLoading,setImageLoading] = useState<boolean>(true);
+  const [imageLoading, setImageLoading] = useState<boolean>(true);
 
-  const { dao } = useSelector((state: Models) => state.global);
+  const {dao} = useSelector((state: Models) => state.global);
 
   const createDisable = useMemo(() => {
     return !(
       description && imageLoading
     )
-  }, [description,imageLoading]);
+  }, [description, imageLoading]);
 
   const createHandle = async () => {
-    console.log('111',imageList, createDisable)
-    if (postLoading) return ;
+    console.log('111', imageList, createDisable)
+    if (postLoading) return;
     if (createDisable) {
       return Toast.show({
         type: 'info',
@@ -53,9 +54,9 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
     try {
       setPostLoading(true);
       const contents: Post[] = [];
-      contents.push({ content: description.trim(), type: 2, sort: 0 });
+      contents.push({content: description.trim(), type: 2, sort: 0});
       imageList.forEach((item, index) => {
-        contents.push({ content: item, type: 3, sort: index });
+        contents.push({content: item, type: 3, sort: index});
       });
       const postData: CreatePost = {
         contents: contents,
@@ -65,9 +66,9 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
         users: [],
         visibility: daoMode ? 2 : 1,
       };
-      console.log(postData,'postData')
-      const { data } = await PostApi.createPost(url, postData);
-      if(data.data) {
+      console.log(postData, 'postData')
+      const {data} = await PostApi.createPost(url, postData);
+      if (data.data) {
         Toast.show({
           type: 'info',
           text1: 'Post successfully'
@@ -102,34 +103,37 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
 
 
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.scrollWrap}>
-        <FavorDaoNavBar
-          title="Create news"
-          vector={require("../assets/vector6.png")}
-        />
-        <TextInputParsedBlock
-          title={'News description'}
-          value={description}
-          setValue={setDescription}
-          multiline={true}
-          placeholder={'Your description...'}
-        />
-        <UploadImage imageType={'image'} isShowSelector={false} setUpImage={setImageList} multiple={true} setImageLoading={setImageLoading}/>
-        <SwitchButton mode={daoMode} setMode={setDaoMode} />
-      </ScrollView>
-
-      <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
-        <TouchableOpacity onPress={createHandle}>
-          <FavorDaoButton
-            textValue={!imageLoading ? 'UpLoading' : "Post"}
-            frame1171275771BackgroundColor="#ff8d1a"
-            cancelColor="#fff"
-            isLoading={postLoading}
+    <BackgroundSafeAreaView>
+      <View style={styles.container}>
+        <ScrollView style={styles.scrollWrap}>
+          <FavorDaoNavBar
+            title="Create news"
+            vector={require("../assets/vector6.png")}
           />
-        </TouchableOpacity>
+          <TextInputParsedBlock
+            title={'News description'}
+            value={description}
+            setValue={setDescription}
+            multiline={true}
+            placeholder={'Your description...'}
+          />
+          <UploadImage imageType={'image'} isShowSelector={false} setUpImage={setImageList} multiple={true}
+                       setImageLoading={setImageLoading}/>
+          <SwitchButton mode={daoMode} setMode={setDaoMode}/>
+        </ScrollView>
+
+        <View style={[styles.instanceParent, createDisable && {opacity: 0.5}]}>
+          <TouchableOpacity onPress={createHandle}>
+            <FavorDaoButton
+              textValue={!imageLoading ? 'UpLoading' : "Post"}
+              frame1171275771BackgroundColor="#ff8d1a"
+              cancelColor="#fff"
+              isLoading={postLoading}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </BackgroundSafeAreaView>
   )
 }
 

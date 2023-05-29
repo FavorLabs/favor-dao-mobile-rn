@@ -7,8 +7,6 @@ import CreateNewsScreen from '../screens/CreateNewsScreen';
 import CreateVideoScreen from '../screens/CreateVideoScreen';
 import VideoPlayScreen from '../screens/VideoPlayScreen';
 import PostDetailScreen from '../screens/PostDetailScreen';
-import QuoteNewsScreen from '../screens/QuoteNewsScreen';
-import InputWalletPasswordScreen from '../screens/InputWalletPasswordScreen';
 import MnemonicBackupScreen from '../screens/MnemonicBackupScreen';
 import DAOSettingScreen from '../screens/Main/Setting/DAOSettingScreen';
 import {BottomTabNavigator} from "./BottomTabBar";
@@ -113,8 +111,6 @@ function RootStack() {
               <Stack.Screen name={Screens.CreateVideo} component={CreateVideoScreen}/>
               <Stack.Screen name={Screens.VideoPlay} component={VideoPlayScreen}/>
               <Stack.Screen name={Screens.PostDetail} component={PostDetailScreen}/>
-              <Stack.Screen name={Screens.QuoteNews} component={QuoteNewsScreen}/>
-              <Stack.Screen name={Screens.InputWalletPassword} component={InputWalletPasswordScreen}/>
               <Stack.Screen name={Screens.MnemonicBackup} component={MnemonicBackupScreen}/>
               <Stack.Screen name={Screens.DAOSetting} component={DAOSettingScreen}/>
               <Stack.Screen name={Screens.QuoteEdit} component={QuoteEditScreen}/>

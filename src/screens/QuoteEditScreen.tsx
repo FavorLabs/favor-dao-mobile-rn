@@ -1,8 +1,8 @@
 import * as React from "react";
 import {StyleSheet, View, Text, Pressable, ScrollView, TouchableOpacity} from "react-native";
 import QuotePreview from "../components/QuotePreview";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import {useNavigation, useRoute} from "@react-navigation/native";
+import {FontSize, FontFamily, Color, Border, Padding} from "../GlobalStyles";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import FavorDaoButton from "../components/FavorDaoButton";
 import TextInputBlock from "../components/TextInputBlock";
@@ -16,16 +16,17 @@ import {ReTransferPost} from "../declare/api/DAOApi";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
+import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
 type Props = {}
 const QuoteEdit: React.FC<Props> = (props) => {
   const navigation = useNavigation();
   const route = useRoute();
   // @ts-ignore
-  const { postId } = route.params;
+  const {postId} = route.params;
   const url = useUrl();
 
-  const { dao } = useSelector((state: Models) => state.global);
+  const {dao} = useSelector((state: Models) => state.global);
 
   const [description, setDescription] = useState<string>('');
   const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
@@ -39,7 +40,7 @@ const QuoteEdit: React.FC<Props> = (props) => {
 
   const getPostInfo = async () => {
     try {
-      const { data } = await PostApi.getPostById(url, postId);
+      const {data} = await PostApi.getPostById(url, postId);
       if (data.data) {
         setPostInfo(data.data);
       }
@@ -55,7 +56,7 @@ const QuoteEdit: React.FC<Props> = (props) => {
         text1: 'Please complete all options',
       })
     }
-    if(postLoading) return;
+    if (postLoading) return;
     setPostLoading(true);
     try {
       // @ts-ignore
@@ -73,8 +74,8 @@ const QuoteEdit: React.FC<Props> = (props) => {
           },
         ],
       };
-      const { data } = await PostApi.reTransferPost(url, postData);
-      if(data.data){
+      const {data} = await PostApi.reTransferPost(url, postData);
+      if (data.data) {
         Toast.show({
           type: 'info',
           text1: 'Quote success!!',
@@ -98,41 +99,43 @@ const QuoteEdit: React.FC<Props> = (props) => {
     if (postId) {
       getPostInfo();
     }
-  },[])
+  }, [])
 
   return (
-    <View style={styles.quoteEdit}>
-      <FavorDaoNavBar
-        title="Create Quote"
-        vector={require("../assets/vector6.png")}
-      />
-      <ScrollView style={styles.scrollWrap}>
-      <View style={[styles.instanceParent, styles.bottombuttonFlexBox]}>
-        <TextInputParsedBlock
-          title={'WriteComments'}
-          value={description}
-          setValue={setDescription}
-          multiline={true}
-          placeholder={'Please enter password here'}
+    <BackgroundSafeAreaView headerStyle={{backgroundColor: '#F8F8F8'}} footerStyle={{backgroundColor: '#F8F8F8'}}>
+      <View style={styles.quoteEdit}>
+        <FavorDaoNavBar
+          title="Create Quote"
+          vector={require("../assets/vector6.png")}
         />
-        <View style={[styles.instanceParent, styles.bottombuttonFlexBox]}>
-          <QuotePreview postInfo={postInfo}/>
+        <ScrollView style={styles.scrollWrap}>
+          <View style={[styles.instanceParent, styles.bottombuttonFlexBox]}>
+            <TextInputParsedBlock
+              title={'WriteComments'}
+              value={description}
+              setValue={setDescription}
+              multiline={true}
+              placeholder={'Please enter password here'}
+            />
+            <View style={[styles.instanceParent, styles.bottombuttonFlexBox]}>
+              <QuotePreview postInfo={postInfo}/>
+            </View>
+          </View>
+        </ScrollView>
+        <View style={[styles.bottomButton, styles.bottombuttonFlexBox, createDisable && {opacity: 0.5}]}>
+          <Pressable
+            onPress={getDebounce(postHandle)}
+          >
+            <FavorDaoButton
+              textValue="Post"
+              frame1171275771BackgroundColor="#ff8d1a"
+              cancelColor="#fff"
+              isLoading={postLoading}
+            />
+          </Pressable>
         </View>
       </View>
-      </ScrollView>
-      <View style={[styles.bottomButton, styles.bottombuttonFlexBox,createDisable && { opacity: 0.5 }]}>
-        <Pressable
-          onPress={getDebounce(postHandle)}
-        >
-          <FavorDaoButton
-            textValue="Post"
-            frame1171275771BackgroundColor="#ff8d1a"
-            cancelColor="#fff"
-            isLoading={postLoading}
-          />
-        </Pressable>
-      </View>
-    </View>
+    </BackgroundSafeAreaView>
   );
 };
 

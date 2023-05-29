@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image, } from "react-native";
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image,} from "react-native";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
@@ -20,6 +20,7 @@ import {
 import WalletController from '../../../libs/walletController';
 import BottomSheetModal from "../../../components/BottomSheetModal";
 import InputPassword from "../../../components/InputPassword";
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 type Props = {};
 
@@ -27,9 +28,9 @@ const LogOut: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const url = useUrl();
-  const { user } = useSelector((state: Models) => state.global);
+  const {user} = useSelector((state: Models) => state.global);
 
-  const [btnLoading,setBtnLoading] = useState<boolean>(false);
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
   const [globalBottomSheet, setGlobalBottomSheet] = useState<boolean>(false);
 
   const showBottomSheet = async () => {
@@ -42,7 +43,7 @@ const LogOut: React.FC<Props> = (props) => {
       setBtnLoading(true);
       await WalletController.logout();
       Toast.show({
-        type:'info',
+        type: 'info',
         text1: 'LogOut success!'
       })
       dispatch(globalUpdateState({
@@ -55,7 +56,7 @@ const LogOut: React.FC<Props> = (props) => {
       navigation.navigate(Screens.Main.Feeds);
     } catch (e) {
       Toast.show({
-        type:'error',
+        type: 'error',
         // @ts-ignore
         text1: e.message
       })
@@ -69,50 +70,52 @@ const LogOut: React.FC<Props> = (props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <FavorDaoNavBar
-        title="Log out"
-        vector={require("../../../assets/vector6.png")}
-      />
+    <BackgroundSafeAreaView>
+      <View style={styles.container}>
+        <FavorDaoNavBar
+          title="Log out"
+          vector={require("../../../assets/vector6.png")}
+        />
 
-      <ScrollView>
-        <View style={styles.topBlock}>
-          <View style={styles.titleRow}>
-            <Text style={styles.title}>{LogOutTitle}</Text>
-            <Image
-              style={styles.accountIcon}
-              resizeMode="cover"
-              source={require("../../../assets/logOutIcon.png")}
-            />
+        <ScrollView>
+          <View style={styles.topBlock}>
+            <View style={styles.titleRow}>
+              <Text style={styles.title}>{LogOutTitle}</Text>
+              <Image
+                style={styles.accountIcon}
+                resizeMode="cover"
+                source={require("../../../assets/logOutIcon.png")}
+              />
+            </View>
+            <Text style={styles.introduction}>
+              {LogOutIntroduction}
+            </Text>
           </View>
-          <Text style={styles.introduction}>
-            {LogOutIntroduction}
-          </Text>
+
+          <View style={styles.description}>
+            <Text style={styles.descriptionText}>{LogOutText}</Text>
+          </View>
+        </ScrollView>
+
+        <View style={styles.instanceParent}>
+          <TouchableOpacity onPress={showBottomSheet}>
+            <FavorDaoButton
+              textValue="Log out"
+              frame1171275771BackgroundColor="#FF564F"
+              cancelColor="#fff"
+              isLoading={btnLoading}
+            />
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.description}>
-          <Text style={styles.descriptionText}>{LogOutText}</Text>
-        </View>
-      </ScrollView>
-
-      <View style={styles.instanceParent}>
-        <TouchableOpacity onPress={showBottomSheet}>
-          <FavorDaoButton
-            textValue="Log out"
-            frame1171275771BackgroundColor="#FF564F"
-            cancelColor="#fff"
-            isLoading={btnLoading}
-          />
-        </TouchableOpacity>
+        <BottomSheetModal
+          visible={globalBottomSheet}
+          setVisible={close}
+        >
+          <InputPassword psd={logOut}/>
+        </BottomSheetModal>
       </View>
-
-      <BottomSheetModal
-        visible={globalBottomSheet}
-        setVisible={close}
-      >
-        <InputPassword psd={logOut} />
-      </BottomSheetModal>
-    </View>
+    </BackgroundSafeAreaView>
   )
 }
 

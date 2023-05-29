@@ -32,7 +32,7 @@ export function BottomTabNavigator() {
             headerShown: false,
             tabBarActiveTintColor: Color.color,
         }}
-        safeAreaInsets={{bottom: 0}}
+        // safeAreaInsets={{bottom: 20}}
         screenListeners={({navigation, route}) => ({
             tabPress: e => {
                 if (route.name !== 'Feeds' && !isLogin) {
