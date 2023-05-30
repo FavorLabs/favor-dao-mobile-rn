@@ -53,7 +53,7 @@ const JoinButton: React.FC<Props> = (props) => {
 
   return (
     <TouchableOpacity onPress={onClick}>
-      <View style={[styles.joinButton, isJoin ? styles.joined : styles.join]}>
+      <View style={[styles.joinButton, isJoin ? styles.joined : styles.join , isLoading && {width: 64}]}>
         {
           isLoading ? <ActivityIndicator size="small"/> :
             <Text style={[styles.joinText, isJoin ? styles.joined : styles.join]}>
@@ -67,9 +67,9 @@ const JoinButton: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   joinButton: {
-    paddingHorizontal: '2%',
-    paddingVertical: '2%',
-    borderRadius: 48,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 18,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
