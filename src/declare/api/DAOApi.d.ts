@@ -263,3 +263,20 @@ export type SignatureData = {
     "signature": string
     "type": "wallet_connect" | 'meta_mask' | 'okx' | 'unipass_std' | 'unipass_eth'
 }
+
+export type TransactionInfo = {
+    account_id: {
+        reference: string,
+        token_name: string
+    },
+    channel: string,
+    id: string,
+    created_at: number,
+    updated_at: number,
+    subject_id: string,
+    pay_amount: string,
+    status: string,
+    rollback: boolean,
+    log: [],
+    ref_order_id: string
+}

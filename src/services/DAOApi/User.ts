@@ -38,4 +38,9 @@ export default {
             url: url + '/user/accounts',
         });
     },
+    getTransaction(url: string): ResData<any> {
+        return request({
+            url: url + '/user/trans',
+        });
+    },
 };

@@ -39,6 +39,7 @@ import DropDownAlert from '../../Shared/DropDownAlert';
 import BottomSheet from 'reanimated-bottom-sheet';
 import style from './styles';
 import CometChatUserProfile from '../../Users/CometChatUserProfile';
+import BackgroundSafeAreaView from "../../../../../../components/BackgroundSafeAreaView";
 
 class CometChatMessages extends React.PureComponent {
   static contextType = CometChatContext;
@@ -1052,7 +1053,8 @@ class CometChatMessages extends React.PureComponent {
     );
 
     return (
-      <CometChatContextProvider ref={(el) => (this.contextProviderRef = el)}>
+        <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: 'white'}}>
+          <CometChatContextProvider ref={(el) => (this.contextProviderRef = el)}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1 }}>
@@ -1196,6 +1198,7 @@ class CometChatMessages extends React.PureComponent {
             />
           ) : null}
       </CometChatContextProvider>
+        </BackgroundSafeAreaView>
     );
   }
 }

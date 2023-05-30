@@ -6,19 +6,19 @@ import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 export type Props = {};
 const ChatScreen: React.FC<Props> = (props) => {
-    return (
-      <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
+  return (
+    <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
       <View style={styles.container}>
-          <CometChatGroupListWithMessages />
+        <CometChatGroupListWithMessages/>
       </View>
-      </BackgroundSafeAreaView>
-    )
+    </BackgroundSafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
+  container: {
+    flex: 1,
+  },
 });
 
 export default ChatScreen;
