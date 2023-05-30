@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
     color: Color.gray_200,
     textAlign: "center",
     lineHeight: 20,
-    // width: 50,
   },
   followDaoHeader: {
     width: 76,

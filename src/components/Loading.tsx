@@ -1,6 +1,7 @@
 import * as React from "react";
-import {Image, StyleSheet, Text, View} from "react-native";
+import { StyleSheet, Text, View} from "react-native";
 import {FontSize, FontFamily, Color} from "../GlobalStyles";
+import FastImage from 'react-native-fast-image';
 
 type LoadingType = {
   text?: string;
@@ -13,7 +14,7 @@ const Loading = ({text, visible}: LoadingType) => {
   }
   return (
     <View style={styles.vectorParent}>
-      <Image
+      <FastImage
         style={styles.vectorIcon}
         resizeMode="cover"
         source={require("../assets/loading.gif")}

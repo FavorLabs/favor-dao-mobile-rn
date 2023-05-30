@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
   },
   titleTypo: {
     textAlign: "left",
-    // fontWeight: '400',
   },
   imageIcon: {
     borderRadius: 50,
@@ -196,7 +195,6 @@ const styles = StyleSheet.create({
     color: Color.iOSSystemLabelsLightPrimary,
   },
   subtitleParent: {
-    height: 42,
     marginLeft: 12
   },
   imageParent: {

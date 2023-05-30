@@ -40,7 +40,7 @@ const DaoBriefCard: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   channelDao: {
     flex: 1,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_3xs,
     backgroundColor: Color.color1,
     width: '100%',
-    height: 80,
+    height: '100%',
     padding: Padding.p_3xs,
     justifyContent: "center",
   },

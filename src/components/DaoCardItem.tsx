@@ -66,8 +66,8 @@ const DaoCardItem: React.FC<Props> = (props) => {
         />
         <View style={[styles.groupParent, styles.labelFlexBox]}>
           <View style={styles.subtitleParent}>
+            <Text style={[styles.title]} numberOfLines={1}>{daoInfo.name}</Text>
             <Text style={styles.subtitle} numberOfLines={1}>joined: {daoInfo.follow_count}</Text>
-            <Text style={[styles.title, styles.titleClr]} numberOfLines={1}>{daoInfo.name}</Text>
           </View>
           <View style={styles.labelWrapper}>
 
@@ -116,11 +116,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
-  titleClr: {
-    color: Color.iOSSystemLabelsLightPrimary,
-    textAlign: "left",
-    letterSpacing: 0,
-  },
   previewIcon: {
     borderTopLeftRadius: Border.br_3xs,
     borderTopRightRadius: Border.br_3xs,
@@ -139,30 +134,22 @@ const styles = StyleSheet.create({
     borderRadius: 64,
   },
   subtitle: {
-    top: 26,
     lineHeight: 20,
     color: Color.iOSSystemLabelsLightSecondary,
     textAlign: "left",
     fontWeight: '400',
-    letterSpacing: 0,
     fontSize: FontSize.size_mini,
-    left: 0,
-    position: "absolute",
-    width: '100%',
   },
   title: {
-    top: 0,
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
     fontWeight: "600",
     color: Color.iOSSystemLabelsLightPrimary,
-    left: 0,
-    position: "absolute",
-    width: '100%'
+    width: '100%',
+    textAlign: "left",
   },
   subtitleParent: {
-    height: 46,
-    flex: 1,
+    maxWidth: '60%',
   },
   label1: {
     fontSize: FontSize.paragraphP313_size,

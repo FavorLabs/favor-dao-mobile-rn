@@ -106,8 +106,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "600",
-    textAlign: "center",
-    letterSpacing: 0,
     color: Color.color,
     fontSize: FontSize.size_9xl,
   },
@@ -123,7 +121,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.size_mini,
     lineHeight: 23,
     color: Color.iOSSystemLabelsLightPrimary,
-    width: 81,
     fontWeight: '500',
   },
   lastmsgtime: {

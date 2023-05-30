@@ -22,7 +22,7 @@ export const TopBarOptions = {
     tabBarLabel: ({focused, color, children}: { focused: boolean, color: string, children: string }) => {
         return (
           <View style={[styles.container, {backgroundColor: focused ? '#ff8d1a' : 'white'}]}>
-              <Text style={[styles.text, {color: focused ? 'white' : '#000000', fontSize: 15}]}>{children}</Text>
+              <Text style={[styles.text, {color: focused ? 'white' : '#000000', fontSize: 15}]} numberOfLines={1}>{children}</Text>
           </View>
         )
     },
