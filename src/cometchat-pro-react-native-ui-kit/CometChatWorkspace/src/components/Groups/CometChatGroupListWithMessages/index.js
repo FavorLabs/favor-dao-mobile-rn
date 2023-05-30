@@ -22,6 +22,7 @@ import Favor from "../../../../../../libs/favor";
 import {h64} from "xxhashjs";
 import {useDispatch} from 'react-redux';
 import {addGuid} from '../../../../../../store/global'
+import BackgroundSafeAreaView from "../../../../../../components/BackgroundSafeAreaView";
 
 class CometChatGroupListWithMessages extends React.Component {
     loggedInUser = null;
@@ -801,10 +802,9 @@ const CometChatGroupListWithMessagesFn = (props) => {
     )
 
     return (
-        <>
+        <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: 'white'}}>
             <CometChatGroupListWithMessages key={time} group={group} {...props} />
-        </>
-
+        </BackgroundSafeAreaView>
     )
 }
 

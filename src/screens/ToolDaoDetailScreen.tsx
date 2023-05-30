@@ -21,10 +21,11 @@ const ToolDaoDetailScreen: React.FC<Props> = (props) => {
   }, [])
 
   return (
-    <BackgroundSafeAreaView>
+    <BackgroundSafeAreaView
+      headerStyle={{paddingTop: 0}}
+      headerComponent={<ExpandedDAOHeader daoInfo={daoInfo} isShowBtnChatToggle={false}/>}
+    >
       <View style={styles.feedsOfDao}>
-        <ExpandedDAOHeader daoInfo={daoInfo} isShowBtnChatToggle={false}/>
-
         <View style={styles.urlBlock}>
           <WebView source={{uri}}/>
         </View>

@@ -22,15 +22,15 @@ const styles = StyleSheet.create({
   btnfeedsFlexBox: {
     justifyContent: "center",
     alignItems: "center",
-    height: 40,
-    width: 40,
+    height: 30,
+    width: 30,
     backgroundColor: Color.color1,
     borderRadius: Border.br_xl,
     flexDirection: "row",
   },
   alertCircleIcon: {
-    width: 20,
-    height: 18,
+    width: 15,
+    height: 15,
   },
   btnchats: {
     // display: "none",

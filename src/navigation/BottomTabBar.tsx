@@ -15,8 +15,8 @@ import DaoActiveSvg from '../assets/svg/dao_active.svg';
 import DaoInActiveSvg from '../assets/svg/dao_inactive.svg';
 import NotifyActiveSvg from '../assets/svg/notify_active.svg';
 import NotifyInActiveSvg from '../assets/svg/notify_inactive.svg';
-import SettingActiveSvg from '../assets/svg/setting_active.svg';
-import SettingInActiveSvg from '../assets/svg/setting_inactive.svg';
+import ProfileActiveSvg from '../assets/svg/profile_active.svg';
+import ProfileInActiveSvg from '../assets/svg/profile_inactive.svg';
 import {Color} from "../GlobalStyles";
 import {useIsLogin} from "../utils/hook";
 import {CometChatGroupListWithMessages} from "../cometchat-pro-react-native-ui-kit/CometChatWorkspace"
@@ -88,7 +88,7 @@ export function BottomTabNavigator() {
             options={{
                 tabBarLabel: 'Profile',
                 tabBarIcon: ({focused, color, size}) => (
-                  <SvgIcon svg={focused ? <SettingActiveSvg/> : <SettingInActiveSvg/>}/>
+                  <SvgIcon svg={focused ? <ProfileActiveSvg/> : <ProfileInActiveSvg/>}/>
                 )
             }}
           />

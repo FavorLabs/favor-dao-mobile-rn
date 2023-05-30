@@ -24,7 +24,7 @@ export default StyleSheet.create({
     margin: 0,
     fontWeight: '700',
     textAlign: 'left',
-    fontSize: 28,
+    fontSize: 34,
   },
   groupSearchStyle: {
     padding: 8,
@@ -69,7 +69,7 @@ export default StyleSheet.create({
   },
   headerContainer: {
     alignItems: 'center',
-    height: 48,
+    // height: 48,
     width: '100%',
     justifyContent: 'center',
   },

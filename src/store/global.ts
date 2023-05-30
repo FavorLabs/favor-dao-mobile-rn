@@ -11,8 +11,8 @@ export type State = {
     guidToDao: Record<string, DaoInfo>,
     userAgreement: boolean,
     daoListStatus: boolean,
-    delStatus:boolean,
-    delDaoMsgId:string
+    delStatus: boolean,
+    delDaoMsgId: string,
 }
 
 export const globalStore = createSlice({
