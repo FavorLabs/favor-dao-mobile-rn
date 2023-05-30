@@ -65,7 +65,8 @@ const UploadImage: React.FC<Props> = (props) => {
 
   const imageSetting = async (pickedImage: any) => {
     setImages([]);
-    setUpImage([]);
+    if(!multiple) setUpImage('');
+    else setUpImage([]);
     imgArr.current = [];
     setImageLoading?.(false)
     setVisible(true);

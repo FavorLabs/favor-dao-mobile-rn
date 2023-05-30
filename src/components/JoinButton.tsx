@@ -67,8 +67,8 @@ const JoinButton: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
   joinButton: {
-    width: 64,
-    height: 28,
+    paddingHorizontal: '2%',
+    paddingVertical: '2%',
     borderRadius: 48,
     borderWidth: 1,
     alignItems: 'center',
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
   },
   joinText: {
     fontSize: FontSize.paragraphP313_size,
-    lineHeight: 18,
     fontWeight: "500",
     textAlign: 'center',
   },

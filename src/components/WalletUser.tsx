@@ -87,7 +87,7 @@ const WalletUser: React.FC<Props> = (props) => {
             resizeMode="cover"
             source={require("../assets/setting-backup-icon.png")}
           />
-          <Text style={[styles.xc8320f, styles.xc8320fTypo]}>Backup</Text>
+          <Text style={[styles.xc8320fTypo]} numberOfLines={1}>Backup</Text>
         </View>
         </TouchableOpacity>
       </View>
@@ -163,17 +163,14 @@ const styles = StyleSheet.create({
   icon: {
     width: 15,
     height: 15,
-  },
-  xc8320f: {
-    width: 52,
-    height: 22,
-    marginLeft: 6,
+    marginRight: 6,
   },
   backupbutton: {
     backgroundColor: Color.iOSSystemFillsLightTertiary,
-    width: 93,
+    paddingVertical: 3,
+    paddingHorizontal: 10,
     marginLeft: 8,
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
   addressline: {
     borderStyle: "solid",

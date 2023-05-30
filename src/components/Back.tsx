@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   back: {
-    width: 63,
     flexDirection: "row",
+    alignItems: 'center',
   },
 });
 

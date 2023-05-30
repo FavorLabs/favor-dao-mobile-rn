@@ -31,7 +31,7 @@ const FavorDaoNavBar = ({title, vector}: FavorDaoNavBarType) => {
         </TouchableOpacity>
       </View>
       <View style={styles.titleRow}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.title} numberOfLines={1}>{title}</Text>
       </View>
     </View>
   );
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   frameWrapper: {
-    width: 50,
+    width: '20%',
   },
   titleRow: {
     flex: 1,
@@ -68,16 +68,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
+    width: '100%',
     fontSize: FontSize.size_xl,
     lineHeight: 22,
     fontWeight: "600",
     color: Color.iOSSystemLabelsLightPrimary,
-    marginLeft: -60,
+    paddingLeft: '15%',
   },
   frameParent: {
-    alignSelf: "stretch",
-    // marginTop: 20,
-    // paddingTop: 20,
     marginHorizontal: 4
   },
 })

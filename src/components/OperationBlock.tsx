@@ -217,7 +217,7 @@ const OperationBlock: React.FC<Props> = (props) => {
                 source={like ? require("../assets/icons8facebooklike-1.png") : require("../assets/like.png")}
               />
           }
-          <Text style={[styles.symbol3, styles.symbolTypo]} numberOfLines={1}>{likeCount}</Text>
+          <Text style={[like ? styles.symbol3 : styles.symbol, styles.symbolTypo]} numberOfLines={1}>{likeCount}</Text>
         </TouchableOpacity>
       </View>
 
@@ -243,15 +243,11 @@ const OperationBlock: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   symbolTypo: {
     marginLeft: 6,
-    textAlign: "left",
     fontWeight: '400',
-    // lineHeight: 20,
-    // letterSpacing: 0,
     fontSize: FontSize.size_mini,
   },
   icons8Share1: {
     width: 20,
-    overflow: "hidden",
     height: 21,
   },
   symbol: {
@@ -275,10 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   like: {
-    // alignSelf: "stretch",
     backgroundColor: Color.color1,
-    height: 24,
-    // paddingHorizontal: Padding.p_base,
     marginTop: 10,
     paddingTop: Padding.p_8xs,
     display: "flex",

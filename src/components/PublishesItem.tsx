@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
   channelitemwithseperator: {
     marginTop: 16,
     alignSelf: "stretch",
+    alignItems: 'center',
   },
 });
 
