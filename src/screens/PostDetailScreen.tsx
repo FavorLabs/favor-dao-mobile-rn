@@ -71,8 +71,8 @@ const PostDetailScreen = () => {
                             <NewsBlock postInfo={postInfo}/>
                             {
                                 postInfo.orig_contents?.length ?
-                                  postInfo.orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}/>
-                                    : postInfo.orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true}/> : <></>
+                                  postInfo.orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true} showOperate={false}/>
+                                    : postInfo.orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true} showOperate={false}/> : <></>
                                   : <></>
                             }
                             <OperationBlock postInfo={postInfo} type={0}/>

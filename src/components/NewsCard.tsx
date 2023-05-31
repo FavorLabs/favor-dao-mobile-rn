@@ -3,28 +3,72 @@ import {StyleSheet, View, Image, Text, TouchableOpacity} from "react-native";
 import NewsContent from "./NewsContent";
 import OperationBlock from "./OperationBlock";
 import { Color, Padding } from "../GlobalStyles";
-import { PostInfo } from "../declare/api/DAOApi";
+import {DaoInfo, PostInfo } from "../declare/api/DAOApi";
 import VideoBlockItem from "./VideoBlockItem";
 import Screens from "../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
+import {useEffect, useState} from "react";
+import {useSelector,useDispatch} from "react-redux";
+import Models from "../declare/storeTypes";
+import {updateState as globalUpdateState} from "../store/global";
 
 export type Props = {
   postInfo: PostInfo;
 };
 
 const NewsCard: React.FC<Props> = (props) => {
+  const dispatch = useDispatch()
   const { postInfo } = props;
   const { contents, orig_contents, type, orig_type, dao } = postInfo;
   const navigation = useNavigation();
-
+  const [shieldStatus,setShieldStatus]=useState(true)
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
     // @ts-ignore
     navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao , type : 'Mixed'});
     event.stopPropagation();
   };
+  const { ShieldAct} = useSelector((state: Models) => state.global);
+  const Shield = () => {
+    if(ShieldAct.Type=='0'){
+     if(ShieldAct.Id==dao.id){
+       setShieldStatus(false)
+       dispatch(globalUpdateState({
+         ShieldAct:{
+           Type:'',
+           Id:''
+         }
+       }))
+     }
+    }
+    if(ShieldAct.Type=='1'){
+      if(ShieldAct.Id==postInfo.id){
+        setShieldStatus(false)
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'',
+            Id:''
+          }
+        }))
+      }
+    }
+    if(ShieldAct.Type=='2'){
+      if(ShieldAct.Id==postInfo.id){
+        setShieldStatus(false)
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'',
+            Id:''
+          }
+        }))
+      }
+    }
 
+  }
+  useEffect(()=>{
+    Shield()
+  },[ShieldAct])
   return (
-    <View style={styles.feedsJoinedInner}>
+    <View style={[styles.feedsJoinedInner,{display:shieldStatus?'flex':'none'}]}>
       <View style={styles.groupParent}>
         {
           !contents &&
@@ -39,13 +83,13 @@ const NewsCard: React.FC<Props> = (props) => {
 
         {
           contents?.length &&
-            <NewsContent postInfo={postInfo} />
+            <NewsContent postInfo={postInfo}  showOperate={true}/>
         }
 
         {
           orig_contents?.length ?
-            orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}/>
-              : orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true}/> : <></>
+            orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}  showOperate={false}/>
+              : orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true}  showOperate={false}/> : <></>
             : <></>
         }
 

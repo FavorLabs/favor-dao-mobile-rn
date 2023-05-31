@@ -6,7 +6,7 @@ import { PostInfo } from "../declare/api/DAOApi";
 import VideoBlockItem from "./VideoBlockItem";
 
 type Props = {
-  postInfo: PostInfo
+  postInfo: PostInfo,
   isReTransfer?: boolean
 };
 
@@ -14,7 +14,7 @@ const VideoBlock: React.FC<Props> = (props) => {
   const { postInfo, isReTransfer } = props;
   return (
     <View style={styles.rowUserParent}>
-      <VideoBlockItem postInfo={postInfo} isReTransfer={isReTransfer}/>
+      <VideoBlockItem postInfo={postInfo} isReTransfer={isReTransfer} showOperate={true} />
       <OperationBlock postInfo={postInfo} type={1}/>
       <View style={[styles.frameChild, styles.likeSpaceBlock]} />
     </View>

@@ -25,15 +25,15 @@ export type Props = {
   isHome?: boolean;
   isNewsFocus?: boolean;
   setIsNewsFocus?: (b: boolean) => void;
-  delDaoMsgId?:string,
-  delStatus?:boolean
+  delDaoMsgId?:string;
+  delStatus?:boolean;
 };
 
 const PostList: React.FC<Props> = (props) => {
   const dispatch=useDispatch()
   const { type, daoId, focus = false, query, isHome = false, isNewsFocus, setIsNewsFocus} = props;
   const url = useUrl();
-  const {delDaoMsgId,delStatus}=useSelector((state: Models) => state.global)
+  const {delStatus}=useSelector((state: Models) => state.global)
   const [isLogin, gotoLogin] = useIsLogin();
   const [pageData, setPageData] = useState<Page>({
     page: 1,
@@ -132,13 +132,6 @@ const PostList: React.FC<Props> = (props) => {
     if(isNewsFocus) setIsNewsFocus?.(false);
   },[query,isNewsFocus,daoId])
 
-  useEffect(() => {
-    if(!delDaoMsgId) return;
-    delDaoMsgById(delDaoMsgId)
-    dispatch(globalUpdateState({
-      delDaoMsgId:''
-    }));
-  },[delDaoMsgId])
 
   if(delStatus){
     onRefresh();
@@ -149,7 +142,7 @@ const PostList: React.FC<Props> = (props) => {
 
 
   return (
-      <View style={styles.container}>
+      <View style={styles.container} >
         <FlatList
           style={styles.postList}
           data={postListArr}

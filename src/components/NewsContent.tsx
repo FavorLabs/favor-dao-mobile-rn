@@ -12,13 +12,14 @@ import Screens from "../navigation/RouteNames";
 import NewsBlock from "./NewsBlock";
 
 export type Props = {
-  postInfo: PostInfo
-  isQuote?: boolean
-  isReTransfer?: boolean
+  postInfo: PostInfo;
+  isQuote?: boolean;
+  isReTransfer?: boolean;
+  showOperate:boolean
 };
 
 const NewsContent: React.FC<Props> = (props) => {
-  const { isQuote, isReTransfer, postInfo} = props;
+  const { isQuote, isReTransfer, postInfo,showOperate} = props;
   const { created_on, dao, author_dao, origCreatedAt } = postInfo;
   return (
     <View style={[styles.frameParent, {backgroundColor: isQuote || isReTransfer ? '#eaeaea' : '#fff'}]}>
@@ -26,6 +27,7 @@ const NewsContent: React.FC<Props> = (props) => {
         time={isQuote ? origCreatedAt : created_on }
         daoInfo={isQuote || isReTransfer ? author_dao : dao}
         postInfo={postInfo}
+        showOperate={showOperate}
       />
       <NewsBlock postInfo={postInfo} isQuote={isQuote} isReTransfer={isReTransfer}/>
     </View>
