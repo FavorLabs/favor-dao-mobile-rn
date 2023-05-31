@@ -15,6 +15,7 @@ import NoDataShow from "./NoDataShow";
 import ToolDaoList from "./ToolDaoList";
 import Models from "../declare/storeTypes";
 import {updateState as globalUpdateState} from "../store/global";
+import Toast from "react-native-toast-message";
 
 export type Props = {
   type?: number | string;
@@ -60,7 +61,12 @@ const PostList: React.FC<Props> = (props) => {
       );
       setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
     } catch (e) {
-      if (e instanceof Error) console.error(e)
+      if (e instanceof Error)
+        Toast.show({
+          type: 'error',
+          // @ts-ignore
+          text1: e.message,
+        });
     }
   };
   const delDaoMsgById = (id:string)=>{

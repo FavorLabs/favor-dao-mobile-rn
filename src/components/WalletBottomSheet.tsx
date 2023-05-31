@@ -9,6 +9,7 @@ import InputPassword from "./InputPassword";
 import {SignatureData} from "../declare/api/DAOApi";
 import WalletController from "../libs/walletController";
 import Favor from "../libs/favor";
+import Toast from "react-native-toast-message";
 
 const WalletBottomSheet = () => {
     const dispatch = useDispatch()
@@ -26,7 +27,11 @@ const WalletBottomSheet = () => {
             await WalletController.login(Favor.url, signatureData)
             close();
         } catch (e) {
-            console.error(e)
+            Toast.show({
+                type: 'error',
+                // @ts-ignore
+                text1: e.message,
+            });
         }
     }
     const close = () => {

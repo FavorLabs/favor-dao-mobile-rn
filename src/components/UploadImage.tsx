@@ -7,6 +7,7 @@ import {usePermissions, useResourceUrl, useUrl} from "../utils/hook";
 import ImageApi from "../services/DAOApi/Image";
 import UploadBlockTitle from "./UploadBlockTitle";
 import Loading from "./Loading";
+import Toast from "react-native-toast-message";
 
 export type Props = {
   imageType: string;
@@ -94,7 +95,11 @@ const UploadImage: React.FC<Props> = (props) => {
       setImages(images => [...images,pickedImage])
       console.log(data.id,'daoId')
     } catch (e) {
-      console.error(e)
+      Toast.show({
+        type: 'error',
+        // @ts-ignore
+        text1: e.message,
+      });
     }
   }
 

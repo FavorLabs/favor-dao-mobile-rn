@@ -42,7 +42,6 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
   }, [description, imageLoading]);
 
   const createHandle = async () => {
-    console.log('111', imageList, createDisable)
     if (postLoading) return;
     if (createDisable) {
       return Toast.show({

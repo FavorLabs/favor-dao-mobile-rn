@@ -54,10 +54,10 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
           resizeMode="cover"
           source={{uri: `${avatarsResUrl}/${dao.avatar}`}}
         />
-        <View style={[styles.groupParent, styles.labelFlexBox]}>
+        <View style={styles.groupParent}>
           <View style={styles.subtitleParent}>
+            <Text style={styles.daoName} numberOfLines={1}>{dao.name}</Text>
             <Text style={styles.subtitle} numberOfLines={1}>joined: {dao.follow_count}</Text>
-            <Text style={[styles.title, styles.titleClr]} numberOfLines={1}>{dao.name}</Text>
           </View>
           <View style={styles.labelWrapper}>
             {/*<View style={[styles.label, styles.labelFlexBox]}>*/}
@@ -65,7 +65,7 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
             {/*</View>*/}
           </View>
         </View>
-        <View style={[styles.groupParent, styles.labelFlexBox]}>
+        <View style={styles.introductionRow}>
           {/* @ts-ignore */}
           <TextParsed content={dao.introduction} style={[styles.description, styles.titleClr]} numberOfLines={3} />
         </View>
@@ -79,15 +79,6 @@ const styles = StyleSheet.create({
   frameParentBg: {
     backgroundColor: Color.color1,
     borderRadius: Border.br_3xs,
-  },
-  labelFlexBox: {
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  titleClr: {
-    color: Color.iOSSystemLabelsLightPrimary,
-    textAlign: "left",
-    letterSpacing: 0,
   },
   previewIcon: {
     borderTopLeftRadius: Border.br_3xs,
@@ -107,30 +98,20 @@ const styles = StyleSheet.create({
     borderRadius: 64,
   },
   subtitle: {
-    top: 26,
     lineHeight: 20,
     color: Color.iOSSystemLabelsLightSecondary,
     textAlign: "left",
     fontWeight: '400',
     letterSpacing: 0,
     fontSize: FontSize.size_mini,
-    left: 0,
-    position: "absolute",
-    width: 114,
   },
-  title: {
-    top: 0,
+  daoName: {
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
     fontWeight: '600',
     color: Color.iOSSystemLabelsLightPrimary,
-    left: 0,
-    position: "absolute",
-    width: 114,
   },
   subtitleParent: {
-    height: 46,
-    width: 114,
   },
   label1: {
     fontSize: FontSize.paragraphP313_size,
@@ -156,14 +137,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignSelf: "stretch",
   },
+  introductionRow: {
+    marginTop: 10,
+  },
   description: {
     lineHeight: 21,
     fontWeight: '400',
     fontSize: FontSize.size_mini,
     color: Color.iOSSystemLabelsLightPrimary,
-    flex: 1,
-    height: 63,
-    overflow: "hidden",
   },
   ellipseParent: {
     paddingHorizontal: Padding.p_base,
@@ -180,6 +161,7 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 16,
     shadowOpacity: 1,
+    height: '100%'
   },
 });
 
