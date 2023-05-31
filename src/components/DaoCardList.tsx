@@ -8,6 +8,7 @@ import PostApi from "../services/DAOApi/Post";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {updateState as globalUpdateState} from "../store/global";
+import Toast from "react-native-toast-message";
 
 type Props = {
   refreshing: boolean;
@@ -39,7 +40,12 @@ const DaoCardList: React.FC<Props> = (props) => {
       );
       setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
     } catch (e) {
-      if (e instanceof Error) console.error(e)
+      if (e instanceof Error)
+        Toast.show({
+          type: 'error',
+          // @ts-ignore
+          text1: e.message,
+        });
     }
   };
 
@@ -60,7 +66,12 @@ const DaoCardList: React.FC<Props> = (props) => {
       );
       setPageData((pageData) => ({ ...pageData, page: 2 }));
     } catch (e) {
-      if (e instanceof Error) console.error(e)
+      if (e instanceof Error)
+        Toast.show({
+          type: 'error',
+          // @ts-ignore
+          text1: e.message,
+        });
     }
   };
 

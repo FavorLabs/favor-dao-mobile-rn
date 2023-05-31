@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import UserApi from "../services/DAOApi/User";
 import {useUrl} from "../utils/hook";
 import {addDecimal} from "../utils/balance";
+import Toast from "react-native-toast-message";
 
 type Props = {};
 const BalanceBackContainer: React.FC<Props> = (props) => {
@@ -17,7 +18,12 @@ const BalanceBackContainer: React.FC<Props> = (props) => {
       const {data} = await UserApi.getAccounts(url);
       setBalance(data.data[0].balance)
     } catch (e) {
-      if (e instanceof Error) console.error(e)
+      if (e instanceof Error)
+        Toast.show({
+          type: 'error',
+          // @ts-ignore
+          text1: e.message,
+        });
     }
   }
 

@@ -17,6 +17,7 @@ import {useResourceUrl, useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
+import Toast from "react-native-toast-message";
 
 type Props = {
   refreshing: boolean;
@@ -43,7 +44,12 @@ const ToolDaoList: React.FC<Props> = (props) => {
       setIsLoadingMore(data.data.pager.total_rows > pageData.page * pageData.page_size,);
       setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
     } catch (e) {
-      if (e instanceof Error) console.error(e)
+      if (e instanceof Error)
+        Toast.show({
+          type: 'error',
+          // @ts-ignore
+          text1: e.message,
+        });
     }
   };
 
@@ -57,7 +63,12 @@ const ToolDaoList: React.FC<Props> = (props) => {
       setIsLoadingMore(data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,);
       setPageData((pageData) => ({ ...pageData, page: 2 }));
     } catch (e) {
-      if (e instanceof Error) console.error(e)
+      if (e instanceof Error)
+        Toast.show({
+          type: 'error',
+          // @ts-ignore
+          text1: e.message,
+        });
     }
   };
 

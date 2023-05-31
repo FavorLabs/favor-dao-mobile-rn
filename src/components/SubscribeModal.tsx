@@ -6,6 +6,7 @@ import {SignatureData} from "../declare/api/DAOApi";
 import BottomSheetModal from "./BottomSheetModal";
 import DaoApi from "../services/DAOApi/Dao";
 import {useUrl} from "../utils/hook";
+import Toast from "react-native-toast-message";
 
 
 export type Props =
@@ -28,7 +29,11 @@ const SubscribeModal = ({visible, setVisible, daoCardInfo, subSuccess}: Props) =
                 await subSuccess();
             }
         } catch (e) {
-            console.error(e)
+            Toast.show({
+                type: 'error',
+                // @ts-ignore
+                text1: e.message,
+            });
         } finally {
             setLoading(false)
         }

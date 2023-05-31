@@ -39,13 +39,18 @@ export function FeedsTopTabNavigator() {
     const [isLogin, gotoLogin] = useIsLogin()
     return (
       // @ts-ignore
-      <TopTab.Navigator screenOptions={TopBarOptions} screenListeners={({navigation, route}) => ({
+      <TopTab.Navigator initialRouteName={'Recommend'} screenOptions={TopBarOptions} screenListeners={({navigation, route}) => ({
           tabPress: e => {
               if (route.name === 'Joined' && !isLogin) {
                   gotoLogin();
                   e.preventDefault()
               }
           },
+          focus: () => {
+            if(route.name === 'Joined' && !isLogin) {
+              navigation.navigate('Recommend')
+            }
+          }
       })}>
           <TopTab.Screen name="Recommend" component={RecommendScreen}/>
           <TopTab.Screen name="Joined" component={JoinedScreen} options={{

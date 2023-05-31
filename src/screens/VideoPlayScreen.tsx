@@ -12,6 +12,7 @@ import {Icon} from "@rneui/themed";
 import Favor from "../libs/favor";
 import SubscribeModal from "../components/SubscribeModal";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import Toast from "react-native-toast-message";
 
 export type Props = {};
 const VideoPlayScreen: React.FC<Props> = (props) => {
@@ -38,7 +39,11 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
         if (videoData.member !== 0 && !videoData.dao.is_subscribed) setSubModal(true);
       }
     } catch (e) {
-      console.error(e);
+      Toast.show({
+        type: 'error',
+        // @ts-ignore
+        text1: e.message,
+      });;
     }
   };
 

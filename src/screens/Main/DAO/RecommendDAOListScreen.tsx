@@ -25,6 +25,7 @@ import PublishContainer from "../../../components/PublishContainer";
 import Chats from "../../../components/Chats";
 import BottomSheetModal from "../../../components/BottomSheetModal";
 import {useNavigation} from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 
 type Props = {};
 const RecommendDAOListScreen: React.FC<Props> = (props) => {
@@ -57,7 +58,12 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
       );
       setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
     } catch (e) {
-      if (e instanceof Error) console.error(e)
+      if (e instanceof Error)
+        Toast.show({
+          type: 'error',
+          // @ts-ignore
+          text1: e.message,
+        });
     }
   };
 
@@ -73,7 +79,12 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
       );
       setPageData((pageData) => ({ ...pageData, page: 2 }));
     } catch (e) {
-      if (e instanceof Error) console.error(e)
+      if (e instanceof Error)
+        Toast.show({
+          type: 'error',
+          // @ts-ignore
+          text1: e.message,
+        });
     }
   };
 

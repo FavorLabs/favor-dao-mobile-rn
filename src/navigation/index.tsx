@@ -31,6 +31,7 @@ import AccountCancellation from "../screens/Main/Setting/AccountCancellation";
 import LogOut from "../screens/Main/Setting/LogOut";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import UserAgreementScreen from "../screens/UserAgreementScreen";
+import Toast from "react-native-toast-message";
 
 const Stack = createStackNavigator();
 
@@ -78,7 +79,11 @@ function RootStack() {
                         dao: dao?.data.data.list?.[0] || null
                     }));
                 } catch (e) {
-                    console.error(e)
+                    Toast.show({
+                        type: 'error',
+                        // @ts-ignore
+                        text1: e.message,
+                    });
                 }
             }
         }
