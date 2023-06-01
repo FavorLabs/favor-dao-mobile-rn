@@ -14,6 +14,7 @@ import SubscribeModal from "../components/SubscribeModal";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import Toast from "react-native-toast-message";
 import Navigation from "../navigation";
+import Loading from "../components/Loading";
 
 export type Props = {};
 const VideoPlayScreen: React.FC<Props> = (props) => {
@@ -26,6 +27,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
   const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
   const [subModal, setSubModal] = useState(false);
   const [seeMoreStatus, setSeeMoreStatus] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(false);
 
   const playable = useMemo(() => videoData?.member === 0 ? true : videoData?.dao.is_subscribed, [videoData])
 
@@ -35,6 +37,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
       const videoData = data.data;
       console.log(videoData)
       if (videoData) {
+        setVisible(false);
         setVideoData(videoData);
         if (videoData.author_dao.id) setIsReTransfer(true);
         if (videoData.member !== 0 && !videoData.dao.is_subscribed) setSubModal(true);
@@ -45,6 +48,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
         // @ts-ignore
         text1: e.message,
       });
+      setVisible(false);
       navigation.goBack();
     }
   };
@@ -66,6 +70,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (postId) {
+      setVisible(true);
       getVideoById(postId);
     }
   }, [postId]);
@@ -132,6 +137,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
         </View>
         <VideoDetailButton postInfo={videoData} vSrc={info.hash!}/>
       </View>
+      <Loading visible={visible} text={'Image uploading in progress'}/>
     </BackgroundSafeAreaView>
   )
 }

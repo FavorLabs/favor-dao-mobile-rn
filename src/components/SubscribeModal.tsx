@@ -7,6 +7,7 @@ import BottomSheetModal from "./BottomSheetModal";
 import DaoApi from "../services/DAOApi/Dao";
 import {useUrl} from "../utils/hook";
 import Toast from "react-native-toast-message";
+import {useNavigation} from "@react-navigation/native";
 
 
 export type Props =
@@ -19,6 +20,7 @@ const SubscribeModal = ({visible, setVisible, daoCardInfo, subSuccess}: Props) =
     const url = useUrl();
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const navigation = useNavigation();
 
     const pwdSuccess = async (signatureData: SignatureData) => {
         setPasswordModalVisible(false);
@@ -34,6 +36,7 @@ const SubscribeModal = ({visible, setVisible, daoCardInfo, subSuccess}: Props) =
                 // @ts-ignore
                 text1: e.message,
             });
+            navigation.goBack();
         } finally {
             setLoading(false)
         }
