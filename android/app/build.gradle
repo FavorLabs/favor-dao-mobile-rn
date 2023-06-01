@@ -114,7 +114,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
-    namespace "io.favorlabs.fultter_favor_dao"
+    namespace 'io.favorlabs.fultter_favor_dao'
     defaultConfig {
         applicationId 'io.favorlabs.fultter_favor_dao'
         minSdkVersion rootProject.ext.minSdkVersion
