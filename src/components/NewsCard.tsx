@@ -30,7 +30,7 @@ const NewsCard: React.FC<Props> = (props) => {
   const { ShieldAct} = useSelector((state: Models) => state.global);
   const Shield = () => {
     if(ShieldAct.Type=='0'){
-     if(ShieldAct.Id==dao.id){
+     if(ShieldAct.Id==dao.id || ( postInfo.author_dao && ShieldAct.Id==postInfo.author_dao.id)){
        setShieldStatus(false)
        dispatch(globalUpdateState({
          ShieldAct:{
@@ -41,7 +41,7 @@ const NewsCard: React.FC<Props> = (props) => {
      }
     }
     if(ShieldAct.Type=='1'){
-      if(ShieldAct.Id==postInfo.id){
+      if(ShieldAct.Id==postInfo.id || ShieldAct.Id==postInfo.ref_id){
         setShieldStatus(false)
         dispatch(globalUpdateState({
           ShieldAct:{
@@ -52,7 +52,8 @@ const NewsCard: React.FC<Props> = (props) => {
       }
     }
     if(ShieldAct.Type=='2'){
-      if(ShieldAct.Id==postInfo.id){
+      console.log(postInfo,'type2')
+      if(ShieldAct.Id==postInfo.id || ShieldAct.Id==postInfo.ref_id){
         setShieldStatus(false)
         dispatch(globalUpdateState({
           ShieldAct:{
@@ -88,8 +89,8 @@ const NewsCard: React.FC<Props> = (props) => {
 
         {
           orig_contents?.length ?
-            orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}  showOperate={false}/>
-              : orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true}  showOperate={false}/> : <></>
+            orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}  showOperate={!contents  ? true : false }/>
+              : orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true}  showOperate={!contents  ? true : false}/> : <></>
             : <></>
         }
 
