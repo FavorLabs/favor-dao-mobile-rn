@@ -4,6 +4,10 @@ import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
 import OperationBlock from "./OperationBlock";
 import { PostInfo } from "../declare/api/DAOApi";
 import VideoBlockItem from "./VideoBlockItem";
+import {useSelector,useDispatch} from "react-redux";
+import {useEffect, useState} from "react";
+import {updateState as globalUpdateState} from "../store/global";
+import Models from "../declare/storeTypes";
 
 type Props = {
   postInfo: PostInfo,
@@ -11,9 +15,51 @@ type Props = {
 };
 
 const VideoBlock: React.FC<Props> = (props) => {
+  const dispatch = useDispatch()
   const { postInfo, isReTransfer } = props;
+  const [shieldStatus,setShieldStatus]=useState(true)
+  const { ShieldAct} = useSelector((state: Models) => state.global);
+
+  const Shield = () => {
+    if(ShieldAct.Type=='0'){
+      if(ShieldAct.Id==postInfo.dao.id){
+        setShieldStatus(false)
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'',
+            Id:''
+          }
+        }))
+      }
+    }
+    if(ShieldAct.Type=='1'){
+      if(ShieldAct.Id==postInfo.id){
+        setShieldStatus(false)
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'',
+            Id:''
+          }
+        }))
+      }
+    }
+    if(ShieldAct.Type=='2'){
+      if(ShieldAct.Id==postInfo.id){
+        setShieldStatus(false)
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'',
+            Id:''
+          }
+        }))
+      }
+    }
+  }
+  useEffect(()=>{
+    Shield()
+  },[ShieldAct])
   return (
-    <View style={styles.rowUserParent}>
+    <View style={[styles.rowUserParent,{display:shieldStatus?'flex':'none'}]}>
       <VideoBlockItem postInfo={postInfo} isReTransfer={isReTransfer} showOperate={true} />
       <OperationBlock postInfo={postInfo} type={1}/>
       <View style={[styles.frameChild, styles.likeSpaceBlock]} />
