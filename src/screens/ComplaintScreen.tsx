@@ -13,8 +13,6 @@ import {
 import {Color, Padding} from "../GlobalStyles";
 import {useMemo, useState} from "react";
 import {DaoInfo, PostInfo} from "../declare/api/DAOApi";
-import {color} from "@rneui/base";
-import content from "*.svg";
 import PostApi from "../services/DAOApi/Post";
 import Toast from "react-native-toast-message";
 import {useIsLogin, useUrl} from '../utils/hook';
@@ -32,7 +30,7 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
     const url = useUrl();
     const createDisable = useMemo(() => {
         return !(
-             reason
+             reason && reason.trim()!==''
         )
     }, [reason]);
     const toComplaint = async () => {

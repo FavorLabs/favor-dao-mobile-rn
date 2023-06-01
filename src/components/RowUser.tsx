@@ -55,7 +55,7 @@ const RowUser: React.FC<Props> = (props) => {
       if(!showOperate){
         setOperateImgStatus(false)
       }else{
-        if(dao?.id == daoInfo?.id){
+        if(dao?.id == daoInfo?.id && !( routeName=='Recommend'||routeName=='Joined' )){
           setActionSheetType(0)
         } else {
           if(routeName=='Mixed'){
@@ -82,6 +82,13 @@ const RowUser: React.FC<Props> = (props) => {
           type: 'info',
           text1: 'Delete dao success!'
         });
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'2',
+            Id:postInfo.id
+          },
+          delStatus:true
+        }))
       }
     } catch (e) {
       if (e instanceof Error)
@@ -95,14 +102,30 @@ const RowUser: React.FC<Props> = (props) => {
   };
   const ShieldDaoMsg = async () => {
     try {
-      const request =  () => PostApi.shieldMsg(url,postInfo.id)
-      const {data}=await request()
-      if(data.code==0){
-        Toast.show({
-          type: 'info',
-          text1: 'Shield success!'
-        });
-      }
+
+        const request =  () => PostApi.shieldMsg(url,postInfo.id)
+        const {data}=await request()
+        if(data.code==0){
+          Toast.show({
+            type: 'info',
+            text1: 'Shield success!'
+          });
+          if(postInfo.ref_id=='000000000000000000000000'){
+            dispatch(globalUpdateState({
+              ShieldAct:{
+                Type:'1',
+                Id:postInfo.id
+              }
+            }))
+          }else {
+              dispatch(globalUpdateState({
+                ShieldAct:{
+                  Type:'1',
+                  Id:postInfo.ref_id
+                }
+              }))
+          }
+        }
     } catch (e) {
       if (e instanceof Error)
       {
@@ -122,6 +145,12 @@ const RowUser: React.FC<Props> = (props) => {
           type: 'info',
           text1: 'Shield success!'
         });
+          dispatch(globalUpdateState({
+            ShieldAct:{
+              Type:'0',
+              Id:daoInfo.id
+            }
+          }))
       }
     } catch (e) {
       if (e instanceof Error)
@@ -137,31 +166,12 @@ const RowUser: React.FC<Props> = (props) => {
     try {
       if (index==0){
         ShieldUser()
-        dispatch(globalUpdateState({
-          ShieldAct:{
-            Type:'0',
-            Id:daoInfo.id
-          }
-        }))
       }
       if(index==1){
         ShieldDaoMsg()
-        dispatch(globalUpdateState({
-          ShieldAct:{
-            Type:'1',
-            Id:postInfo.id
-          }
-        }))
       }
       if(index==2){
         delDaoMsg()
-        dispatch(globalUpdateState({
-          ShieldAct:{
-            Type:'2',
-            Id:postInfo.id
-          },
-          delStatus:true
-        }))
       }
     } catch (e) {
       if (e instanceof Error)
@@ -258,15 +268,12 @@ const RowUser: React.FC<Props> = (props) => {
               cancelButtonIndex={3}
               onPress={(index:number) => {
                 if (index==0) {
-                  console.log("@name")
                   OperateAct(index)
                 }
                 if (index==1){
-                  console.log("cont")
                   OperateAct(index)
                 }
                 if(index==2){
-                  console.log(postInfo,daoInfo)
                   // @ts-ignore
                   navigation.navigate(Screens.Complaint,{postInfo:postInfo,daoInfo:daoInfo})
                 }
