@@ -127,7 +127,6 @@ const styles = StyleSheet.create({
   retransRow: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
     paddingHorizontal: Padding.p_base,
     paddingVertical: 10,
   },

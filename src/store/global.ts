@@ -12,7 +12,7 @@ export type State = {
     userAgreement: boolean,
     daoListStatus: boolean,
     delStatus:boolean,
-    delDaoMsgId:string
+    ShieldAct: Record<string, string>,
 }
 
 export const globalStore = createSlice({
@@ -27,7 +27,10 @@ export const globalStore = createSlice({
         userAgreement: false,
         daoListStatus: false,
         delStatus: false,
-        delDaoMsgId: '',
+        ShieldAct:{
+            Type:'',
+            Id:''
+        }
     } as State,
     reducers: {
         updateState: (state, action: PayloadAction<Partial<State>>) => {

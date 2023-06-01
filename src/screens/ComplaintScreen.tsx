@@ -18,6 +18,7 @@ import content from "*.svg";
 import PostApi from "../services/DAOApi/Post";
 import Toast from "react-native-toast-message";
 import {useIsLogin, useUrl} from '../utils/hook';
+import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 type Props = {
 };
 
@@ -59,6 +60,7 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
         }
     }
     return (
+        <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
         <KeyboardAwareScrollView contentContainerStyle={[styles.complaint, styles.complaintSpaceBlock]}>
             <FavorDaoNavBar
                 title="complaint"
@@ -95,6 +97,7 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
                 </View>
             </View>
         </KeyboardAwareScrollView>
+        </BackgroundSafeAreaView>
     )
 }
 const styles = StyleSheet.create({

@@ -266,6 +266,7 @@ const RowUser: React.FC<Props> = (props) => {
                   OperateAct(index)
                 }
                 if(index==2){
+                  console.log(postInfo,daoInfo)
                   // @ts-ignore
                   navigation.navigate(Screens.Complaint,{postInfo:postInfo,daoInfo:daoInfo})
                 }
