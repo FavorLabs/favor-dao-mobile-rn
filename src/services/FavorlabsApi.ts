@@ -17,10 +17,10 @@ export default {
             },
         });
     },
-    getFavorXConfig():
-      Promise<AxiosResponse<FavorXConfig[]>> {
+    getFavorXConfig<T>(networkId: 'all' | 18 | 19 = 'all'):
+      Promise<AxiosResponse<FavorXConfig[] | FavorXConfig>> {
         return FavorlabsService({
-            url: '/favorxconfig?networkId=all&json=true',
+            url: `/favorxconfig?networkId=${networkId}&json=true`,
             timeout: 3000
         });
     }
