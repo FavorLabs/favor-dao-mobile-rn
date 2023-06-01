@@ -10,8 +10,25 @@ import Screens from "../navigation/RouteNames";
 import {Padding, Color, FontFamily, FontSize, Border} from "../GlobalStyles";
 import Loading from "../components/Loading";
 import Favor from "../libs/favor";
-import {EXTERNAL_CONFIG_NAME} from '@env';
+import {EXTERNAL_CONFIG_NAME, IS_TEST} from '@env';
 import {CometChat} from '@cometchat-pro/react-native-chat';
+
+const DefaultConfig = {
+    "name": "Polygon Mainnet",
+    "bootnode": ["/ip4/94.103.5.122/tcp/1818/p2p/12D3KooWA9J6uL7xjgYD1j8ybHqVeHMAstTzZXsNpDAU4VqRScwU", "/ip4/107.167.2.249/tcp/1800/p2p/12D3KooWEnr66XXK4Y85J1oRZasJUMLj41iexzXSE7DPKwJD3Ao3", "/ip6/2610:150:c066::b5f7:4c24/tcp/1800/p2p/12D3KooWEnr66XXK4Y85J1oRZasJUMLj41iexzXSE7DPKwJD3Ao3"],
+    "chain-endpoint": "https://polygon-mainnet.public.blastapi.io",
+    "network-id": 18,
+    "oracle-contract-addr": "0xDecc6cCfe1E5369EF8e0d30033EF476b075E49bB",
+    "traffic": false,
+    "traffic-contract-addr": "",
+    "proxy-group": "dao-proxy",
+    "proxy-nodes": ["69e1256d685f684c5b903b70dc75b09c3a865a093bf18411973e42fc87fe682f", "ad02ef8199addd00b50c56445f7e22e6e3a5803261c0ff4fecec966867e7dd47"],
+    "unipass": {
+        "nodeRPC": "https://node.wallet.unipass.id/polygon-mainnet",
+        "domain": "wallet.unipass.id"
+    },
+    "chat": {"region": "us", "appId": "235461af0053efb9"}
+}
 
 const StartNode = () => {
     const navigation = useNavigation<StackNavigationProp<any>>()
@@ -23,40 +40,29 @@ const StartNode = () => {
     const [configLoaded, setConfigLoaded] = useState(false);
 
     useEffect(() => {
-        getConfig();
         getVersion();
+        IS_TEST ? getConfig() : getConfigStartNode();
     }, [])
+    const getConfigStartNode = async () => {
+        setVisible(true);
+        const data = await getConfig(18);
+        const fc = data as FavorXConfig;
+        setConfig([fc])
+        await startNode(fc).catch((e) => {
+            console.error(e)
+        });
+        setVisible(false);
+    }
     const getVersion = async () => {
         const version = await Favor.version()
         setVersion(version);
     }
-    const getConfig = async () => {
+    const getConfig = async (networkId: 'all' | 18 | 19 = 'all') => {
         setConfigLoaded(false);
-        try {
-            const {data} = await FavorlabsApi.getFavorXConfig()
-            setConfig(data);
-        } catch (e) {
-            // console.error(e);
-            setConfig([{
-                "name": "Polygon Mainnet",
-                "bootnode": ["/ip4/94.103.5.122/tcp/1818/p2p/12D3KooWA9J6uL7xjgYD1j8ybHqVeHMAstTzZXsNpDAU4VqRScwU", "/ip4/107.167.2.249/tcp/1800/p2p/12D3KooWEnr66XXK4Y85J1oRZasJUMLj41iexzXSE7DPKwJD3Ao3", "/ip6/2610:150:c066::b5f7:4c24/tcp/1800/p2p/12D3KooWEnr66XXK4Y85J1oRZasJUMLj41iexzXSE7DPKwJD3Ao3"],
-                "chain-endpoint": "https://polygon-mainnet.public.blastapi.io",
-                "network-id": 18,
-                "oracle-contract-addr": "0xDecc6cCfe1E5369EF8e0d30033EF476b075E49bB",
-                "traffic": false,
-                "traffic-contract-addr": "",
-                "proxy-group": "dao-proxy",
-                "proxy-nodes": ["69e1256d685f684c5b903b70dc75b09c3a865a093bf18411973e42fc87fe682f", "ad02ef8199addd00b50c56445f7e22e6e3a5803261c0ff4fecec966867e7dd47"],
-                "unipass": {
-                    "nodeRPC": "https://node.wallet.unipass.id/polygon-mainnet",
-                    "domain": "wallet.unipass.id"
-                },
-                "chat": {"region": "us", "appId": "235461af0053efb9"}
-            }])
-        } finally {
-            setConfigLoaded(true);
-        }
-
+        const {data} = await FavorlabsApi.getFavorXConfig(networkId).catch(() => ({data: DefaultConfig}));
+        setConfig(Array.isArray(data) ? data : [data]);
+        setConfigLoaded(true);
+        return data;
     }
     const initChat = (region: string, appId: string) => {
         const appSetting = new CometChat.AppSettingsBuilder()
@@ -95,43 +101,49 @@ const StartNode = () => {
         try {
             setVisible(true);
             const fc = config[selectedIndex];
-            await Favor.startNode({
-                "network-id": fc['network-id'],
-                "boot-nodes": fc['bootnode'].join(','),
-                "chain-endpoint": fc["chain-endpoint"],
-                "oracle-contract-addr": fc["oracle-contract-addr"],
-                // @ts-ignore
-                traffic: fc['traffic'],
-                "traffic-contract-addr": fc['traffic-contract-addr'],
-                "proxy-group": fc['proxy-group'],
-                "proxy-enable": checked,
-                groups: [{
-                    name: fc['proxy-group'],
-                    type: 1,
-                    'keep-connected-peers': 1,
-                    nodes: fc['proxy-nodes'],
-                }],
-            })
-            console.log("Node start success");
-            await Favor.getConfig(fc["network-id"], EXTERNAL_CONFIG_NAME || 'FavorDAO');
-            await Favor.subProxy();
-            initChat(fc.chat.region, fc.chat.appId);
-            navigation.replace(Screens.Root);
+            await startNode(fc);
         } catch (e) {
             console.error(e)
-            await Favor.stop();
         } finally {
             setVisible(false);
         }
     }
-
+    const startNode = async (fc: FavorXConfig) => {
+        await Favor.startNode({
+            "network-id": fc['network-id'],
+            "boot-nodes": fc['bootnode'].join(','),
+            "chain-endpoint": fc["chain-endpoint"],
+            "oracle-contract-addr": fc["oracle-contract-addr"],
+            // @ts-ignore
+            traffic: fc['traffic'],
+            "traffic-contract-addr": fc['traffic-contract-addr'],
+            "proxy-group": fc['proxy-group'],
+            "proxy-enable": checked,
+            groups: [{
+                name: fc['proxy-group'],
+                type: 1,
+                'keep-connected-peers': 1,
+                nodes: fc['proxy-nodes'],
+            }],
+        }).catch(async error => {
+            await Favor.stop();
+            throw error
+        })
+        console.log("Node start success");
+        await Favor.getConfig(fc["network-id"], EXTERNAL_CONFIG_NAME || 'FavorDAO');
+        await Favor.subProxy();
+        initChat(fc.chat.region, fc.chat.appId);
+        navigation.replace(Screens.Root);
+    }
 
     return <View style={styles.container}>
         <View style={styles.header}>
             <Text style={styles.title}>
                 Select Network
             </Text>
-            <TouchableOpacity onPress={getConfig}>
+            <TouchableOpacity onPress={() => {
+                getConfig();
+            }}>
                 <Icon size={25} color={Color.color} name='refresh-circle-sharp' type='ionicon'/>
             </TouchableOpacity>
         </View>
