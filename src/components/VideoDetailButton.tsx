@@ -53,11 +53,6 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   const [isJoin, setIsJoin] = useState(false);
   const [btnLoading,setBtnLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(postInfo.dao,'postInfo')
-    console.log('----------')
-  },[])
-
   const getPostLikeStatus = async () => {
     const {data} = await PostApi.checkPostLike(url, postInfo.id);
     if (data.data) {
