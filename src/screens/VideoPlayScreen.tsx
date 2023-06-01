@@ -80,7 +80,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
     setSubModal(false);
   }
 
-  if (!videoData) return null;
+  if (!videoData) return <View style={styles.loadingContent}><Text style={styles.loading}>loading...</Text></View>;
 
   return (
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.iOSSystemLabelsLightPrimary}} footerStyle={{backgroundColor: Color.iOSSystemLabelsLightPrimary}}>
@@ -137,12 +137,22 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
         </View>
         <VideoDetailButton postInfo={videoData} vSrc={info.hash!}/>
       </View>
-      <Loading visible={visible} text={'Image uploading in progress'}/>
     </BackgroundSafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  loadingContent: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loading: {
+    color: Color.color1,
+    fontSize: FontSize.size_xl,
+    fontWeight: '600',
+  },
   container: {
     backgroundColor: Color.iOSSystemLabelsLightPrimary,
     flex: 1,
@@ -177,7 +187,6 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   name: {
-    lineHeight: 23,
     letterSpacing: 0,
     fontSize: FontSize.bodyBody17_size,
   },
@@ -187,7 +196,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: FontSize.paragraphP313_size,
     color: Color.color1,
-    lineHeight: 18,
   },
   tags: {
     flexDirection: 'row'

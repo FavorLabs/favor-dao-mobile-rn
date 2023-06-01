@@ -28,11 +28,11 @@ type Props = {
 };
 
 const OperationBlock: React.FC<Props> = (props) => {
-  const { postInfo, type } = props;
-  const { id, ref_id, contents } = props.postInfo;
+  const {postInfo, type} = props;
+  const {id, ref_id, contents} = props.postInfo;
   const url = useUrl();
   // const { token } = useSelector((state: any) => state.wallet);
-  const { dao } = useSelector((state: Models) => state.global);
+  const {dao} = useSelector((state: Models) => state.global);
   const [isLogin, gotoLogin] = useIsLogin();
 
   const navigation = useNavigation();
@@ -43,18 +43,17 @@ const OperationBlock: React.FC<Props> = (props) => {
   const actionSheetRef = useRef<ActionSheet>(null);
   const screens = ['', Screens.QuoteEdit];
 
-  const [postId,setPostId] = useState<string>('');
+  const [postId, setPostId] = useState<string>('');
   const [like, setLike] = useState<boolean>(false);
-  const [isPostLike, setIsPostLike] = useState<boolean>(true);
   const [likeCount, setLikeCount] = useState<number>(postInfo?.upvote_count);
   const [watchCount, setWatchCount] = useState<number>(postInfo?.view_count);
   const [refCount, setRefCount] = useState<number>(postInfo.ref_count);
   const [commentOnCount, setCommentOnCount] = useState<number>(postInfo.comment_count);
-  const [isLikeLoading,setIsLikeLoading] = useState<boolean>(false);
+  const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false);
 
   const showActionSheet = (e: { preventDefault: () => void; }) => {
-    if(isLogin) {
-      if(dao) {
+    if (isLogin) {
+      if (dao) {
         actionSheetRef.current?.show();
       } else {
         Toast.show({
@@ -77,38 +76,36 @@ const OperationBlock: React.FC<Props> = (props) => {
   };
 
   const postLike = async () => {
-    if(!isLogin) return  gotoLogin();
-    if(isLikeLoading) return;
-    if (isPostLike) {
-      try {
-        setIsLikeLoading(true);
-        setIsPostLike(false);
-        const {data} = await PostApi.postLike(url, postId);
-        if (data.data) {
-          setLike(data.data.status);
-          if (data.data.status) setLikeCount(likeCount + 1);
-          else setLikeCount(likeCount - 1);
-        }
-      } catch (e) {
-        Toast.show({
-          type: 'error',
-          text1: 'post like error',
-        })
-      } finally {
-        setIsPostLike(true);
-        setIsLikeLoading(false);
+    if (!isLogin) return gotoLogin();
+    if (isLikeLoading) return;
+    try {
+      setIsLikeLoading(true);
+      const {data} = await PostApi.postLike(url, postId);
+      if (data.data) {
+        setLike(data.data.status);
+        if (data.data.status) setLikeCount(likeCount + 1);
+        else setLikeCount(likeCount - 1);
       }
+    } catch (e) {
+      Toast.show({
+        type: 'error',
+        text1: 'post like error',
+      })
+    } finally {
+      setIsLikeLoading(false);
     }
   };
 
   const postView = async () => {
     try {
       const {data} = await PostApi.addPostView(url, postId);
-      if (data.data.status) setWatchCount(watchCount + 1);} catch (e) {}
+      if (data.data.status) setWatchCount(watchCount + 1);
+    } catch (e) {
+    }
   };
 
   const reTransferFun = async () => {
-    if(!isLogin) return gotoLogin();
+    if (!isLogin) return gotoLogin();
     try {
       if (dao) {
         const postData: ReTransferPost = {
@@ -140,21 +137,17 @@ const OperationBlock: React.FC<Props> = (props) => {
   };
 
   const toQuoteEdit = async () => {
-    if(!isLogin) return gotoLogin();
+    if (!isLogin) return gotoLogin();
     // @ts-ignore
     navigation.navigate(Screens.QuoteEdit, {postId: postId});
   };
 
   const toPostDerail = () => {
-    if(routeName !== Screens.PostDetail) {
+    if (routeName !== Screens.PostDetail) {
       // @ts-ignore
-      navigation.navigate(type === 0 ? Screens.PostDetail : Screens.VideoPlay,{ postId: postId});
+      navigation.navigate(type === 0 ? Screens.PostDetail : Screens.VideoPlay, {postId: postId});
     }
   };
-
-  useEffect(() => {
-    if (isLogin) setIsPostLike(true);
-  }, [like]);
 
   useEffect(() => {
     if (isLogin && postId) {
@@ -164,12 +157,12 @@ const OperationBlock: React.FC<Props> = (props) => {
   }, [postId]);
 
   useEffect(() => {
-    if(contents) {
+    if (contents) {
       setPostId(id);
     } else {
       setPostId(ref_id);
     }
-  },[])
+  }, [])
 
   return (
     <View style={styles.like}>

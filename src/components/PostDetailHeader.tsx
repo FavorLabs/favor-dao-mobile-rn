@@ -146,7 +146,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.bodyBody17_size,
     color: Color.iOSSystemLabelsLightPrimary,
     width: 158,
-    lineHeight: 23,
     textAlign: "left",
     fontWeight: '400',
     letterSpacing: 0,

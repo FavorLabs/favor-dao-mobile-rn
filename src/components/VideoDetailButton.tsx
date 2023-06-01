@@ -28,7 +28,7 @@ type Props = {
 };
 
 const VideoDetailButton: React.FC<Props> = (props) => {
-  const { postInfo, vSrc } = props;
+  const {postInfo, vSrc} = props;
   const url = useUrl();
   const navigation = useNavigation();
   const avatarsResUrl = useResourceUrl('avatars');
@@ -36,7 +36,6 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   const [isLogin, gotoLogin] = useIsLogin();
 
   const [like, setLike] = useState<boolean>(false);
-  const [isPostLike, setIsPostLike] = useState<boolean>(true);
   const [likeCount, setLikeCount] = useState<number>(postInfo.upvote_count);
   const [refCount, setRefCount] = useState<number>(postInfo.ref_count);
   const [commentOnCount, setCommentOnCount] = useState<number>(postInfo.comment_count);
@@ -48,9 +47,9 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   const [sourceInfoModal, setSourceInfoModal] = useState(false);
   const actionSheetRef = useRef<ActionSheet>(null);
   const screens = ['', Screens.QuoteEdit];
-  const [isLikeLoading,setIsLikeLoading] = useState<boolean>(false);
+  const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false);
   const [isJoin, setIsJoin] = useState(false);
-  const [btnLoading,setBtnLoading] = useState<boolean>(false);
+  const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
   const getPostLikeStatus = async () => {
     const {data} = await PostApi.checkPostLike(url, postInfo.id);
@@ -60,29 +59,27 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   };
 
   const postLike = async () => {
-    if(!isLogin) return gotoLogin();
-    if(isLikeLoading) return ;
-    if (isPostLike && postInfo) {
-      try {
-        setIsLikeLoading(true);
-        setIsPostLike(false);
-        const {data} = await PostApi.postLike(url, postInfo.id);
-        if (data.data) {
-          setLike(data.data.status);
-          if (data.data.status) { // @ts-ignore
-            setLikeCount(likeCount + 1);
-          } else { // @ts-ignore
-            setLikeCount(likeCount - 1);
-          }
+    if (!isLogin) return gotoLogin();
+    if (isLikeLoading) return;
+    try {
+      setIsLikeLoading(true);
+      const {data} = await PostApi.postLike(url, postInfo.id);
+      if (data.data) {
+        setLike(data.data.status);
+        if (data.data.status) {
+          setLikeCount(likeCount + 1);
+        } else {
+          setLikeCount(likeCount - 1);
         }
-      } catch (e) {
-        console.log(e)
-      } finally {
-        setIsPostLike(true);
-        setIsLikeLoading(false);
       }
+    } catch (e) {
+      Toast.show({
+        type: 'error',
+        text1: 'post like error',
+      })
+    } finally {
+      setIsLikeLoading(false);
     }
-
   };
 
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
@@ -148,9 +145,9 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   }
 
   const checkJoinStatus = async () => {
-    if(postInfo?.dao.id)
+    if (postInfo?.dao.id)
       try {
-        const { data } = await DaoApi.checkBookmark(url, postInfo.dao.id);
+        const {data} = await DaoApi.checkBookmark(url, postInfo.dao.id);
         setIsJoin(data.data.status);
       } catch (e) {
         if (e instanceof Error) console.error(e.message);
@@ -158,14 +155,14 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   };
 
   const bookmarkHandle = async () => {
-    if(!isLogin) return gotoLogin();
-    if (btnLoading) return ;
-    if(postInfo?.dao.id){
+    if (!isLogin) return gotoLogin();
+    if (btnLoading) return;
+    if (postInfo?.dao.id) {
       setBtnLoading(true)
       try {
-        const { data } = await DaoApi.bookmark(url, postInfo.dao.id);
+        const {data} = await DaoApi.bookmark(url, postInfo.dao.id);
         setIsJoin(data.data.status);
-        if(data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
+        if (data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
       } catch (e) {
         if (e instanceof Error) console.error(e.message);
       } finally {
@@ -180,10 +177,6 @@ const VideoDetailButton: React.FC<Props> = (props) => {
       checkJoinStatus();
     }
   }, []);
-
-  useEffect(() => {
-    setIsPostLike(true);
-  }, [like]);
 
   useEffect(() => {
     if (vSrc) {

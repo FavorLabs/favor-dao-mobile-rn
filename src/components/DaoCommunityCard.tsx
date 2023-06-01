@@ -107,9 +107,9 @@ const styles = StyleSheet.create({
   },
   daoName: {
     fontSize: FontSize.bodyBody17_size,
-    lineHeight: 23,
     fontWeight: '600',
     color: Color.iOSSystemLabelsLightPrimary,
+    textAlignVertical: 'bottom',
   },
   subtitleParent: {
   },

@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FontSize.size_mini,
     letterSpacing: 0,
-    lineHeight: 22,
     fontWeight: "600",
     textAlign: "left",
     color: Color.color1,
