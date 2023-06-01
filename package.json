@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "scripts": {
     "start": "expo start --dev-client",
-    "android": "expo run:android",
+    "android": "react-native run-android",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "postinstall": "rn-nodeify --install assert,url,http,zlib,https,buffer,process,stream,crypto --hack --yarn --overwrite",
@@ -34,7 +34,7 @@
     "ethereumjs-util": "^7.1.5",
     "ethereumjs-wallet": "^1.0.2",
     "events": "^3.3.0",
-    "expo": "~48.0.15",
+    "expo": "~48.0.18",
     "expo-font": "^11.1.1",
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",

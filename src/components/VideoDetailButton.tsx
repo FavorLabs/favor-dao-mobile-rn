@@ -32,7 +32,6 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   const url = useUrl();
   const navigation = useNavigation();
   const avatarsResUrl = useResourceUrl('avatars');
-  const {screenWidth, screenHeight} = useScreenDimensions();
   const {dao} = useSelector((state: Models) => state.global);
   const [isLogin, gotoLogin] = useIsLogin();
 

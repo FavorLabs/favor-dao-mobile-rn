@@ -57,7 +57,11 @@ const UploadImage: React.FC<Props> = (props) => {
         multiple: multiple,
         maxFiles: 9,
       }).then((pickedImage) => {
-        return(imageSetting(pickedImage));
+        if(pickedImage) return(imageSetting(pickedImage));
+        else return Toast.show({
+          type: 'error',
+          text1: 'PickedImage error',
+        });
       });
     // } else {
     //   requestPhotoPermission();

@@ -14,25 +14,12 @@ import Toast from "react-native-toast-message";
 
 type PostDetailHeaderType = {
   postInfo: PostInfo | null;
-
-  /** Style props */
-  postDetailHeaderWidth?: number | string;
-  postDetailHeaderPaddingHorizontal?: number | string;
-  postDetailHeaderAlignSelf?: string;
-
   /** Action props */
   onBackPress?: () => void;
 };
 
-const getStyleValue = (key: string, value: string | number | undefined) => {
-  if (value === undefined) return;
-  return { [key]: value === "unset" ? undefined : value };
-};
 const PostDetailHeader = ({
   onBackPress,
-  postDetailHeaderWidth,
-  postDetailHeaderPaddingHorizontal,
-  postDetailHeaderAlignSelf,
   postInfo,
 }: PostDetailHeaderType) => {
   const url = useUrl();
@@ -82,20 +69,8 @@ const PostDetailHeader = ({
     if(isLogin) checkJoinStatus();
   },[postInfo?.dao.id])
 
-  const postDetailHeaderStyle = useMemo(() => {
-    return {
-      ...getStyleValue("width", postDetailHeaderWidth),
-      ...getStyleValue("paddingHorizontal", postDetailHeaderPaddingHorizontal),
-      ...getStyleValue("alignSelf", postDetailHeaderAlignSelf),
-    };
-  }, [
-    postDetailHeaderWidth,
-    postDetailHeaderPaddingHorizontal,
-    postDetailHeaderAlignSelf,
-  ]);
-
   return (
-    <View style={[styles.postdetailHeader, postDetailHeaderStyle]}>
+    <View style={styles.postDetailHeader}>
       <Pressable style={styles.back} onPress={onBackPress}>
         <Image
           style={styles.icon}
@@ -213,11 +188,8 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     flexDirection: "row",
   },
-  postdetailHeader: {
-    alignSelf: "stretch",
+  postDetailHeader: {
     backgroundColor: Color.color1,
-    height: 90,
-    paddingTop: Padding.p_29xl,
     paddingRight: 10,
     alignItems: "center",
     flexDirection: "row",
