@@ -41,6 +41,7 @@ const PostDetailScreen = () => {
                 // @ts-ignore
                 text1: e.message
             });
+            navigation.goBack();
         }
     };
 

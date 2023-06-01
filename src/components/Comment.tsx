@@ -66,12 +66,12 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
 
     const sendComment = async () => {
         if (!isLogin) return gotoLogin();
-        if (!comment) return Toast.show({type: 'info', text1: 'Please enter your comment!'});
+        if (!comment.trim()) return Toast.show({type: 'info', text1: 'Please enter your comment!'});
         if(isLoading) return ;
         try {
             setIsLoading(true);
             const content = {
-                content: comment,
+                content: comment.trim(),
                 type: postType,
                 sort: 0,
             };

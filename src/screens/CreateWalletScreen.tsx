@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {StyleSheet, View, TouchableOpacity} from "react-native";
+import {StyleSheet, View, TouchableOpacity, ScrollView} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
 import ProtocolRadioSelect from "../components/ProtocolRadioSelect";
@@ -99,37 +99,41 @@ const CreateWallet = () => {
           title="Create wallet"
           vector={require("../assets/vector6.png")}
         />
-        <View style={styles.content}>
-          <View>
-            <WalletWords mnemonicArray={mnemonicArray}/>
-            <TextInputBlock
-              title={'Password'}
-              placeholder={`Please enter passwords`}
-              value={password}
-              setValue={setPassword}
-              secureTextEntry={true}
-            />
-            <TextInputBlock
-              title={'Confirm Password'}
-              placeholder={`Please enter passwords again`}
-              value={repeatPassword}
-              setValue={setRepeatPassword}
-              secureTextEntry={true}
-            />
-          </View>
-          <View>
-            <ProtocolRadioSelect value={agree} setValue={setAgree}/>
-            <TouchableOpacity style={[{marginTop: 10}, createDisable && {opacity: 0.5}]} disabled={loading}
-                              onPress={create}>
-              <FavorDaoButton
-                isLoading={loading}
-                textValue="Create"
-                frame1171275771BackgroundColor="#ff8d1a"
-                cancelColor="#fff"
+
+          <View style={styles.content}>
+            <ScrollView>
+            <View>
+              <WalletWords mnemonicArray={mnemonicArray}/>
+              <TextInputBlock
+                title={'Password'}
+                placeholder={`Please enter passwords`}
+                value={password}
+                setValue={setPassword}
+                secureTextEntry={true}
               />
-            </TouchableOpacity>
+              <TextInputBlock
+                title={'Confirm Password'}
+                placeholder={`Please enter passwords again`}
+                value={repeatPassword}
+                setValue={setRepeatPassword}
+                secureTextEntry={true}
+              />
+            </View>
+            </ScrollView>
+            <View>
+              <ProtocolRadioSelect value={agree} setValue={setAgree}/>
+              <TouchableOpacity style={[{marginTop: 10}, createDisable && {opacity: 0.5}]} disabled={loading}
+                                onPress={create}>
+                <FavorDaoButton
+                  isLoading={loading}
+                  textValue="Create"
+                  frame1171275771BackgroundColor="#ff8d1a"
+                  cancelColor="#fff"
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+
       </KeyboardAwareScrollView>
     </BackgroundSafeAreaView>
   </>

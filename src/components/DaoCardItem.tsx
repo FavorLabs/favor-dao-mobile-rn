@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
   moreText: {
     fontSize: 16,
     fontWeight: '400',
+    color: Color.accentLight,
   },
   frameParentBg: {
     backgroundColor: Color.color1,

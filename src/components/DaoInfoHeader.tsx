@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
   moreText: {
     fontSize: 16,
     fontWeight: '400',
+    color: Color.accentLight,
   },
   container: {
     // backgroundColor: '#ccc',

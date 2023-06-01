@@ -13,6 +13,7 @@ import Favor from "../libs/favor";
 import SubscribeModal from "../components/SubscribeModal";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import Toast from "react-native-toast-message";
+import Navigation from "../navigation";
 
 export type Props = {};
 const VideoPlayScreen: React.FC<Props> = (props) => {
@@ -43,7 +44,8 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
         type: 'error',
         // @ts-ignore
         text1: e.message,
-      });;
+      });
+      navigation.goBack();
     }
   };
 
@@ -121,7 +123,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
               ))
             }
             <TouchableOpacity onPress={seeMoreClick}>
-              <Text style={[styles.tag, styles.largeTypo]}>
+              <Text style={[styles.tag, styles.showMore]}>
                 {seeMoreStatus ? 'Show Less' : 'See More'}
               </Text>
             </TouchableOpacity>
@@ -186,16 +188,18 @@ const styles = StyleSheet.create({
   },
   tag: {
     marginRight: 5,
-    color: Color.color1,
     lineHeight: 18,
     fontSize: FontSize.size_mini,
   },
-
   largeTypo: {
     fontWeight: '600',
     textAlign: "left",
     color: Color.color1,
   },
+  showMore: {
+    fontWeight: '600',
+    color: Color.accentLight,
+  }
 });
 
 export default VideoPlayScreen;

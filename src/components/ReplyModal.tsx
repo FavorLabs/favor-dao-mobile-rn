@@ -35,13 +35,13 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
     const [isLoading,setIsLoading] = useState<boolean>(false);
     const sendReply = async () => {
         if (!isLogin) return gotoLogin();
-        if (!reply) return Toast.show({type: 'info', text1: 'Please enter your reply!'});
+        if (!reply.trim()) return Toast.show({type: 'info', text1: 'Please enter your reply!'});
         if (isLoading) return ;
         try {
             setIsLoading(true);
             const {data} = await PostApi.addCommentReply(url, {
                 comment_id: commentInfo.id,
-                content: reply,
+                content: reply.trim(),
             });
             if (data.data) {
                 const res = data.data;

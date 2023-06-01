@@ -39,10 +39,6 @@ const Transactions: React.FC<Props> = (props) => {
     return string;
   }
 
-  // useEffect(()=> {
-  //   if(user) getTransaction();
-  // },[user])
-
   return (
     <>
       <TouchableOpacity style={styles.mainbuttonParent} onPress={showPopUp}>
