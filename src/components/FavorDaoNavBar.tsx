@@ -12,71 +12,83 @@ import {useNavigation} from "@react-navigation/native";
 type FavorDaoNavBarType = {
   title?: string;
   vector?: ImageSourcePropType;
+  rightComponent?: React.ReactNode;
 };
 
-const FavorDaoNavBar = ({title, vector}: FavorDaoNavBarType) => {
+const FavorDaoNavBar = ({title, vector,rightComponent}: FavorDaoNavBarType) => {
   const navigation = useNavigation()
   const back = () => {
     navigation.goBack();
   }
+
   return (
-    <View style={[styles.frameParent, styles.frameParentFlexBox]}>
-      <View style={[styles.frameWrapper, styles.frameParentFlexBox]}>
-        <TouchableOpacity style={styles.button} onPress={back}>
-          <Image
-            style={styles.vectorIcon} resizeMode="cover"
-            source={vector || require("../assets/vector6.png")}
-          />
-          <Text style={styles.back}>Back</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.titleRow}>
+    <View style={styles.container}>
+
+      <TouchableOpacity style={styles.left} onPress={back}>
+        <Image
+          style={styles.vectorIcon} resizeMode="cover"
+          source={vector || require("../assets/vector6.png")}
+        />
+        <Text style={styles.backText}>Back</Text>
+      </TouchableOpacity>
+
+      <View style={styles.center}>
         <Text style={styles.title} numberOfLines={1}>{title}</Text>
+      </View>
+
+      <View style={styles.right}>
+        { rightComponent }
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  button: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  frameParentFlexBox: {
+  container: {
     alignItems: "center",
     flexDirection: "row",
+    justifyContent: 'center',
+  },
+  left: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: '20%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: 'flex-start',
   },
   vectorIcon: {
     width: 8,
     height: 14,
   },
-  back: {
+  backText: {
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
     fontWeight: '400',
     color: Color.royalblue_100,
     marginLeft: 5,
   },
-  frameWrapper: {
-    width: '20%',
-  },
-  titleRow: {
-    flex: 1,
-    marginLeft: 5,
-    alignItems: "center",
-    justifyContent: "center",
+  center: {
+    maxWidth: '60%',
   },
   title: {
+    textAlign: 'center',
     width: '100%',
     fontSize: FontSize.size_xl,
     lineHeight: 22,
     fontWeight: "600",
     color: Color.iOSSystemLabelsLightPrimary,
-    paddingLeft: '15%',
   },
-  frameParent: {
-    marginHorizontal: 4
+  right: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: '20%',
+    overflow: 'hidden',
+    alignItems: 'flex-end',
   },
 })
 

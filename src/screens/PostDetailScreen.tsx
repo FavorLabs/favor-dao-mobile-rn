@@ -19,103 +19,104 @@ import show = Toast.show;
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
 const PostDetailScreen = () => {
-    const url = useUrl();
-    const route = useRoute();
-    const {postId} = route.params as { postId: string };
+  const url = useUrl();
+  const route = useRoute();
+  const {postId} = route.params as { postId: string };
 
-    const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
-    const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
+  const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
+  const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
 
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
-    const getPostInfo = async () => {
-        try {
-            const {data} = await PostApi.getPostById(url, postId);
-            if (data.data) {
-                setPostInfo(data.data);
-                if (data.data.author_dao.id) setIsReTransfer(true);
-            }
-        } catch (e) {
-            Toast.show({
-                type: 'error',
-                // @ts-ignore
-                text1: e.message
-            });
-            navigation.goBack();
-        }
-    };
+  const getPostInfo = async () => {
+    try {
+      const {data} = await PostApi.getPostById(url, postId);
+      if (data.data) {
+        setPostInfo(data.data);
+        if (data.data.author_dao.id) setIsReTransfer(true);
+      }
+    } catch (e) {
+      Toast.show({
+        type: 'error',
+        // @ts-ignore
+        text1: e.message
+      });
+      navigation.goBack();
+    }
+  };
 
-    useEffect(() => {
-        if (postId) {
-            getPostInfo();
-        }
-    }, [postId]);
+  useEffect(() => {
+    if (postId) {
+      getPostInfo();
+    }
+  }, [postId]);
 
-    if (!postInfo) return null;
+  if (!postInfo) return null;
 
-    return (
-      <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color1}} footerStyle={{backgroundColor: Color.color1}}>
-        <KeyboardAwareScrollView scrollEnabled={false} contentContainerStyle={{flex:1}}>
-          <View style={styles.container}>
-              <View>
-                  <PostDetailHeader
-                    onBackPress={() => navigation.goBack()}
-                    postInfo={postInfo}
-                  />
-              </View>
-              <View style={{flex: 1, marginTop: 20}}>
-                  <Comment
-                    postId={postInfo.id}
-                    postType={postInfo.type}
-                    headerComponents={() => {
-                        return <View style={styles.content}>
-                            <NewsBlock postInfo={postInfo}/>
-                            {
-                                postInfo.orig_contents?.length ?
-                                  postInfo.orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true} showOperate={false}/>
-                                    : postInfo.orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true} showOperate={false}/> : <></>
-                                  : <></>
-                            }
-                            <OperationBlock postInfo={postInfo} type={0}/>
-                        </View>
-                    }}
-                  />
-              </View>
+  return (
+    <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color1}} footerStyle={{backgroundColor: Color.color1}}>
+      <KeyboardAwareScrollView scrollEnabled={false} contentContainerStyle={{flex: 1}}>
+        <View style={styles.container}>
+          <View>
+            <PostDetailHeader
+              onBackPress={() => navigation.goBack()}
+              postInfo={postInfo}
+            />
           </View>
+          <View style={{flex: 1, marginTop: 20}}>
+            <Comment
+              postId={postInfo.id}
+              postType={postInfo.type}
+              headerComponents={() => {
+                return <View style={styles.content}>
+                  <NewsBlock postInfo={postInfo}/>
+                  {
+                    postInfo.orig_contents?.length ?
+                      postInfo.orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true} showOperate={false}/>
+                        : postInfo.orig_type === 1 ?
+                          <VideoBlockItem postInfo={postInfo} isQuote={true} showOperate={false}/> : <></>
+                      : <></>
+                  }
+                  <OperationBlock postInfo={postInfo} type={0}/>
+                </View>
+              }}
+            />
+          </View>
+        </View>
       </KeyboardAwareScrollView>
-      </BackgroundSafeAreaView>
-    )
+    </BackgroundSafeAreaView>
+  )
 }
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: Color.color1,
-    },
-    content: {
-        marginBottom: 30
-    },
-    commentWrap: {
-        marginTop: 30
-    },
-    scrollWrap: {
-        flex: 1,
-    },
-    footer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginHorizontal: 16,
-        paddingVertical: 8,
-        backgroundColor: Color.color2
-    },
-    footerInput: {
-        flex: 1,
-        marginRight: 20,
-        padding: 10,
-        borderRadius: 20,
-        backgroundColor: Color.color1
-    }
+  container: {
+    flex: 1,
+    backgroundColor: Color.color1,
+  },
+  content: {
+    marginBottom: 30
+  },
+  commentWrap: {
+    marginTop: 30
+  },
+  scrollWrap: {
+    flex: 1,
+  },
+  footer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: Color.color2
+  },
+  footerInput: {
+    flex: 1,
+    marginRight: 20,
+    padding: 10,
+    borderRadius: 20,
+    backgroundColor: Color.color1
+  }
 });
 
 export default PostDetailScreen;
