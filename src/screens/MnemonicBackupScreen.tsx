@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StyleSheet, View, Text, TouchableOpacity} from "react-native";
+import {StyleSheet, View, Text, TouchableOpacity, ScrollView} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import WalletWords from "../components/WalletWords";
 import {FontFamily, Color, FontSize, Border, Padding} from "../GlobalStyles";
@@ -9,134 +9,88 @@ import {useMemo} from "react";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
 const Mnemonic = () => {
-    const navigation = useNavigation();
-    const route = useRoute()
-    const {mnemonic} = route.params as { mnemonic: string }
+  const navigation = useNavigation();
+  const route = useRoute()
+  const {mnemonic} = route.params as { mnemonic: string }
 
-    const mnemonicArray = useMemo(() => {
-        return mnemonic?.split(' ') || [];
-    }, [mnemonic])
+  const mnemonicArray = useMemo(() => {
+    return mnemonic?.split(' ') || [];
+  }, [mnemonic])
 
-    const backUp = () => {
-      navigation.goBack();
-    };
+  const backUp = () => {
+    navigation.goBack();
+  };
 
-    return (
-      <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
-        <View style={[styles.mnemonic, styles.mnemonicFlexBox]}>
-            <FavorDaoNavBar
-                title="Mnemonic words"
-                vector={require("../assets/vector6.png")}
-            />
-            <View style={styles.titleParent}>
-                <Text style={[styles.title, styles.titleLayout]}>{`Backup mnemonics`}</Text>
-                <Text style={[styles.title1, styles.titleLayout]}>
-                    Please copy the mnemonic words in order to ensure accurate backup
-                </Text>
-            </View>
-            <WalletWords mnemonicArray={mnemonicArray}/>
-
-            <TouchableOpacity onPress={backUp} style={styles.backupButton}>
-                <FavorDaoButton
-                    textValue="Backup"
-                    frame1171275771BackgroundColor="#ff8d1a"
-                    cancelColor="#fff"
-                />
-            </TouchableOpacity>
-        </View>
-      </BackgroundSafeAreaView>
-    );
+  return (
+    <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
+      <View style={styles.mnemonic}>
+        <FavorDaoNavBar
+          title="Mnemonic words"
+          vector={require("../assets/vector6.png")}
+        />
+        <ScrollView>
+          <View style={styles.titleParent}>
+            <Text style={[styles.title, styles.titleLayout]}>{`Backup mnemonics`}</Text>
+            <Text style={[styles.title1, styles.titleLayout]}>
+              Please copy the mnemonic words in order to ensure accurate backup
+            </Text>
+          </View>
+          <WalletWords mnemonicArray={mnemonicArray}/>
+        </ScrollView>
+      </View>
+      <TouchableOpacity onPress={backUp} style={styles.backupButton}>
+        <FavorDaoButton
+          textValue="Backup"
+          frame1171275771BackgroundColor="#ff8d1a"
+          cancelColor="#fff"
+        />
+      </TouchableOpacity>
+    </BackgroundSafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
-    backupButton: {
-        position: "absolute",
-        bottom: 20,
-    },
-    mnemonicFlexBox: {
-        overflow: "hidden",
-        alignItems: "center",
-    },
-    titleLayout: {
-        width: '85%',
-        textAlign: "left",
-        fontWeight: '400',
-        lineHeight: 22,
-        letterSpacing: 0,
-    },
-    title: {
-        color: Color.iOSSystemLabelsLightPrimary,
-        height: 25,
-        fontSize: FontSize.bodyBody17_size,
-        textAlign: "left",
-        fontWeight: '400',
-        lineHeight: 22,
-    },
-    title1: {
-        fontSize: FontSize.size_xs,
-        color: Color.color4,
-        height: 48,
-    },
-    titleParent: {
-        marginTop: 20,
-        alignSelf: "stretch",
-    },
-    create: {
-        lineHeight: 23,
-        fontWeight: "600",
-        color: Color.color1,
-        textAlign: "center",
-        letterSpacing: 0,
-        fontSize: FontSize.bodyBody17_size,
-    },
-    createWrapper: {
-        borderRadius: Border.br_29xl,
-        backgroundColor: Color.color,
-        flexDirection: "row",
-        paddingHorizontal: Padding.p_124xl_5,
-        paddingVertical: Padding.p_sm,
-        justifyContent: "center",
-        alignSelf: "stretch",
-        alignItems: "center",
-    },
-    background: {
-        height: "100%",
-        top: "0%",
-        right: "0%",
-        bottom: "0%",
-        left: "0%",
-        position: "absolute",
-        width: "100%",
-    },
-    seperator: {
-        marginLeft: -66.5,
-        bottom: 10,
-        left: "50%",
-        borderRadius: Border.br_81xl,
-        backgroundColor: Color.iOSSystemLabelsLightPrimary,
-        width: 134,
-        height: 5,
-        position: "absolute",
-    },
-    homeIndicator: {
-        height: 34,
-        marginTop: 20,
-        width: 375,
-    },
-    instanceParent: {
-        paddingTop: 201,
-        marginTop: 20,
-        alignSelf: "stretch",
-        alignItems: "center",
-    },
-    mnemonic: {
-        backgroundColor: Color.color2,
-        flex: 1,
-        paddingHorizontal: Padding.p_base,
-        paddingVertical: 0,
-        alignItems: "center",
-        width: "100%",
-    },
+  backupButton: {
+    paddingHorizontal: Padding.p_base,
+    marginBottom: 20,
+  },
+  titleLayout: {
+    width: '85%',
+    textAlign: "left",
+    fontWeight: '400',
+    lineHeight: 22,
+    letterSpacing: 0,
+  },
+  title: {
+    color: Color.iOSSystemLabelsLightPrimary,
+    height: 25,
+    fontSize: FontSize.bodyBody17_size,
+    textAlign: "left",
+    fontWeight: '400',
+    lineHeight: 22,
+  },
+  title1: {
+    fontSize: FontSize.size_xs,
+    color: Color.color4,
+    height: 48,
+  },
+  titleParent: {
+    marginTop: 20,
+    alignSelf: "stretch",
+  },
+  create: {
+    lineHeight: 23,
+    fontWeight: "600",
+    color: Color.color1,
+    textAlign: "center",
+    letterSpacing: 0,
+    fontSize: FontSize.bodyBody17_size,
+  },
+  mnemonic: {
+    backgroundColor: Color.color2,
+    flex: 1,
+    paddingHorizontal: Padding.p_base,
+  },
 });
 
 export default Mnemonic;

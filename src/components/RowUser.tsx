@@ -308,7 +308,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: FontSize.bodyBody17_size,
-    lineHeight: 23,
     color: Color.iOSSystemLabelsLightPrimary,
     marginRight: 4,
     fontWeight: '500'

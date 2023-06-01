@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
     borderRadius: 32,
   },
   title: {
-    lineHeight: 22,
     textAlign: "left",
     color: Color.iOSSystemLabelsLightPrimary,
     fontWeight: '600',

@@ -51,7 +51,7 @@ const PostDetailScreen = () => {
     }
   }, [postId]);
 
-  if (!postInfo) return null;
+  if (!postInfo) return null
 
   return (
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color1}} footerStyle={{backgroundColor: Color.color1}}>
@@ -88,6 +88,15 @@ const PostDetailScreen = () => {
   )
 }
 const styles = StyleSheet.create({
+  loadingContent: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loading: {
+    color: Color.color1,
+  },
   container: {
     flex: 1,
     backgroundColor: Color.color1,
