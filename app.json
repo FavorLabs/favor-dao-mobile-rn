@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FavorDao",
-    "slug": "FavorDao",
+    "name": "FavorDAO",
+    "slug": "FavorDAO",
     "version": "1.0.2",
     "jsEngine": "hermes",
     "orientation": "portrait",
@@ -31,7 +31,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.favorlabs.favorDao",
+      "package": "io.favorlabs.fultter_favor_dao",
       "permissions": [
         "INTERNET",
         "CAMERA",

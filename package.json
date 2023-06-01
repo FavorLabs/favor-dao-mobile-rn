@@ -44,7 +44,7 @@
     "process": "^0.11.0",
     "prop-types": "^15.7.2",
     "react": "18.2.0",
-    "react-native": "0.71.7",
+    "react-native": "0.71.8",
     "react-native-actionsheet": "^2.4.2",
     "react-native-autolink": "^4.1.0",
     "react-native-background-timer": "^2.4.1",

@@ -1,4 +1,4 @@
-package com.favorlabs.favorDao;
+package io.favorlabs.fultter_favor_dao;
 
 import android.os.Build;
 import android.os.Bundle;
