@@ -13,10 +13,11 @@ type Props = {
   postInfo: PostInfo
   isReTransfer?: boolean
   isQuote?: boolean
+  showOperate:boolean
 };
 
 const VideoBlockItem: React.FC<Props> = (props) => {
-  const { postInfo, isReTransfer, isQuote } = props;
+  const { postInfo, isReTransfer, isQuote ,showOperate} = props;
   const { contents, orig_contents, created_on, dao, author_dao, origCreatedAt } = props.postInfo;
   const imagesResUrl = useResourceUrl('images');
   const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
@@ -43,6 +44,7 @@ const VideoBlockItem: React.FC<Props> = (props) => {
         time={isQuote ? origCreatedAt : created_on}
         daoInfo={isQuote || isReTransfer ? author_dao : dao}
         postInfo={postInfo}
+        showOperate={showOperate}
       />
       <TouchableOpacity onPress={toVideoDetail}>
 

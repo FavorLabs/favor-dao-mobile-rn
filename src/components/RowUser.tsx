@@ -22,16 +22,21 @@ import Models from "../declare/storeTypes";
 import ActionSheet from 'react-native-actionsheet';
 import PostApi from '../services/DAOApi/Post';
 import {updateState as globalUpdateState} from "../store/global";
+
+
 type Props = {
   time: number;
-  daoInfo?: DaoInfo;
+  daoInfo: DaoInfo;
   postInfo: PostInfo;
+  showOperate:boolean
 };
 
 const RowUser: React.FC<Props> = (props) => {
+  const [isLogin, gotoLogin] = useIsLogin();
   const dispatch = useDispatch()
-  const [resetImgStatus,setResetImgStatus] = useState<boolean>(false)
-  const { time , daoInfo,postInfo } = props;
+  const [operateImgStatus,setOperateImgStatus] = useState<boolean>(true)
+  const [actionSheetType,setActionSheetType] = useState<number>(1)
+  const { time , daoInfo,postInfo,showOperate} = props;
   const url = useUrl();
   const navigation = useNavigation();
   const avatarsResUrl = useResourceUrl('avatars');
@@ -39,19 +44,37 @@ const RowUser: React.FC<Props> = (props) => {
   const route = useRoute();
   // @ts-ignore
   const routeName = route.name;
-  const { dao } = useSelector((state: Models) => state.global);
+  const { dao,user } = useSelector((state: Models) => state.global);
 
   const delSheetRef = useRef<ActionSheet>(null);
-  const getSetStates = () => {
-    if(dao?.id == daoInfo?.id ){
-      if(routeName==='Mixed'||routeName==='News'||routeName==='Videos'){
-        setResetImgStatus(true)
+  const shieldSheetRef = useRef<ActionSheet>(null);
+
+
+  const getSetStates = ()=>{
+    if(isLogin){
+      if(!showOperate){
+        setOperateImgStatus(false)
+      }else{
+        if(dao?.id == daoInfo?.id){
+          setActionSheetType(0)
+        } else {
+          if(routeName=='Mixed'){
+            setOperateImgStatus(false)
+          }
+          if(routeName=='News'){
+            setOperateImgStatus(false)
+          }
+          if(routeName=='Videos'){
+            setOperateImgStatus(false)
+          }
+        }
       }
+    }else {
+      setOperateImgStatus(false)
     }
   }
   const uDelDaoMsg = async () => {
     try {
-
       const request =  () => PostApi.deletePost(url,postInfo.id)
       const {data}=await request()
       if(data.code==0){
@@ -59,10 +82,6 @@ const RowUser: React.FC<Props> = (props) => {
           type: 'info',
           text1: 'Delete dao success!'
         });
-        dispatch(globalUpdateState({
-          delDaoMsgId:postInfo.id,
-          delStatus:true
-        }));
       }
     } catch (e) {
       if (e instanceof Error)
@@ -74,8 +93,93 @@ const RowUser: React.FC<Props> = (props) => {
       }
     }
   };
-  const delAct=()=>{
-    delSheetRef.current?.show();
+  const ShieldDaoMsg = async () => {
+    try {
+      const request =  () => PostApi.shieldMsg(url,postInfo.id)
+      const {data}=await request()
+      if(data.code==0){
+        Toast.show({
+          type: 'info',
+          text1: 'Shield success!'
+        });
+      }
+    } catch (e) {
+      if (e instanceof Error)
+      {
+        Toast.show({
+          type: 'error',
+          text1: e.message
+        });
+      }
+    }
+  };
+  const ShieldUser = async () => {
+    try {
+      const request =  () => PostApi.shieldUser(url,daoInfo.id)
+      const {data}=await request()
+      if(data.code==0){
+        Toast.show({
+          type: 'info',
+          text1: 'Shield success!'
+        });
+      }
+    } catch (e) {
+      if (e instanceof Error)
+      {
+        Toast.show({
+          type: 'error',
+          text1: e.message
+        });
+      }
+    }
+  };
+  const OperateAct = async (index:number) => {
+    try {
+      if (index==0){
+        ShieldUser()
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'0',
+            Id:daoInfo.id
+          }
+        }))
+      }
+      if(index==1){
+        ShieldDaoMsg()
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'1',
+            Id:postInfo.id
+          }
+        }))
+      }
+      if(index==2){
+        delDaoMsg()
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'2',
+            Id:postInfo.id
+          },
+          delStatus:true
+        }))
+      }
+    } catch (e) {
+      if (e instanceof Error)
+      {
+        Toast.show({
+          type: 'error',
+          text1: e.message
+        });
+      }
+    }
+  };
+  const ActShow = ()=>{
+    if(actionSheetType==0){
+      delSheetRef.current?.show();
+    }
+    if(actionSheetType==1){
+      shieldSheetRef.current?.show();
+    }
   }
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
     // @ts-ignore
@@ -84,7 +188,7 @@ const RowUser: React.FC<Props> = (props) => {
   };
   useEffect(()=>{
     getSetStates()
-  },[])
+  },[operateImgStatus,dao])
 
   const delDaoMsg=()=>{
     Alert.alert(
@@ -127,23 +231,50 @@ const RowUser: React.FC<Props> = (props) => {
                 <Text style={[styles.subtitle, styles.titleTypo]} onPress={toDaoCommunity}>{createTime}</Text>
               </TouchableOpacity>
             </View>
-          <TouchableOpacity onPress={delAct}>
-            <View style={styles.delActArea}>
-              <Image style={[styles.resetImg,{display:resetImgStatus?"flex":"none"}]} source={require("../assets/operate.png")}  />
+          <TouchableOpacity onPress={ActShow}>
+            <View style={[styles.delActArea,{display:operateImgStatus?"flex":"none"}]}>
+              <Image style={[styles.resetImg,{display:operateImgStatus?"flex":"none"}]} source={require("../assets/operate.png")}  />
             </View>
           </TouchableOpacity>
         </View>
-        <ActionSheet
-            ref={delSheetRef}
-            title={'delete'}
-            options={['Delete', 'Cancel']}
-            cancelButtonIndex={1}
-            destructiveButtonIndex={0}
-            userInterfaceStyle={'dark'}
-            onPress={(index: number) => {
-              if(index==0) delDaoMsg()
-            }}
-        />
+        { actionSheetType== 0 &&
+          <ActionSheet
+              ref={delSheetRef}
+              title={'delete'}
+              options={['Delete', 'Cancel']}
+              cancelButtonIndex={1}
+              destructiveButtonIndex={0}
+              userInterfaceStyle={'dark'}
+              onPress={(index: number) => {
+                if(index==0) OperateAct(2)
+              }}
+          />
+        }
+        { actionSheetType== 1 &&
+          <ActionSheet
+              ref={shieldSheetRef}
+              title={'Shield & Complaint'}
+              options={[`Shield @${daoInfo?.name}`, 'Shield this content' ,'Complaint','Cancel']}
+              cancelButtonIndex={3}
+              onPress={(index:number) => {
+                if (index==0) {
+                  console.log("@name")
+                  OperateAct(index)
+                }
+                if (index==1){
+                  console.log("cont")
+                  OperateAct(index)
+                }
+                if(index==2){
+                  console.log(postInfo,daoInfo)
+                  // @ts-ignore
+                  navigation.navigate(Screens.Complaint,{postInfo:postInfo,daoInfo:daoInfo})
+                }
+
+              }}
+          />
+        }
+
       </View>
 
   );

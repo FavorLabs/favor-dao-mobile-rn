@@ -31,6 +31,7 @@ import AccountCancellation from "../screens/Main/Setting/AccountCancellation";
 import LogOut from "../screens/Main/Setting/LogOut";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import UserAgreementScreen from "../screens/UserAgreementScreen";
+import ComplaintScreen from "../screens/ComplaintScreen";
 import Toast from "react-native-toast-message";
 
 const Stack = createStackNavigator();
@@ -128,6 +129,7 @@ function RootStack() {
               <Stack.Screen name={Screens.LogOut} component={LogOut}/>
               <Stack.Screen name={Screens.ChangePassword} component={ChangePasswordScreen}/>
               <Stack.Screen name={Screens.UserAgreement} component={UserAgreementScreen}/>
+              <Stack.Screen name={Screens.Complaint} component={ComplaintScreen}/>
           </Stack.Navigator>
           <Loading visible={visible} text={'Connecting to a p2p network'}/>
       </>

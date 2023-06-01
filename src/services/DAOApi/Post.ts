@@ -12,9 +12,28 @@ import {
   PostInfo,
   ResData,
   Status,
-  ReTransferPost, DaoInfo,
+  ReTransferPost, DaoInfo,ComplaintData
 } from '../../declare/api/DAOApi';
 export default {
+  shieldMsg(url: string, id: string): ResData<Status> {
+    return request({
+      method: 'post',
+      url: url + `/post/block/${id}`
+    });
+  },
+  shieldUser(url: string, id: string): ResData<Status> {
+    return request({
+      method: 'post',
+      url: url + `/dao/block/${id}`
+    });
+  },
+  complaint(url: string, data:ComplaintData ): ResData<Status> {
+    return request({
+      method: 'post',
+      url: url + `/post/complaint`,
+      data
+    });
+  },
   createPost(url: string, data: CreatePost): ResData<PostInfo> {
     return request({
       method: 'post',

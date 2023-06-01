@@ -29,6 +29,7 @@ const Screens = {
   LogOut: 'LogOut',
   ChangePassword: 'ChangePassword',
   UserAgreement: 'UserAgreement',
+  Complaint:'Complaint',
 }
 
 export default Screens;
