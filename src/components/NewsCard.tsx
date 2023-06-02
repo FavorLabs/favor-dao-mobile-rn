@@ -51,18 +51,6 @@ const NewsCard: React.FC<Props> = (props) => {
         }))
       }
     }
-    if(ShieldAct.Type=='2'){
-      console.log(postInfo,'type2')
-      if(ShieldAct.Id==postInfo.id || ShieldAct.Id==postInfo.ref_id){
-        setShieldStatus(false)
-        dispatch(globalUpdateState({
-          ShieldAct:{
-            Type:'',
-            Id:''
-          }
-        }))
-      }
-    }
 
   }
   useEffect(()=>{

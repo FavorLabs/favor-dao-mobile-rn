@@ -51,12 +51,14 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
     try {
       const request = (params: Page) => PostApi.getPostListByType(url, params);
       const { data } = await request(pageData);
-      const listArr: PostInfo[] = data.data.list;
-      setPostListArr(() => [...postListArr,...listArr]);
-      setIsLoadingMore(
-        data.data.pager.total_rows > pageData.page * pageData.page_size,
-      );
-      setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
+      if(data.data.list){
+        const listArr: PostInfo[] = data.data.list;
+        setPostListArr(() => [...postListArr,...listArr]);
+        setIsLoadingMore(
+            data.data.pager.total_rows > pageData.page * pageData.page_size,
+        );
+        setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
+      }
     } catch (e) {
       if (e instanceof Error)
         Toast.show({
@@ -72,12 +74,13 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
       const pageInfo = { page: 1, page_size: 20, type:-1 , query: daoSearch ,sort: 'dao_follow_count:desc,created_on:desc'};
       const request = (params: Page) => PostApi.getPostListByType(url, params);
       const { data } = await request(pageInfo);
+      if(data.data.list){
       const listArr: PostInfo[] = data.data.list;
       setPostListArr([...listArr]);
       setIsLoadingMore(
         data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,
       );
-      setPageData((pageData) => ({ ...pageData, page: 2 }));
+      setPageData((pageData) => ({ ...pageData, page: 2 }));}
     } catch (e) {
       if (e instanceof Error)
         Toast.show({

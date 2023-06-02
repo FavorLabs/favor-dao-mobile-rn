@@ -14,7 +14,6 @@ import ReTransfer from "./ReTransfer";
 import NoDataShow from "./NoDataShow";
 import ToolDaoList from "./ToolDaoList";
 import Models from "../declare/storeTypes";
-import {updateState as globalUpdateState} from "../store/global";
 import Toast from "react-native-toast-message";
 
 export type Props = {
@@ -25,15 +24,11 @@ export type Props = {
   isHome?: boolean;
   isNewsFocus?: boolean;
   setIsNewsFocus?: (b: boolean) => void;
-  delDaoMsgId?:string;
-  delStatus?:boolean;
 };
 
 const PostList: React.FC<Props> = (props) => {
-  const dispatch=useDispatch()
   const { type, daoId, focus = false, query, isHome = false, isNewsFocus, setIsNewsFocus} = props;
   const url = useUrl();
-  const {delStatus}=useSelector((state: Models) => state.global)
   const [isLogin, gotoLogin] = useIsLogin();
   const [pageData, setPageData] = useState<Page>({
     page: 1,
@@ -53,13 +48,15 @@ const PostList: React.FC<Props> = (props) => {
         ? (params: Page) => PostApi.getPostListByDaoId(url, daoId, params)
         : (params: Page) => PostApi.getPostListByType(url, params);
       const { data } = await request(pageData);
-      const listArr: PostInfo[] = data.data.list;
-      setPostListArr(() => [...postListArr,...listArr]);
+      if(data.data.list) {
+        const listArr: PostInfo[] = data.data.list;
+        setPostListArr(() => [...postListArr,...listArr]);
 
-      setIsLoadingMore(
-        data.data.pager.total_rows > pageData.page * pageData.page_size,
-      );
-      setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
+        setIsLoadingMore(
+            data.data.pager.total_rows > pageData.page * pageData.page_size,
+        );
+        setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
+      }
     } catch (e) {
       if (e instanceof Error)
         Toast.show({
@@ -69,10 +66,6 @@ const PostList: React.FC<Props> = (props) => {
         });
     }
   };
-  const delDaoMsgById = (id:string)=>{
-    let newPostList = postListArr.filter(item=> item.id!= id)
-    setPostListArr(()=> [...newPostList]);
-  }
 
   const refreshPage = async () => {
     try {
@@ -83,12 +76,14 @@ const PostList: React.FC<Props> = (props) => {
           ? (params: Page) => PostApi.getPostListByDaoId(url, daoId, params)
           : (params: Page) => PostApi.getPostListByType(url, params);
       const { data } = await request(pageInfo);
-      const listArr: PostInfo[] = data.data.list;
-      setPostListArr(() => [...listArr]);
-      setIsLoadingMore(
-        data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,
-      );
-      setPageData((pageData) => ({ ...pageData, page: 2 }));
+      if(data.data.list){
+        const listArr: PostInfo[] = data.data.list;
+        setPostListArr(() => [...listArr]);
+        setIsLoadingMore(
+            data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,
+        );
+        setPageData((pageData) => ({ ...pageData, page: 2 }));
+      }
     } catch (e) {
       if (e instanceof Error) console.error(e.message);
     }
@@ -130,15 +125,8 @@ const PostList: React.FC<Props> = (props) => {
   useEffect(() => {
     onRefresh();
     if(isNewsFocus) setIsNewsFocus?.(false);
-  },[query,isNewsFocus,daoId])
+  },[query,isNewsFocus,daoId,isLogin])
 
-
-  if(delStatus){
-    onRefresh();
-    dispatch(globalUpdateState({
-      delStatus:false
-    }));
-  }
 
 
   return (
