@@ -7,7 +7,7 @@ import {
   Text,
   View,
   Alert,
-  ImageSourcePropType, TouchableOpacity,
+  TouchableOpacity,
 } from "react-native";
 import { FontFamily, Border, FontSize, Color, Padding } from "../GlobalStyles";
 import {useResourceUrl} from "../utils/hook";
@@ -48,14 +48,13 @@ const RowUser: React.FC<Props> = (props) => {
 
   const delSheetRef = useRef<ActionSheet>(null);
   const shieldSheetRef = useRef<ActionSheet>(null);
-
-
   const getSetStates = ()=>{
     if(isLogin){
+      setOperateImgStatus(true)
       if(!showOperate){
         setOperateImgStatus(false)
       }else{
-        if(dao?.id == daoInfo?.id && !( routeName=='Recommend'||routeName=='Joined' )){
+        if(dao?.id == daoInfo?.id){
           setActionSheetType(0)
         } else {
           if(routeName=='Mixed'){
@@ -75,20 +74,36 @@ const RowUser: React.FC<Props> = (props) => {
   }
   const uDelDaoMsg = async () => {
     try {
-      const request =  () => PostApi.deletePost(url,postInfo.id)
-      const {data}=await request()
-      if(data.code==0){
-        Toast.show({
-          type: 'info',
-          text1: 'Delete dao success!'
-        });
-        dispatch(globalUpdateState({
-          ShieldAct:{
-            Type:'2',
-            Id:postInfo.id
-          },
-          delStatus:true
-        }))
+      if(postInfo.ref_id=='000000000000000000000000'){
+        const request =  () => PostApi.deletePost(url,postInfo.id)
+        const {data}=await request()
+        if(data.code==0){
+          Toast.show({
+            type: 'info',
+            text1: 'Shield success!'
+          });
+          dispatch(globalUpdateState({
+            ShieldAct:{
+              Type:'1',
+              Id:postInfo.id
+            }
+          }))
+        }
+      }else {
+        const request =  () => PostApi.deletePost(url,postInfo.ref_id)
+        const {data}=await request()
+        if(data.code==0){
+          Toast.show({
+            type: 'info',
+            text1: 'Shield success!'
+          });
+          dispatch(globalUpdateState({
+            ShieldAct:{
+              Type:'1',
+              Id:postInfo.ref_id
+            }
+          }))
+        }
       }
     } catch (e) {
       if (e instanceof Error)
@@ -102,30 +117,38 @@ const RowUser: React.FC<Props> = (props) => {
   };
   const ShieldDaoMsg = async () => {
     try {
-
-        const request =  () => PostApi.shieldMsg(url,postInfo.id)
-        const {data}=await request()
-        if(data.code==0){
-          Toast.show({
-            type: 'info',
-            text1: 'Shield success!'
-          });
           if(postInfo.ref_id=='000000000000000000000000'){
-            dispatch(globalUpdateState({
-              ShieldAct:{
-                Type:'1',
-                Id:postInfo.id
-              }
-            }))
+            const request =  () => PostApi.shieldMsg(url,postInfo.id)
+            const {data}=await request()
+            if(data.code==0){
+              Toast.show({
+                type: 'info',
+                text1: 'Shield success!'
+              });
+              dispatch(globalUpdateState({
+                ShieldAct:{
+                  Type:'1',
+                  Id:postInfo.id
+                }
+              }))
+            }
           }else {
+            const request =  () => PostApi.shieldMsg(url,postInfo.ref_id)
+            const {data}=await request()
+            if(data.code==0){
+              Toast.show({
+                type: 'info',
+                text1: 'Shield success!'
+              });
               dispatch(globalUpdateState({
                 ShieldAct:{
                   Type:'1',
                   Id:postInfo.ref_id
                 }
               }))
+            }
           }
-        }
+
     } catch (e) {
       if (e instanceof Error)
       {
@@ -198,7 +221,7 @@ const RowUser: React.FC<Props> = (props) => {
   };
   useEffect(()=>{
     getSetStates()
-  },[operateImgStatus,dao])
+  },[operateImgStatus,dao,isLogin])
 
   const delDaoMsg=()=>{
     Alert.alert(
