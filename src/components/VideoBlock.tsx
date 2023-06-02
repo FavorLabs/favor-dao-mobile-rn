@@ -17,12 +17,13 @@ type Props = {
 const VideoBlock: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
   const { postInfo, isReTransfer } = props;
+  const { contents, orig_contents, type, orig_type, dao } = postInfo;
   const [shieldStatus,setShieldStatus]=useState(true)
   const { ShieldAct} = useSelector((state: Models) => state.global);
 
   const Shield = () => {
     if(ShieldAct.Type=='0'){
-      if(ShieldAct.Id==postInfo.dao.id){
+      if(ShieldAct.Id==dao.id || ( postInfo.author_dao && ShieldAct.Id==postInfo.author_dao.id)){
         setShieldStatus(false)
         dispatch(globalUpdateState({
           ShieldAct:{
@@ -33,7 +34,7 @@ const VideoBlock: React.FC<Props> = (props) => {
       }
     }
     if(ShieldAct.Type=='1'){
-      if(ShieldAct.Id==postInfo.id){
+      if(ShieldAct.Id==postInfo.id || ShieldAct.Id==postInfo.ref_id){
         setShieldStatus(false)
         dispatch(globalUpdateState({
           ShieldAct:{
@@ -44,7 +45,8 @@ const VideoBlock: React.FC<Props> = (props) => {
       }
     }
     if(ShieldAct.Type=='2'){
-      if(ShieldAct.Id==postInfo.id){
+      console.log(postInfo,'type2')
+      if(ShieldAct.Id==postInfo.id || ShieldAct.Id==postInfo.ref_id){
         setShieldStatus(false)
         dispatch(globalUpdateState({
           ShieldAct:{

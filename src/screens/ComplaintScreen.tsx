@@ -35,18 +35,26 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
     }, [reason]);
     const toComplaint = async () => {
         try {
-            const request =  () => PostApi.complaint(url,{
-                post_id:postInfo.id,
-                reason:reason
-            })
-            const {data}=await request()
-            if(data.code==0){
+            if(!createDisable){
+                const request =  () => PostApi.complaint(url,{
+                    post_id:postInfo.id,
+                    reason:reason
+                })
+                const {data}=await request()
+                if(data.code==0){
+                    Toast.show({
+                        type: 'info',
+                        text1: 'Complaint success!'
+                    });
+                    navigation.goBack();
+                }
+            }else {
                 Toast.show({
-                    type: 'info',
-                    text1: 'Complaint success!'
+                    type: 'error',
+                    text1: 'Complaint failed ! Please check the input content'
                 });
-                navigation.goBack();
             }
+
         } catch (e) {
             if (e instanceof Error)
             {
