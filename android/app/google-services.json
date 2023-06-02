@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "265824651398",
+    "project_id": "favordao-57f28",
+    "storage_bucket": "favordao-57f28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265824651398:android:f441cf9b380f30b2786907",
+        "android_client_info": {
+          "package_name": "com.favorlabs.favorDao"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "265824651398-ugoqudrs6g3aklsi0gmo0mj9o67tscol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSvjreU8V3mmJ31v2MjN4hQQUtox4CVt8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "265824651398-ugoqudrs6g3aklsi0gmo0mj9o67tscol.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "265824651398-ebqp9sd650c744vgcfv269kfed4gok0t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.favorlabs.favorDao"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265824651398:android:b447bd1d8d4ad201786907",
+        "android_client_info": {
+          "package_name": "io.favorlabs.fultter_favor_dao"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "265824651398-ugoqudrs6g3aklsi0gmo0mj9o67tscol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSvjreU8V3mmJ31v2MjN4hQQUtox4CVt8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "265824651398-ugoqudrs6g3aklsi0gmo0mj9o67tscol.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "265824651398-ebqp9sd650c744vgcfv269kfed4gok0t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.favorlabs.favorDao"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -26,7 +26,7 @@ class Favor extends EventEmitter {
     bucket?: BucketRes
 
     get url() {
-        return `${this.api}/group/http/${this.config!.proxyGroup}/${DaoDomainName}/v1`
+        return `${this.api}/group/http/${this.config?.proxyGroup}/${DaoDomainName}/v1`
     }
 
     get resourceUrl() {

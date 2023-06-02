@@ -82,5 +82,19 @@
     <string>Light</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>NSCalendarsUsageDescription</key>
+    <string>This app needs access to your calendar so you can schedule meetings and view events.</string>
+    <key>NSContactsUsageDescription</key>
+    <string>This app needs access to your contacts so you can stay in touch with them.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>This app needs access to your microphone so you can use voice commands to control the app.</string>
+    <key>NSSiriUsageDescription</key>
+    <string>This app needs access to Siri so you can use voice commands to control the app.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs access to your location so it can provide relevant services even when you're not using the app.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to your location so it can provide relevant services while you're using the app.</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>This app needs access to your Bluetooth so you can communicate with other devices.</string>
   </dict>
 </plist>
