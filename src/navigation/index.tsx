@@ -34,6 +34,9 @@ import UserAgreementScreen from "../screens/UserAgreementScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import ComplaintScreen from "../screens/ComplaintScreen";
 import Toast from "react-native-toast-message";
+import analytics from "@react-native-firebase/analytics";
+import {Platform} from "react-native";
+import {useNavigation} from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
@@ -61,6 +64,11 @@ function RootStack() {
         async function fetch() {
             if (firstLoad && !requestLoading) {
                 await Favor.getBucket();
+                await analytics().logEvent('favorDAO_open', {
+                    platform: Platform.OS,
+                    networkId: Favor.networkId,
+                    region: Favor.bucket?.Settings.Region
+                });
                 setFirstLoad(false);
             }
         }

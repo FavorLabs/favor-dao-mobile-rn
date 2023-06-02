@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Alert, AppState, Platform} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
@@ -14,6 +14,9 @@ import WalletBottomSheet from "./src/components/WalletBottomSheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNExitApp from 'react-native-exit-app';
 import FirebaseMessaging from "./src/components/FirebaseMessaging";
+import analytics from '@react-native-firebase/analytics';
+import {NavigationState} from "@react-navigation/routers";
+import Favor from "./src/libs/favor";
 
 function App() {
     // AsyncStorage.clear().catch(console.error)
@@ -39,6 +42,9 @@ function App() {
     }
 
     useEffect(() => {
+        analytics().logEvent('app_open', {
+            platform: Platform.OS
+        })
         loadFont().catch(Alert.alert)
         const nativeEventSubscription = AppState.addEventListener("change", (state) => {
             if (state === 'background') {
@@ -50,6 +56,30 @@ function App() {
         }
     }, [])
 
+    function getCurrentRouteName(state: NavigationState): string {
+        if (!state) {
+            return '';
+        }
+        const route = state.routes[state.index];
+
+        if (route.state) {
+            return route.name + '_' + getCurrentRouteName(route.state as NavigationState);
+        }
+        return route.name;
+    }
+
+    const handleNavigationStateChange = async (state: NavigationState | undefined) => {
+        if (state) {
+            const currentScreen = getCurrentRouteName(state);
+            await analytics().logEvent('screen_change', {
+                platform: Platform.OS,
+                networkId: Favor.networkId,
+                region: Favor.bucket?.Settings.Region,
+                name: currentScreen
+            });
+        }
+    };
+
     if (!fontsLoaded) return null;
 
     return (
@@ -58,7 +88,7 @@ function App() {
               <SafeAreaProvider initialMetrics={null} style={styles.container}>
                   {/*<SafeAreaView style={{flex: 1}}>*/}
                   <StatusBar style="auto"/>
-                  <NavigationContainer>
+                  <NavigationContainer onStateChange={handleNavigationStateChange}>
                       <RootStack/>
                       <WalletBottomSheet/>
                       <FirebaseMessaging/>
