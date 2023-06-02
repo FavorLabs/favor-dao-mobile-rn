@@ -24,18 +24,18 @@ const SettingScreen: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
       <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.titleWrapper}>
-            <Text style={styles.title}>Profile</Text>
+        <View style={styles.titleWrapper}>
+          <Text style={styles.title}>Profile</Text>
 
-            <TouchableOpacity onPress={goToSetting}>
-              <Image
-                style={styles.settingIcon}
-                resizeMode="cover"
-                source={require("../../../assets/union-Setting.png")}
-              />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={goToSetting}>
+            <Image
+              style={styles.settingIcon}
+              resizeMode="cover"
+              source={require("../../../assets/union-Setting.png")}
+            />
+          </TouchableOpacity>
+        </View>
+        <ScrollView>
           <WalletUser/>
           <View style={styles.sendbar}>
             <Receive/>

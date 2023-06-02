@@ -1,5 +1,5 @@
 import request from '../index';
-import {NotifyGroup, ResData, ListData, SystemNotify} from "../../declare/api/DAOApi";
+import {NotifyGroup, ResData, ListData, SystemNotify, Page} from "../../declare/api/DAOApi";
 
 
 export default {
@@ -13,14 +13,16 @@ export default {
             url: url + '/notify/unread/' + id
         })
     },
-    getNotifySys(url: string, id: string) {
+    getNotifySys(url: string, id: string, params: Page) {
         return request({
-            url: url + '/notify/sys/' + id
+            url: url + '/notify/sys/' + id,
+            params
         })
     },
-    getNotifyFromId(url: string, id: string) {
+    getNotifyFromId(url: string, id: string, params: Page) {
         return request({
-            url: url + '/notify/' + id
+            url: url + '/notify/' + id,
+            params
         })
     },
     getNotifyOrgan(url: string): ResData<ListData<SystemNotify>> {
@@ -31,6 +33,13 @@ export default {
     readNotifyFromId(url: string, id: string) {
         return request({
             method: 'put',
+            url: url + '/notify/group/' + id
+        })
+    },
+    delNotifyAll(url: string, id: string) {
+        console.log(id,'--------------------------------')
+        return request({
+            method: 'delete',
             url: url + '/notify/group/' + id
         })
     },

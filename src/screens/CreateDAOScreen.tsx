@@ -101,11 +101,11 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-      <ScrollView style={styles.scrollWrap}>
         <FavorDaoNavBar
           title="Create DAO"
           vector={require("../assets/vector6.png")}
         />
+      <ScrollView style={styles.scrollWrap}>
         <TextInputBlock
           title={'Name'}
           value={daoName}

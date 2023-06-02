@@ -2,6 +2,7 @@ import {configureStore} from '@reduxjs/toolkit'
 import globalReducer from './global';
 import walletReducer from './wallet';
 import searchReducer from './search';
+import notifyReducer from './notify';
 import controllersReducer from './controllers';
 import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     wallet: persistReducer(persistConfig, walletReducer),
     global: globalReducer,
     controllers: controllersReducer,
-    search: searchReducer
+    search: searchReducer,
+    notify: notifyReducer,
 })
 
 export const store = createStore(rootReducer);
