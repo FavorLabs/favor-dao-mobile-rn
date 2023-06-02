@@ -23,7 +23,7 @@ const InputPassword = ({fn, btnText = 'Confirm', type, psd}: Props) => {
         try {
             if(type !== undefined) {
                 const privateKey = WalletController.exportPrivateKey(password);
-                fn?.(WalletController.getSignatureData(privateKey, type));
+                await fn?.(WalletController.getSignatureData(privateKey, type));
             } else {
                 const m = WalletController.exportMnemonic(password);
                 if(m) psd?.();

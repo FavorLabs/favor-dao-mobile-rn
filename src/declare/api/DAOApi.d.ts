@@ -186,7 +186,7 @@ export type DaoParams = Omit<
 >;
 
 export type ListData<T> = {
-    list: T[];
+    list: T[] | null;
     pager: Pagination & {
         total_rows: number;
     };
@@ -284,4 +284,36 @@ export type TransactionInfo = {
     rollback: boolean,
     log: [],
     ref_order_id: string
+}
+
+
+export type NotifyGroup = {
+    "fromInfo": {
+        "id": string
+        "avatar": string
+        "name": string
+    }
+    "unreadCount": number
+    "context": string
+    "createdAt": number
+}
+
+export type SystemNotify = {
+    "id": string
+    "name": string
+    "avatar": string
+    "unreadCount": number
+    "key": string
+}
+
+export type Notify = {
+    "id": string
+    "title": string
+    "context": string
+    "createdAt": string
+    "route"?: {
+        name: string
+        subRoute: Notify['route']
+        [key: string]: any
+    }
 }

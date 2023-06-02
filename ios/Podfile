@@ -14,6 +14,8 @@ install! 'cocoapods',
 
 prepare_react_native_project!
 
+$RNFirebaseAsStaticFramework = true
+
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...), which will be excluded. To fix this,
 # you can also exclude `react-native-flipper` in `react-native.config.js`
@@ -39,11 +41,14 @@ elsif podfile_properties.key?('ios.flipper') then
 end
 
 target 'FavorDao' do
+  use_modular_headers!
   use_expo_modules!
   config = use_native_modules!
 
+
   use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
+#   use_frameworks! :linkage => :static
 
   # Permissions_path
   permissions_path = '../node_modules/react-native-permissions/ios'

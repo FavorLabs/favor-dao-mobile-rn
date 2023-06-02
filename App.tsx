@@ -1,6 +1,6 @@
-import React, {useEffect,useState} from "react";
+import React, {useEffect, useState} from "react";
 import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Alert,AppState,Platform} from 'react-native';
+import {StyleSheet, Alert, AppState, Platform} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import RootStack from "./src/navigation";
 import {store, persiStore} from './src/store';
@@ -13,9 +13,9 @@ import {NavigationContainer} from "@react-navigation/native";
 import WalletBottomSheet from "./src/components/WalletBottomSheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RNExitApp from 'react-native-exit-app';
+import FirebaseMessaging from "./src/components/FirebaseMessaging";
 
-
-export default function App() {
+function App() {
     // AsyncStorage.clear().catch(console.error)
     const [fontsLoaded, setFontsLoader] = useState(false);
     const loadFont = async () => {
@@ -42,7 +42,7 @@ export default function App() {
         loadFont().catch(Alert.alert)
         const nativeEventSubscription = AppState.addEventListener("change", (state) => {
             if (state === 'background') {
-               if (Platform.OS === 'ios') RNExitApp.exitApp();
+                if (Platform.OS === 'ios') RNExitApp.exitApp();
             }
         })
         return () => {
@@ -57,17 +57,28 @@ export default function App() {
           <PersistGate persistor={persiStore}>
               <SafeAreaProvider initialMetrics={null} style={styles.container}>
                   {/*<SafeAreaView style={{flex: 1}}>*/}
-                      <StatusBar style="auto"/>
-                      <NavigationContainer>
-                          <RootStack/>
-                          <WalletBottomSheet/>
-                      </NavigationContainer>
-                      <Toast/>
+                  <StatusBar style="auto"/>
+                  <NavigationContainer>
+                      <RootStack/>
+                      <WalletBottomSheet/>
+                      <FirebaseMessaging/>
+                  </NavigationContainer>
+                  <Toast/>
                   {/*</SafeAreaView>*/}
               </SafeAreaProvider>
           </PersistGate>
       </Provider>
     );
+}
+
+export default function HeadlessCheck({isHeadless}: { isHeadless: boolean }) {
+    if (isHeadless) {
+        // App has been launched in the background by iOS, ignore
+        return null;
+    }
+
+    // Render the app component on foreground launch
+    return <App/>;
 }
 
 const styles = StyleSheet.create({
