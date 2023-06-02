@@ -33,6 +33,7 @@ const DaoCardList: React.FC<Props> = (props) => {
     try {
       const request = (params: Page) => PostApi.getPostListByType(url, params);
       const { data } = await request(pageData);
+      // @ts-ignore
       const listArr: PostInfo[] = data.data.list;
       setPostListArr(() => [...postListArr,...listArr]);
       setIsLoadingMore(
@@ -59,6 +60,7 @@ const DaoCardList: React.FC<Props> = (props) => {
     try {
       const request = (params: Page) => PostApi.getPostListByType(url, params);
       const { data } = await request(pageInfo);
+      // @ts-ignore
       const listArr: PostInfo[] = data.data.list;
       setPostListArr(() => [...listArr]);
       setIsLoadingMore(

@@ -294,7 +294,7 @@ export type NotifyGroup = {
         "name": string
     }
     "unreadCount": number
-    "context": string
+    "content": string
     "createdAt": number
 }
 
@@ -309,11 +309,12 @@ export type SystemNotify = {
 export type Notify = {
     "id": string
     "title": string
-    "context": string
+    "content": string
     "createdAt": string
     "route"?: {
         name: string
         subRoute: Notify['route']
         [key: string]: any
-    }
+    },
+    "links": string
 }

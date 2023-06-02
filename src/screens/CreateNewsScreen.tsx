@@ -104,11 +104,11 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
+        <FavorDaoNavBar
+          title="Create news"
+          vector={require("../assets/vector6.png")}
+        />
         <ScrollView style={styles.scrollWrap}>
-          <FavorDaoNavBar
-            title="Create news"
-            vector={require("../assets/vector6.png")}
-          />
           <TextInputParsedBlock
             title={'News description'}
             value={description}

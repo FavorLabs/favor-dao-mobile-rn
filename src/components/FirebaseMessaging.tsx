@@ -34,6 +34,7 @@ const FirebaseMessaging = () => {
                         })
                     }
                 })
+                await messaging().subscribeToTopic('sys');
             }
 
         } catch (e) {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, StyleSheet, View, TouchableOpacity, Pressable} from "react-native";
+import {Text, StyleSheet, View, TouchableOpacity, Pressable, ScrollView} from "react-native";
 import {Color, Border, Padding, FontFamily, FontSize} from "../GlobalStyles";
 import FavorDaoButton from "./FavorDaoButton";
 import DaoCommunityCard from "./DaoCommunityCard";
@@ -45,12 +45,14 @@ const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
 
     return (
       <View style={styles.titleParent}>
+          <ScrollView>
           <Text style={[styles.title, styles.titleFlexBox]}>
               Please subscribe first
           </Text>
           <View style={{
               width: '100%',
               marginTop: 20,
+              height: 240,
           }}>
               <DaoCommunityCard
                 daoCardInfo={daoCardInfo}
@@ -86,6 +88,7 @@ const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
                 cancelColor="#fff"
               />
           </Pressable>
+          </ScrollView>
       </View>
     );
 };
