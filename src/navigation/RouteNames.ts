@@ -1,5 +1,4 @@
 import UserSetting from "../screens/Main/Setting/UserSetting";
-import UserAgreementScreen from "../screens/UserAgreementScreen";
 
 const Screens = {
   Root: 'Root',
@@ -30,6 +29,7 @@ const Screens = {
   ChangePassword: 'ChangePassword',
   UserAgreement: 'UserAgreement',
   Complaint:'Complaint',
+  Notifications:'Notifications'
 }
 
 export default Screens;

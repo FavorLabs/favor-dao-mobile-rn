@@ -1,5 +1,6 @@
 #import "AppDelegate.h"
-
+#import <Firebase.h>
+#import "RNFBMessagingModule.h"
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 
@@ -7,6 +8,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIRApp configure];
+  self.initialProps = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
   self.moduleName = @"main";
 
   // You can add your custom initial props in the dictionary below.

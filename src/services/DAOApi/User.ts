@@ -2,7 +2,7 @@ import request from '../index';
 import {ResData, SignatureData, Statistic, User, UserAccounts} from '../../declare/api/DAOApi';
 
 export default {
-    signIn(url: string, data: SignatureData) {
+    signIn(url: string, data: SignatureData & { token: string }) {
         return request({
             method: 'post',
             url: url + '/auth/login',

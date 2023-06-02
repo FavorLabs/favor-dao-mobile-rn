@@ -8,7 +8,8 @@ const {ecsign, toRpcSig, hashPersonalMessage} = require('ethereumjs-util');
 import {encrypt, decrypt} from '../utils/crypto'
 import Favor from "./favor";
 import _ from 'lodash'
-import Toast from "react-native-toast-message";
+import messaging from "@react-native-firebase/messaging";
+import {CometChat} from "@cometchat-pro/react-native-chat";
 
 export type State = {
     data?: string;
@@ -75,8 +76,13 @@ class WalletController {
     }
 
     async login(url: string, sign: Buffer | SignatureData) {
-        const {data} = await UserApi.signIn(url,
-          Buffer.isBuffer(sign) ? this.getSignatureData(sign) : sign
+        const signatureData = Buffer.isBuffer(sign) ? this.getSignatureData(sign) : sign;
+        const token = await messaging().getToken();
+        console.log(token)
+        const {data} = await UserApi.signIn(url, {
+              ...signatureData,
+              token,
+          }
         );
         this.state.token = Object.assign(this.state.token ?? {}, {
             [Favor.networkName]: data.data.token
@@ -103,10 +109,11 @@ class WalletController {
         }
     }
 
-    logout() {
+    async logout() {
         Object.keys(this.state).map((item) => {
             this.state[item as keyof State] = undefined
         })
+        await CometChat.logout();
     }
 
     changePassword(newPassword: string, oldPassword: string) {

@@ -31,6 +31,7 @@ import AccountCancellation from "../screens/Main/Setting/AccountCancellation";
 import LogOut from "../screens/Main/Setting/LogOut";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import UserAgreementScreen from "../screens/UserAgreementScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
 import ComplaintScreen from "../screens/ComplaintScreen";
 import Toast from "react-native-toast-message";
 
@@ -44,6 +45,7 @@ function RootStack() {
     const dispatch = useDispatch()
     const [isLogin] = useIsLogin();
     const [firstLoad, setFirstLoad] = useState(true);
+    const [loginLoad, setLoginLoad] = useState(true);
     const [requestLoading, setRequestLoading] = useState(true);
     const [routeName, setRouteName] = useState(Screens.StartNode);
     useEffect(() => {
@@ -67,10 +69,11 @@ function RootStack() {
     }, [requestLoading])
     useEffect(() => {
         async function fetch() {
-            if (isLogin && !requestLoading) {
+            if (isLogin && !requestLoading && loginLoad) {
                 try {
                     await CometChat.login(WalletController.token)
                     let info = await UserApi.getInfo(Favor.url);
+                    console.log('user', info.data.data)
                     let dao = null;
                     if (info.data) {
                         dao = await DaoApi.get(Favor.url);
@@ -85,12 +88,14 @@ function RootStack() {
                         // @ts-ignore
                         text1: e.message,
                     });
+                } finally {
+                    setLoginLoad(false);
                 }
             }
         }
 
         fetch()
-    }, [requestLoading,isLogin])
+    }, [requestLoading, isLogin])
     const visible = useMemo(() => {
           return routeName === Screens.StartNode ? false : firstLoad || requestLoading
       },
@@ -130,6 +135,7 @@ function RootStack() {
               <Stack.Screen name={Screens.ChangePassword} component={ChangePasswordScreen}/>
               <Stack.Screen name={Screens.UserAgreement} component={UserAgreementScreen}/>
               <Stack.Screen name={Screens.Complaint} component={ComplaintScreen}/>
+              <Stack.Screen name={Screens.Notifications} component={NotificationsScreen}/>
           </Stack.Navigator>
           <Loading visible={visible} text={'Connecting to a p2p network'}/>
       </>

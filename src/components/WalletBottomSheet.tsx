@@ -8,10 +8,11 @@ import Models from "../declare/storeTypes";
 import InputPassword from "./InputPassword";
 import {SignatureData} from "../declare/api/DAOApi";
 import WalletController from "../libs/walletController";
-import Favor from "../libs/favor";
+import {useUrl} from "../utils/hook";
 import Toast from "react-native-toast-message";
 
 const WalletBottomSheet = () => {
+    const url = useUrl();
     const dispatch = useDispatch()
     const navigation = useNavigation();
     const {globalBottomSheet} = useSelector((state: Models) => state.controllers)
@@ -24,7 +25,7 @@ const WalletBottomSheet = () => {
     }, [])
     const login = async (signatureData: SignatureData) => {
         try {
-            await WalletController.login(Favor.url, signatureData)
+            await WalletController.login(url, signatureData)
             close();
         } catch (e) {
             Toast.show({
