@@ -6,6 +6,8 @@ import Screens from "../../../navigation/RouteNames";
 import UserSettingItem from "../../../components/UserSettingItem";
 import {Color, FontSize} from "../../../GlobalStyles";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
+import packageInfo from "../../../../package.json"
+
 
 type Props = {};
 
@@ -31,7 +33,6 @@ const UserSetting: React.FC<Props> = (props) => {
     navigation.navigate(Screens.LogOut);
   }
 
-
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
@@ -46,7 +47,7 @@ const UserSetting: React.FC<Props> = (props) => {
           <UserSettingItem title={'Log out'} onClick={goToLogOut}/>
           <View style={styles.version}>
             <Text style={styles.about}>About</Text>
-            <Text style={styles.versionText}>version 1.0.2.0601</Text>
+            <Text style={styles.versionText}>version {packageInfo.version}.0601</Text>
           </View>
         </ScrollView>
       </View>
