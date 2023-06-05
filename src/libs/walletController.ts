@@ -79,8 +79,12 @@ class WalletController {
 
     async login(url: string, sign: Buffer | SignatureData) {
         const signatureData = Buffer.isBuffer(sign) ? this.getSignatureData(sign) : sign;
-        const token = await messaging().getToken();
-        console.log(token)
+        const token: string | undefined = await new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(undefined);
+            }, 2000)
+            messaging().getToken().then(resolve).catch(() => resolve(undefined))
+        })
         const {data} = await UserApi.signIn(url, {
               ...signatureData,
               token,
