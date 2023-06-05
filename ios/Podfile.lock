@@ -192,6 +192,8 @@ PODS:
   - Permission-StoreKit (3.8.0):
     - RNPermissions
   - PromisesObjC (2.2.0)
+  - PromisesSwift (2.2.0):
+    - PromisesObjC (= 2.2.0)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -468,10 +470,11 @@ PODS:
   - react-native-tcp-socket (6.0.6):
     - CocoaAsyncSocket
     - React-Core
-  - react-native-video (5.2.1):
+  - react-native-video (6.0.0-alpha.6):
     - React-Core
-    - react-native-video/Video (= 5.2.1)
-  - react-native-video/Video (5.2.1):
+    - react-native-video/Video (= 6.0.0-alpha.6)
+  - react-native-video/Video (6.0.0-alpha.6):
+    - PromisesSwift
     - React-Core
   - react-native-webrtc (106.0.7):
     - JitsiWebRTC (~> 106.0.0)
@@ -775,6 +778,7 @@ SPEC REPOS:
     - libwebp
     - nanopb
     - PromisesObjC
+    - PromisesSwift
     - SDWebImage
     - SDWebImageWebPCoder
     - TOCropViewController
@@ -1025,6 +1029,7 @@ SPEC CHECKSUMS:
   Permission-SpeechRecognition: 39eb2398ca66ba3ac07d502e33c2f92da70ea7e0
   Permission-StoreKit: df32d0883219ddb237d673eed9165734203bfecc
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
+  PromisesSwift: cf9eb58666a43bbe007302226e510b16c1e10959
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 8af6a32dfc2b65ec82193c2dee6e1011ff22ac2a
   RCTTypeSafety: bee9dd161c175896c680d47ef1d9eaacf2b587f4
@@ -1049,7 +1054,7 @@ SPEC CHECKSUMS:
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-safe-area-context: 1d596539b05a78f2b346e954e7c577f6f9be7544
   react-native-tcp-socket: e724380c910c2e704816ec817ed28f1342246ff7
-  react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
+  react-native-video: fee89269ad07556d960721f3b62e39be6ace3c90
   react-native-webrtc: 0df36747802476e758af6b6dceccdeaed8c826c2
   react-native-webview: 203b6a1c7507737f777c91d7e10c30e7e67c1a17
   React-perflogger: d21f182895de9d1b077f8a3cd00011095c8c9100

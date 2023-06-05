@@ -87,10 +87,9 @@ function RootStack() {
                         // @ts-ignore
                         text1: e.message,
                     });
-                } finally {
-                    setLoginLoad(false);
                 }
             }
+            setLoginLoad(false);
         }
 
         fetch()
