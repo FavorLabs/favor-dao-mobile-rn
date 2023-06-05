@@ -29,6 +29,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import {updateState as globalUpdateState} from "../../../store/notify";
 import {read} from "react-native-fs";
+import NoDataShow from "../../../components/NoDataShow";
 
 const NotifyScreen = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -48,7 +49,6 @@ const NotifyScreen = () => {
 
   const getNotifyGroup = async (refresh?: boolean) => {
     const pageData = await refresh ? {page: 1, page_size: pageInfo.page_size} : pageInfo;
-    console.log(pageData,'pageData')
     try {
       const {data} = await NotifyApi.getNotifyGroup(url)
       console.log(data.data, 'notifyGroup')
@@ -119,7 +119,7 @@ const NotifyScreen = () => {
 
   useEffect(() => {
     if(messageRefresh) {
-      getNotifyGroup(true);
+      onRefresh();
       getSystemGroup();
       dispatch(globalUpdateState({
         messageRefresh: false,
@@ -139,7 +139,7 @@ const NotifyScreen = () => {
     }, [readFromId])
   )
 
-  const gotoNotifications = (params: NotifyGroup['fromInfo'] & { isSystem?: boolean }) => {
+  const gotoNotifications = (params: NotifyGroup['fromInfo'] & { isSystem?: boolean , key?: string}) => {
     navigation.navigate(Screens.Notifications, params)
   }
 
@@ -156,7 +156,8 @@ const NotifyScreen = () => {
                     id: item.id,
                     name: item.name,
                     avatar: item.avatar,
-                    isSystem: item.key === 'sys'
+                    isSystem: item.key === 'sys',
+                    key: item.key
                   })
                 }}>
                   <View style={styles.iconBox}>
@@ -173,7 +174,7 @@ const NotifyScreen = () => {
           </View>
         </View>
         <View style={styles.list}>
-          <Text style={styles.text}>Message list</Text>
+          { list.length ? <Text style={styles.text}>Message list</Text> : <></> }
           <FlatList data={list}
                     renderItem={({item}) => (
                       <View style={[styles.notifyBox, styles.flexRC]}>
@@ -187,11 +188,11 @@ const NotifyScreen = () => {
                         </View>
                         <View style={styles.notifyRight}>
                           <View style={[styles.infoTop, styles.flexRC]}>
-                            <Text style={styles.name}>{item.fromInfo.name}</Text>
-                            <Text style={styles.time}>{getTime(item.createdAt)}</Text>
+                            <Text style={styles.name} numberOfLines={1}>{item.fromInfo.name}</Text>
+                            <Text style={styles.time} numberOfLines={1}>{getTime(item.createdAt)}</Text>
                           </View>
                           <View style={styles.flexRC}>
-                            <Text style={styles.content}>{item.content}</Text>
+                            <Text style={styles.content} numberOfLines={2}>{item.content}</Text>
                             <View style={styles.flexRC}>
                               {
                                 !!item.unreadCount && <Text style={styles.unReadCount}>
@@ -227,6 +228,16 @@ const NotifyScreen = () => {
                         }
                       </>
                     )}
+                    ListEmptyComponent={!list.length && !refreshing ?
+                      <View style={styles.noData}>
+                        <NoDataShow
+                          title={'No messages'}
+                          description={"When you have messages you'll see them here"}
+                          image={require('../../../assets/notifyNoData.png')}
+                        />
+                      </View>
+                      : null
+                    }
           />
         </View>
       </View>
@@ -356,6 +367,9 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  noData: {
+    marginTop: '40%',
   },
 });
 

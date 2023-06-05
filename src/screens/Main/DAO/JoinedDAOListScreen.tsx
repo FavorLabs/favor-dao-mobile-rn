@@ -145,7 +145,11 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
             </ScrollView>
           </View>
           :
-          <NoDataShow/>
+          <NoDataShow
+            title={'No results found'}
+            image={require('../../../assets/postlistNoData.png')}
+            description={`Please join some DAO communities first`}
+          />
       }
 
     </View>
