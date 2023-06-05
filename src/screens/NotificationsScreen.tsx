@@ -88,6 +88,7 @@ const NotificationsScreen = () => {
       await NotifyApi.readNotifyFromId(url, id);
       dispatch(globalUpdateState({
         readFromId: id,
+        isSystem: key ? true : false
       }));
     } catch (e) {
       if(e instanceof Error) {

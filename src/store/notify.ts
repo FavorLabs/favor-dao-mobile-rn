@@ -4,6 +4,7 @@ export type State = {
   delFromId: string;
   messageRefresh: boolean;
   readFromId: string;
+  isSystem: boolean;
 }
 
 export const notifyStore = createSlice({
@@ -12,6 +13,7 @@ export const notifyStore = createSlice({
     delFromId: '',
     messageRefresh: true,
     readFromId: '',
+    isSystem: false,
   } as State,
   reducers: {
     updateState: (state, action: PayloadAction<Partial<State>>) => {

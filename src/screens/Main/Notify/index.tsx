@@ -38,7 +38,7 @@ const NotifyScreen = () => {
   const resourceUrl = useResourceUrl('avatars');
   const [list, setList] = useState<NotifyGroup[]>([]);
   const [systemList, setSystemList] = useState<SystemNotify[]>([]);
-  const { delFromId, messageRefresh, readFromId } = useSelector((state: Models) => state.notify);
+  const { delFromId, messageRefresh, readFromId, isSystem } = useSelector((state: Models) => state.notify);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loading,setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -117,6 +117,23 @@ const NotifyScreen = () => {
     }));
   }
 
+  const readSystemFromIdList = (readId: string) => {
+    const readList = systemList.find(item => item.id === readId);
+    const readIdList = {...readList, unreadCount: 0 }
+    const mapList = systemList.map(item => {
+      if (item.id === readId) {
+        return readIdList;
+      }
+      return item;
+    })
+    // @ts-ignore
+    setSystemList(mapList);
+    dispatch(globalUpdateState({
+      readFromId: '',
+      isSystem: false,
+    }));
+  }
+
   useEffect(() => {
     if(messageRefresh) {
       onRefresh();
@@ -135,7 +152,10 @@ const NotifyScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      if (readFromId !== '') readFromIdList(readFromId);
+      if (readFromId !== '') {
+        if(isSystem) readSystemFromIdList(readFromId);
+        else readFromIdList(readFromId);
+      }
     }, [readFromId])
   )
 
