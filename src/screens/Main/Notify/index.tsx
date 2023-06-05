@@ -134,15 +134,17 @@ const NotifyScreen = () => {
     }));
   }
 
-  useEffect(() => {
-    if(messageRefresh) {
-      onRefresh();
-      getSystemGroup();
-      dispatch(globalUpdateState({
-        messageRefresh: false,
-      }));
-    }
-  }, [messageRefresh]);
+  useFocusEffect(
+    useCallback(() => {
+      if(messageRefresh) {
+        onRefresh();
+        getSystemGroup();
+        dispatch(globalUpdateState({
+          messageRefresh: false,
+        }));
+      }
+    }, [messageRefresh])
+  )
 
   useFocusEffect(
     useCallback(() => {
