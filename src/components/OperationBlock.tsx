@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
   ActivityIndicator,
-  Image,
+  Image, Platform,
   StyleSheet,
   Text, TouchableOpacity,
   View,
@@ -21,6 +21,8 @@ import {ReTransferPost} from "../declare/api/DAOApi";
 import Toast from 'react-native-toast-message';
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
+import analytics from "@react-native-firebase/analytics";
+import Favor from "../libs/favor";
 
 type Props = {
   postInfo: PostInfo;
@@ -85,6 +87,13 @@ const OperationBlock: React.FC<Props> = (props) => {
         setLike(data.data.status);
         if (data.data.status) setLikeCount(likeCount + 1);
         else setLikeCount(likeCount - 1);
+        analytics().logEvent('like', {
+          platform: Platform.OS,
+          networkId: Favor.networkId,
+          region: Favor.bucket?.Settings.Region,
+          postId: postId,
+          type: data.data.status
+        });
       }
     } catch (e) {
       Toast.show({

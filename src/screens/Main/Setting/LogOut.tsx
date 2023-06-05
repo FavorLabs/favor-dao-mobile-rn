@@ -41,7 +41,7 @@ const LogOut: React.FC<Props> = (props) => {
     close();
     try {
       setBtnLoading(true);
-      await WalletController.logout();
+      await WalletController.logout(user?.address);
       Toast.show({
         type: 'info',
         text1: 'LogOut success!'

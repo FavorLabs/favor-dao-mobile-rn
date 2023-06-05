@@ -1,5 +1,15 @@
 import React, {useEffect, useMemo, useState, useRef} from 'react';
-import {Image, StyleSheet, View, Text, Pressable, SafeAreaView, ScrollView, TouchableOpacity} from "react-native";
+import {
+  Image,
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+  Platform
+} from "react-native";
 import VideoDetailButton from "../components/VideoDetailButton";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {FontSize, FontFamily, Color, Border} from "../GlobalStyles";
@@ -15,6 +25,7 @@ import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import Toast from "react-native-toast-message";
 import Navigation from "../navigation";
 import Loading from "../components/Loading";
+import analytics from "@react-native-firebase/analytics";
 
 export type Props = {};
 const VideoPlayScreen: React.FC<Props> = (props) => {
@@ -31,6 +42,16 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
 
   const playable = useMemo(() => videoData?.member === 0 ? true : videoData?.dao.is_subscribed, [videoData])
 
+  useEffect(() => {
+    if (playable) {
+      analytics().logEvent('video_play', {
+        platform: Platform.OS,
+        networkId: Favor.networkId,
+        region: Favor.bucket?.Settings.Region,
+        id: videoData?.id
+      });
+    }
+  }, [playable])
   const getVideoById = async (id: string) => {
     try {
       const {data} = await PostApi.getPostById(url, id);
@@ -83,7 +104,8 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
   if (!videoData) return <View style={styles.loadingContent}><Text style={styles.loading}>loading...</Text></View>;
 
   return (
-    <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.iOSSystemLabelsLightPrimary}} footerStyle={{backgroundColor: Color.iOSSystemLabelsLightPrimary}}>
+    <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.iOSSystemLabelsLightPrimary}}
+                            footerStyle={{backgroundColor: Color.iOSSystemLabelsLightPrimary}}>
       <View style={styles.container}>
         <Pressable
           style={styles.wrapper}

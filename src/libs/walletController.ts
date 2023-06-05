@@ -10,6 +10,8 @@ import Favor from "./favor";
 import _ from 'lodash'
 import messaging from "@react-native-firebase/messaging";
 import {CometChat} from "@cometchat-pro/react-native-chat";
+import analytics from "@react-native-firebase/analytics";
+import {Platform} from "react-native";
 
 export type State = {
     data?: string;
@@ -109,11 +111,17 @@ class WalletController {
         }
     }
 
-    async logout() {
+    async logout(address?: string) {
         Object.keys(this.state).map((item) => {
             this.state[item as keyof State] = undefined
         })
         await CometChat.logout();
+        await analytics().logEvent('logout', {
+            platform: Platform.OS,
+            networkId: Favor.networkId,
+            region: Favor.bucket?.Settings.Region,
+            address: address
+        });
     }
 
     changePassword(newPassword: string, oldPassword: string) {

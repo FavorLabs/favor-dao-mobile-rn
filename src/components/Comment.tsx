@@ -1,13 +1,13 @@
 import React, {useEffect, useState, useImperativeHandle, RefObject, useMemo, useRef} from 'react';
 import {
-    View,
-    Text,
-    StyleSheet,
-    FlatList,
-    Image,
-    TouchableWithoutFeedback,
-    TouchableOpacity,
-    TextInput, FlatListProps, ListRenderItem, ActivityIndicator
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  TextInput, FlatListProps, ListRenderItem, ActivityIndicator, Platform
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import PostApi from '../services/DAOApi/Post';
@@ -19,6 +19,8 @@ import {getDebounce, getTime} from "../utils/util";
 import Models from "../declare/storeTypes";
 import CommentItem from "./CommentItem";
 import ReplyModal from "./ReplyModal";
+import analytics from "@react-native-firebase/analytics";
+import Favor from "../libs/favor";
 
 export type Props = {
     postId: string;
@@ -46,6 +48,7 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
     const loadData = async () => {
         const {data} = await PostApi.getPostComments(url, pageData);
         if (data.data.list) {
+            // @ts-ignore
             setList((list) => [...list, ...data.data.list]);
             setHasMore(
               data.data.pager.total_rows > pageData.page * pageData.page_size,
@@ -102,6 +105,12 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
                 setList(list => [...list, commentInfo])
                 setComment('');
                 Toast.show({type: 'info', text1: 'comment success!'})
+                analytics().logEvent('comment', {
+                    platform: Platform.OS,
+                    networkId: Favor.networkId,
+                    region: Favor.bucket?.Settings.Region,
+                    postId: postId
+              });
             }
         } catch (e) {
             if (e instanceof Error) Toast.show({type: 'error', text1: e.message});

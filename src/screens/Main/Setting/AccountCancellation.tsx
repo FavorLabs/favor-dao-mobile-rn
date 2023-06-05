@@ -48,7 +48,7 @@ const AccountCancellation: React.FC<Props> = (props) => {
     try {
       setBtnLoading(true);
       await UserApi.accountCancellation(url, signatureData);
-      await WalletController.logout();
+      await WalletController.logout(user?.address);
       dispatch(globalUpdateState({
         user: null,
         dao: null,
