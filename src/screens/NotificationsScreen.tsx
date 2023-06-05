@@ -1,7 +1,17 @@
 import React, {useCallback, useState} from 'react';
 import {Notify, NotifyGroup, Page} from "../declare/api/DAOApi";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
-import {FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import {useFocusEffect, useNavigation, useRoute} from "@react-navigation/native";
 import NotifyApi from "../services/DAOApi/Notify";
@@ -15,7 +25,6 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {updateState as globalUpdateState} from "../store/notify";
-import {iteratee} from "lodash";
 
 const NotificationsScreen = () => {
   const dispatch = useDispatch();
@@ -26,18 +35,28 @@ const NotificationsScreen = () => {
   const [notifyList, setNotifyList] = useState<Notify[]>();
   const resourceUrl = useResourceUrl('avatars');
   const { delFromId } = useSelector((state: Models) => state.notify);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [loading,setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [pageInfo, setPageInfo] = useState<Page>({
     page: 1,
     page_size: 10,
   });
 
-  const getNotify = async () => {
+  const getNotify = async (refresh?: boolean) => {
+    const pageData = await refresh ? {page: 1, page_size: pageInfo.page_size} : pageInfo;
     try {
-      const {data} = isSystem ? await NotifyApi.getNotifySys(url, id, pageInfo) : await NotifyApi.getNotifyFromId(url, id, pageInfo);
-      console.log(data,'getNotify')
-      if(data.data.list){
-        setNotifyList(data.data.list);
+      const { data } = isSystem
+        ? await NotifyApi.getNotifySys(url, id, pageData)
+        : await NotifyApi.getNotifyFromId(url, id, pageData);
+      if(refresh) {
+        setNotifyList(data.data.list)
+      } else {
+        if(notifyList) setNotifyList([...notifyList,data.data.list])
       }
+      setIsLoadingMore(data.data.pager.total_rows > pageData.page * pageData.page_size,);
+      setPageInfo({ ...pageInfo, page: ++pageData.page });
+
     } catch (e) {
       if(e instanceof Error) {
         Toast.show({
@@ -46,11 +65,28 @@ const NotificationsScreen = () => {
         })
       }
     }
-  }
+  };
+
+  const handleLoadMore = async () => {
+    if (isLoadingMore && !loading) {
+      setLoading(true);
+      await getNotify();
+      setLoading(false);
+    }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getNotify(true);
+    setRefreshing(false);
+  };
 
   const readNotify = async () => {
     try {
       await NotifyApi.readNotifyFromId(url, id);
+      dispatch(globalUpdateState({
+        readFromId: id,
+      }));
     } catch (e) {
       if(e instanceof Error) {
         Toast.show({
@@ -83,7 +119,7 @@ const NotificationsScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getNotify();
+      getNotify(true);
       readNotify()
     }, [])
   )
@@ -111,14 +147,38 @@ const NotificationsScreen = () => {
                   uri: `${resourceUrl}/${avatar}`
                 }}
               />
-              <View style={styles.notifyContent}>
+              <TouchableOpacity style={styles.notifyContent} onPress={() => {
+                if(item.links) {
+                  const link = JSON.parse(item.links);
+                  // @ts-ignore
+                  navigation.navigate(link.route,{ postId: link.id });
+                }
+              }}>
                 <Text style={styles.text}>{item.content}</Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         )}
         keyExtractor={(item: Notify) => item.id}
         style={styles.flatList}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        ListFooterComponent={() => (
+          <>
+            {
+              loading &&
+                <View style={styles.footer}>
+                    <ActivityIndicator size="large" />
+                </View>
+            }
+          </>
+        )}
       />
     </View>
   </BackgroundSafeAreaView>;
@@ -148,7 +208,7 @@ const styles = StyleSheet.create({
   },
   time: {
     textAlign: 'center',
-    marginTop: 13,
+    marginVertical: 13,
   },
   avatar: {
     width: 50,
@@ -175,7 +235,13 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 16,
     color: '#000000',
-  }
+  },
+  footer: {
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
 })
 
 export default NotificationsScreen;

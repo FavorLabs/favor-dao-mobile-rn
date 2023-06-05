@@ -1,22 +1,34 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, FlatListProps, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  FlatListProps,
+  Image,
+  TouchableOpacity,
+  RefreshControl,
+  ActivityIndicator
+} from 'react-native';
 import {NotifyTopTabNavigator} from "../../../navigation/TopTabBar";
 import {Color, FontFamily, FontSize, Padding} from "../../../GlobalStyles";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import NotifyApi from "../../../services/DAOApi/Notify";
 import {useResourceUrl, useUrl} from "../../../utils/hook";
 import {useFocusEffect, useNavigation} from "@react-navigation/native";
-import {NotifyGroup, SystemNotify} from "../../../declare/api/DAOApi";
+import {NotifyGroup, Page, SystemNotify} from "../../../declare/api/DAOApi";
 import {getTime} from "../../../utils/util";
 import {Icon} from '@rneui/themed'
 import SvgIcon from "../../../components/SvgIcon";
-import UnionSvg from "../../../assets/svg/union.svg"
+import UnionSvg from "../../../assets/svg/union.svg";
+import TransactionSvg from "../../../assets/svg/transactionSvg.svg";
 import {StackNavigationProp} from "@react-navigation/stack";
 import Screens from "../../../navigation/RouteNames";
 import Toast from "react-native-toast-message";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import {updateState as globalUpdateState} from "../../../store/notify";
+import {read} from "react-native-fs";
 
 const NotifyScreen = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -25,28 +37,58 @@ const NotifyScreen = () => {
   const resourceUrl = useResourceUrl('avatars');
   const [list, setList] = useState<NotifyGroup[]>([]);
   const [systemList, setSystemList] = useState<SystemNotify[]>([]);
-  const { delFromId } = useSelector((state: Models) => state.notify);
+  const { delFromId, messageRefresh, readFromId } = useSelector((state: Models) => state.notify);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [loading,setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [pageInfo, setPageInfo] = useState<Page>({
+    page: 1,
+    page_size: 10,
+  });
 
-  const getNotifyGroup = async () => {
+  const getNotifyGroup = async (refresh?: boolean) => {
+    const pageData = await refresh ? {page: 1, page_size: pageInfo.page_size} : pageInfo;
+    console.log(pageData,'pageData')
     try {
       const {data} = await NotifyApi.getNotifyGroup(url)
-      console.log(data.data?.list,'notifyGroup')
-      if (data.data?.list) {
-        setList(data.data?.list)
+      console.log(data.data, 'notifyGroup')
+      if(data.data?.list){
+        if(refresh) {
+          setList(data.data?.list)
+        } else {
+          setList([...list,...data.data.list])
+        }
+        setIsLoadingMore(data.data.pager.total_rows > pageData.page * pageData.page_size,);
+        setPageInfo({ ...pageInfo, page: ++pageData.page });
       }
-    }catch (e) {
-      if(e instanceof Error) {
+    } catch (e) {
+      if (e instanceof Error) {
         Toast.show({
           type: 'error',
           text1: e.message
         })
       }
     }
-  }
+  };
+
+  const handleLoadMore = async () => {
+    if (isLoadingMore && !loading) {
+      setLoading(true);
+      await getNotifyGroup();
+      setLoading(false);
+    }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getNotifyGroup(true);
+    setRefreshing(false);
+  };
 
   const getSystemGroup = async () => {
-    const {data} = await NotifyApi.getNotifyOrgan(url)
+    const {data} = await NotifyApi.getNotifyOrgan(url);
     if (data.data?.list) {
+      console.log(data.data, 'SystemGroup')
       setSystemList(data.data?.list)
     }
   }
@@ -59,22 +101,43 @@ const NotifyScreen = () => {
     }));
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      getNotifyGroup();
-      getSystemGroup()
-    }, [])
-  )
-
-  // useEffect(() => {
-  //   getNotifyGroup();
-  //   getSystemGroup()
-  // }, []);
+  const readFromIdList = (readId: string) => {
+    const readList = list.find(item => item.fromInfo.id === readId);
+    const readIdList = { ...readList, unreadCount: 0 }
+    const mapList = list.map(item => {
+      if (item.fromInfo.id === readId) {
+        return readIdList;
+      }
+      return item;
+    })
+    // @ts-ignore
+    setList(mapList);
+    dispatch(globalUpdateState({
+      readFromId: '',
+    }));
+  }
 
   useEffect(() => {
-    console.log(delFromId,'delId')
-    if(delFromId) delFromIdList(delFromId);
-  },[delFromId])
+    if(messageRefresh) {
+      getNotifyGroup(true);
+      getSystemGroup();
+      dispatch(globalUpdateState({
+        messageRefresh: false,
+      }));
+    }
+  }, [messageRefresh]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (delFromId !== '') delFromIdList(delFromId);
+    }, [delFromId])
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      if (readFromId !== '') readFromIdList(readFromId);
+    }, [readFromId])
+  )
 
   const gotoNotifications = (params: NotifyGroup['fromInfo'] & { isSystem?: boolean }) => {
     navigation.navigate(Screens.Notifications, params)
@@ -97,7 +160,7 @@ const NotifyScreen = () => {
                   })
                 }}>
                   <View style={styles.iconBox}>
-                    <SvgIcon svg={<UnionSvg/>}/>
+                    <SvgIcon svg={ item.key === 'transaction' ? <TransactionSvg/> : <UnionSvg/>}/>
                     {
                       !!item.unreadCount && <View style={styles.unread}></View>
                     }
@@ -146,6 +209,24 @@ const NotifyScreen = () => {
                       </View>
                     )}
                     keyExtractor={item => item.fromInfo.id}
+                    onEndReached={handleLoadMore}
+                    onEndReachedThreshold={0.5}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                      />
+                    }
+                    ListFooterComponent={() => (
+                      <>
+                        {
+                          loading &&
+                            <View style={styles.footer}>
+                                <ActivityIndicator size="large" />
+                            </View>
+                        }
+                      </>
+                    )}
           />
         </View>
       </View>
@@ -269,7 +350,13 @@ const styles = StyleSheet.create({
     fontSize: FontSize.capsCaps310SemiBold_size,
     lineHeight: 14,
     paddingHorizontal: 4
-  }
+  },
+  footer: {
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
 });
 
 export default NotifyScreen;

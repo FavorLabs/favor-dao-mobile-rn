@@ -1,13 +1,17 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export type State = {
-  delFromId: string
+  delFromId: string;
+  messageRefresh: boolean;
+  readFromId: string;
 }
 
 export const notifyStore = createSlice({
   name: 'notify',
   initialState: {
     delFromId: '',
+    messageRefresh: true,
+    readFromId: '',
   } as State,
   reducers: {
     updateState: (state, action: PayloadAction<Partial<State>>) => {
