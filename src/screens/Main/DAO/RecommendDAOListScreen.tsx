@@ -30,7 +30,7 @@ import Toast from "react-native-toast-message";
 type Props = {};
 const RecommendDAOListScreen: React.FC<Props> = (props) => {
   const url = useUrl();
-  const { daoSearch } = useSelector((state: Models) => state.search);
+  const {daoSearch} = useSelector((state: Models) => state.search);
   const [pageData, setPageData] = useState<DAOPage>({
     page: 1,
     page_size: 20,
@@ -39,26 +39,25 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
     sort: 'dao_follow_count:desc,created_on:desc'
   });
 
-  const [postListArr,setPostListArr] = useState<PostInfo[]>([]);
+  const [postListArr, setPostListArr] = useState<PostInfo[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [loading,setLoading] = useState(false);
-  const [isShow,setIsShow] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
+  const [isShow, setIsShow] = useState<boolean>(false);
   const [daoInfo, setDaoInfo] = useState<DaoInfo>();
   const [isJoin, setIsJoin] = useState(false);
 
   const loadMore = async () => {
     try {
       const request = (params: Page) => PostApi.getPostListByType(url, params);
-      const { data } = await request(pageData);
-      if(data.data.list){
-        const listArr: PostInfo[] = data.data.list;
-        setPostListArr(() => [...postListArr,...listArr]);
-        setIsLoadingMore(
-            data.data.pager.total_rows > pageData.page * pageData.page_size,
-        );
-        setPageData((pageData) => ({ ...pageData, page: ++pageData.page }));
-      }
+      const {data} = await request(pageData);
+      // @ts-ignore
+      const listArr: PostInfo[] = data.data.list;
+      setPostListArr(() => [...postListArr, ...listArr]);
+      setIsLoadingMore(
+        data.data.pager.total_rows > pageData.page * pageData.page_size,
+      );
+      setPageData((pageData) => ({...pageData, page: ++pageData.page}));
     } catch (e) {
       if (e instanceof Error)
         Toast.show({
@@ -71,16 +70,22 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
 
   const refreshPage = async () => {
     try {
-      const pageInfo = { page: 1, page_size: 20, type:-1 , query: daoSearch ,sort: 'dao_follow_count:desc,created_on:desc'};
+      const pageInfo = {
+        page: 1,
+        page_size: 20,
+        type: -1,
+        query: daoSearch,
+        sort: 'dao_follow_count:desc,created_on:desc'
+      };
       const request = (params: Page) => PostApi.getPostListByType(url, params);
-      const { data } = await request(pageInfo);
-      if(data.data.list){
+      const {data} = await request(pageInfo);
+      // @ts-ignore
       const listArr: PostInfo[] = data.data.list;
       setPostListArr([...listArr]);
       setIsLoadingMore(
         data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,
       );
-      setPageData((pageData) => ({ ...pageData, page: 2 }));}
+      setPageData((pageData) => ({...pageData, page: 2}));
     } catch (e) {
       if (e instanceof Error)
         Toast.show({
@@ -119,7 +124,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
     <View style={styles.container}>
       <FlatList
         data={postListArr}
-        renderItem={({ item }) =>
+        renderItem={({item}) =>
           <TouchableOpacity onPress={() => (toFeedsOfDao(item))} style={styles.daoCard}>
             <DaoBriefCard daoCardInfo={item.dao}/>
           </TouchableOpacity>
@@ -140,7 +145,7 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
             {
               loading &&
                 <View style={styles.footer}>
-                    <ActivityIndicator size="large" />
+                    <ActivityIndicator size="large"/>
                 </View>
             }
           </>
@@ -175,9 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     paddingTop: 5,
   },
-  flautist: {
-
-  },
+  flautist: {},
   noData: {
     flex: 1,
     marginTop: '40%',

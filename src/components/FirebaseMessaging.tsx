@@ -3,12 +3,15 @@ import messaging from '@react-native-firebase/messaging';
 import {PermissionsAndroid, Platform} from 'react-native'
 import Toast from "react-native-toast-message";
 import Favor from "../libs/favor";
+import {useDispatch} from "react-redux";
+import {updateState as globalUpdateState} from "../store/notify";
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log("background", remoteMessage)
 })
 
 const FirebaseMessaging = () => {
+    const dispatch = useDispatch();
     async function initMessaging() {
         try {
             let permissionStatus = false;
@@ -26,6 +29,9 @@ const FirebaseMessaging = () => {
                 });
                 messaging().onMessage(async remoteMessage => {
                     console.log('message', remoteMessage)
+                    dispatch(globalUpdateState({
+                        messageRefresh: true,
+                    }));
                     if (remoteMessage.data?.networkId === Favor.networkId && remoteMessage.data?.region === Favor.bucket?.Settings.Region) {
                         Toast.show({
                             type: 'info',
