@@ -1,5 +1,5 @@
 import React, {useState, useMemo, useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Platform} from 'react-native';
 import Toast from 'react-native-toast-message';
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputBlock from "../components/TextInputBlock";
@@ -18,6 +18,8 @@ import {RegExps} from "../components/TextInputParsed";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";
 import FavorDaoButton from "../components/FavorDaoButton";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import analytics from "@react-native-firebase/analytics";
+import Favor from "../libs/favor";
 
 export type Props = {};
 const CreateDAOScreen: React.FC<Props> = (props) => {
@@ -80,6 +82,12 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           daoListStatus: true,
           newsJoinStatus: true,
         }))
+        await analytics().logEvent('create_DAO', {
+          platform: Platform.OS,
+          networkId: Favor.networkId,
+          region: Favor.bucket?.Settings.Region,
+          id: data.data.id
+        });
         navigation.goBack();
       }
     } catch (e) {

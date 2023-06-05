@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform} from 'react-native';
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import TextInputParsedBlock from "../components/TextInputParsedBlock";
 import TextInputBlock from "../components/TextInputBlock";
@@ -21,6 +21,8 @@ import {RegExps} from "../components/TextInputParsed";
 import FavorDaoButton from "../components/FavorDaoButton";
 import {updateState as globalUpdateState} from "../store/global";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import analytics from "@react-native-firebase/analytics";
+import Favor from "../libs/favor";
 
 export type Props = {};
 const CreateVideoScreen: React.FC<Props> = (props) => {
@@ -84,6 +86,12 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
           joinStatus: true,
           newsJoinStatus: true
         }));
+        await analytics().logEvent('create_post', {
+          platform: Platform.OS,
+          networkId: Favor.networkId,
+          region: Favor.bucket?.Settings.Region,
+          id: data.data.id
+        });
         navigation.goBack();
       }
     } catch (e) {

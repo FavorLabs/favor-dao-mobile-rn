@@ -37,6 +37,7 @@ import Toast from "react-native-toast-message";
 import analytics from "@react-native-firebase/analytics";
 import {Platform} from "react-native";
 import {useNavigation} from "@react-navigation/native";
+import {getDAOInfo} from "../utils/util";
 
 const Stack = createStackNavigator();
 
@@ -79,17 +80,7 @@ function RootStack() {
         async function fetch() {
             if (isLogin && !requestLoading && loginLoad) {
                 try {
-                    await CometChat.login(WalletController.token)
-                    let info = await UserApi.getInfo(Favor.url);
-                    console.log('user', info.data.data)
-                    let dao = null;
-                    if (info.data) {
-                        dao = await DaoApi.get(Favor.url);
-                    }
-                    dispatch(globalUpdateState({
-                        user: info.data.data,
-                        dao: dao?.data.data.list?.[0] || null
-                    }));
+                    await getDAOInfo(dispatch)
                 } catch (e) {
                     Toast.show({
                         type: 'error',

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, Image, Platform, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Color, FontFamily, FontSize} from "../GlobalStyles";
 // @ts-ignore
 import ActionSheet from 'react-native-actionsheet'
@@ -21,6 +21,8 @@ import loading from "./Loading";
 import DaoApi from "../services/DAOApi/Dao";
 import JoinButton from "./JoinButton";
 import VideoJoinButton from "./VideoJoinButton";
+import analytics from "@react-native-firebase/analytics";
+import Favor from "../libs/favor";
 
 type Props = {
   postInfo: PostInfo;
@@ -71,6 +73,13 @@ const VideoDetailButton: React.FC<Props> = (props) => {
         } else {
           setLikeCount(likeCount - 1);
         }
+        analytics().logEvent('like', {
+          platform: Platform.OS,
+          networkId: Favor.networkId,
+          region: Favor.bucket?.Settings.Region,
+          postId: postInfo.id,
+          type: data.data.status
+        });
       }
     } catch (e) {
       Toast.show({
