@@ -152,7 +152,11 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
         )}
         ListEmptyComponent={!postListArr.length && !refreshing ?
           <View style={styles.noData}>
-            <NoDataShow/>
+            <NoDataShow
+              title={'No results found'}
+              image={require('../../../assets/postlistNoData.png')}
+              description={`Please go to publish the content first`}
+            />
           </View>
           : null}
       />

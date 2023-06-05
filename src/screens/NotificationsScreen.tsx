@@ -25,16 +25,18 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {updateState as globalUpdateState} from "../store/notify";
+import NoDataShow from "../components/NoDataShow";
+import UnionSvg from "../assets/svg/unionWhite.svg";
+import TransactionSvg from "../assets/svg/transactionSvgWhite.svg";
 
 const NotificationsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const route = useRoute();
   const url = useUrl();
-  const {id, avatar, name, isSystem} = route.params as NotifyGroup['fromInfo'] & { isSystem?: boolean }
+  const {id, avatar, name, isSystem, key} = route.params as NotifyGroup['fromInfo'] & { isSystem?: boolean, key?: string }
   const [notifyList, setNotifyList] = useState<Notify[]>();
   const resourceUrl = useResourceUrl('avatars');
-  const { delFromId } = useSelector((state: Models) => state.notify);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loading,setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -119,7 +121,7 @@ const NotificationsScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getNotify(true);
+      onRefresh();
       readNotify()
     }, [])
   )
@@ -141,12 +143,19 @@ const NotificationsScreen = () => {
               {getTime(Number(item.createdAt))}
             </Text>
             <View style={styles.notifyRow}>
-              <Image
-                style={styles.avatar}
-                source={{
-                  uri: `${resourceUrl}/${avatar}`
-                }}
-              />
+              {
+                key ?
+                  <View style={styles.iconBox}>
+                    <SvgIcon svg={ key === 'transaction' ? <TransactionSvg/> : <UnionSvg/>}/>
+                  </View>
+                  :
+                  <Image
+                    style={styles.avatar}
+                    source={{
+                      uri: `${resourceUrl}/${avatar}`
+                    }}
+                  />
+              }
               <TouchableOpacity style={styles.notifyContent} onPress={() => {
                 if(item.links) {
                   const link = JSON.parse(item.links);
@@ -179,6 +188,16 @@ const NotificationsScreen = () => {
             }
           </>
         )}
+        ListEmptyComponent={!notifyList?.length && !refreshing ?
+          <View style={styles.noData}>
+            <NoDataShow
+              title={'No messages'}
+              description={"When you have messages you'll see them here"}
+              image={require('../assets/notifyNoData.png')}
+            />
+          </View>
+          : null
+        }
       />
     </View>
   </BackgroundSafeAreaView>;
@@ -241,6 +260,19 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  noData: {
+    flex: 1,
+    marginTop: '40%'
+  },
+  iconBox: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: 'center',
+    backgroundColor: '#000000',
+    marginRight: 10,
   },
 })
 

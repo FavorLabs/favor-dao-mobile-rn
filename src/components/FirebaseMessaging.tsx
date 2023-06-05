@@ -29,15 +29,15 @@ const FirebaseMessaging = () => {
                 });
                 messaging().onMessage(async remoteMessage => {
                     console.log('message', remoteMessage)
-                    dispatch(globalUpdateState({
-                        messageRefresh: true,
-                    }));
                     if (remoteMessage.data?.networkId === Favor.networkId && remoteMessage.data?.region === Favor.bucket?.Settings.Region) {
                         Toast.show({
                             type: 'info',
                             text1: remoteMessage.notification?.title,
                             text2: remoteMessage.notification?.body
-                        })
+                        });
+                        dispatch(globalUpdateState({
+                            messageRefresh: true,
+                        }));
                     }
                 })
                 await messaging().subscribeToTopic('sys');

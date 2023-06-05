@@ -51,7 +51,6 @@ const PostList: React.FC<Props> = (props) => {
       // @ts-ignore
       const listArr: PostInfo[] = data.data.list;
       setPostListArr(() => [...postListArr, ...listArr]);
-
       setIsLoadingMore(
         data.data.pager.total_rows > pageData.page * pageData.page_size,
       );
@@ -172,7 +171,11 @@ const PostList: React.FC<Props> = (props) => {
         )}
         ListEmptyComponent={!postListArr.length && !refreshing ?
           <View style={styles.noData}>
-            <NoDataShow/>
+            <NoDataShow
+              title={'No results found'}
+              image={require('../assets/postlistNoData.png')}
+              description={`Please join some DAO communities first`}
+            />
           </View>
           : null
         }
