@@ -29,7 +29,7 @@ const FirebaseMessaging = () => {
                 });
                 messaging().onMessage(async remoteMessage => {
                     console.log('message', remoteMessage)
-                    if (remoteMessage.data?.networkId === Favor.networkId && remoteMessage.data?.region === Favor.bucket?.Settings.Region) {
+                    if (Number(remoteMessage.data?.networkId) === Number(Favor.networkId) && remoteMessage.data?.region === Favor.bucket?.Settings.Region) {
                         Toast.show({
                             type: 'info',
                             text1: remoteMessage.notification?.title,

@@ -25,6 +25,7 @@ const PostDetailScreen = () => {
 
   const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
   const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
+  const [requestId, setRequestId] = useState<string>(postId)
 
   const navigation = useNavigation();
 
@@ -32,6 +33,11 @@ const PostDetailScreen = () => {
     try {
       const {data} = await PostApi.getPostById(url, postId);
       if (data.data) {
+        if (!data.data.contents.length || !data.data.contents) {
+          // @ts-ignore
+          navigation.navigate('PostDetail',{postId: data.data.ref_id})
+          return;
+        }
         setPostInfo(data.data);
         if (data.data.author_dao.id) setIsReTransfer(true);
       }
