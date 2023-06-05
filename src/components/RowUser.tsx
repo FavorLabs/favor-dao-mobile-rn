@@ -49,8 +49,6 @@ const RowUser: React.FC<Props> = (props) => {
   const delSheetRef = useRef<ActionSheet>(null);
   const shieldSheetRef = useRef<ActionSheet>(null);
   const getSetStates = ()=>{
-    if(isLogin){
-      setOperateImgStatus(true)
       if(!showOperate){
         setOperateImgStatus(false)
       }else{
@@ -68,9 +66,6 @@ const RowUser: React.FC<Props> = (props) => {
           }
         }
       }
-    }else {
-      setOperateImgStatus(false)
-    }
   }
   const uDelDaoMsg = async () => {
     try {
@@ -290,17 +285,22 @@ const RowUser: React.FC<Props> = (props) => {
               options={[`Shield @${daoInfo?.name}`, 'Shield this content' ,'Complaint','Cancel']}
               cancelButtonIndex={3}
               onPress={(index:number) => {
-                if (index==0) {
-                  OperateAct(index)
+                if (isLogin){
+                  if (index==0) {
+                    OperateAct(index)
+                  }
+                  if (index==1){
+                    OperateAct(index)
+                  }
+                  if(index==2){
+                    // @ts-ignore
+                    navigation.navigate(Screens.Complaint,{postInfo:postInfo,daoInfo:daoInfo})
+                  }
+                }else{
+                  if (index!==3){
+                    gotoLogin();
+                  }
                 }
-                if (index==1){
-                  OperateAct(index)
-                }
-                if(index==2){
-                  // @ts-ignore
-                  navigation.navigate(Screens.Complaint,{postInfo:postInfo,daoInfo:daoInfo})
-                }
-
               }}
           />
         }
