@@ -48,69 +48,18 @@ const LocalWallet = () => {
 };
 
 const styles = StyleSheet.create({
-    // amountTypo: {
-    //     fontWeight: '500',
-    //     fontWeight: "500",
-    //     lineHeight: 23,
-    //     left: 0,
-    //     position: "absolute",
-    //     textAlign: "left",
-    //     letterSpacing: 0,
-    // },
     title: {
         fontSize: FontSize.size_xl,
-        lineHeight: 22,
         fontWeight: "600",
-        width: 343,
         height: 22,
         textAlign: "left",
-        letterSpacing: 0,
         color: Color.iOSSystemLabelsLightPrimary,
+        marginLeft: 14,
     },
-    // frameChild: {
-    //     width: 43,
-    //     height: 36,
-    // },
-    // amount: {
-    //     top: 0,
-    //     fontSize: FontSize.size_mini,
-    //     width: 105,
-    //     color: Color.iOSSystemLabelsLightPrimary,
-    //     fontWeight: '500',
-    //     fontWeight: "500",
-    //     lineHeight: 23,
-    //     left: 0,
-    //     position: "absolute",
-    // },
-    // amount1: {
-    //     top: 25,
-    //     fontSize: FontSize.size_xs,
-    //     color: Color.color3,
-    //     width: 232,
-    // },
-    // amountParent: {
-    //     flex: 1,
-    //     height: 48,
-    //     marginLeft: 8,
-    // },
-    // chevronRightIcon: {
-    //     width: 24,
-    //     height: 24,
-    //     overflow: "hidden",
-    //     marginLeft: 8,
-    // },
-    // groupParent: {
-    //     borderRadius: Border.br_3xs,
-    //     backgroundColor: Color.color1,
-    //     flexDirection: "row",
-    //     padding: Padding.p_sm,
-    //     alignItems: "center",
-    //     marginTop: 20,
-    //     alignSelf: "stretch",
-    // },
+
     titleParent: {
-        marginTop: 30,
         alignSelf: "stretch",
+        paddingBottom: 30,
     },
 });
 

@@ -120,7 +120,7 @@ const CreateWallet = () => {
               />
             </View>
             </ScrollView>
-            <View>
+            <View style={styles.bottom}>
               <ProtocolRadioSelect value={agree} setValue={setAgree}/>
               <TouchableOpacity style={[{marginTop: 10}, createDisable && {opacity: 0.5}]} disabled={loading}
                                 onPress={create}>
@@ -133,7 +133,6 @@ const CreateWallet = () => {
               </TouchableOpacity>
             </View>
           </View>
-
       </KeyboardAwareScrollView>
     </BackgroundSafeAreaView>
   </>
@@ -149,7 +148,10 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: 'space-between',
-  }
+  },
+  bottom: {
+    marginBottom: 20,
+  },
 });
 
 export default CreateWallet;
