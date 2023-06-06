@@ -82,6 +82,7 @@ const NotifyScreen = () => {
   const onRefresh = async () => {
     setRefreshing(true);
     await getNotifyGroup(true);
+    await getSystemGroup();
     setRefreshing(false);
   };
 
@@ -138,7 +139,6 @@ const NotifyScreen = () => {
     useCallback(() => {
       if(messageRefresh) {
         onRefresh();
-        getSystemGroup();
         dispatch(globalUpdateState({
           messageRefresh: false,
         }));

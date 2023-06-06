@@ -11,6 +11,7 @@ import FavorDaoButton from "../../../components/FavorDaoButton";
 import UserApi from '../../../services/DAOApi/User';
 import {useUrl} from "../../../utils/hook";
 import {updateState as globalUpdateState} from "../../../store/global";
+import {updateState as notifyUpdateState} from "../../../store/notify";
 import Toast from "react-native-toast-message";
 import {Color, FontFamily} from "../../../GlobalStyles";
 import {
@@ -51,6 +52,9 @@ const LogOut: React.FC<Props> = (props) => {
         dao: null,
         newsJoinStatus: true,
         joinStatus: true,
+      }));
+      dispatch(notifyUpdateState({
+        messageRefresh: true
       }));
       // @ts-ignore
       navigation.navigate(Screens.Main.Feeds);

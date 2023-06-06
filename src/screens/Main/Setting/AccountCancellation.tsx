@@ -11,6 +11,7 @@ import FavorDaoButton from "../../../components/FavorDaoButton";
 import UserApi from '../../../services/DAOApi/User';
 import {useUrl} from "../../../utils/hook";
 import {updateState as globalUpdateState} from "../../../store/global";
+import {updateState as notifyUpdateState} from "../../../store/notify";
 import Toast from "react-native-toast-message";
 import {Color, FontFamily} from "../../../GlobalStyles";
 import {
@@ -56,6 +57,9 @@ const AccountCancellation: React.FC<Props> = (props) => {
         joinStatus: true,
         daoListStatus: true,
       }));
+      dispatch(notifyUpdateState({
+        messageRefresh: true
+      }))
       Toast.show({
         type: 'info',
         text1: 'Account cancellation success!'
