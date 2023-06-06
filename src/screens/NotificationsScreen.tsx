@@ -35,6 +35,7 @@ const NotificationsScreen = () => {
   const route = useRoute();
   const url = useUrl();
   const {id, avatar, name, isSystem, key} = route.params as NotifyGroup['fromInfo'] & { isSystem?: boolean, key?: string }
+  const { messageRefresh } = useSelector((state: Models) => state.notify);
   const [notifyList, setNotifyList] = useState<Notify[]>();
   const resourceUrl = useResourceUrl('avatars');
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -124,7 +125,7 @@ const NotificationsScreen = () => {
     useCallback(() => {
       onRefresh();
       readNotify()
-    }, [])
+    }, [messageRefresh])
   )
 
   return <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}}>
