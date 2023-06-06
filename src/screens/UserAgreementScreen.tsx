@@ -19,6 +19,52 @@ const UserAgreementScreen: React.FC<Props> = (props) => {
   const navigation = useNavigation();
 
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
+  const [textList,setTextList] = useState([
+    {
+      title: "1.Introduction",
+      content: "Welcome to FavorDAO, a decentralized, community-driven Web3 toolbox that provides cryptocurrency investment advice and community management tools. By using our services, you agree to these terms of service, which govern your use of the platform.",
+    },
+    {
+      title: "2.Eligibility",
+      content: "To use FavorDAO, you must be at least 18 years old and have the legal capacity to enter into a contract. By using our services, you represent and warrant that you meet these eligibility requirements.",
+    },
+    {
+      title: "3.User Account",
+      content: "To use our services, you must create a user account using a digital wallet. You are responsible for maintaining the security of your account and any associated passwords or private keys. You agree to notify us immediately if you suspect any unauthorized use of your account.",
+    },
+    {
+      title: "4.Community Creation and Management",
+      content: "FavorDAO allows users to create and manage decentralized autonomous organizations (DAOs) within the platform. You agree to comply with all applicable laws and regulations in creating and managing your DAO, and to assume full responsibility for all actions taken by your DAO.",
+    },
+    {
+      title: "5.Content Creation and Subscription",
+      content: "FavorDAO allows users to create and publish content, and to offer subscriptions to their content. You agree to comply with all applicable laws and regulations in creating and publishing your content, and to assume full responsibility for the accuracy and legality of your content.",
+    },
+    {
+      title: "6.Rewards and Incentives",
+      content: "FavorDAO provides various tools for users to earn rewards and incentives, including subscription fees, airdrops, and promotional tasks. You agree to comply with all applicable laws and regulations in earning rewards and incentives, and to assume full responsibility for any tax liabilities arising from such rewards and incentives.",
+    },
+    {
+      title: "7.Disclaimer of Warranties",
+      content: 'FavorDAO provides its services on an "as is" and "as available" basis, without any warranties of any kind, express or implied. We do not warrant that our services will be uninterrupted or error-free, and we disclaim any warranties of merchantability, fitness for a particular purpose, and non-infringement.',
+    },
+    {
+      title: "8.Limitation of Liability",
+      content: "In no event shall FavorDAO be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in connection with your use of our services, including but not limited to damages for loss of profits, goodwill, use, data, or other intangible losses.",
+    },
+    {
+      title: "9.Indemnification",
+      content: "You agree to indemnify and hold FavorDAO and its affiliates, officers, agents, and employees harmless from any claim or demand, including reasonable attorneys' fees, arising out of or in connection with your use of our services, your content, or your violation of these terms of service.",
+    },
+    {
+      title: "10.Governing Law and Jurisdiction",
+      content: "These terms of service shall be governed by and construed in accordance with the laws of the jurisdiction in which FavorDAO is incorporated. Any dispute arising out of or in connection with these terms of service shall be resolved exclusively in the courts of that jurisdiction.",
+    },
+    {
+      title: "11.Amendments",
+      content: "FavorDAO reserves the right to amend these terms of service at any time and without prior notice. Your continued use of our services after any such amendments shall constitute your acceptance of the amended terms of service.",
+    },
+  ])
 
   const confirmClick = () => {
     dispatch(globalUpdateState({
@@ -52,28 +98,16 @@ const UserAgreementScreen: React.FC<Props> = (props) => {
 
         <ScrollView>
           <View style={styles.description}>
-            <Text style={styles.descriptionText}>
-              1. Respect for others: When posting remarks or comments on the social software, please be careful not to
-              offend or hurt other users. Please avoid making any uncomfortable or offensive comments.
-            </Text>
-            <Text style={styles.descriptionText}>
-              2. Protect privacy: Please do not disclose sensitive personal information such as addresses, phone numbers
-              or bank account information. Any content posted on social media should be public or consistent with your
-              privacy settings.
-            </Text>
-            <Text style={styles.descriptionText}>
-              3. Compliance: Please follow the rules for using social media platforms and do not post illegal,
-              fraudulent or deceptive information. If you find that another user has violated the rules, please report
-              it to the platform in a timely manner.
-            </Text>
-            <Text style={styles.descriptionText}>
-              4. Do not share false information: Please do not spread false information, including rumors, false news
-              and inaccurate comments. This may cause harm to other users and lead to unnecessary panic and confusion.
-            </Text>
-            <Text style={styles.descriptionText}>
-              5. Pay attention to account security: Please protect your helper and password, and avoid using weak
-              passwords and public networks.
-            </Text>
+            {
+              textList.map((item,index) => {
+                return (
+                  <View key={index} style={[styles.descriptionItem, index=== textList.length -1 && {marginBottom:0}]}>
+                    <Text style={styles.descriptionTitle}>{item.title}</Text>
+                    <Text style={styles.descriptionContent}>{item.content}</Text>
+                  </View>
+                )
+              })
+            }
           </View>
         </ScrollView>
 
@@ -134,13 +168,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: Color.color1,
   },
-  descriptionText: {
-    fontSize: 17,
-    fontWeight: '400',
-    lineHeight: 23,
-    color: Color.iOSSystemLabelsLightPrimary,
+  descriptionItem: {
     marginBottom: 20,
   },
+  descriptionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Color.iOSSystemLabelsLightPrimary,
+  },
+  descriptionContent: {
+    fontSize: 17,
+    fontWeight: '400',
+    color: Color.iOSSystemLabelsLightPrimary,
+  }
 })
 
 export default UserAgreementScreen;

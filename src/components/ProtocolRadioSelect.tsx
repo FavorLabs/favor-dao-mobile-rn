@@ -17,44 +17,41 @@ const ProtocolRadioSelect = ({value, setValue}: Props) => {
     }
 
     return (
-        <View style={styles.controlstableViewrowxchecParent}>
+        <View style={styles.parent}>
             <AgreeCheckBox value={value} setValue={setValue}/>
-            <Text style={styles.description}>
+            <View style={styles.description}>
                 <Text style={styles.iHaveCarefully}>{`I have carefully read and agree to `}</Text>
                 <TouchableOpacity onPress={toUserAgreement}>
                     <Text style={styles.theUserAgreement}>the user agreement</Text>
                 </TouchableOpacity>
-            </Text>
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    controlstableViewrowxchecIcon: {
-        width: 16,
-        height: 16,
-    },
     iHaveCarefully: {
         color: Color.iOSSystemLabelsLightPrimary,
-    },
-    theUserAgreement: {
-        color: Color.color,
-    },
-    description: {
-        flex: 1,
         fontSize: FontSize.size_xs,
-        letterSpacing: 0,
-        lineHeight: 20,
         fontWeight: '400',
         textAlign: "left",
         marginLeft: 10,
     },
-    controlstableViewrowxchecParent: {
-        alignSelf: "stretch",
+    theUserAgreement: {
+        color: Color.color,
+        fontSize: FontSize.size_xs,
+        fontWeight: '400',
+        textAlign: "left",
+    },
+    description: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    parent: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 20,
     },
 });
 
