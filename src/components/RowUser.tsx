@@ -85,7 +85,7 @@ const RowUser: React.FC<Props> = (props) => {
           }))
         }
       }else {
-        const request =  () => PostApi.deletePost(url,postInfo.ref_id)
+        const request =  () => PostApi.deletePost(url,postInfo.id)
         const {data}=await request()
         if(data.code==0){
           Toast.show({

@@ -40,22 +40,17 @@ const QuotePreview: React.FC<Props> = (props) => {
             source={{uri: `${imagesResUrl}/${info[3][0]?.content}`}}
           />
         ) : (
-          <View style={styles.imageIcon}/>
+            <Image
+                style={styles.imageIcon}
+                resizeMode="cover"
+                source={ isReTransfer ? {uri: `${avatarsResUrl}/${postInfo?.author_dao.avatar}`} : {uri: `${avatarsResUrl}/${postInfo?.dao.avatar}`}}
+            />
         )
       }
       <View style={styles.content}>
         <View style={styles.nameandavatar}>
-          {
-            postInfo && (
-              <Image
-                style={styles.imageIcon1}
-                resizeMode="cover"
-                source={ isReTransfer ? {uri: `${avatarsResUrl}/${postInfo.author_dao.avatar}`} : {uri: `${avatarsResUrl}/${postInfo.dao.avatar}`}}
-              />
-            )
-          }
           <Text style={styles.title} numberOfLines={2}>
-            {postInfo &&
+           @{postInfo &&
               (isReTransfer
                 ? `${postInfo.author_dao.name}`
                 : `${postInfo.dao.name}`)}
@@ -86,18 +81,18 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "left",
-    marginLeft: 5,
     flex: 1,
   },
   description: {
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
     fontWeight: '400',
-    color: Color.iOSSystemLabelsLightPrimary,
+    color: '#999999',
   },
   nameandavatar: {
     alignItems: "center",
     flexDirection: "row",
+    fontWeight:'500'
   },
   content: {
     paddingHorizontal: Padding.p_base,
