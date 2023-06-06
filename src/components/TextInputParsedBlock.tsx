@@ -24,7 +24,7 @@ const TextInputParsedBlock = (props: TextInputBlockType) => {
       <Text style={styles.title}>{title}</Text>
       <TextInputParsed
         height={height}
-        style={[styles.input, inputProps.multiline && {height: height}]}
+        style={[styles.input, inputProps.multiline && {height: height,textAlignVertical: 'top'}]}
         value={value}
         onChangeText={setValue}
         { ...inputProps }

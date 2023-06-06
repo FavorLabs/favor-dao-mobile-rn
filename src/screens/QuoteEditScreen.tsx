@@ -6,6 +6,7 @@ import {FontSize, FontFamily, Color, Border, Padding} from "../GlobalStyles";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import FavorDaoButton from "../components/FavorDaoButton";
 import TextInputBlock from "../components/TextInputBlock";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import {useEffect, useMemo, useState} from "react";
 import {useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
@@ -34,7 +35,7 @@ const QuoteEdit: React.FC<Props> = (props) => {
 
   const createDisable = useMemo(() => {
     return !(
-      description
+      description && description.trim()!==''
     )
   }, [description]);
 
@@ -103,7 +104,8 @@ const QuoteEdit: React.FC<Props> = (props) => {
 
   return (
     <BackgroundSafeAreaView headerStyle={{backgroundColor: '#F8F8F8'}} footerStyle={{backgroundColor: '#F8F8F8'}}>
-      <View style={styles.quoteEdit}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
+
         <FavorDaoNavBar
           title="Create Quote"
           vector={require("../assets/vector6.png")}
@@ -134,7 +136,7 @@ const QuoteEdit: React.FC<Props> = (props) => {
             />
           </Pressable>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     </BackgroundSafeAreaView>
   );
 };
@@ -147,6 +149,12 @@ const styles = StyleSheet.create({
   },
   bottombuttonFlexBox: {
     alignSelf: "stretch",
+  },
+  createWallet: {
+    backgroundColor: Color.color2,
+    flex: 1,
+    overflow: "hidden",
+    paddingHorizontal: Padding.p_base,
   },
   instanceParent: {
     marginTop: 20,
