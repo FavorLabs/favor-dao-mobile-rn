@@ -47,15 +47,29 @@
       </dict>
     </dict>
     <key>NSAppleMusicUsageDescription</key>
-    <string>$(PRODUCT_NAME) want to select image or videos from your media library</string>
+    <string>This app needs permission to access your Apple Music library in order to play music within the app.</string>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>This app needs permission to use Bluetooth in the background at all times to function properly.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>This app needs permission to access your calendars in order to schedule events and reminders within the app.</string>
     <key>NSCameraUsageDescription</key>
-    <string>$(PRODUCT_NAME) want to use your camera</string>
+    <string>This app needs permission to access your camera in order to take photos and videos within the app.</string>
+    <key>NSContactsUsageDescription</key>
+    <string>This app needs permission to access your contacts in order to display them within the app and allow you to interact with them.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs permission to access your location at all times or when you are using it in order to provide location-based services.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs permission to access your location when you are using it in order to provide location-based services.</string>
     <key>NSMicrophoneUsageDescription</key>
-    <string>This is for Mic permission</string>
+    <string>This app needs permission to access your microphone in order to record audio within the app.</string>
     <key>NSMotionUsageDescription</key>
-    <string>Allow $(PRODUCT_NAME) to access your device motion.</string>
+    <string>This app needs permission to access motion data (such as accelerometer and gyroscope data) in order to provide certain features within the app.</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>$(PRODUCT_NAME) want to select photo from your media library</string>
+    <string>This app needs permission to access your photo library in order to display photos and videos within the app.</string>
+    <key>NSSiriUsageDescription</key>
+    <string>This app needs permission to access Siri in order to provide voice-activated functionality within the app.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>This app needs permission to access speech recognition in order to provide voice-to-text functionality within the app.</string>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
@@ -82,19 +96,5 @@
     <string>Light</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
-    <key>NSCalendarsUsageDescription</key>
-    <string>This app needs access to your calendar so you can schedule meetings and view events.</string>
-    <key>NSContactsUsageDescription</key>
-    <string>This app needs access to your contacts so you can stay in touch with them.</string>
-    <key>NSSpeechRecognitionUsageDescription</key>
-    <string>This app needs access to your microphone so you can use voice commands to control the app.</string>
-    <key>NSSiriUsageDescription</key>
-    <string>This app needs access to Siri so you can use voice commands to control the app.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>This app needs access to your location so it can provide relevant services even when you're not using the app.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>This app needs access to your location so it can provide relevant services while you're using the app.</string>
-    <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>This app needs access to your Bluetooth so you can communicate with other devices.</string>
   </dict>
 </plist>
