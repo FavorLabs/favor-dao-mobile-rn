@@ -33,6 +33,13 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
              reason && reason.trim()!==''
         )
     }, [reason]);
+    const contentText = useMemo(() => {
+        if(postInfo.ref_id=='000000000000000000000000'){
+            return postInfo.contents[0].content
+        }else {
+            return postInfo.orig_contents[0].content
+        }
+    }, [postInfo]);
     const toComplaint = async () => {
         try {
             if(!createDisable){
@@ -67,7 +74,7 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
     }
     return (
         <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
-        <KeyboardAwareScrollView contentContainerStyle={[styles.complaint, styles.complaintSpaceBlock]}>
+        <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
             <FavorDaoNavBar
                 title="complaint"
                 vector={require("../assets/vector6.png")}
@@ -76,7 +83,7 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
                 <ScrollView>
                     <TextInputBlock
                         title={`Complaint about the content released by`}
-                        placeholder={`${postInfo.contents[0].content}`}
+                        placeholder={`${contentText}`}
                         username={`@${daoInfo.name}`}
                         value={complaint}
                         setValue={setComplaint}
@@ -107,6 +114,12 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
     )
 }
 const styles = StyleSheet.create({
+    createWallet: {
+        backgroundColor: Color.color2,
+        flex: 1,
+        overflow: "hidden",
+        paddingHorizontal: Padding.p_base,
+    },
     complaintSpaceBlock: {
         paddingHorizontal: Padding.p_base,
         overflow: "hidden",
