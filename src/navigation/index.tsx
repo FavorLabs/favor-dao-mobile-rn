@@ -46,10 +46,8 @@ function EmptyScreen() {
 }
 
 function RootStack() {
-    const dispatch = useDispatch()
-    const [isLogin] = useIsLogin();
+    const dispatch = useDispatch();
     const [firstLoad, setFirstLoad] = useState(true);
-    const [loginLoad, setLoginLoad] = useState(true);
     const [requestLoading, setRequestLoading] = useState(true);
     const [routeName, setRouteName] = useState(Screens.StartNode);
     useEffect(() => {
@@ -64,36 +62,31 @@ function RootStack() {
     useEffect(() => {
         async function fetch() {
             if (firstLoad && !requestLoading) {
-                await Favor.getBucket();
-                await analytics().logEvent('favorDAO_open', {
-                    platform: Platform.OS,
-                    networkId: Favor.networkId,
-                    region: Favor.bucket?.Settings.Region
-                });
+                try {
+                    await Favor.getBucket();
+                    analytics().logEvent('favorDAO_open', {
+                        platform: Platform.OS,
+                        networkId: Favor.networkId,
+                        region: Favor.bucket?.Settings.Region
+                    });
+                    if (WalletController.token) {
+                        await getDAOInfo(dispatch);
+                    }
+                } catch (e) {
+                    if (e instanceof Error) {
+                        Toast.show({
+                            type: "error",
+                            text1: e.message
+                        })
+                    }
+                }
                 setFirstLoad(false);
             }
         }
 
         fetch()
     }, [requestLoading])
-    useEffect(() => {
-        async function fetch() {
-            if (isLogin && !requestLoading && loginLoad) {
-                try {
-                    await getDAOInfo(dispatch)
-                } catch (e) {
-                    Toast.show({
-                        type: 'error',
-                        // @ts-ignore
-                        text1: e.message,
-                    });
-                }
-            }
-            setLoginLoad(false);
-        }
 
-        fetch()
-    }, [requestLoading, isLogin])
     const visible = useMemo(() => {
           return routeName === Screens.StartNode ? false : firstLoad || requestLoading
       },
