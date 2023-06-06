@@ -75,7 +75,6 @@ function App() {
   const handleNavigationStateChange = async (state: NavigationState | undefined) => {
     if (state) {
       const currentScreen = getCurrentRouteName(state);
-      console.log(currentScreen)
       await analytics().logEvent('screen_change', {
         platform: Platform.OS,
         networkId: Favor.networkId,
