@@ -57,7 +57,8 @@ export const usePermissions = (permissionType: Permission) => {
 
 export const useIsLogin = (): [boolean, Function] => {
     const dispatch = useDispatch();
-    const isLogin = useMemo(() => !!(WalletController.token), [WalletController.token]);
+    const {token} = useSelector<any, any>(state => state.wallet)
+    const isLogin = useMemo(() => !!(token?.[Favor.networkName]), [token]);
     const gotoLogin = () => {
         dispatch(controllersUpdateState({
             globalBottomSheet: true

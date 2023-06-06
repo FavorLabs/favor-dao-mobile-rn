@@ -7,6 +7,7 @@ import {useIsLogin} from "../../../utils/hook";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import {updateState as globalUpdateState} from "../../../store/global";
+import NoDataShow from "../../../components/NoDataShow";
 
 export type Props = {};
 const JoinedScreen: React.FC<Props> = (props) => {
@@ -15,6 +16,7 @@ const JoinedScreen: React.FC<Props> = (props) => {
     const {feedsSearch} = useSelector((state: Models) => state.search);
     const {newsJoinStatus} = useSelector((state: Models) => state.global);
     const [isNewsFocus, setIsNewsFocus] = useState<boolean>(false);
+    const [isLogin, gotoLogin] = useIsLogin();
 
     useEffect(() => {
         if (isFocused && newsJoinStatus) {
@@ -29,8 +31,19 @@ const JoinedScreen: React.FC<Props> = (props) => {
     return (
       <View style={styles.container}>
           <View style={styles.container}>
-              <PostList type={'post'} focus query={feedsSearch} isNewsFocus={isNewsFocus}
+              {
+                  isLogin ?
+                  <PostList type={'post'} focus query={feedsSearch} isNewsFocus={isNewsFocus}
                         setIsNewsFocus={setIsNewsFocus}/>
+                :
+                <View style={styles.noData}>
+                    <NoDataShow
+                      title={'No results found'}
+                      image={require('../../../assets/postlistNoData.png')}
+                      description={`Please join some DAO communities first`}
+                    />
+                </View>
+              }
           </View>
       </View>
     )
@@ -41,6 +54,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Color.color1,
     },
+    noData: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 
 export default JoinedScreen;
