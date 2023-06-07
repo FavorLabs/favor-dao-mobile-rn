@@ -37,7 +37,8 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
 
   const createDisable = useMemo(() => {
     return !(
-      daoName &&
+      daoName.length > 0 &&
+      daoName.length < 27 &&
       daoDescription &&
       daoAvatar &&
       daoBanner
@@ -69,7 +70,6 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
         visibility: daoMode,
         tags,
       }
-      console.log(params,'create DAO')
       const { data } = await DaoApi.create(url, params);
       if(data.data) {
         Toast.show({
@@ -106,6 +106,14 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
     setTags(getMatchedStrings(daoDescription, RegExps.tag));
   }, [daoDescription]);
 
+  useEffect(()=>{
+    if(daoName.length > 26 ){
+       Toast.show({
+        type: 'error',
+        text1: 'The character length of Dao name cannot exceed 26!',
+      })
+    }
+  },[daoName])
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>

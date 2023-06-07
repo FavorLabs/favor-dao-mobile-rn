@@ -11,7 +11,7 @@ import {
     ScrollView,Text
 } from "react-native";
 import {Color, Padding} from "../GlobalStyles";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {DaoInfo, PostInfo} from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
 import Toast from "react-native-toast-message";
@@ -72,6 +72,14 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
             }
         }
     }
+    useEffect(()=>{
+        if (reason!=='' && reason.trim()==''){
+            Toast.show({
+                type: 'error',
+                text1: 'The input cannot be a plain space'
+            });
+        }
+    },[reason])
     return (
         <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
         <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
