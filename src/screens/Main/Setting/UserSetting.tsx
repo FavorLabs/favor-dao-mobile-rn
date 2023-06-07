@@ -47,7 +47,7 @@ const UserSetting: React.FC<Props> = (props) => {
           <UserSettingItem title={'Log out'} onClick={goToLogOut}/>
           <View style={styles.version}>
             <Text style={styles.about}>About</Text>
-            <Text style={styles.versionText}>version {packageInfo.version}.0606</Text>
+            <Text style={styles.versionText}>version {packageInfo.version}.0607</Text>
           </View>
         </ScrollView>
       </View>

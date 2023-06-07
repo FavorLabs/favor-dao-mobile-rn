@@ -28,6 +28,7 @@ import {updateState as globalUpdateState} from "../store/notify";
 import NoDataShow from "../components/NoDataShow";
 import UnionSvg from "../assets/svg/unionWhite.svg";
 import TransactionSvg from "../assets/svg/transactionSvgWhite.svg";
+import {logger} from "../cometchat-pro-react-native-ui-kit/CometChatWorkspace/src/utils/common";
 
 const NotificationsScreen = () => {
   const dispatch = useDispatch();
@@ -52,11 +53,14 @@ const NotificationsScreen = () => {
       const { data } = isSystem
         ? await NotifyApi.getNotifySys(url, id, pageData)
         : await NotifyApi.getNotifyFromId(url, id, pageData);
-      if(refresh) {
-        setNotifyList(data.data.list)
-      } else {
-        if(notifyList) setNotifyList([...notifyList,data.data.list])
+      if(data.data.list) {
+        if(refresh) {
+          setNotifyList(data.data.list)
+        } else {
+          if(notifyList) setNotifyList([...notifyList,data.data.list])
+        }
       }
+      console.log(notifyList,'notifyList')
       setIsLoadingMore(data.data.pager.total_rows > pageData.page * pageData.page_size,);
       setPageInfo({ ...pageInfo, page: ++pageData.page });
 
@@ -139,6 +143,7 @@ const NotificationsScreen = () => {
       </View>
       <FlatList
         data={notifyList}
+        contentContainerStyle={{paddingBottom: 40}}
         renderItem={({item}) => (
           <View>
             <Text style={styles.time}>
@@ -173,7 +178,7 @@ const NotificationsScreen = () => {
         keyExtractor={(item: Notify) => item.id}
         style={styles.flatList}
         onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={0.2}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
