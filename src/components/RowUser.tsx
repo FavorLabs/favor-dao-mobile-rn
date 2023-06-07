@@ -53,11 +53,7 @@ const RowUser: React.FC<Props> = (props) => {
         setOperateImgStatus(false)
       }else{
         if(dao?.id == daoInfo?.id){
-          if (isLogin){
-            setActionSheetType(0)
-          }else {
-            setActionSheetType(1)
-          }
+          if (isLogin){setActionSheetType(0)}else {setActionSheetType(1)}
         } else {
           if(routeName=='Mixed'){
             setOperateImgStatus(false)
