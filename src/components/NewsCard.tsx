@@ -78,7 +78,7 @@ const NewsCard: React.FC<Props> = (props) => {
         {
           orig_contents?.length ?
             orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}  showOperate={!contents  ? true : false }/>
-              : orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true}  showOperate={!contents  ? true : false}/> : <></>
+              : orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true} isReTransfer={!contents  ? true : false} showOperate={!contents  ? true : false}/> : <></>
             : <></>
         }
 

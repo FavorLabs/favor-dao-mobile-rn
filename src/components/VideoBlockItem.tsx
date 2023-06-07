@@ -37,7 +37,6 @@ const VideoBlockItem: React.FC<Props> = (props) => {
       navigation.navigate(Screens.VideoPlay,{ postId: isQuote ? postInfo.ref_id : postInfo.id});
     }
   }
-
   return (
     <View style={[styles.rowUserParent, {backgroundColor: isQuote || isReTransfer ? '#eaeaea' : '#fff'}]}>
       <RowUser
@@ -61,7 +60,7 @@ const VideoBlockItem: React.FC<Props> = (props) => {
             source={{uri:`${imagesResUrl}/${info?.[3]?.[0]?.content}`}}
           />
 
-          { postInfo.member === 1 &&
+          { (postInfo.member === 1 || isReTransfer || isQuote) &&
             <View style={styles.rectangleParent}>
               <View style={styles.subtitleParent}>
                 <Text style={styles.subtitle}>{ postInfo.dao.is_subscribed ? 'Unlock' : 'Locked' }</Text>
