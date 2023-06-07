@@ -53,7 +53,11 @@ const RowUser: React.FC<Props> = (props) => {
         setOperateImgStatus(false)
       }else{
         if(dao?.id == daoInfo?.id){
-          if (isLogin){setActionSheetType(0)}else {setActionSheetType(1)}
+          if (isLogin){
+            setActionSheetType(0)
+          }else {
+            setActionSheetType(1)
+          }
         } else {
           if(routeName=='Mixed'){
             setOperateImgStatus(false)
@@ -215,7 +219,6 @@ const RowUser: React.FC<Props> = (props) => {
     event.stopPropagation();
   };
   useEffect(()=>{
-    console.log(isLogin,"login")
     getSetStates()
   },[operateImgStatus,dao,isLogin])
 
