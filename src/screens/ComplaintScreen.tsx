@@ -51,14 +51,14 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
                 if(data.code==0){
                     Toast.show({
                         type: 'info',
-                        text1: 'Complaint success!'
+                        text1: 'Report success!'
                     });
                     navigation.goBack();
                 }
             }else {
                 Toast.show({
                     type: 'error',
-                    text1: 'Complaint failed ! Please check the input content'
+                    text1: 'Report failed ! Please check the input content'
                 });
             }
 
@@ -76,13 +76,13 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
         <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
         <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
             <FavorDaoNavBar
-                title="complaint"
+                title="Report"
                 vector={require("../assets/vector6.png")}
             />
             <View style={styles.content}>
                 <ScrollView>
                     <TextInputBlock
-                        title={`Complaint about the content released by`}
+                        title={`Report about the content released by`}
                         placeholder={`${contentText}`}
                         username={`@${daoInfo.name}`}
                         value={complaint}
@@ -92,7 +92,7 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
                     />
                     <TextInputBlock
                         title={'Reason'}
-                        placeholder={`Please enter the reason for your complaint`}
+                        placeholder={`Please enter the reason for your report`}
                         value={reason}
                         setValue={setReason}
                         multiline={true}

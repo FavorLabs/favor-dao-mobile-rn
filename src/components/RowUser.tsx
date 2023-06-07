@@ -75,7 +75,7 @@ const RowUser: React.FC<Props> = (props) => {
         if(data.code==0){
           Toast.show({
             type: 'info',
-            text1: 'Shield success!'
+            text1: 'Delete success!'
           });
           dispatch(globalUpdateState({
             ShieldAct:{
@@ -90,7 +90,7 @@ const RowUser: React.FC<Props> = (props) => {
         if(data.code==0){
           Toast.show({
             type: 'info',
-            text1: 'Shield success!'
+            text1: 'Delete success!'
           });
           dispatch(globalUpdateState({
             ShieldAct:{
@@ -118,7 +118,7 @@ const RowUser: React.FC<Props> = (props) => {
             if(data.code==0){
               Toast.show({
                 type: 'info',
-                text1: 'Shield success!'
+                text1: 'Block success!'
               });
               dispatch(globalUpdateState({
                 ShieldAct:{
@@ -133,7 +133,7 @@ const RowUser: React.FC<Props> = (props) => {
             if(data.code==0){
               Toast.show({
                 type: 'info',
-                text1: 'Shield success!'
+                text1: 'Block success!'
               });
               dispatch(globalUpdateState({
                 ShieldAct:{
@@ -161,7 +161,7 @@ const RowUser: React.FC<Props> = (props) => {
       if(data.code==0){
         Toast.show({
           type: 'info',
-          text1: 'Shield success!'
+          text1: 'Block success!'
         });
           dispatch(globalUpdateState({
             ShieldAct:{
@@ -281,8 +281,8 @@ const RowUser: React.FC<Props> = (props) => {
         { actionSheetType== 1 &&
           <ActionSheet
               ref={shieldSheetRef}
-              title={'Shield & Complaint'}
-              options={[`Shield @${daoInfo?.name}`, 'Shield this content' ,'Complaint','Cancel']}
+              title={'Block & Report'}
+              options={[`Block @${daoInfo?.name}`, 'Block this post' ,'Report','Cancel']}
               cancelButtonIndex={3}
               onPress={(index:number) => {
                 if (isLogin){
