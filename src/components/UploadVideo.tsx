@@ -54,6 +54,7 @@ const UploadVideo: React.FC<Props> = (props) => {
   const [statusTip, setStatusTip] = useState<string>('');
   const [videoName, setVideoName] = useState<string>('');
   const [videoSize, setVideoSize] = useState<number>(0);
+  const [videoDuration, setVideoDuration] = useState<number | null>(0);
 
   // const { api, debugApi, ws, config } = useSelector((state: Models) => state.global);
   // @ts-ignore
@@ -88,6 +89,7 @@ const UploadVideo: React.FC<Props> = (props) => {
         if (!checkVideoSize(video)) return;
         setVideoName(video.filename as string);
         setVideoSize(video.size);
+        setVideoDuration(video.duration);
 
         const res = await fetch(video.path as string);
         const blob = await res.blob();
@@ -118,7 +120,7 @@ const UploadVideo: React.FC<Props> = (props) => {
       const uri = await VideoThumbnails.getThumbnailAsync(
         videoURL,
         {
-          time: 15000,
+           time: videoDuration ? videoDuration >= 15000 ? 15000 : 1000 : 1000,
         }
       );
       console.log("uri", uri);

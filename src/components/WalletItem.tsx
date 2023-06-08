@@ -68,7 +68,7 @@ const WalletItem = ({
                 <Text style={[styles.amount, styles.amountTypo, amountStyle]}>
                     {walletName}
                 </Text>
-                <Text style={[styles.amount1, styles.amountTypo, amount1Style]}>
+                <Text style={[styles.amount1, styles.amountTypo, amount1Style]} numberOfLines={1}>
                     {walletIntroduction}
                 </Text>
             </View>
