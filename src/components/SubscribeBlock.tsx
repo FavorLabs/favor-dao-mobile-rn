@@ -8,6 +8,8 @@ import UserApi from '../services/DAOApi/User'
 import {useEffect, useState} from "react";
 import {addDecimal, compareNumber} from "../utils/balance";
 import Toast from "react-native-toast-message";
+import DaoCardItem from "./DaoCardItem";
+import DaoApi from "../services/DAOApi/Dao";
 
 type Props = React.ComponentProps<typeof DaoCommunityCard> & {
     subFn?: Function
@@ -16,11 +18,42 @@ type Props = React.ComponentProps<typeof DaoCommunityCard> & {
 const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
     const url = useUrl();
     const [balance, setBalance] = useState<string>('0');
-    const [isLogin, gotoLogin] = useIsLogin()
+    const [isLogin, gotoLogin] = useIsLogin();
+    const [isJoin, setIsJoin] = useState(false);
+    const [btnLoading,setBtnLoading] = useState<boolean>(false);
+
+    const bookmarkHandle = async () => {
+        if(btnLoading) return;
+        try {
+            setBtnLoading(true);
+            console.log(daoCardInfo.id)
+            const { data } = await DaoApi.bookmark(url, daoCardInfo.dao.id);
+            if(data.data) {
+                setIsJoin(data.data.status);
+                Toast.show({type: 'info', text1: 'Join success!'});
+            }
+        } catch (e) {
+            if (e instanceof Error) console.error(e.message);
+        } finally {
+            setBtnLoading(false);
+        }
+    };
+
+    const checkJoinStatus = async () => {
+        try {
+            const { data } = await DaoApi.checkBookmark(url, daoCardInfo.dao.id);
+            setIsJoin(data.data.status);
+            console.log(data.data.status);
+        } catch (e) {
+            if (e instanceof Error) console.error(e.message);
+        }
+    };
 
     useEffect(() => {
-        getBalance()
+        getBalance();
+        checkJoinStatus();
     }, [])
+
     const getBalance = async () => {
         const {data} = await UserApi.getAccounts(url);
         console.log(data.data)
@@ -52,11 +85,8 @@ const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
           <View style={{
               width: '100%',
               marginTop: 20,
-              height: 240,
           }}>
-              <DaoCommunityCard
-                daoCardInfo={daoCardInfo}
-              />
+              <DaoCardItem daoInfo={daoCardInfo.dao} handle={bookmarkHandle} joinStatus={isJoin} btnLoading={btnLoading}/>
           </View>
 
           <View style={[styles.frameWrapper, styles.frameWrapperSpaceBlock]}>
@@ -101,14 +131,6 @@ const styles = StyleSheet.create({
         textAlign: "left",
         color: Color.iOSSystemLabelsLightPrimary,
     },
-    frameWrapperBg: {
-        backgroundColor: Color.color1,
-        borderRadius: Border.br_3xs,
-    },
-    previewIconFlexBox: {
-        overflow: "hidden",
-        alignSelf: "stretch",
-    },
     frameWrapperSpaceBlock: {
         paddingHorizontal: Padding.p_base,
         alignSelf: "stretch",
@@ -118,110 +140,18 @@ const styles = StyleSheet.create({
         fontSize: FontSize.size_mini,
         letterSpacing: 0,
     },
-    title1Typo: {
-        lineHeight: 23,
-        fontSize: FontSize.bodyBody17_size,
-        fontWeight: '600',
-    },
     label1FlexBox: {
         textAlign: "center",
         letterSpacing: 0,
     },
     title: {
         fontSize: FontSize.size_xl,
-        lineHeight: 22,
         fontWeight: '600',
         letterSpacing: 0,
         textAlign: "left",
         alignSelf: "stretch",
     },
-    previewIcon: {
-        borderTopLeftRadius: Border.br_3xs,
-        borderTopRightRadius: Border.br_3xs,
-        maxWidth: "100%",
-        height: 72,
-        width: "100%",
-    },
-    previewWrapper: {
-        alignSelf: "stretch",
-    },
-    frameChild: {
-        width: 64,
-        height: 64,
-    },
-    subtitle: {
-        top: 26,
-        color: Color.iOSSystemLabelsLightSecondary,
-        lineHeight: 20,
-        fontWeight: '400',
-        fontSize: FontSize.size_mini,
-        left: 0,
-        position: "absolute",
-        width: 114,
-        textAlign: "left",
-    },
-    title1: {
-        top: 0,
-        left: 0,
-        position: "absolute",
-        width: 114,
-        textAlign: "left",
-        color: Color.iOSSystemLabelsLightPrimary,
-        lineHeight: 23,
-        fontSize: FontSize.bodyBody17_size,
-        letterSpacing: 0,
-    },
-    subtitleParent: {
-        height: 46,
-        width: 114,
-    },
-    label1: {
-        fontSize: FontSize.paragraphP313_size,
-        lineHeight: 18,
-        fontWeight: "500",
-        color: Color.color,
-    },
-    label: {
-        borderRadius: Border.br_base,
-        backgroundColor: Color.darkorange_100,
-        paddingHorizontal: Padding.p_2xs,
-        paddingVertical: Padding.p_8xs,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    labelWrapper: {
-        alignItems: "flex-end",
-        marginLeft: 119,
-        flex: 1,
-        justifyContent: "center",
-    },
-    groupParent: {
-        marginTop: 10,
-        flexDirection: "row",
-        alignItems: "center",
-        alignSelf: "stretch",
-    },
-    description: {
-        lineHeight: 21,
-        flex: 1,
-        fontWeight: '400',
-        fontSize: FontSize.size_mini,
-        textAlign: "left",
-        color: Color.iOSSystemLabelsLightPrimary,
-    },
-    ellipseParent: {
-        paddingBottom: Padding.p_base,
-        marginTop: -36,
-        justifyContent: "center",
-    },
-    frameParent: {
-        marginTop: 20,
-        alignSelf: "stretch",
-    },
     description1: {
-        // width: 213,
-        lineHeight: 20,
         fontWeight: '400',
         fontSize: FontSize.size_mini,
         textAlign: "left",
@@ -269,16 +199,6 @@ const styles = StyleSheet.create({
         lineHeight: 23,
         fontSize: FontSize.bodyBody17_size,
         fontWeight: '600',
-    },
-    createWrapper: {
-        borderRadius: Border.br_29xl,
-        backgroundColor: Color.color,
-        paddingHorizontal: Padding.p_124xl_5,
-        paddingVertical: Padding.p_sm,
-        flexDirection: "row",
-        marginTop: 20,
-        justifyContent: "center",
-        alignItems: "center",
     },
     titleParent: {
         marginTop: 20,

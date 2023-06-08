@@ -133,7 +133,7 @@ const NotificationsScreen = () => {
   return <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}}>
     <View style={styles.container}>
       <View style={styles.header}>
-        <FavorDaoNavBar title={'Andrew parker'} rightComponent={
+        <FavorDaoNavBar title={name} rightComponent={
           <TouchableOpacity style={styles.right} onPress={delNotify}>
             <SvgIcon svg={<DeleteSvg/>}/>
           </TouchableOpacity>

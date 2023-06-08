@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: FontSize.size_xl,
         fontWeight: "600",
-        height: 22,
         textAlign: "left",
         color: Color.iOSSystemLabelsLightPrimary,
         marginLeft: 14,
