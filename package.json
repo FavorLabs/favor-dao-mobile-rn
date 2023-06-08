@@ -3,11 +3,12 @@
   "version": "1.0.3",
   "scripts": {
     "start": "expo start --dev-client",
-    "android": "react-native run-android",
+    "android": "react-native run-android --mode=debug",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "postinstall": "rn-nodeify --install assert,url,http,zlib,https,buffer,process,stream,crypto --hack --yarn --overwrite",
-    "android-init": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
+    "android-debug": "react-native build-android --mode=debug",
+    "android-release": "react-native build-android --mode=release"
   },
   "dependencies": {
     "@cometchat-pro/react-native-calls": "^2.3.1",
