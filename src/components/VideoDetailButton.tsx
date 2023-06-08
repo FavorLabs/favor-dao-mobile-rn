@@ -50,8 +50,6 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   const actionSheetRef = useRef<ActionSheet>(null);
   const screens = ['', Screens.QuoteEdit];
   const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false);
-  const [isJoin, setIsJoin] = useState(false);
-  const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
   const getPostLikeStatus = async () => {
     const {data} = await PostApi.checkPostLike(url, postInfo.id);
@@ -89,15 +87,6 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     } finally {
       setIsLikeLoading(false);
     }
-  };
-
-  const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
-    // @ts-ignore
-    navigation.navigate(Screens.FeedsOfDAO, {
-      daoInfo: postInfo.author_dao.avatar ? postInfo.author_dao : postInfo.dao,
-      type: 'Mixed'
-    });
-    event.stopPropagation();
   };
 
   const toQuoteEdit = async () => {
@@ -153,37 +142,9 @@ const VideoDetailButton: React.FC<Props> = (props) => {
     }
   }
 
-  const checkJoinStatus = async () => {
-    if (postInfo?.dao.id)
-      try {
-        const {data} = await DaoApi.checkBookmark(url, postInfo.dao.id);
-        setIsJoin(data.data.status);
-      } catch (e) {
-        if (e instanceof Error) console.error(e.message);
-      }
-  };
-
-  const bookmarkHandle = async () => {
-    if (!isLogin) return gotoLogin();
-    if (btnLoading) return;
-    if (postInfo?.dao.id) {
-      setBtnLoading(true)
-      try {
-        const {data} = await DaoApi.bookmark(url, postInfo.dao.id);
-        setIsJoin(data.data.status);
-        if (data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
-      } catch (e) {
-        if (e instanceof Error) console.error(e.message);
-      } finally {
-        setBtnLoading(false);
-      }
-    }
-  };
-
   useEffect(() => {
     if (postInfo && isLogin) {
-      getPostLikeStatus();
-      checkJoinStatus();
+      getPostLikeStatus()
     }
   }, []);
 
@@ -199,22 +160,6 @@ const VideoDetailButton: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.groupParent}>
-      <View>
-        <TouchableOpacity onPress={toDaoCommunity} style={styles.avatarBlock}>
-          <Image
-            style={[styles.avatar]}
-            resizeMode="cover"
-            source={{uri: `${avatarsResUrl}/${postInfo.dao.avatar}`}}
-          />
-        </TouchableOpacity>
-
-        {
-          postInfo?.dao.id !== dao?.id &&
-            <TouchableOpacity style={styles.joinBtn}>
-                <VideoJoinButton isJoin={isJoin} handle={bookmarkHandle} isLoading={btnLoading}/>
-            </TouchableOpacity>
-        }
-      </View>
 
       <View style={styles.placeholderParent}>
 
@@ -355,8 +300,6 @@ const styles = StyleSheet.create({
   groupParent: {
     bottom: 30,
     right: 15,
-    // height: 336,
-    // width: 30,
     position: "absolute",
     display: 'flex',
     justifyContent: 'center',

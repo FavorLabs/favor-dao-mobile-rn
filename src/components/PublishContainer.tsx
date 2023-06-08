@@ -39,7 +39,7 @@ const PublishContainer: React.FC<Props> = (props) => {
   const processMessage = (arrData: DaoInfo) => {
     if (arrData.last_posts?.length > 1) {
       arrData.last_posts.forEach((item) => {
-        let obj = getContent(item.contents as Post[]);
+        let obj = getContent(item.contents.length ? item.contents as Post[] : item.orig_contents);
         if (item.type === 0) {
           setLastPostNews({
             text: obj[2]?.[0]?.content,

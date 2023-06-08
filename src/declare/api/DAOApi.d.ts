@@ -59,6 +59,7 @@ export type DaoInfo = {
             type: number;
             created_on: number;
             contents: Post[];
+            orig_contents: Post[];
         },
     ];
     is_joined: boolean;

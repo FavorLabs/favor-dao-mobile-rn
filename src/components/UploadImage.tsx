@@ -108,12 +108,15 @@ const UploadImage: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    setImages(autoThumbnail ? [{ sourceURL: autoThumbnail }] : [])
+    setImages(autoThumbnail ? [{ sourceURL: autoThumbnail, path: autoThumbnail }] : [])
   }, [autoThumbnail]);
 
   useEffect(() => {
     if (upImage) {
-      setImages([{ sourceURL: `${imageType === 'avatar' ? avatarsResUrl : imagesResUrl}/${upImage}` }]);
+      setImages([{
+        sourceURL: `${imageType === 'avatar' ? avatarsResUrl : imagesResUrl}/${upImage}` ,
+        path: `${imageType === 'avatar' ? avatarsResUrl : imagesResUrl}/${upImage}`,
+      }]);
     }
   }, [upImage]);
 

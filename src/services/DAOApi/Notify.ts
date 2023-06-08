@@ -3,9 +3,10 @@ import {NotifyGroup, ResData, ListData, SystemNotify, Page} from "../../declare/
 
 
 export default {
-    getNotifyGroup(url: string): ResData<ListData<NotifyGroup>> {
+    getNotifyGroup(url: string, params: Page): ResData<ListData<NotifyGroup>> {
         return request({
-            url: url + '/notify/group'
+            url: url + '/notify/group',
+            params
         })
     },
     getUnReadCount(url: string, id: string): ResData<number> {

@@ -37,7 +37,7 @@ const NotificationsScreen = () => {
   const url = useUrl();
   const {id, avatar, name, isSystem, key} = route.params as NotifyGroup['fromInfo'] & { isSystem?: boolean, key?: string }
   const { messageRefresh } = useSelector((state: Models) => state.notify);
-  const [notifyList, setNotifyList] = useState<Notify[]>();
+  const [notifyList, setNotifyList] = useState<Notify[]>([]);
   const resourceUrl = useResourceUrl('avatars');
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [loading,setLoading] = useState(false);
@@ -55,15 +55,13 @@ const NotificationsScreen = () => {
         : await NotifyApi.getNotifyFromId(url, id, pageData);
       if(data.data.list) {
         if(refresh) {
-          setNotifyList(data.data.list)
+          await setNotifyList(data.data.list)
         } else {
-          if(notifyList) setNotifyList([...notifyList,data.data.list])
+          await setNotifyList([...notifyList,...data.data.list])
         }
       }
-      console.log(notifyList,'notifyList')
       setIsLoadingMore(data.data.pager.total_rows > pageData.page * pageData.page_size,);
       setPageInfo({ ...pageInfo, page: ++pageData.page });
-
     } catch (e) {
       if(e instanceof Error) {
         Toast.show({
@@ -145,7 +143,7 @@ const NotificationsScreen = () => {
         data={notifyList}
         contentContainerStyle={{paddingBottom: 40}}
         renderItem={({item}) => (
-          <View>
+          <View key={item.id}>
             <Text style={styles.time}>
               {getTime(Number(item.createdAt))}
             </Text>

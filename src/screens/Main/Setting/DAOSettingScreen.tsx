@@ -123,7 +123,7 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
   }, [dao])
 
   useEffect(() => {
-    setTags(getMatchedStrings(daoDescription, RegExps.tag));
+    setTags(getMatchedStrings(daoDescription, RegExps.tag))
   }, [daoDescription]);
 
 

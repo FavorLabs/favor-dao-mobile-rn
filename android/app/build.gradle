@@ -86,7 +86,7 @@ ext {
  * use App Bundles (https://developer.android.com/guide/app-bundle/)
  * and want to have separate APKs to upload to the Play Store.
  */
-def enableSeparateBuildPerCPUArchitecture = true
+def enableSeparateBuildPerCPUArchitecture = localProperties.getProperty('debug').toBoolean()
 
 /**
  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
@@ -200,6 +200,7 @@ android {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 

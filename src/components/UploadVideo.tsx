@@ -75,6 +75,7 @@ const UploadVideo: React.FC<Props> = (props) => {
     setVideoSize(0);
     setShowSelect(true);
     setThumbnail('');
+    setVideo('');
   };
 
   const pickVideo = async () => {
@@ -121,8 +122,9 @@ const UploadVideo: React.FC<Props> = (props) => {
         }
       );
       console.log("uri", uri);
+      let imgName = uri.uri.split('/').pop();
       setAutoThumbnail(uri?.uri?.toString());
-      let file = {uri: uri?.uri?.toString(), type: 'multipart/form-data', name: 'image.png'};
+      let file = {uri: uri?.uri?.toString(), type: 'image/jpg', name: imgName};
       let fmData = new FormData();
       // @ts-ignore
       fmData.append('thumbnail', file);

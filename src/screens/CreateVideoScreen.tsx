@@ -118,11 +118,11 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
+        <FavorDaoNavBar
+          title="Create Video"
+          vector={require("../assets/vector6.png")}
+        />
         <ScrollView style={styles.scrollWrap}>
-          <FavorDaoNavBar
-            title="Create Video"
-            vector={require("../assets/vector6.png")}
-          />
           <TextInputBlock
             title={'Video title'}
             value={videoTitle}
