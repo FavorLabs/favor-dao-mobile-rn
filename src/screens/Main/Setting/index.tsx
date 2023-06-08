@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, TouchableOpacity,Platform} from 'react-native';
 import {FontSize, FontFamily, Color, Padding, Border} from "../../../GlobalStyles";
 import WalletUser from "../../../components/WalletUser";
 import Receive from "../../../components/Receive";
@@ -38,8 +38,8 @@ const SettingScreen: React.FC<Props> = (props) => {
         <ScrollView>
           <WalletUser/>
           <View style={styles.sendbar}>
-            <Receive/>
-            <Send/>
+            { Platform.OS === 'ios' ? <View style={{flex:1}}/> :<Receive/> }
+            { Platform.OS === 'ios' ? <View style={{flex:1}}/> :<Send/> }
             <Transactions/>
           </View>
           <View style={styles.settings1}>

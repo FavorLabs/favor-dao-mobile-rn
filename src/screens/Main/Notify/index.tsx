@@ -50,7 +50,7 @@ const NotifyScreen = () => {
   const getNotifyGroup = async (refresh?: boolean) => {
     const pageData = await refresh ? {page: 1, page_size: pageInfo.page_size} : pageInfo;
     try {
-      const {data} = await NotifyApi.getNotifyGroup(url)
+      const {data} = await NotifyApi.getNotifyGroup(url, pageData)
       console.log(data.data, 'notifyGroup')
       if(data.data?.list){
         if(refresh) {
@@ -208,7 +208,9 @@ const NotifyScreen = () => {
                             }}
                           />
                         </View>
-                        <View style={styles.notifyRight}>
+                        <TouchableOpacity style={styles.notifyRight} onPress={() => {
+                          gotoNotifications(item.fromInfo)
+                        }}>
                           <View style={[styles.infoTop, styles.flexRC]}>
                             <Text style={styles.name} numberOfLines={1}>{item.fromInfo.name}</Text>
                             <Text style={styles.time} numberOfLines={1}>{getTime(item.createdAt)}</Text>
@@ -221,14 +223,12 @@ const NotifyScreen = () => {
                                       +{item.unreadCount}
                                   </Text>
                               }
-                              <TouchableOpacity onPress={() => {
-                                gotoNotifications(item.fromInfo)
-                              }}>
+                              <View>
                                 <Icon color={Color.color4} name={'chevron-right'} type={'material'}/>
-                              </TouchableOpacity>
+                              </View>
                             </View>
                           </View>
-                        </View>
+                        </TouchableOpacity>
                       </View>
                     )}
                     keyExtractor={item => item.fromInfo.id}

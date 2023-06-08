@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
+import {Text, StyleSheet, Image, View, TouchableOpacity, Platform} from "react-native";
 import { FontFamily, FontSize, Color, Border, Padding } from "../GlobalStyles";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
@@ -54,14 +54,17 @@ const DAOManagementContainer: React.FC<Props> = (props) => {
             </View>
         }
         <View style={styles.daomnglistChild} />
-        <View style={styles.daosetting}>
-          <Image
-            style={styles.materialSymbolsaddBoxIcon}
-            resizeMode="cover"
-            source={require("../assets/daoManagement-daoLevel.png")}
-          />
-          <Text style={[styles.add, styles.addTypo]}>DAO Level</Text>
-        </View>
+        {
+          Platform.OS !== 'ios' &&
+            <View style={styles.daosetting}>
+                <Image
+                    style={styles.materialSymbolsaddBoxIcon}
+                    resizeMode="cover"
+                    source={require("../assets/daoManagement-daoLevel.png")}
+                />
+                <Text style={[styles.add, styles.addTypo]}>DAO Level</Text>
+            </View>
+        }
       </View>
     </View>
   );
