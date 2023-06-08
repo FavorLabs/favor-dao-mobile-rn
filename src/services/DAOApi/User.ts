@@ -1,5 +1,5 @@
 import request from '../index';
-import {ResData, SignatureData, Statistic, User, UserAccounts} from '../../declare/api/DAOApi';
+import {Page, ResData, SignatureData, Statistic, User, UserAccounts} from '../../declare/api/DAOApi';
 
 export default {
     signIn(url: string, data: SignatureData & { token?: string }) {
@@ -38,9 +38,10 @@ export default {
             url: url + '/user/accounts',
         });
     },
-    getTransaction(url: string): ResData<any> {
+    getTransaction(url: string, params: Page): ResData<any> {
         return request({
             url: url + '/user/trans',
+            params,
         });
     },
 };
