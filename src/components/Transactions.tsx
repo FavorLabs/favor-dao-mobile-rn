@@ -1,38 +1,76 @@
 import * as React from "react";
-import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import { Border, FontSize, FontFamily, Color } from "../GlobalStyles";
+import {
+  ActivityIndicator, FlatList,
+  Image,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
+import {Border, FontSize, Color} from "../GlobalStyles";
 import {useEffect, useState} from "react";
 import BottomSheetModal from "./BottomSheetModal";
 import {addDecimal} from "../utils/balance";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import UserApi from "../services/DAOApi/User";
-import Favor from "../libs/favor";
 import {useUrl} from "../utils/hook";
 import Toast from "react-native-toast-message";
-import {TransactionInfo} from "../declare/api/DAOApi";
+import { Page, TransactionInfo} from "../declare/api/DAOApi";
 
 type Props = {};
 const Transactions: React.FC<Props> = (props) => {
-  const { user } = useSelector((state: Models) => state.global);
+  const {user} = useSelector((state: Models) => state.global);
   const url = useUrl();
-  const [popUpShow,setPopUpShow] = useState<boolean>(false);
-  const [transactions,setTransactions] = useState<TransactionInfo[]>([])
+  const [popUpShow, setPopUpShow] = useState<boolean>(false);
+  const [transactions, setTransactions] = useState<TransactionInfo[]>([]);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [pageInfo, setPageInfo] = useState<Page>({
+    page: 1,
+    page_size: 10000,
+  });
 
   const showPopUp = () => {
-    getTransaction();
+    getTransaction(true);
     setPopUpShow(true);
   }
 
-  const getTransaction = async () => {
+  const getTransaction = async (refresh?: boolean) => {
+    const pageData = await refresh ? {page: 1, page_size: pageInfo.page_size} : pageInfo;
     try {
-      const res = await UserApi.getTransaction(url);
-      setTransactions(res.data.data.list);
+      const {data} = await UserApi.getTransaction(url, pageData);
+      if (data.data.list) {
+        refresh ? setTransactions(data.data.list) : setTransactions([...transactions, ...data.data.list]);
+        setIsLoadingMore(data.data.pager.total_rows > pageData.page * pageData.page_size,);
+        setPageInfo({...pageInfo, page: ++pageData.page});
+      }
     } catch (e) {
-      // @ts-ignore
-      Toast.show({type: 'error', text1: e.message});
+      if (e instanceof Error) {
+        Toast.show({
+          type: 'error',
+          text1: e.message
+        })
+      }
     }
   }
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getTransaction(true);
+    setRefreshing(false);
+  };
+
+  const handleLoadMore = async () => {
+    if (isLoadingMore && !loading) {
+      setLoading(true);
+      await getTransaction();
+      setLoading(false);
+    }
+  };
 
   const sliceStr = (str: string) => {
     let string = str.slice(1);
@@ -75,6 +113,12 @@ const Transactions: React.FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
+  footer: {
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   mainbuttonIcon: {
     borderRadius: Border.br_101xl,
     width: 50,
