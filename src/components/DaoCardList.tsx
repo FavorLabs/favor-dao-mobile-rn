@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Button, SafeAreaView, ScrollView, FlatList} from 'react-native';
 import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
 import DaoCommunityCard from "./DaoCommunityCard";
-import {Page, PostInfo} from "../declare/api/DAOApi";
+import {DAOPage, Page, PostInfo} from "../declare/api/DAOApi";
 import {useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
 import {useDispatch, useSelector} from "react-redux";
@@ -17,11 +17,12 @@ type Props = {
 const DaoCardList: React.FC<Props> = (props) => {
   const url = useUrl();
   const dispatch = useDispatch();
-  const [pageData, setPageData] = useState<Page>({
+  const [pageData, setPageData] = useState<DAOPage>({
     page: 1,
     page_size: 5,
     type: -1,
     query: undefined,
+    sort: 'dao_follow_count:desc,created_on:desc'
   });
 
 
@@ -56,6 +57,7 @@ const DaoCardList: React.FC<Props> = (props) => {
       page_size: 5,
       type: -1,
       query: undefined,
+      sort: 'dao_follow_count:desc,created_on:desc'
     };
     try {
       const request = (params: Page) => PostApi.getPostListByType(url, params);

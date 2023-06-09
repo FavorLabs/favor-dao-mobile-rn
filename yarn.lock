@@ -1184,10 +1184,10 @@
   resolved "https://registry.npmmirror.com/@cometchat-pro/react-native-calls/-/react-native-calls-2.3.1.tgz#81c22a68d324ddb9e2a5f0b93ca559eeedcf1ac3"
   integrity sha512-J3lFi9C1VOXjFYQKIuXV5K8LDaUW4EbBj6UUftyU6vyIxY2gkyCWPm5hy/GRhZCweBRcUjMMScuZeEdP0Ar7CQ==
 
-"@cometchat-pro/react-native-chat@3.0.2":
-  version "3.0.2"
-  resolved "https://registry.npmmirror.com/@cometchat-pro/react-native-chat/-/react-native-chat-3.0.2.tgz#38cde052dfda9583cac1d58e8499ed1e2f7c7a2e"
-  integrity sha512-fZZ5v/WBqmXzFHU4Wo1zBj16EGhk2xcU+bPuVDKvrGINyMbxwP3axvo4Ytk/U5yHDttodsA3nqULPI1tper7ig==
+"@cometchat-pro/react-native-chat@3.0.12":
+  version "3.0.12"
+  resolved "https://registry.yarnpkg.com/@cometchat-pro/react-native-chat/-/react-native-chat-3.0.12.tgz#205874fea252aee148cd49dbc388ad4d27d04a34"
+  integrity sha512-sBF5nnuRRhUmFaiPW3lEGuWxWNnKFeHVaFfHajA4j2iVygkUH9Z4ZBFbuvkkfU4ePEO5YspVS4NFwg+wL15aKA==
 
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"

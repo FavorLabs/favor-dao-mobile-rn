@@ -50,11 +50,11 @@ const PostList: React.FC<Props> = (props) => {
       const {data} = await request(pageData);
       // @ts-ignore
       const listArr: PostInfo[] = data.data.list;
-      setPostListArr(() => [...postListArr, ...listArr]);
-      setIsLoadingMore(
+      await setPostListArr(() => [...postListArr, ...listArr]);
+      await setIsLoadingMore(
         data.data.pager.total_rows > pageData.page * pageData.page_size,
       );
-      setPageData((pageData) => ({...pageData, page: ++pageData.page}));
+      await setPageData((pageData) => ({...pageData, page: ++pageData.page}));
     } catch (e) {
       if (e instanceof Error)
         Toast.show({
@@ -76,11 +76,11 @@ const PostList: React.FC<Props> = (props) => {
       const {data} = await request(pageInfo);
       // @ts-ignore
       const listArr: PostInfo[] = data.data.list;
-      setPostListArr(() => [...listArr]);
-      setIsLoadingMore(
+      await setPostListArr(() => [...listArr]);
+      await setIsLoadingMore(
         data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,
       );
-      setPageData((pageData) => ({...pageData, page: 2}));
+      await setPageData((pageData) => ({...pageData, page: 2}));
     } catch (e) {
       if (e instanceof Error) console.error(e.message);
     }

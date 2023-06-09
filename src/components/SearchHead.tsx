@@ -1,10 +1,17 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {View, Text, StyleSheet, TextInput, TouchableOpacity, Image} from 'react-native';
 import {Border, Color, FontSize, Padding} from "../GlobalStyles";
 import {getDebounce} from "../utils/util";
+import Screens from "../navigation/RouteNames";
+// @ts-ignore
+import ActionSheet from 'react-native-actionsheet';
+import {useIsLogin} from "../utils/hook";
+import {useSelector} from "react-redux";
+import Models from "../declare/storeTypes";
+import {useNavigation} from "@react-navigation/native";
+import {StackNavigationProp} from "@react-navigation/stack";
 export type Props = {
     tittle:string;
-    frameFnc?: (e: { preventDefault: () => void; })=>void;
     getSearchBlur: () => void;
     searchValue:string;
     setSearchValue: (a: string) => void;
@@ -12,7 +19,27 @@ export type Props = {
 };
 
 const SearchHead:React.FC<Props>=(props)=>{
-    const {tittle,frameFnc,getSearchBlur,searchValue,setSearchValue,unFrameStatus} = props;
+    const screens = [Screens.CreateVideo, Screens.CreateNews];
+    const navigation = useNavigation<StackNavigationProp<any>>();
+    const actionSheetRef = useRef<ActionSheet>(null);
+    const [isLogin, gotoLogin] = useIsLogin();
+    const {tittle,getSearchBlur,searchValue,setSearchValue,unFrameStatus} = props;
+    const {dao} = useSelector((state: Models) => state.global);
+    const showActionSheet = (e: { preventDefault: () => void; }) => {
+        if (isLogin) {
+            if (dao) {
+                actionSheetRef.current?.show();
+            } else {
+                // @ts-ignore
+                navigation.navigate(Screens.CreateDAO);
+                e.preventDefault()
+            }
+        } else {
+            gotoLogin();
+            e.preventDefault()
+        }
+    }
+
     return(
                     <View style={[styles.titleParent, styles.selectionBg]}>
                         <Text style={styles.title}>{tittle}</Text>
@@ -28,7 +55,7 @@ const SearchHead:React.FC<Props>=(props)=>{
                                     />
                                 </View>
                             </View>
-                            <TouchableOpacity onPress={frameFnc} >
+                            <TouchableOpacity onPress={showActionSheet} >
                                 <View style={[styles.frameWrapper, styles.wrapperBg,{display:unFrameStatus?'none':'flex'}]}>
                                     <Image
                                         style={styles.frameChild}
@@ -38,6 +65,17 @@ const SearchHead:React.FC<Props>=(props)=>{
                                 </View>
                             </TouchableOpacity>
                         </View>
+                        <ActionSheet
+                            ref={actionSheetRef}
+                            title={'Create post now!'}
+                            options={['Video Post', 'News Post', 'Cancel']}
+                            cancelButtonIndex={2}
+                            onPress={(index: number) => {
+                                if (index < screens.length) { // @ts-ignore
+                                    navigation.navigate(screens[index]);
+                                }
+                            }}
+                        />
                     </View>
             )
 }

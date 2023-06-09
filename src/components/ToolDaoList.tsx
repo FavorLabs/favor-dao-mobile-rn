@@ -39,6 +39,7 @@ const ToolDaoList: React.FC<Props> = (props) => {
     try {
       const request = (params: Page) => PostApi.getToolDao(url, params);
       const { data } = await request(pageData);
+      // @ts-ignore
       const listArr: DaoInfo[] = data.data.list;
       setDaoListArr(() => [...daoListArr,...listArr]);
       setIsLoadingMore(data.data.pager.total_rows > pageData.page * pageData.page_size,);
@@ -58,6 +59,7 @@ const ToolDaoList: React.FC<Props> = (props) => {
     try {
       const request = (params: Page) => PostApi.getToolDao(url, params);
       const { data } = await request(pageInfo);
+      // @ts-ignore
       const listArr: DaoInfo[] = data.data.list;
       setDaoListArr(() => [...listArr]);
       setIsLoadingMore(data.data.pager.total_rows > pageInfo.page * pageInfo.page_size,);
