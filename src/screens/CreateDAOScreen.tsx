@@ -110,7 +110,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
     if(daoName.length > 26 ){
        Toast.show({
         type: 'error',
-        text1: 'The character length of Dao name cannot exceed 26!',
+        text1: 'DAO name is too lang!',
       })
     }
   },[daoName])
