@@ -67,7 +67,7 @@ const VideoBlockItem: React.FC<Props> = (props) => {
                 <Image
                   style={styles.lockIcon}
                   resizeMode="cover"
-                  source={postInfo.dao.is_subscribed ? require("../assets/unlock.png") : require("../assets/lock.png")}
+                  source={isReTransfer? postInfo.author_dao.is_subscribed ? require("../assets/unlock.png") : require("../assets/lock.png") : postInfo.dao.is_subscribed ? require("../assets/unlock.png") : require("../assets/lock.png") }
                 />
               </View>
             </View>
