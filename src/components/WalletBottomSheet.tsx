@@ -10,6 +10,7 @@ import {SignatureData} from "../declare/api/DAOApi";
 import WalletController from "../libs/walletController";
 import {useUrl} from "../utils/hook";
 import Toast from "react-native-toast-message";
+import {getDAOInfo} from "../utils/util";
 
 const WalletBottomSheet = () => {
     const url = useUrl();
@@ -26,6 +27,7 @@ const WalletBottomSheet = () => {
     const login = async (signatureData: SignatureData) => {
         try {
             await WalletController.login(url, signatureData)
+            await getDAOInfo(dispatch);
             close();
         } catch (e) {
             Toast.show({

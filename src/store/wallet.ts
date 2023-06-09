@@ -6,10 +6,6 @@ export const walletControllerStore = createSlice({
     initialState: {} as State,
     reducers: {
         updateState: (state, action: PayloadAction<{ key: keyof State, value: any }>) => {
-            console.log( {
-                ...state,
-                [action.payload.key]: action.payload.value,
-            })
             return {
                 ...state,
                 [action.payload.key]: action.payload.value,
