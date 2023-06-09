@@ -13,37 +13,56 @@ const LocalWallet = () => {
         navigation.navigate(Screens.CreateWallet)
     }
     const importWallet = () => {
-        navigation.navigate(Screens.ImportWallet)
+        navigation.navigate(Screens.ImportWallet, {
+            type: 'mnemonic'
+        })
+    }
+    const importPrivateKey = () => {
+        navigation.navigate(Screens.ImportWallet, {
+            type: 'privateKey'
+        })
     }
 
     return (
-        <View style={styles.titleParent}>
-            <Text style={styles.title}>Local wallet</Text>
-            <TouchableOpacity onPress={createWallet}>
-                <WalletItem
-                    walletImage={require("../assets/group-1171275666.png")}
-                    walletName="Create wallet"
-                    walletIntroduction="No wallet to create"
-                    frame1171275664Overflow="unset"
-                    ellipse12Width={43}
-                    ellipse12Height={36}
-                    amountWidth={185}
-                    amountWidth1={233}
-                />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={importWallet}>
-                <WalletItem
-                    walletImage={require("../assets/group-1171275667.png")}
-                    walletName="Import wallet"
-                    walletIntroduction="There is already a wallet to import"
-                    frame1171275664Overflow="unset"
-                    ellipse12Width={43}
-                    ellipse12Height={36}
-                    amountWidth={185}
-                    amountWidth1={233}
-                />
-            </TouchableOpacity>
-        </View>
+      <View style={styles.titleParent}>
+          <Text style={styles.title}>Local wallet</Text>
+          <TouchableOpacity onPress={createWallet}>
+              <WalletItem
+                walletImage={require("../assets/group-1171275666.png")}
+                walletName="Create wallet"
+                walletIntroduction="No wallet to create"
+                frame1171275664Overflow="unset"
+                ellipse12Width={43}
+                ellipse12Height={36}
+                amountWidth={185}
+                amountWidth1={233}
+              />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={importWallet}>
+              <WalletItem
+                walletImage={require("../assets/group-1171275667.png")}
+                walletName="Import wallet"
+                walletIntroduction="There is already a wallet to import"
+                frame1171275664Overflow="unset"
+                ellipse12Width={43}
+                ellipse12Height={36}
+                amountWidth={185}
+                amountWidth1={233}
+              />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={importPrivateKey}>
+              <WalletItem
+                walletImage={require("../assets/group-1171275667.png")}
+                walletName="Import private key"
+                walletIntroduction="There is private key a wallet to import"
+                frame1171275664Overflow="unset"
+                ellipse12Width={43}
+                ellipse12Height={36}
+                amountWidth={185}
+                amountWidth1={233}
+              />
+          </TouchableOpacity>
+      </View>
     );
 };
 

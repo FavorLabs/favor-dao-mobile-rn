@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View} from "react-native";
-import { Color, FontFamily, FontSize, Border, Padding } from "../GlobalStyles";
+import {Color, FontFamily, FontSize, Border, Padding} from "../GlobalStyles";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import {getDebounce} from "../utils/util";
@@ -18,10 +18,10 @@ import Clipboard from '@react-native-clipboard/clipboard';
 type Props = {};
 const WalletUser: React.FC<Props> = (props) => {
   const navigation = useNavigation();
-  const { user } = useSelector((state: Models) => state.global);
+  const {user} = useSelector((state: Models) => state.global);
   const avatarsResUrl = useResourceUrl('avatars');
 
-  const [isBackUpShow,setBackUpIsShow] = useState<boolean>(false);
+  const [isBackUpShow, setBackUpIsShow] = useState<boolean>(false);
   const [password, setPassword] = useState('');
 
   const toBackUp = () => {
@@ -29,19 +29,26 @@ const WalletUser: React.FC<Props> = (props) => {
   };
 
   const Confirm = () => {
-    if(!password) {
+    if (!password) {
       return Toast.show({
         type: 'error',
         text1: 'No password entered!'
       });
-    };
+    }
+    ;
     try {
-      const mnemonic =  WalletController.exportMnemonic(password);
-      if(mnemonic){
-      // @ts-ignore
-      navigation.navigate(Screens.MnemonicBackup,{mnemonic: mnemonic});
-      setBackUpIsShow(false);
+      if (WalletController.type === 'privateKey') {
+        const privateKey = WalletController.exportPrivateKeySting(password)
+        // @ts-ignore
+        navigation.navigate(Screens.MnemonicBackup, {mnemonic: privateKey, type: 'privateKey'});
+      } else {
+        const mnemonic = WalletController.exportMnemonic(password);
+        if (mnemonic) {
+          // @ts-ignore
+          navigation.navigate(Screens.MnemonicBackup, {mnemonic: mnemonic, type: 'mnemonic'});
+        }
       }
+      setBackUpIsShow(false);
     } catch (e) {
       return Toast.show({
         type: 'error',
@@ -62,11 +69,11 @@ const WalletUser: React.FC<Props> = (props) => {
 
   useEffect(() => {
     setPassword('');
-  },[isBackUpShow])
+  }, [isBackUpShow])
 
   useEffect(() => {
     setBackUpIsShow(false);
-  },[])
+  }, [])
 
   return (
     <View style={styles.user}>
@@ -81,20 +88,21 @@ const WalletUser: React.FC<Props> = (props) => {
           <Text style={styles.shortaddress} numberOfLines={1}>{user?.address}</Text>
         </TouchableWithoutFeedback>
         <TouchableOpacity onPress={getDebounce(toBackUp)}>
-        <View style={[styles.backupbutton, styles.addresslineFlexBox]}>
-          <Image
-            style={styles.icon}
-            resizeMode="cover"
-            source={require("../assets/setting-backup-icon.png")}
-          />
-          <Text style={[styles.xc8320fTypo]} numberOfLines={1}>Backup</Text>
-        </View>
+          <View style={[styles.backupbutton, styles.addresslineFlexBox]}>
+            <Image
+              style={styles.icon}
+              resizeMode="cover"
+              source={require("../assets/setting-backup-icon.png")}
+            />
+            <Text style={[styles.xc8320fTypo]} numberOfLines={1}>Backup</Text>
+          </View>
         </TouchableOpacity>
       </View>
 
       <BottomSheetModal visible={isBackUpShow} setVisible={setBackUpIsShow}>
         <View style={styles.backUpDialog}>
-          <Text style={styles.forMnemonic}>For mnemonic</Text>
+          <Text
+            style={styles.forMnemonic}>For {WalletController.type === "privateKey" ? 'private key' : 'mnemonic'}</Text>
           <TextInputBlock
             title={'Password'}
             placeholder={`Please enter passwords`}
@@ -102,7 +110,7 @@ const WalletUser: React.FC<Props> = (props) => {
             setValue={setPassword}
             secureTextEntry={true}
           />
-          <TouchableOpacity style={{marginTop:20}} onPress={Confirm}>
+          <TouchableOpacity style={{marginTop: 20}} onPress={Confirm}>
             <FavorDaoButton
               textValue="Confirm"
               frame1171275771BackgroundColor="#ff8d1a"

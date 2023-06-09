@@ -7,11 +7,12 @@ import FavorDaoButton from "../components/FavorDaoButton";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import {useMemo} from "react";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import TextInputBlock from "../components/TextInputBlock";
 
 const Mnemonic = () => {
   const navigation = useNavigation();
   const route = useRoute()
-  const {mnemonic} = route.params as { mnemonic: string }
+  const {mnemonic, type} = route.params as { mnemonic: string, type: 'mnemonic' | 'privateKey' }
 
   const mnemonicArray = useMemo(() => {
     return mnemonic?.split(' ') || [];
@@ -25,17 +26,27 @@ const Mnemonic = () => {
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
       <View style={styles.mnemonic}>
         <FavorDaoNavBar
-          title="Mnemonic words"
+          title={type === 'privateKey' ? 'Private Key' : 'Mnemonic words'}
           vector={require("../assets/vector6.png")}
         />
         <ScrollView>
           <View style={styles.titleParent}>
             <Text style={[styles.title, styles.titleLayout]}>{`Backup mnemonics`}</Text>
             <Text style={[styles.title1, styles.titleLayout]}>
-              Please copy the mnemonic words in order to ensure accurate backup
+              Please copy the {type === 'privateKey' ? 'Private Key' : 'Mnemonic words'} in order to ensure accurate backup
             </Text>
           </View>
-          <WalletWords mnemonicArray={mnemonicArray}/>
+          {
+            type === 'privateKey' ?
+              <TextInputBlock
+                title={'Private Key'}
+                value={mnemonic}
+                editable={false}
+                multiline={true}
+              /> :
+              <WalletWords mnemonicArray={mnemonicArray}/>
+          }
+
         </ScrollView>
       </View>
       <TouchableOpacity onPress={backUp} style={styles.backupButton}>

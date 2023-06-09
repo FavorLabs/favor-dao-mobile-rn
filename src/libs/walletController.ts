@@ -16,6 +16,7 @@ import {Platform} from "react-native";
 export type State = {
     data?: string;
     token?: Record<string, string>
+    type?: 'mnemonic' | 'privateKey'
 }
 
 class WalletController {
@@ -42,6 +43,10 @@ class WalletController {
         return this.state.token?.[Favor.networkName]
     }
 
+    get type(){
+        return this.state.type
+    }
+
     createMnemonic() {
         return bip39.generateMnemonic();
     }
@@ -54,15 +59,32 @@ class WalletController {
             throw new Error('Mnemonic Invalid');
         }
         this.state.data = encrypt(mnemonic, password);
+        this.state.type = 'mnemonic';
     }
 
-    signMessage(message: string, privateKey: Buffer) {
-        const messageBuffer = hashPersonalMessage(Buffer.from(message));
-        const signature = ecsign(messageBuffer, privateKey);
-        return toRpcSig(signature.v, signature.r, signature.s);
+    importPrivateKey(password: string, privateKey: string) {
+        if (!password) {
+            throw new Error('Password Invalid');
+        }
+        if (privateKey.length !== 64) {
+            throw new Error('PrivateKey Invalid');
+        }
+        this.state.data = encrypt(privateKey, password);
+        this.state.type = 'privateKey'
+    }
+
+    exportPrivateKeySting(password: string) {
+        const privateKey = decrypt(this.state.data!, password);
+        if (!privateKey) {
+            throw new Error('Password Invalid')
+        }
+        return privateKey;
     }
 
     exportPrivateKey(password: string) {
+        if (this.state.type === 'privateKey') {
+            return Buffer.from(this.exportPrivateKeySting(password),'hex');
+        }
         const mnemonic = this.exportMnemonic(password);
         const hdWallet = hdkey.fromMasterSeed(bip39.mnemonicToSeedSync(mnemonic));
         const wallet = hdWallet.derivePath("m/44'/60'/0'/0/0").getWallet()
@@ -77,22 +99,10 @@ class WalletController {
         return mnemonic;
     }
 
-    async login(url: string, sign: Buffer | SignatureData) {
-        const signatureData = Buffer.isBuffer(sign) ? this.getSignatureData(sign) : sign;
-        const token: string | undefined = await new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(undefined);
-            }, 2000)
-            messaging().getToken().then(resolve).catch(() => resolve(undefined))
-        })
-        const {data} = await UserApi.signIn(url, {
-              ...signatureData,
-              token,
-          }
-        );
-        this.state.token = Object.assign(this.state.token ?? {}, {
-            [Favor.networkName]: data.data.token
-        })
+    signMessage(message: string, privateKey: Buffer) {
+        const messageBuffer = hashPersonalMessage(Buffer.from(message));
+        const signature = ecsign(messageBuffer, privateKey);
+        return toRpcSig(signature.v, signature.r, signature.s);
     }
 
     getSignatureData(privateKey: Buffer, type = 0): SignatureData {
@@ -115,6 +125,24 @@ class WalletController {
         }
     }
 
+    async login(url: string, sign: Buffer | SignatureData) {
+        const signatureData = Buffer.isBuffer(sign) ? this.getSignatureData(sign) : sign;
+        const token: string | undefined = await new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(undefined);
+            }, 2000)
+            messaging().getToken().then(resolve).catch(() => resolve(undefined))
+        })
+        const {data} = await UserApi.signIn(url, {
+              ...signatureData,
+              token,
+          }
+        );
+        this.state.token = Object.assign(this.state.token ?? {}, {
+            [Favor.networkName]: data.data.token
+        })
+    }
+
     async logout(address?: string) {
         Object.keys(this.state).map((item) => {
             this.state[item as keyof State] = undefined
@@ -129,9 +157,17 @@ class WalletController {
     }
 
     changePassword(newPassword: string, oldPassword: string) {
-        const mnemonic = this.exportMnemonic(oldPassword);
-        this.importMnemonic(newPassword, mnemonic);
+        if (this.state.type === 'privateKey') {
+            const privateKey = this.exportPrivateKeySting(oldPassword);
+            this.importPrivateKey(newPassword, privateKey)
+        } else {
+            const mnemonic = this.exportMnemonic(oldPassword);
+            this.importMnemonic(newPassword, mnemonic);
+        }
     }
 }
 
 export default new WalletController();
+
+
+
