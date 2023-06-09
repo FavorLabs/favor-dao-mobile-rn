@@ -63,7 +63,7 @@ const VideoBlockItem: React.FC<Props> = (props) => {
           { (postInfo.member === 1 || isReTransfer || isQuote) &&
             <View style={styles.rectangleParent}>
               <View style={styles.subtitleParent}>
-                <Text style={styles.subtitle}>{ postInfo.dao.is_subscribed ? 'Unlock' : 'Locked' }</Text>
+                <Text style={styles.subtitle}>{ isReTransfer? postInfo.author_dao.is_subscribed ? 'Unlock' : 'Locked' : postInfo.dao.is_subscribed ? 'Unlock' : 'Locked' }</Text>
                 <Image
                   style={styles.lockIcon}
                   resizeMode="cover"
