@@ -8,6 +8,9 @@ import {useNavigation, useRoute} from "@react-navigation/native";
 import {useMemo} from "react";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import TextInputBlock from "../components/TextInputBlock";
+import {Icon} from "@rneui/themed";
+import Clipboard from "@react-native-clipboard/clipboard"
+import Toast from "react-native-toast-message";
 
 const Mnemonic = () => {
   const navigation = useNavigation();
@@ -31,19 +34,37 @@ const Mnemonic = () => {
         />
         <ScrollView>
           <View style={styles.titleParent}>
-            <Text style={[styles.title, styles.titleLayout]}>{`Backup mnemonics`}</Text>
+            <Text style={[styles.title, styles.titleLayout]}>{`Backup`}</Text>
             <Text style={[styles.title1, styles.titleLayout]}>
-              Please copy the {type === 'privateKey' ? 'Private Key' : 'Mnemonic words'} in order to ensure accurate backup
+              Please copy the {type === 'privateKey' ? 'Private Key' : 'Mnemonic words'} in order to ensure accurate
+              backup
             </Text>
           </View>
           {
             type === 'privateKey' ?
-              <TextInputBlock
-                title={'Private Key'}
-                value={mnemonic}
-                editable={false}
-                multiline={true}
-              /> :
+              <View>
+                <View style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 20
+                }}>
+                  <Text style={styles.title2}>Private Key</Text>
+                  <TouchableOpacity onPress={() => {
+                    Clipboard.setString(mnemonic);
+                    Toast.show({
+                      type: 'success',
+                      text1: "copy success"
+                    })
+                  }}>
+                    <Icon size={20} name={'copy1'} type={'antdesign'}/>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.textBox}>
+                  <Text style={{lineHeight: 20, letterSpacing: 0.5}}>
+                    {mnemonic}
+                  </Text>
+                </View>
+              </View> :
               <WalletWords mnemonicArray={mnemonicArray}/>
           }
 
@@ -101,6 +122,24 @@ const styles = StyleSheet.create({
     backgroundColor: Color.color2,
     flex: 1,
     paddingHorizontal: Padding.p_base,
+  },
+  title2: {
+    textAlign: "left",
+    lineHeight: 23,
+    letterSpacing: 0,
+    fontSize: FontSize.bodyBody17_size,
+    fontWeight: "600",
+    color: Color.iOSSystemLabelsLightPrimary,
+  },
+  textBox: {
+    marginTop: 20,
+    backgroundColor: '#fff',
+    borderRadius: Border.br_3xs,
+    padding: Padding.p_smi,
+    paddingTop: Padding.p_smi,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
 });
 
