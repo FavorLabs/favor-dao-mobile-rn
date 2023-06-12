@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
-import { useSelector, useDispatch } from 'react-redux';
-import { Color, Padding, Border, FontFamily, FontSize } from "../GlobalStyles";
+import {useSelector, useDispatch} from 'react-redux';
+import {Color, Padding, Border, FontFamily, FontSize} from "../GlobalStyles";
 import UploadBlockTitle from "./UploadBlockTitle";
 import Api from '../services/NodeApi';
 import Models from "../declare/storeTypes";
 import Toast from 'react-native-toast-message';
-import ImagePicker, { Video } from 'react-native-image-crop-picker';
-import { LocalStorage, SessionStorage } from '../utils/storage';
+import ImagePicker, {Video} from 'react-native-image-crop-picker';
+import {LocalStorage, SessionStorage} from '../utils/storage';
 import {getSize, getProgress, stringToBinary, omitAddress} from '../utils/util';
-import { decode } from 'base-64';
+import {decode} from 'base-64';
 import Favor from "../libs/favor";
 import {WebsocketProvider} from "web3-core";
 import {Config} from "../declare/global";
 import Events from "events";
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import RnFs from 'react-native-fs';
 import ImageApi from "../services/DAOApi/Image";
 import {useResourceUrl} from "../utils/hook";
 import LoadingSpinner from "./LoadingSpinner";
@@ -44,7 +43,7 @@ type FavorType = {
 }
 
 const UploadVideo: React.FC<Props> = (props) => {
-  const { setVideo, thumbnail, setThumbnail, autoThumbnail, setAutoThumbnail } = props;
+  const {setVideo, thumbnail, setThumbnail, autoThumbnail, setAutoThumbnail} = props;
   const dispatch = useDispatch();
   const imagesResUrl = useResourceUrl('images');
 
@@ -58,7 +57,7 @@ const UploadVideo: React.FC<Props> = (props) => {
 
   // const { api, debugApi, ws, config } = useSelector((state: Models) => state.global);
   // @ts-ignore
-  const { api, debugApi, ws, config } = Favor as FavorType;
+  const {api, debugApi, ws, config} = Favor as FavorType;
 
   useEffect(() => {
     // dispatch({
@@ -83,22 +82,20 @@ const UploadVideo: React.FC<Props> = (props) => {
     init();
     ImagePicker.openPicker({
       mediaType: "video",
+      compressVideoPreset: 'Passthrough'
     }).then(async video => {
-        setShowSelect(false);
-        console.log('video', video);
-        if (!checkVideoSize(video)) return;
-        setVideoName(video.filename as string);
-        setVideoSize(video.size);
-        setVideoDuration(video.duration);
+      setShowSelect(false);
+      console.log('video', video);
+      if (!checkVideoSize(video)) return;
+      setVideoName(video.filename as string);
+      setVideoSize(video.size);
+      setVideoDuration(video.duration);
 
-        const res = await fetch(video.path as string);
-        const blob = await res.blob();
-
-        await generateThumbnail(video.path);
-        // @ts-ignore
-        uploadVideo(video, blob);
+      await generateThumbnail(video.path);
+      // @ts-ignore
+      uploadVideo(video);
     }).catch(() => {
-        init();
+      init();
     });
 
   };
@@ -120,7 +117,7 @@ const UploadVideo: React.FC<Props> = (props) => {
       const uri = await VideoThumbnails.getThumbnailAsync(
         videoURL,
         {
-           time: videoDuration ? videoDuration >= 15000 ? 15000 : 1000 : 1000,
+          time: videoDuration ? videoDuration >= 15000 ? 15000 : 1000 : 1000,
         }
       );
       console.log("uri", uri);
@@ -130,7 +127,7 @@ const UploadVideo: React.FC<Props> = (props) => {
       let fmData = new FormData();
       // @ts-ignore
       fmData.append('thumbnail', file);
-      const { data } = await ImageApi.upload(imagesResUrl, fmData);
+      const {data} = await ImageApi.upload(imagesResUrl, fmData);
       setThumbnail(data.id);
     } catch (e) {
       console.warn(e);
@@ -308,7 +305,8 @@ const UploadVideo: React.FC<Props> = (props) => {
             method: 'group_unsubscribe',
             params: [storageResult],
           },
-          () => {},
+          () => {
+          },
         );
       }
       if (downloadResult) {
@@ -319,7 +317,8 @@ const UploadVideo: React.FC<Props> = (props) => {
             method: 'chunkInfo_unsubscribe',
             params: [downloadResult],
           },
-          () => {},
+          () => {
+          },
         );
       }
       ws.removeAllListeners('groupSubscribe');
@@ -329,22 +328,18 @@ const UploadVideo: React.FC<Props> = (props) => {
     });
   };
 
-  const uploadVideo = async (file: Video, blob: Blob) => {
-    console.log('uploadVideo', file);
-    if (!config) return;
-    // setShowSelect(false);
+  const uploadVideo = async (video: Video) => {
     try {
       setUploading(true);
       setStatusTip('Uploading the file to local node');
+
       await Api.observeStorageGroup(api, config.storeGroup, config.storeNodes);
 
-      // const fileData = await RnFs.readFile(file.sourceURL as string, 'ascii');
-      // const buffer = Buffer.from(fileData, 'binary');
-
-      let data = await Api.uploadFile(api, file, blob);
-      // console.log('data----', data);
-      let hash: string = data.data.reference;
+      console.log(video.filename)
+      let response = await Api.uploadFile(api, video.path, video.mime, video.filename);
+      let hash: string = JSON.parse(response.body).reference
       console.log('hash', hash);
+
       let uploadedList = JSON.parse(
         SessionStorage.getItem('uploaded_list') || '{}',
       );
@@ -354,21 +349,21 @@ const UploadVideo: React.FC<Props> = (props) => {
         let fileInfo = await Api.getFileInfo(api, hash);
         let len: number = fileInfo.data.list[0].bitVector.len;
         // @ts-ignore
-        const { text, overlay } = await uploadToStorageNode(hash, len);
+        const {text, overlay} = await uploadToStorageNode(hash, len);
         setStatusTip(text);
-        Toast.show({ type: 'success', text1: text });
+        Toast.show({type: 'success', text1: text});
         uploadOverlay = overlay;
         uploadedList[hash] = overlay;
         SessionStorage.setItem('uploaded_list', JSON.stringify(uploadedList));
       } else {
         setProgressValue(100);
         setStatusTip('Upload successful');
-        Toast.show({ type: 'success', text1: 'Upload successful' });
+        Toast.show({type: 'success', text1: 'Upload successful'});
       }
       setVideo(`${hash}?oracles=${uploadOverlay}`);
     } catch (e) {
       setProgressValue(0);
-      Toast.show({ type: 'error', text1: e instanceof Error ? e.message : JSON.stringify(e) });
+      Toast.show({type: 'error', text1: e instanceof Error ? e.message : JSON.stringify(e)});
       setVideo('');
       // setShowVideoList(false);
     } finally {
@@ -378,9 +373,9 @@ const UploadVideo: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.groupParent}>
-      <UploadBlockTitle type={'video'} isShowSelector={false} />
+      <UploadBlockTitle type={'video'} isShowSelector={false}/>
 
-      { showSelect ? <>
+      {showSelect ? <>
         <View style={styles.uploadWrap}>
           <View style={styles.uploadIconTips}>
             <TouchableOpacity style={styles.iconTips} onPress={pickVideo}>
@@ -399,29 +394,29 @@ const UploadVideo: React.FC<Props> = (props) => {
           <View style={[styles.groupContainer, styles.groupLayout]}>
             <View style={[styles.groupContainer, styles.groupLayout]}>
               <View style={[styles.groupContainer, styles.groupLayout]}>
-                <View style={[styles.groupChild, styles.groupLayout]} />
+                <View style={[styles.groupChild, styles.groupLayout]}/>
               </View>
             </View>
             <View style={[styles.frameView, styles.buttonFlexBox]}>
-              { autoThumbnail ? <>
+              {autoThumbnail ? <>
                 <Image
                   style={styles.frameChild}
                   resizeMode="cover"
-                  source={{ uri: autoThumbnail }}
+                  source={{uri: autoThumbnail}}
                 />
               </> : <>
-                <View style={[styles.frameChild, { backgroundColor: Color.lightGrayscaleContent3 }]}></View>
-              </> }
+                <View style={[styles.frameChild, {backgroundColor: Color.lightGrayscaleContent3}]}></View>
+              </>}
               <View style={[styles.xBasefileStateWrapper, styles.basefileLayout]}>
                 <View style={[styles.xBasefileState, styles.basefileLayout]}>
                   <View style={styles.drop}>
-                    <LoadingSpinner isLoading={uploading} />
+                    <LoadingSpinner isLoading={uploading}/>
                     <Text style={[styles.text2, styles.secTypo]}>
-                      { videoName ? omitAddress(videoName, 5, 6) : '' }
+                      {videoName ? omitAddress(videoName, 5, 6) : ''}
                     </Text>
                     <View style={[styles.counter1, styles.counterBorder]}>
                       <Text style={[styles.text1, styles.textFlexBox]}>
-                        { getSize(videoSize) }
+                        {getSize(videoSize)}
                       </Text>
                     </View>
                     <Image
@@ -430,7 +425,7 @@ const UploadVideo: React.FC<Props> = (props) => {
                       source={require("../assets/right-icon.png")}
                     />
                   </View>
-                  <Text style={[styles.sec, styles.secTypo]}>{ progressValue.toFixed(2) }% / { statusTip }</Text>
+                  <Text style={[styles.sec, styles.secTypo]}>{progressValue.toFixed(2)}% / {statusTip}</Text>
                   <TouchableOpacity onPress={init}>
                     <Image
                       style={[styles.cancelIcon, styles.iconLayout]}
@@ -439,14 +434,14 @@ const UploadVideo: React.FC<Props> = (props) => {
                     />
                   </TouchableOpacity>
                   <View style={styles.determinateline}>
-                    <View style={[styles.view, { right: `${100 - progressValue}%` }]} />
+                    <View style={[styles.view, {right: `${100 - progressValue}%`}]}/>
                   </View>
                 </View>
               </View>
             </View>
           </View>
         </View>
-      </> }
+      </>}
     </View>
   );
 };

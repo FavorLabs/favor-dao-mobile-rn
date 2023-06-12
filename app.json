@@ -2,7 +2,7 @@
   "expo": {
     "name": "FavorDAO",
     "slug": "FavorDAO",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "jsEngine": "hermes",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

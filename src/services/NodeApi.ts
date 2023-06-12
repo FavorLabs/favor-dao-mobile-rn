@@ -1,13 +1,13 @@
 import request from 'axios';
-import { AxiosResponse } from 'axios';
+import {AxiosResponse} from 'axios';
 import type {
   Message,
   ApiPort,
   Addresses,
   FileList,
 } from '../declare/api/nodeApi';
-import { ChunkSource } from '../declare/api/nodeApi';
-import {Video} from "react-native-image-crop-picker";
+import {ChunkSource} from '../declare/api/nodeApi';
+import * as FileSystem from "expo-file-system";
 
 export default {
   // Api
@@ -21,32 +21,21 @@ export default {
       url: api + '/file',
       method: 'get',
       params: {
-        page: JSON.stringify({ pageNum: 1, pageSize: 1 }),
-        sort: JSON.stringify({ key: 'rootCid', order: 'asc' }),
-        filter: JSON.stringify([{ key: 'rootCid', value: hash, term: 'cn' }]),
+        page: JSON.stringify({pageNum: 1, pageSize: 1}),
+        sort: JSON.stringify({key: 'rootCid', order: 'asc'}),
+        filter: JSON.stringify([{key: 'rootCid', value: hash, term: 'cn'}]),
       },
     });
   },
-  async uploadFile(api: string, file: Video, blob: any) {
-    let fileName = file.filename;
-    let headers = {};
-    // @ts-ignore
-    headers['Content-Type'] = file.mime || 'application/x-www-form-urlencoded';
-    return request({
-      url: api + '/file',
-      method: 'post',
-      data: blob,
-      params: { name: fileName },
-      headers,
-      timeout: 0,
-      transformRequest: [(data, headers) => {
-        if (typeof Blob !== 'undefined' && data instanceof Blob) {
-          return data;
-        }
-        // @ts-ignore
-        return request.defaults.transformRequest[0].call(null, data, headers);
-      }],
-    });
+  async uploadFile(api: string, path: string, type: string, name?: string,) {
+    return FileSystem.uploadAsync(`${api}/file?name=${name}`, path, {
+      fieldName: 'file',
+      httpMethod: 'POST',
+      headers: {
+        "Content-Type": type
+      },
+      uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
+    })
   },
   observeProxyGroup(
     api: string,
@@ -90,7 +79,7 @@ export default {
         source: data.data.overlay,
         hash,
       },
-      { timeout: 30 * 1000 },
+      {timeout: 30 * 1000},
     );
   },
   getPyramidSize(api: string, data: any): Promise<AxiosResponse<FileList>> {
