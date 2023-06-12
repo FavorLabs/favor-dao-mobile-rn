@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   },
   box: {
     flex: 1,
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   videoBox: {
     position: 'relative',
@@ -310,6 +310,7 @@ const styles = StyleSheet.create({
     zIndex: 2
   },
   video: {
+    marginTop: '48%',
     height: 238,
   },
   groupParent: {

@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         backgroundColor: Color.color1,
         borderRadius: 12,
-        maxHeight: '50%'
+        maxHeight: '40%',
     },
     loading: {
         color: Color.color4,

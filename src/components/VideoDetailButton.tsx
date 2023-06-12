@@ -239,7 +239,7 @@ const VideoDetailButton: React.FC<Props> = (props) => {
       <BottomSheetModal
         visible={sourceInfoModal}
         setVisible={setSourceInfoModal}
-        height={'50%'}
+        height={'60%'}
       >
         <ChunkSourceInfo
           videoHash={videoHash}
