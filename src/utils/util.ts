@@ -207,3 +207,13 @@ export const getMatchedStrings = (str: string, regex: RegExp): string[] => {
 export const hasWhiteSpace = (str: string) => {
     return str.indexOf(' ') >= 0;
 }
+
+export const getChatsAvatarUrl = (str: string) => {
+    const parts = str.split('//');
+    return parts[1]
+}
+
+export const getChatsDaoName = (str: string) => {
+    const parts = str.split('DAO');
+    return parts[1]
+}

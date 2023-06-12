@@ -127,6 +127,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
           value={daoName}
           setValue={setDaoName}
           placeholder={'Please enter a name'}
+          maxLength={20}
         />
         <TextInputParsedBlock
           title={'DAO description'}

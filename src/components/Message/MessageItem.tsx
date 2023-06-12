@@ -12,7 +12,7 @@ export type Props={
     content?: string
     createdAt?: number
     lastUserName?:string
-    navigationFn?: Function,
+    navigationFn: () => void,
     contentLines?:number
 };
 
@@ -29,7 +29,7 @@ const MessageItem:React.FC<Props> = (props) => {
                     }}
                 />
             </View>
-            <TouchableOpacity style={styles.notifyRight} onPress={()=> navigationFn}>
+            <TouchableOpacity style={styles.notifyRight} onPress={navigationFn}>
                 <View style={[styles.infoTop, styles.flexRC]}>
                     <Text style={styles.name} numberOfLines={1}>{name}</Text>
                     <Text style={styles.time} numberOfLines={1}>{getTime(createdAt as number)}</Text>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         marginVertical: Padding.p_3xs
     },
     notifyBox: {
-        // paddingVertical: 12,
+        paddingHorizontal: 16,
     },
     flexRC: {
         flexDirection: 'row',
