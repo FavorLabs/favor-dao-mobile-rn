@@ -17,6 +17,7 @@ import FirebaseMessaging from "./src/components/FirebaseMessaging";
 import analytics from '@react-native-firebase/analytics';
 import {NavigationState} from "@react-navigation/routers";
 import Favor from "./src/libs/favor";
+import {AppRegistry} from 'react-native';
 
 function App() {
   // AsyncStorage.clear().catch(console.error)
@@ -49,6 +50,9 @@ function App() {
     const nativeEventSubscription = AppState.addEventListener("change", (state) => {
       if (state === 'background') {
         if (Platform.OS === 'ios') RNExitApp.exitApp();
+        else {
+          AppRegistry.startHeadlessTask(1, 'SomeTaskName', {});
+        }
       }
     })
     return () => {
