@@ -18,9 +18,11 @@ import analytics from '@react-native-firebase/analytics';
 import {NavigationState} from "@react-navigation/routers";
 import Favor from "./src/libs/favor";
 import {AppRegistry} from 'react-native';
+import {useKeepAwake} from 'expo-keep-awake'
 
 function App() {
   // AsyncStorage.clear().catch(console.error)
+  useKeepAwake();
   const [fontsLoaded, setFontsLoader] = useState(false);
   const loadFont = async () => {
     SplashScreen.preventAutoHideAsync();
@@ -48,9 +50,11 @@ function App() {
     })
     loadFont().catch(Alert.alert)
     const nativeEventSubscription = AppState.addEventListener("change", (state) => {
+      console.log(state, 1)
       if (state === 'background') {
-        if (Platform.OS === 'ios') RNExitApp.exitApp();
-        else {
+        if (Platform.OS === 'ios') {
+          RNExitApp.exitApp()
+        } else {
           AppRegistry.startHeadlessTask(1, 'SomeTaskName', {});
         }
       }
