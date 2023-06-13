@@ -8,6 +8,8 @@ import { useFocusEffect } from "@react-navigation/native";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import MessageItem from "../../../components/Message/MessageItem";
 import {getChatsAvatarUrl, getChatsDaoName} from "../../../utils/util";
+import {useSelector} from "react-redux";
+import Models from "../../../declare/storeTypes";
 
 type DataList = {
   avatar: string;
@@ -16,11 +18,13 @@ type DataList = {
   lastUserName: string;
   content: string;
   unreadCount: number;
-  daoName: string
+  daoName: string;
+  guid: string;
 }
 
 const ChatScreen = () => {
   const [searchValue, setSearchValue] = useState<string>('');
+  const {user} = useSelector((state: Models) => state.global);
   const limit = 10;
   const [list, setList] = useState<DataList[]>([]);
   // const [searchList, setSearchList] = useState<CometChat.Group[]>([]);
@@ -35,7 +39,7 @@ const ChatScreen = () => {
       .setConversationType('group')
       .withUserAndGroupTags(true)
       .setLimit(limit)
-      .build(),[isRefresh])
+      .build(),[isRefresh,user?.id])
 
   const groupsRequest = useMemo(() =>
     new CometChat.GroupsRequestBuilder()
@@ -61,6 +65,8 @@ const ChatScreen = () => {
           // @ts-ignore
           unreadCount: 0,
           daoName: getChatsDaoName(item.getTags()[0] as string),
+          // @ts-ignore
+          guid: item.guid,
         };
         dataList.push(obj)
       })
@@ -74,6 +80,12 @@ const ChatScreen = () => {
   const getInfo = async (refresh?: boolean) => {
     try {
       const data = await conversationRequest.fetchNext()
+      console.log(data,'getInfo');
+      data.map(item => {
+        if(item.getLastMessage()){
+          console.log(item.getLastMessage(),'lastMessage')
+        }
+      })
       let dataList:DataList[] = [];
       data.map(item => {
         // @ts-ignore
@@ -82,11 +94,13 @@ const ChatScreen = () => {
           avatar: getChatsAvatarUrl(item.getConversationWith().icon),
           name: item.getConversationWith().getName(),
           createdAt: item.getLastMessage() ? item.getLastMessage().updatedAt : 0,
-          lastUserName: item.getLastMessage() ? item.getLastMessage().name : '',
+          lastUserName: item.getLastMessage() && item.getLastMessage().text ? item.getLastMessage().sender.name : '',
           content: item.getLastMessage() ? item.getLastMessage().text : '',
           // @ts-ignore
           unreadCount: item.unreadMessageCount,
           daoName: getChatsDaoName(item.getConversationWith().getTags()[0] as string),
+          // @ts-ignore
+          guid: item.getConversationWith().guid,
         };
         dataList.push(obj)
       })
@@ -114,9 +128,22 @@ const ChatScreen = () => {
     }
   };
 
-  const toChatsDetail = (daoName: string) => {
-    console.log(daoName,'daoName')
+  const toChatsDetail = (item:DataList) => {
+    console.log(item.daoName,'---daoName,',item.guid,'---guid');
+    let messagesRequest = new CometChat.MessagesRequestBuilder()
+      .setGUID(item.guid).setLimit(limit).setType('group').build();
+    messagesRequest.fetchNext().then(
+      messages => {
+        console.log("Message list fetched:", messages);
+      }, error => {
+        console.log("Message fetching failed with error:", error);
+      }
+    );
   }
+
+  useEffect(()=> {
+    if(!user) setSearchValue('');
+  },[user])
 
   useEffect(()=> {
     searchValue ? getSearchInfo(true) : getInfo(true);
@@ -147,7 +174,7 @@ const ChatScreen = () => {
             lastUserName={item.lastUserName}
             content={item.content}
             unreadCount={item.unreadCount}
-            navigationFn={() =>toChatsDetail(item.daoName)}
+            navigationFn={() =>toChatsDetail(item)}
           />}
           keyExtractor={(item, index) => `conversation-${index}`}
           refreshControl={

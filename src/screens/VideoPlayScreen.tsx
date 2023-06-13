@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  Platform
+  Platform, ActivityIndicator
 } from "react-native";
 import VideoDetailButton from "../components/VideoDetailButton";
 import {useNavigation, useRoute} from "@react-navigation/native";
@@ -17,7 +17,7 @@ import {useIsLogin, useResourceUrl, useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
 import {PostInfo} from "../declare/api/DAOApi";
 import {getContent, getTime} from "../utils/util";
-import Video from 'react-native-video';
+import Video, {OnBufferData} from 'react-native-video';
 import {Icon} from "@rneui/themed";
 import Favor from "../libs/favor";
 import SubscribeModal from "../components/SubscribeModal";
@@ -51,6 +51,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
   const [isJoin, setIsJoin] = useState(false);
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
   const [time, setTime] = useState(0)
+  const [videoLoading, setVideoLoading] = useState<boolean>(false);
 
   const playable = useMemo(() => videoData?.member === 0 ? true : videoData?.dao.is_subscribed, [videoData])
 
@@ -175,6 +176,10 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
     setSubModal(false);
   }
 
+  const buffer = (data: OnBufferData) => {
+    setVideoLoading(data.isBuffering)
+  }
+
   if (!videoData) return <View style={styles.loadingContent}><Text style={styles.loading}>loading...</Text></View>;
 
   return (
@@ -188,7 +193,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
           <Icon type={'antdesign'} name={'left'} color={Color.color1}/>
         </Pressable>
 
-        <View style={styles.box}>
+        <View style={[styles.box,videoLoading && {backgroundColor:'rgba(0,0,0,0.5)',zIndex:999}]}>
           <View style={styles.videoBox}>
             {
               !playable &&
@@ -197,6 +202,11 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
                 }} style={styles.playIcon}>
                     <Icon name={'play-circle'} type={'feather'} color={'#fff'} size={50}/>
                 </Pressable>
+            }
+            {videoLoading &&
+            <View style={styles.videoLoading}>
+              <ActivityIndicator size={"large"}/>
+            </View>
             }
             <Video
               style={styles.video}
@@ -213,6 +223,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
                 Orientation.lockToPortrait();
                 fullScreenRef.current = false;
               }}
+              onBuffer={buffer}
             />
           </View>
         </View>
@@ -308,6 +319,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 2
+  },
+  videoLoading: {
+    height: 238,
+    position: 'absolute',
+    top: '46%',
+    left:0,
+    right:0,
+    bottom: 0,
+    zIndex: 999,
+    backgroundColor:'rgba(0,0,0,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   video: {
     marginTop: '48%',

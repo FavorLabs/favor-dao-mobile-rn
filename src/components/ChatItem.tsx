@@ -15,9 +15,9 @@ import {h64} from "xxhashjs";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import Screens from "../navigation/RouteNames";
 import navigation from "../navigation";
-import {useNavigation} from "@react-navigation/native";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
 import DaoApi from "../services/DAOApi/Dao";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useUrl} from "../utils/hook";
 
 type Props = {
@@ -29,27 +29,44 @@ type Props = {
 const ChatItem: React.FC<Props> = (props) => {
   const { daoInfo, setIsShow, isJoin } = props;
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const toFeedsOfDao = async () => {
+    console.log(isLoading)
+    if(isLoading) return ;
     if(isJoin === false){
       return Toast.show({
         type:'info',
         text1: 'You need to join this dao to enter the chat!!!'
       })
     }
-    const str = `${Favor.bucket?.Settings.TagRegion.split('_')[1]}-${Favor.networkId}-group_${daoInfo.id}`
-    const guid = h64(Buffer.from(str), 0).toString()
-    const group = await CometChat.getGroup(guid)
-    // @ts-ignore
-    navigation.navigate(Screens.Main.Chat, {
-      group,
-      time: Date.now()
-    })
-    if(setIsShow) setIsShow(false)
+    setIsLoading(true);
+    try {
+      const str = `${Favor.bucket?.Settings.TagRegion.split('_')[1]}-${Favor.networkId}-group_${daoInfo.id}`
+      const guid = h64(Buffer.from(str), 0).toString()
+      const group = await CometChat.getGroup(guid)
+      // @ts-ignore
+      await navigation.navigate(Screens.Main.Chat, {
+        group,
+        time: Date.now()
+      })
+      if(setIsShow) setIsShow(false)
+    } catch (e) {
+      if(e instanceof Error) {
+        Toast.show({
+          type:'error',
+          text1: e.message
+        })
+      }
+    }
   }
 
+  useFocusEffect(useCallback(()=> {
+    setIsLoading(false);
+  },[]))
+
   return (
-    <TouchableOpacity onPress={getDebounce(toFeedsOfDao)}>
+    <TouchableOpacity onPress={toFeedsOfDao}>
     <View style={[styles.notificationParent, styles.parentFlexBox]}>
       <View style={styles.notification}>
         <Text style={styles.title}>G</Text>

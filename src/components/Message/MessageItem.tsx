@@ -35,20 +35,14 @@ const MessageItem:React.FC<Props> = (props) => {
                     <Text style={styles.time} numberOfLines={1}>{getTime(createdAt as number)}</Text>
                 </View>
                 <View style={styles.flexRC}>
-                    <Text style={styles.content} numberOfLines={lastUserName?  1 : contentLines }>
-                        {
-                            <Text style={styles.name} numberOfLines={1}>{lastUserName}</Text>
-                        }
-                        {
-                            lastUserName && ":"
-                        }
-                        {
-                            content
-                        }
-                    </Text>
+                    <View style={styles.content}>
+                        <Text style={styles.lastName} numberOfLines={1}>{lastUserName}</Text>
+                        <Text style={styles.colon}>{lastUserName && ":"}</Text>
+                        <Text style={styles.lastContent} numberOfLines={contentLines?contentLines:1}>{content}</Text>
+                    </View>
                     <View style={styles.flexRC}>
                         {
-                            !!unreadCount && <Text style={styles.unReadCount}>
+                            !!unreadCount && <Text style={styles.unReadCount} numberOfLines={1}>
                                 +{unreadCount}
                             </Text>
                         }
@@ -125,7 +119,7 @@ const styles = StyleSheet.create({
     },
     flexRC: {
         flexDirection: 'row',
-        alignItems: "center"
+        alignItems: "center",
     },
     notifyLeft: {
         marginRight: Padding.p_5xs,
@@ -165,13 +159,25 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        overflow: "hidden",
-        fontWeight: '400',
-        fontSize: FontSize.size_mid,
-        lineHeight: 23,
-        letterSpacing: -0.4,
-        color: Color.iOSSystemTintsDisableLight,
-        marginRight: 10
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    lastName: {
+      fontSize: FontSize.size_mini,
+      fontWeight: "500",
+      color: '#3c3c3c',
+    },
+    colon: {
+        fontSize: FontSize.size_sm,
+        fontWeight: "400",
+        color: 'rgba(60,60,60,0.6)',
+        marginHorizontal: 3,
+    },
+    lastContent: {
+        fontSize: FontSize.size_sm,
+        fontWeight: "400",
+        color: 'rgba(60,60,60,0.6)',
+        flex:1,
     },
     unReadCount: {
         backgroundColor: Color.color,
