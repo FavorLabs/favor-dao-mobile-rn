@@ -8,7 +8,7 @@ import Back from "./Back";
 import DAOInfo from "./DAOInfo";
 import BtnChatToggle from "./BtnChatToggle";
 import {Color, Padding} from "../GlobalStyles";
-import {useNavigation} from "@react-navigation/native";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
 import {DaoInfo, Post} from "../declare/api/DAOApi";
 import {useIsLogin, useResourceUrl, useUrl} from "../utils/hook";
 import {getContent, getDebounce, getTime} from "../utils/util";
@@ -17,7 +17,7 @@ import Favor from "../libs/favor";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import Screens from "../navigation/RouteNames";
 import Toast from "react-native-toast-message";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
 type Props = {
@@ -31,6 +31,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
     const navigation = useNavigation();
     const [isLogin, gotoLogin] = useIsLogin();
     const [isJoin,setIsJoin] = useState<boolean>(daoInfo.is_joined);
+    const [isLoading, setIsLoading] = useState(false);
 
     const imagesResUrl = useResourceUrl('images');
 
@@ -40,12 +41,14 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
 
     const toFeedsOfDao = async () => {
         if (!isLogin) return gotoLogin();
+        if(isLoading) return;
         if(!isJoin){
             return Toast.show({
                 type:'info',
                 text1: 'You need to join this dao to enter the chat!!!'
             })
         }
+        setIsLoading(true);
         const str = `${Favor.bucket?.Settings.TagRegion.split('_')[1]}-${Favor.networkId}-group_${daoInfo.id}`
         const guid = h64(Buffer.from(str), 0).toString()
         const group = await CometChat.getGroup(guid)
@@ -55,6 +58,10 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
             time: Date.now()
         })
     }
+
+    useFocusEffect(useCallback(()=> {
+        setIsLoading(false);
+    },[]))
 
     return (
       <ImageBackground
@@ -71,7 +78,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
 
               {
                   isShowBtnChatToggle ?
-                    <TouchableOpacity onPress={getDebounce(toFeedsOfDao)}>
+                    <TouchableOpacity onPress={toFeedsOfDao}>
                         <BtnChatToggle/>
                     </TouchableOpacity>
                     : <View></View>
