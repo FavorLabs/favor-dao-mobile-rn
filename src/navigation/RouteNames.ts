@@ -31,6 +31,9 @@ const Screens = {
   Complaint:'Complaint',
   Notifications:'Notifications',
   ClaimDetails: 'ClaimDetails',
+  ChatInDAO:'ChatInDAO',
+  RedEnvelopes:'RedEnvelopes',
+  LuckyPacketRecord:'LuckyPacketRecord'
 }
 
 export default Screens;
