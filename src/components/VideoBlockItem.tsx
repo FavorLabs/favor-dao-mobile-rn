@@ -7,7 +7,7 @@ import {getContent} from "../utils/util";
 import RowUser from "./RowUser";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
-import {useEffect} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 type Props = {
   postInfo: PostInfo
@@ -20,23 +20,29 @@ const VideoBlockItem: React.FC<Props> = (props) => {
   const { postInfo, isReTransfer, isQuote ,showOperate} = props;
   const { contents, orig_contents, created_on, dao, author_dao, origCreatedAt } = props.postInfo;
   const imagesResUrl = useResourceUrl('images');
+  const [isSubscribedStatus,setIsSubscribedStatus] =useState(false);
   const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
   const navigation = useNavigation();
   const [isLogin, gotoLogin] = useIsLogin();
 
+  const memberStatus = useMemo(()=> isReTransfer || isQuote ? postInfo.orig_member : postInfo.member ,[])
+
   const toVideoDetail = () => {
-    if(postInfo.member === 1) {
-      if(isLogin) {
-        // @ts-ignore
-        navigation.navigate(Screens.VideoPlay,{ postId: isQuote ? postInfo.ref_id : postInfo.id});
-      } else {
-        gotoLogin();
-      }
-    } else {
+    if(isLogin) {
       // @ts-ignore
       navigation.navigate(Screens.VideoPlay,{ postId: isQuote ? postInfo.ref_id : postInfo.id});
+    } else {
+      gotoLogin();
     }
   }
+  useEffect(()=>{
+    if (isReTransfer || isQuote){
+      setIsSubscribedStatus(postInfo.author_dao.is_subscribed)
+    }else {
+      setIsSubscribedStatus(postInfo.dao.is_subscribed)
+    }
+  },[])
+
   return (
     <View style={[styles.rowUserParent, {backgroundColor: isQuote || isReTransfer ? '#eaeaea' : '#fff'}]}>
       <RowUser
@@ -60,14 +66,14 @@ const VideoBlockItem: React.FC<Props> = (props) => {
             source={{uri:`${imagesResUrl}/${info?.[3]?.[0]?.content}`}}
           />
 
-          { (postInfo.member === 1 || isReTransfer || isQuote) &&
+          { memberStatus === 1  &&
             <View style={styles.rectangleParent}>
               <View style={styles.subtitleParent}>
-                <Text style={styles.subtitle}>{ isReTransfer? postInfo.author_dao.is_subscribed ? 'Unlock' : 'Locked' : postInfo.dao.is_subscribed ? 'Unlock' : 'Locked' }</Text>
+                <Text style={styles.subtitle}>{ isSubscribedStatus ?  'Unlock' : 'Locked'  } </Text>
                 <Image
                   style={styles.lockIcon}
                   resizeMode="cover"
-                  source={isReTransfer? postInfo.author_dao.is_subscribed ? require("../assets/unlock.png") : require("../assets/lock.png") : postInfo.dao.is_subscribed ? require("../assets/unlock.png") : require("../assets/lock.png") }
+                  source={isSubscribedStatus ? require("../assets/unlock.png") : require("../assets/lock.png") }
                 />
               </View>
             </View>
