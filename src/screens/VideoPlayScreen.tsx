@@ -75,6 +75,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
         if (videoData.author_dao.id) setIsReTransfer(true);
         if (videoData.member !== 0 && !videoData.dao.is_subscribed) setSubModal(true);
         setTime(videoData.author_dao.id ? videoData.origCreatedAt : videoData.created_on)
+        console.log(videoData,'videoData')
       }
     } catch (e) {
       Toast.show({
@@ -90,6 +91,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
   const info = useMemo(() => {
     if (!videoData) return {};
     const obj = getContent(videoData.type === 2 || videoData.type === 3 ? videoData.orig_contents : videoData.contents);
+    console.log(obj,'obj')
     return {
       title: obj[1][0].content,
       description: obj[2][0].content,
@@ -199,7 +201,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
               !playable &&
                 <Pressable onPress={() => {
                   setSubModal(true)
-                }} style={styles.playIcon}>
+                }} style={styles.videoLoading}>
                     <Icon name={'play-circle'} type={'feather'} color={'#fff'} size={50}/>
                 </Pressable>
             }
@@ -211,7 +213,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
             <Video
               style={styles.video}
               source={{
-                uri: `${Favor.api}/file/${info.hash}`
+                uri: info.hash? `${Favor.api}/file/${info.hash} ` :''
               }}
               controls={true}
               resizeMode="contain"
@@ -318,7 +320,7 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 2
+    zIndex: 2,
   },
   videoLoading: {
     height: 238,
