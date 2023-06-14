@@ -38,6 +38,7 @@ import analytics from "@react-native-firebase/analytics";
 import {Platform} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import {getDAOInfo} from "../utils/util";
+import ClaimDetails from "../screens/Main/Chat/ClaimDetails";
 
 const Stack = createStackNavigator();
 
@@ -127,6 +128,7 @@ function RootStack() {
               <Stack.Screen name={Screens.UserAgreement} component={UserAgreementScreen}/>
               <Stack.Screen name={Screens.Complaint} component={ComplaintScreen}/>
               <Stack.Screen name={Screens.Notifications} component={NotificationsScreen}/>
+              <Stack.Screen name={Screens.ClaimDetails} component={ClaimDetails}/>
           </Stack.Navigator>
           <Loading visible={visible} text={'Connecting to a p2p network'}/>
       </>
