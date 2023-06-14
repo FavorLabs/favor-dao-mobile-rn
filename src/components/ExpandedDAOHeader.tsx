@@ -23,11 +23,12 @@ import {useSafeAreaInsets} from "react-native-safe-area-context";
 type Props = {
     daoInfo: DaoInfo;
     isShowBtnChatToggle?: boolean;
+    isShowJoined?:boolean;
 };
 
 const ExpandedDAOHeader: React.FC<Props> = (props) => {
     const { top } = useSafeAreaInsets();
-    const {daoInfo, isShowBtnChatToggle = true} = props;
+    const {daoInfo, isShowBtnChatToggle = true, isShowJoined = true } = props;
     const navigation = useNavigation();
     const [isLogin, gotoLogin] = useIsLogin();
     const [isJoin,setIsJoin] = useState<boolean>(daoInfo.is_joined);
@@ -74,7 +75,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
                   <Back/>
               </TouchableOpacity>
 
-              <DAOInfo daoInfo={daoInfo} joinStatus={isJoin} setJoinStatus={setIsJoin}/>
+              <DAOInfo daoInfo={daoInfo} joinStatus={isJoin} setJoinStatus={setIsJoin} isShowJoined={isShowJoined}/>
 
               {
                   isShowBtnChatToggle ?

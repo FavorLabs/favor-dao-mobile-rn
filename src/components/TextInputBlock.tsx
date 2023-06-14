@@ -10,6 +10,7 @@ type TextInputBlockType = React.ComponentProps<typeof TextInput> & {
     height?: number
     disable?:boolean
     username?:string
+    AdditionalInformation?:string
 }
 
 const TextInputBlock = (props: TextInputBlockType) => {
@@ -21,6 +22,7 @@ const TextInputBlock = (props: TextInputBlockType) => {
         height = 100,
         username,
         disable,
+        AdditionalInformation,
         ...inputProps
     } = props;
     const disableStatus = ()=>{
@@ -34,7 +36,9 @@ const TextInputBlock = (props: TextInputBlockType) => {
     return (
 
       <View style={[styles.createWalletInner, !title && {marginTop: -10} ]}>
-          <Text style={styles.title}>{title}</Text><Text style={[styles.title,styles.username]}>{username}</Text>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={[styles.title,styles.username]}>{username}</Text>
+          <Text style={styles.AdditionalInformation}>{AdditionalInformation}</Text>
           <TextInput
             style={[styles.input, inputProps.multiline && {height: height,textAlignVertical: 'top'}]}
             value={value}
@@ -49,6 +53,10 @@ const TextInputBlock = (props: TextInputBlockType) => {
 };
 
 const styles = StyleSheet.create({
+    AdditionalInformation:{
+        fontSize:13,
+        color:'#939393'
+    },
     title: {
         textAlign: "left",
         lineHeight: 23,

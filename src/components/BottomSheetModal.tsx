@@ -12,8 +12,9 @@ export type Props = {
   isPadding?: boolean
   children?: React.ReactNode
   height?: number | string
+  bgColor?:string
 }
-const BottomSheetModal = ({visible, setVisible, isPadding = true, children, height}: Props) => {
+const BottomSheetModal = ({bgColor,visible, setVisible, isPadding = true, children, height}: Props) => {
   const insets = useSafeAreaInsets();
   const safeStyle = {
     marginLeft: insets.left,
@@ -33,7 +34,9 @@ const BottomSheetModal = ({visible, setVisible, isPadding = true, children, heig
           <View style={[
             styles.content,
             {paddingBottom: insets.bottom},
-            !!height && {height: height},
+            !!height && {height: height},{
+            backgroundColor: bgColor ? bgColor :'#fff'
+            }
           ]}>
             <TouchableOpacity style={styles.closeBox} onPress={close}>
               <SvgIcon svg={<CloseSvg/>} width={25} height={25}/>

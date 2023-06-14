@@ -33,6 +33,9 @@ import ChangePasswordScreen from "../screens/ChangePasswordScreen";
 import UserAgreementScreen from "../screens/UserAgreementScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import ComplaintScreen from "../screens/ComplaintScreen";
+import ChatInDAOScreen from "../screens/Main/Chat/ChatInDAOScreen";
+import RedEnvelopesScreen from '../screens/Main/Chat/RedEnvelopesScreen'
+import LuckyPacketRecordScreen from "../screens/Main/Chat/LuckyPacketRecordScreen";
 import Toast from "react-native-toast-message";
 import analytics from "@react-native-firebase/analytics";
 import {Platform} from "react-native";
@@ -127,6 +130,9 @@ function RootStack() {
               <Stack.Screen name={Screens.ChangePassword} component={ChangePasswordScreen}/>
               <Stack.Screen name={Screens.UserAgreement} component={UserAgreementScreen}/>
               <Stack.Screen name={Screens.Complaint} component={ComplaintScreen}/>
+              <Stack.Screen name={Screens.ChatInDAO} component={ChatInDAOScreen}/>
+              <Stack.Screen name={Screens.RedEnvelopes} component={RedEnvelopesScreen}/>
+              <Stack.Screen name={Screens.LuckyPacketRecord} component={LuckyPacketRecordScreen}/>
               <Stack.Screen name={Screens.Notifications} component={NotificationsScreen}/>
               <Stack.Screen name={Screens.ClaimDetails} component={ClaimDetails}/>
           </Stack.Navigator>

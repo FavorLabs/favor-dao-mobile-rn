@@ -14,12 +14,13 @@ type Props = {
   daoInfo: DaoInfo;
   joinStatus: boolean;
   setJoinStatus: (a:boolean) => void;
+  isShowJoined?:boolean
 };
 
 const DAOInfo: React.FC<Props> = (props) => {
   const url = useUrl();
   const [isLogin, gotoLogin] = useIsLogin();
-  const { daoInfo, joinStatus, setJoinStatus } = props;
+  const { daoInfo, joinStatus, setJoinStatus ,isShowJoined = true } = props;
   const avatarsResUrl = useResourceUrl('avatars');
   const { dao } = useSelector((state: Models) => state.global);
   // const [joinStatus, setJoinStatus] = useState<boolean>(false);
@@ -62,7 +63,7 @@ const DAOInfo: React.FC<Props> = (props) => {
         daoInfo ?
           <>
             <Image
-              style={styles.userImageIcon}
+              style={[styles.userImageIcon,{marginLeft:isShowJoined?0:'20%'}]}
               resizeMode="cover"
               source={{uri: `${avatarsResUrl}/${daoInfo.avatar}`}}
             />
@@ -71,7 +72,7 @@ const DAOInfo: React.FC<Props> = (props) => {
               <Text style={styles.subtitle} numberOfLines={1}>{daoInfo.follow_count} members</Text>
             </View>
             {
-              dao?.id !== daoInfo.id &&
+              dao?.id !== daoInfo.id && isShowJoined &&
                 <JoinButton isJoin={joinStatus} handle={bookmarkHandle} isLoading={btnLoading}/>
             }
           </>
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   daoinfo: {
     width: '55%',
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center"
   },
 });
 
