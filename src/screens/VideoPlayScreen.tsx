@@ -213,7 +213,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
             <Video
               style={styles.video}
               source={{
-                uri: info.hash? `${Favor.api}/file/${info.hash} ` :''
+                uri: info.hash? `${Favor.api}/file/${info.hash}` :''
               }}
               controls={true}
               resizeMode="contain"
