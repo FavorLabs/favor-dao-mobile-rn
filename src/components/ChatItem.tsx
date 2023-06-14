@@ -4,21 +4,17 @@ import {
   StyleSheet,
   Text,
   View,
-  ImageSourcePropType, TouchableOpacity,
+  TouchableOpacity,
 } from "react-native";
-import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
-import {getDebounce} from "../utils/util";
+import { Color, FontSize, Border } from "../GlobalStyles";
 import {DaoInfo} from "../declare/api/DAOApi";
 import Toast from "react-native-toast-message";
 import Favor from "../libs/favor";
 import {h64} from "xxhashjs";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import Screens from "../navigation/RouteNames";
-import navigation from "../navigation";
 import {useFocusEffect, useNavigation} from "@react-navigation/native";
-import DaoApi from "../services/DAOApi/Dao";
-import {useCallback, useEffect, useState} from "react";
-import {useUrl} from "../utils/hook";
+import {useCallback, useState} from "react";
 
 type Props = {
   daoInfo: DaoInfo;

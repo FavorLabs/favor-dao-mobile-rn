@@ -29,7 +29,8 @@ const Screens = {
   ChangePassword: 'ChangePassword',
   UserAgreement: 'UserAgreement',
   Complaint:'Complaint',
-  Notifications:'Notifications'
+  Notifications:'Notifications',
+  ClaimDetails: 'ClaimDetails',
 }
 
 export default Screens;
