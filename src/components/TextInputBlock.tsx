@@ -38,7 +38,7 @@ const TextInputBlock = (props: TextInputBlockType) => {
       <View style={[styles.createWalletInner, !title && {marginTop: -10} ]}>
           <Text style={styles.title}>{title}</Text>
           <Text style={[styles.title,styles.username]}>{username}</Text>
-          <Text style={styles.AdditionalInformation}>{AdditionalInformation}</Text>
+          <Text style={[styles.AdditionalInformation,{display:AdditionalInformation?'flex':'none'}]}>{AdditionalInformation}</Text>
           <TextInput
             style={[styles.input, inputProps.multiline && {height: height,textAlignVertical: 'top'}]}
             value={value}

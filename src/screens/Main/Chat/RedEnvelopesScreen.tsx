@@ -4,8 +4,12 @@ import { Padding, Color, FontFamily, FontSize, Border } from "../../../GlobalSty
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import {RETabs} from "./RedEnvelopesTab/RETabs";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
+import {useRoute} from "@react-navigation/native";
 
 const RedEnvelopesScreen = () => {
+    const route = useRoute();
+    // @ts-ignore
+    const { memberCount, sendCustomMessage} = route.params;
     return (
         <BackgroundSafeAreaView headerStyle={{backgroundColor:'#F8F8F8'}}>
             <View style={styles.header}>
@@ -16,7 +20,7 @@ const RedEnvelopesScreen = () => {
             </View>
                 <View style={styles.content}>
                     <View style={styles.feedsOfDao}>
-                        <RETabs/>
+                        <RETabs memberCount={memberCount} sendCustomMessage={sendCustomMessage}/>
                     </View>
                 </View>
         </BackgroundSafeAreaView>

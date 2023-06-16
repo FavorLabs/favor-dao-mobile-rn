@@ -115,6 +115,8 @@ class WalletController {
             msg = `${address} subscribe DAO at ${timestamp}`;
         } else if (type === 2) {
             msg = `delete ${address} account at ${timestamp}`;
+        } else if (type === 3) {
+            msg = `${address} Create Redpacket at ${timestamp}`;
         }
         const signature = this.signMessage(msg, privateKey);
         return {
