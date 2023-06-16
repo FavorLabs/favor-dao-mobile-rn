@@ -54,3 +54,33 @@ export declare type ChunkSource = {
   len: number;
   chunkSource: Chunk[];
 };
+
+export declare type Topology = {
+  baseAddr?: string;
+  population?: number;
+  connected?: number;
+  timestamp?: Date;
+  nnLowWatermark?: number;
+  depth?: number;
+  bins?: Record<
+    string,
+    {
+      population?: number;
+      connected?: number;
+      disconnectedPeers?: null | string[];
+      connectedPeers?: null | string[];
+    }
+  >;
+  bootNodes?: {
+    connected: number;
+    connectedPeers: null | Peers;
+    disconnectedPeers: null | Peers;
+    population: number;
+  };
+  lightNodes?: {
+    connected: number;
+    connectedPeers: null | Peers;
+    disconnectedPeers: null | Peers;
+    population: number;
+  };
+};

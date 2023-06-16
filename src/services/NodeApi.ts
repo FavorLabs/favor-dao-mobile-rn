@@ -5,6 +5,7 @@ import type {
   ApiPort,
   Addresses,
   FileList,
+  Topology
 } from '../declare/api/nodeApi';
 import {ChunkSource} from '../declare/api/nodeApi';
 import * as FileSystem from "expo-file-system";
@@ -106,4 +107,9 @@ export default {
       url: debugApi + '/chunk/source/' + hash,
     });
   },
+  getTopology(debugApi: string): Promise<AxiosResponse<Topology>> {
+    return request({
+      url: debugApi + '/topology',
+    });
+  }
 };

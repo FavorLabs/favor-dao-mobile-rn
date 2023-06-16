@@ -17,8 +17,10 @@ import FirebaseMessaging from "./src/components/FirebaseMessaging";
 import analytics from '@react-native-firebase/analytics';
 import {NavigationState} from "@react-navigation/routers";
 import Favor from "./src/libs/favor";
-import {AppRegistry} from 'react-native';
 import {useKeepAwake} from 'expo-keep-awake'
+import BackgroundService from 'react-native-background-actions';
+import {sleep} from "./src/utils/util";
+import {Color} from "./src/GlobalStyles";
 
 function App() {
   // AsyncStorage.clear().catch(console.error)
@@ -45,24 +47,51 @@ function App() {
   }
 
   useEffect(() => {
-    analytics().logEvent('app_open', {
-      platform: Platform.OS
-    })
-    loadFont().catch(Alert.alert)
+    async function fetch() {
+      await loadFont().catch(Alert.alert);
+      analytics().logEvent('app_open', {
+        platform: Platform.OS
+      })
+      if (Platform.OS === 'android') startService();
+    }
+
+    fetch();
     const nativeEventSubscription = AppState.addEventListener("change", (state) => {
-      console.log(state, 1)
       if (state === 'background') {
         if (Platform.OS === 'ios') {
           RNExitApp.exitApp()
-        } else {
-          AppRegistry.startHeadlessTask(1, 'SomeTaskName', {});
         }
       }
     })
-    return () => {
-      nativeEventSubscription.remove();
-    }
+    return nativeEventSubscription.remove;
   }, [])
+
+  const veryIntensiveTask = async (taskDataArguments: any) => {
+    const {delay} = taskDataArguments;
+    await new Promise(async (resolve) => {
+      for (let i = 0; BackgroundService.isRunning(); i++) {
+        await sleep(delay);
+      }
+    });
+  };
+
+  const startService = async () => {
+    const options = {
+      taskName: 'FavorDAO',
+      taskTitle: 'FavorX Light Node Running',
+      taskDesc: "Full Peers : 0, Proxy : 0",
+      taskIcon: {
+        name: 'ic_launcher',
+        type: 'mipmap',
+      },
+      linkingURI: 'favordao://',
+      color: Color.color,
+      parameters: {
+        delay: 1000,
+      },
+    };
+    await BackgroundService.start(veryIntensiveTask, options);
+  }
 
   function getCurrentRouteName(state: NavigationState): { name: string, params: Object } {
     if (!state) {

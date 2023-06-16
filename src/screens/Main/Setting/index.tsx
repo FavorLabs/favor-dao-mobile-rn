@@ -10,6 +10,7 @@ import DAOManagementContainer from "../../../components/DAOManagementContainer";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
+import VPNSetting from "../../../components/VPNSetting";
 // import ServiceComponent from "../../../components/ServiceComponent";
 // import PromotionTasks from "../../../components/PromotionTasks";
 
@@ -44,6 +45,9 @@ const SettingScreen: React.FC<Props> = (props) => {
           </View>
           <View style={styles.settings1}>
             <BalanceBackContainer/>
+            <View style={styles.settingpannel}>
+              <VPNSetting />
+            </View>
             <View style={styles.settingpannel}>
               <DAOManagementContainer/>
               {/*<ServiceComponent />*/}
