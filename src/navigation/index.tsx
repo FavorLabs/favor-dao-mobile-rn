@@ -55,6 +55,7 @@ function RootStack() {
   const [routeName, setRouteName] = useState(Screens.StartNode);
   const fullCount = useRef(0)
   const proxyCount = useRef(0)
+  let timer = useRef<NodeJS.Timer | null>(null);
 
   useEffect(() => {
     if (start) {
@@ -70,26 +71,34 @@ function RootStack() {
 
   useEffect(() => {
     async function fetch() {
-      if (firstLoad && !requestLoading) {
-        try {
-          await Favor.getBucket();
-          analytics().logEvent('favorDAO_open', {
-            platform: Platform.OS,
-            networkId: Favor.networkId,
-            region: Favor.bucket?.Settings.Region
-          });
-          if (WalletController.token) {
-            await getDAOInfo(dispatch);
+      if (!requestLoading) {
+        if (firstLoad) {
+          try {
+            await Favor.getBucket();
+            analytics().logEvent('favorDAO_open', {
+              platform: Platform.OS,
+              networkId: Favor.networkId,
+              region: Favor.bucket?.Settings.Region
+            });
+            if (WalletController.token) {
+              await getDAOInfo(dispatch);
+            }
+          } catch (e) {
+            if (e instanceof Error) {
+              Toast.show({
+                type: "error",
+                text1: e.message
+              })
+            }
           }
-        } catch (e) {
-          if (e instanceof Error) {
-            Toast.show({
-              type: "error",
-              text1: e.message
-            })
-          }
+          setFirstLoad(false);
+        } else {
+          if (timer.current) clearTimeout(timer.current);
         }
-        setFirstLoad(false);
+      } else if (requestLoading && !firstLoad) {
+        timer.current = setInterval(() => {
+          Favor.observeProxyGroup();
+        }, 2000)
       }
     }
 
@@ -151,7 +160,7 @@ function RootStack() {
         <Stack.Screen name={Screens.Notifications} component={NotificationsScreen}/>
         <Stack.Screen name={Screens.ClaimDetails} component={ClaimDetails}/>
       </Stack.Navigator>
-      <Loading visible={visible} text={'Connecting to a p2p network'}/>
+      <Loading visible={visible} text={'Connecting to a p2p network'} timeout={7000}/>
     </>
   );
 }
