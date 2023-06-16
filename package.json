@@ -62,7 +62,7 @@
     "react-native-elements": "^3.4.3",
     "react-native-exit-app": "^1.1.0",
     "react-native-fast-image": "^8.6.3",
-    "react-native-favor": "https://github.com/FavorLabs/react-native-favor.git#vpn",
+    "react-native-favor": "https://github.com/FavorLabs/react-native-favor.git",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-get-random-values": "^1.8.0",

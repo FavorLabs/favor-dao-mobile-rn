@@ -57,11 +57,11 @@ function App() {
 
     fetch();
     const nativeEventSubscription = AppState.addEventListener("change", (state) => {
-      if (state === 'background') {
-        if (Platform.OS === 'ios') {
-          RNExitApp.exitApp()
-        }
-      }
+      // if (state === 'background') {
+      //   if (Platform.OS === 'ios') {
+      //     RNExitApp.exitApp()
+      //   }
+      // }
     })
     return nativeEventSubscription.remove;
   }, [])
@@ -79,7 +79,7 @@ function App() {
     const options = {
       taskName: 'FavorDAO',
       taskTitle: 'FavorX Light Node Running',
-      taskDesc: "Full Peers : 0, Proxy : 0",
+      taskDesc: "Full Peers : 0 | Proxy : 0",
       taskIcon: {
         name: 'ic_launcher',
         type: 'mipmap',

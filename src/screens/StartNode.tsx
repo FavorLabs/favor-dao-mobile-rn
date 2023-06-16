@@ -44,7 +44,7 @@ const StartNode = () => {
 
   useEffect(() => {
     getVersion();
-    IS_TEST ? getConfig() : getConfigStartNode();
+    IS_TEST === 'true' ? getConfig() : getConfigStartNode();
   }, [])
   const getConfigStartNode = async () => {
     setVisible(true);
