@@ -92,7 +92,7 @@ const ChatInDAOScreen = () => {
             <FlatList
               // ref={flatListRef}
               data={messageList}
-              renderItem={({item})=><ChatNameBox showTime={true} messageInfo={item}/>}
+              renderItem={({item})=><ChatNameBox messageInfo={item}/>}
               // @ts-ignore
               keyExtractor={(item) => item.getId()}
               inverted={true}

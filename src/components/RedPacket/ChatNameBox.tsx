@@ -7,12 +7,10 @@ import {useSelector} from "react-redux";
 import Models from "../../declare/storeTypes";
 import {useResourceUrl} from "../../utils/hook";
 export type Props = {
-  isUser?:boolean,
-  showTime:boolean,
-  messageInfo: CometChat.BaseMessage
+  messageInfo: CometChat.BaseMessage;
 };
 const ChatNameBox: React.FC<Props> = (props) => {
-  const {isUser, showTime, messageInfo} = props;
+  const { messageInfo } = props;
 
   const avatarsResUrl = useResourceUrl('avatars');
   const {user} = useSelector((state: Models) => state.global);
@@ -50,8 +48,8 @@ const ChatNameBox: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
+
       {
-        showTime &&
         // @ts-ignore
           <Text style={styles.time}>{getTime(Number(messageInfo.updatedAt))}</Text>
       }
@@ -67,7 +65,7 @@ const ChatNameBox: React.FC<Props> = (props) => {
                   <Text style={styles.name}>{messageInfo.getSender().getName()}</Text>
                 </View>
                 <View style={styles.msgbox}>
-                  <ChatMsgItem msgType={1} type={messageInfoType} messageInfo={messageInfo}/>
+                  <ChatMsgItem type={messageInfoType} messageInfo={messageInfo}/>
                 </View>
               </>
               :
@@ -81,7 +79,7 @@ const ChatNameBox: React.FC<Props> = (props) => {
                 </View>
                 <View style={styles.msgboxIsMine}>
                   <View style={styles. msgboxIsMineBox}>
-                    <ChatMsgItem msgType={1} isUser={true} type={messageInfoType} messageInfo={messageInfo} isMy={true}/>
+                    <ChatMsgItem isUser={true} type={messageInfoType} messageInfo={messageInfo} isMy={true}/>
                   </View>
                 </View>
               </>

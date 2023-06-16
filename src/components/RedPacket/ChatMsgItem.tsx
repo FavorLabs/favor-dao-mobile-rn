@@ -1,31 +1,62 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Video from 'react-native-video';
-import {useResourceUrl} from "../../utils/hook";
+import {useResourceUrl, useUrl} from "../../utils/hook";
 import LinearGradient from 'react-native-linear-gradient';
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import SvgIcon from "../SvgIcon";
 import FileDownloadSvg from "../../assets/svg/file-down-svg.svg";
 import {Color} from "../../GlobalStyles";
+import RedPacketApi from "../../services/RedpacketApi";
+import {RedPacketInfo} from "../../declare/api/RedapacketApi";
 
 export type Props = {
-  msgType: number,
   isUser?: boolean,
-  contextData?: string,
-  openStatus?: boolean,
   type?: string,
   messageInfo?: CometChat.BaseMessage,
   isMy?: boolean,
 };
 
 const ChatMsgItem: React.FC<Props> = (props) => {
+  const url = useUrl();
   const avatarsResUrl = useResourceUrl('avatars');
-  const {msgType, isUser, contextData, openStatus, type, messageInfo, isMy} = props;
+  const { isUser, type, messageInfo, isMy } = props;
   const [videoPlay,setVideoPlay] = useState(true);
+  const [redStatus,setRedStatus] = useState(2);
 
   const VideoClick = () => {
     setVideoPlay(!videoPlay);
   };
+
+  const clickRedPacket = () => {
+    if(redStatus === 0 ) {
+
+    } else if (redStatus === 1) {
+
+    } else {
+
+    }
+  };
+
+  const getRedPacketStatus = async () => {
+    try {
+      // @ts-ignore
+      const { data } = await RedPacketApi.getRedPacketInfo(url,messageInfo.customData.id);
+      const redPacket: RedPacketInfo = data.data;
+      if(redPacket.total === Number(redPacket.claim_count) || Number(redPacket.claim_amount) > 0) return setRedStatus(1);
+      return setRedStatus(2);
+    } catch (e) {
+      if(e instanceof Error) {
+        console.log(e.message)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if(type === 'redPacket') {
+      getRedPacketStatus();
+    }
+  },[])
 
   // @ts-ignore
   return (
@@ -105,15 +136,15 @@ const ChatMsgItem: React.FC<Props> = (props) => {
       }
       {
         type === 'redPacket' &&
-          <TouchableOpacity>
+          <TouchableOpacity onPress={clickRedPacket} style={[styles.redPacket,styles.BDRmax]}>
               <LinearGradient start={{x: 0.0, y: 0}} end={{x: 1, y: 0}}
                               colors={['#FF8D1A', '#FF5530']}
-                              style={[styles.redPacket, styles.BDRmax, {opacity: openStatus ? 0.7 : 1}, {
-                                height: openStatus ? 88 : 79
+                              style={[styles.redPacket, styles.BDRmax, {opacity: redStatus !== 2 ? 0.7 : 1}, {
+                                height: 79
                               }]}>
                   <View style={styles.RPContainer}>
                     {
-                      !openStatus &&
+                      redStatus === 2 &&
                         <View style={styles.RPClose}>
                             <View style={styles.Abserlut}></View>
                             <View style={styles.RPCHead}>
@@ -127,7 +158,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                         </View>
                     }
                     {
-                      openStatus &&
+                      redStatus !== 2 &&
                         <View style={styles.RPOpen}>
                             <View style={styles.RPCHeadOP}>
                                 <View/>
@@ -140,8 +171,15 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                         </View>
                     }
                       <View style={styles.RPText}>
-                          <Text style={styles.Msg} numberOfLines={1} ellipsizeMode={"tail"}>{contextData}</Text>
-                          <Text style={[styles.Received, {display: openStatus ? 'flex' : 'none'}]}>Received</Text>
+                          <Text style={styles.Msg} numberOfLines={1} ellipsizeMode={"tail"}>
+                            {
+                              // @ts-ignore
+                              messageInfo.customData.title
+                            }
+                          </Text>
+                          <Text style={[styles.Received, {display: redStatus !== 2 ? 'flex' : 'none'}]}>
+                              Received
+                          </Text>
                       </View>
                   </View>
               </LinearGradient>
@@ -153,13 +191,14 @@ const ChatMsgItem: React.FC<Props> = (props) => {
 const styles = StyleSheet.create({
   actionMsg: {},
   Msg: {
-    color: 'white',
-    fontSize: 22,
-    width: 100
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '400',
   },
   Received: {
-    color: 'white',
-    fontSize: 16,
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '400'
   },
   LogoNameBox: {
     width: 37,
@@ -177,7 +216,7 @@ const styles = StyleSheet.create({
   RPText: {
     marginLeft: 15,
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   SC2: {
     height: 5.5,
