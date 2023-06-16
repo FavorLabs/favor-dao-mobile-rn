@@ -5,8 +5,7 @@ const TopTab = createMaterialTopTabNavigator();
 import { FontSize, Color } from "../../../../GlobalStyles";
 import FightForLuck from "./FightForLuck";
 import Ordinary from "./Ordinary";
-import RecordReceived from "./RecordReceived";
-import RecordDistributed from "./RecordDistributed";
+
 
 export const REtabs = {
     header: () => null,
@@ -26,14 +25,16 @@ export const REtabs = {
 }
 
 type FeedsOfDaoProps = {
+    memberCount:number,
+    sendCustomMessage:()=>void
 }
 export function RETabs(props: FeedsOfDaoProps) {
-    const {  } = props;
+    const { memberCount, sendCustomMessage} = props;
     return (
         // @ts-ignore
         <TopTab.Navigator screenOptions={REtabs} >
-            <TopTab.Screen name="FightForLuck" component={FightForLuck} />
-            <TopTab.Screen name="Ordinary" component={Ordinary}/>
+            <TopTab.Screen name="FightForLuck" component={FightForLuck}  initialParams={{ memberCount,sendCustomMessage}}/>
+            <TopTab.Screen name="Ordinary" component={Ordinary} initialParams={{ memberCount,sendCustomMessage}}/>
         </TopTab.Navigator>
     );
 }

@@ -1,17 +1,33 @@
 import * as React from "react";
-import {Image, StyleSheet, View, Text, TouchableOpacity,ScrollView,} from "react-native";
+import {Image, StyleSheet, View, Text, TouchableOpacity, ScrollView, Pressable,} from "react-native";
 import TextInputBlock from "../../../../components/TextInputBlock";
 import FavorDaoButton from "../../../../components/FavorDaoButton";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import MoneyPacket from "../../../../components/RedPacket/MoneyPacket";
 
 
-type Props ={};
+type Props ={
+    route:any
+};
 
 const FightForLuck: React.FC<Props> = (props) => {
-    const [luckyModal,setLuckyModal]=useState(true)
+    const {route}=props
+    const {memberCount, sendCustomMessage}=route.params
+    console.log(memberCount,sendCustomMessage,'f')
+    const [luckyModal,setLuckyModal]=useState(false)
     const [LuckyPacketQuantitySum,setLuckyPacketQuantitySum]=useState('')
     const [TotalAmountSum,setTotalAmountSum]=useState('')
+    const [wishes,setWishes]=useState('')
+    const clearInp=()=>{
+        setLuckyPacketQuantitySum('')
+        setTotalAmountSum('')
+        setWishes('')
+    }
+    const createDisable = useMemo(() => {
+        return !(
+            LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!==''&& wishes && LuckyPacketQuantitySum <= memberCount
+        )
+    }, [LuckyPacketQuantitySum,TotalAmountSum,wishes]);
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -20,7 +36,8 @@ const FightForLuck: React.FC<Props> = (props) => {
                     placeholder={`Please enter the quantity of luckypacket`}
                     value={LuckyPacketQuantitySum}
                     setValue={setLuckyPacketQuantitySum}
-                    AdditionalInformation={'(There are 6 people in this group)'}
+                    keyboardType={'numeric'}
+                    AdditionalInformation={`(There are ${memberCount} people in this group)`}
                 />
                 <TextInputBlock
                     title={'Total amount'}
@@ -31,19 +48,31 @@ const FightForLuck: React.FC<Props> = (props) => {
                 <TextInputBlock
                     title={'Best wishes'}
                     placeholder={`Please enter best wishes`}
-                    value={TotalAmountSum}
-                    setValue={setTotalAmountSum}
+                    value={wishes}
+                    setValue={setWishes}
                 />
                 <View style={[styles.titleParent, styles.contentSpaceBlock]}>
-                    <Text style={[styles.title3, styles.titleFlexBox]}>0.00</Text>
-                        <FavorDaoButton
-                            textValue="Insert money"
-                            frame1171275771BackgroundColor="#ff564f"
-                            cancelColor="#fff"
-                        />
+                    <Text style={[styles.title3, styles.titleFlexBox]}>{TotalAmountSum}</Text>
                 </View>
             </ScrollView>
-            <MoneyPacket visible={luckyModal} setVisible={setLuckyModal}/>
+            <Pressable onPress={()=>setLuckyModal(true)} style={createDisable && { opacity: 0.5 }} disabled={createDisable}>
+                <FavorDaoButton
+                    textValue="Insert money"
+                    frame1171275771BackgroundColor="#ff564f"
+                    cancelColor="#fff"
+                />
+            </Pressable>
+            <MoneyPacket
+                visible={luckyModal}
+                type={3}
+                setVisible={setLuckyModal}
+                redPacketType={0}
+                title={wishes}
+                amount={TotalAmountSum}
+                total={LuckyPacketQuantitySum}
+                clearInp={clearInp}
+                sendCustomMessage={sendCustomMessage}
+            />
         </View>
     )
 }

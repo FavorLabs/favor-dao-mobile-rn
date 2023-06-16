@@ -6,11 +6,12 @@ import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import SvgIcon from "../../../components/SvgIcon";
 import ClaimDetailsRight from "../../../assets/svg/claimDetailsRight.svg";
-
-const ClaimDetails = () => {
-
-
-
+export type Props = {
+data?:any,
+id?:string
+};
+const ClaimDetails:React.FC<Props> = (props) => {
+  const {data,id}=props
   return (
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}}>
       <View style={styles.container}>
