@@ -14,7 +14,7 @@ export default {
             url: url + `/redpacket/${id}`
         });
     },
-    getRedpacketInfo(url: string,id:string) {
+    getRedPacketInfo(url: string,id:string) {
         return request({
             url: url + `/redpacket/${id}`,
         });
