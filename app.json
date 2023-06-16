@@ -2,7 +2,7 @@
   "expo": {
     "name": "FavorDAO",
     "slug": "FavorDAO",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "jsEngine": "hermes",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,7 +24,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "io.favorlabs.fultter_favor_dao"
+      "package": "io.favorlabs.fultter_favor_dao",
+      "versionCode": 5
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -111,7 +111,7 @@ function RootStack() {
     setTimeout(getFullCount, 5000)
   }
   const updateService = () => {
-    BackgroundService.updateNotification({taskDesc: `Full Peers : ${fullCount.current}, Proxy : ${proxyCount.current}`})
+    BackgroundService.updateNotification({taskDesc: `Full Peers : ${fullCount.current} | Proxy : ${proxyCount.current}`})
   }
 
   const

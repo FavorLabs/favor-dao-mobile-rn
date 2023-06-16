@@ -38,7 +38,7 @@ class Favor extends EventEmitter {
     }
 
     async startNode(fc: FavorX.Options) {
-        if (EXTERNAL_NODE !== undefined) {
+        if (EXTERNAL_NODE === 'true') {
             this.useExternalNode();
             return;
         }

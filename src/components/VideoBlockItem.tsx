@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Text, StyleSheet, View, Image, TouchableOpacity} from "react-native";
-import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
-import { PostInfo } from "../declare/api/DAOApi";
+import {FontSize, FontFamily, Color, Padding, Border} from "../GlobalStyles";
+import {PostInfo} from "../declare/api/DAOApi";
 import {useIsLogin, useResourceUrl} from "../utils/hook";
 import {getContent} from "../utils/util";
 import RowUser from "./RowUser";
@@ -13,35 +13,35 @@ type Props = {
   postInfo: PostInfo
   isReTransfer?: boolean
   isQuote?: boolean
-  showOperate:boolean
+  showOperate: boolean
 };
 
 const VideoBlockItem: React.FC<Props> = (props) => {
-  const { postInfo, isReTransfer, isQuote ,showOperate} = props;
-  const { contents, orig_contents, created_on, dao, author_dao, origCreatedAt } = props.postInfo;
+  const {postInfo, isReTransfer, isQuote, showOperate} = props;
+  const {contents, orig_contents, created_on, dao, author_dao, origCreatedAt} = props.postInfo;
   const imagesResUrl = useResourceUrl('images');
-  const [isSubscribedStatus,setIsSubscribedStatus] =useState(false);
+  const [isSubscribedStatus, setIsSubscribedStatus] = useState(false);
   const info = getContent(isQuote || isReTransfer ? orig_contents : contents);
   const navigation = useNavigation();
   const [isLogin, gotoLogin] = useIsLogin();
 
-  const memberStatus = useMemo(()=> isReTransfer || isQuote ? postInfo.orig_member : postInfo.member ,[])
+  const memberStatus = useMemo(() => isReTransfer || isQuote ? postInfo.orig_member : postInfo.member, [])
 
   const toVideoDetail = () => {
-    if(isLogin) {
+    if (isLogin || memberStatus === 0) {
       // @ts-ignore
-      navigation.navigate(Screens.VideoPlay,{ postId: isQuote ? postInfo.ref_id : postInfo.id});
+      navigation.navigate(Screens.VideoPlay, {postId: isQuote ? postInfo.ref_id : postInfo.id});
     } else {
       gotoLogin();
     }
   }
-  useEffect(()=>{
-    if (isReTransfer || isQuote){
+  useEffect(() => {
+    if (isReTransfer || isQuote) {
       setIsSubscribedStatus(postInfo.author_dao.is_subscribed)
-    }else {
+    } else {
       setIsSubscribedStatus(postInfo.dao.is_subscribed)
     }
-  },[])
+  }, [])
 
   return (
     <View style={[styles.rowUserParent, {backgroundColor: isQuote || isReTransfer ? '#eaeaea' : '#fff'}]}>
@@ -63,20 +63,20 @@ const VideoBlockItem: React.FC<Props> = (props) => {
           <Image
             style={styles.imageIcon}
             resizeMode="cover"
-            source={{uri:`${imagesResUrl}/${info?.[3]?.[0]?.content}`}}
+            source={{uri: `${imagesResUrl}/${info?.[3]?.[0]?.content}`}}
           />
 
-          { memberStatus === 1  &&
-            <View style={styles.rectangleParent}>
-              <View style={styles.subtitleParent}>
-                <Text style={styles.subtitle}>{ isSubscribedStatus ?  'Unlock' : 'Locked'  } </Text>
-                <Image
-                  style={styles.lockIcon}
-                  resizeMode="cover"
-                  source={isSubscribedStatus ? require("../assets/unlock.png") : require("../assets/lock.png") }
-                />
+          {memberStatus === 1 &&
+              <View style={styles.rectangleParent}>
+                  <View style={styles.subtitleParent}>
+                      <Text style={styles.subtitle}>{isSubscribedStatus ? 'Unlock' : 'Locked'} </Text>
+                      <Image
+                          style={styles.lockIcon}
+                          resizeMode="cover"
+                          source={isSubscribedStatus ? require("../assets/unlock.png") : require("../assets/lock.png")}
+                      />
+                  </View>
               </View>
-            </View>
           }
 
           <Image
