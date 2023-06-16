@@ -4,25 +4,17 @@ import {CometChatGroupListWithMessages} from '../../../cometchat-pro-react-nativ
 import {Color} from "../../../GlobalStyles";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import SearchHead from "../../../components/SearchHead";
-import { useFocusEffect } from "@react-navigation/native";
+import {useFocusEffect, useNavigation} from "@react-navigation/native";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import MessageItem from "../../../components/Message/MessageItem";
 import {getChatsAvatarUrl, getChatsDaoName} from "../../../utils/util";
 import {useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
-
-type DataList = {
-  avatar: string;
-  name: string;
-  createdAt: number;
-  lastUserName: string;
-  content: string;
-  unreadCount: number;
-  daoName: string;
-  guid: string;
-}
+import Screens from "../../../navigation/RouteNames";
+import {DataList} from "../../../declare/api/DAOApi";
 
 const ChatScreen = () => {
+  const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState<string>('');
   const {user} = useSelector((state: Models) => state.global);
   const limit = 10;
@@ -129,16 +121,8 @@ const ChatScreen = () => {
   };
 
   const toChatsDetail = (item:DataList) => {
-    console.log(item.daoName,'---daoName,',item.guid,'---guid');
-    let messagesRequest = new CometChat.MessagesRequestBuilder()
-      .setGUID(item.guid).setLimit(limit).setType('group').build();
-    messagesRequest.fetchNext().then(
-      messages => {
-        console.log("Message list fetched:", messages);
-      }, error => {
-        console.log("Message fetching failed with error:", error);
-      }
-    );
+    // @ts-ignore
+    navigation.navigate(Screens.ChatInDAO,{ info: item });
   }
 
   useEffect(()=> {

@@ -195,7 +195,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
           <Icon type={'antdesign'} name={'left'} color={Color.color1}/>
         </Pressable>
 
-        <View style={[styles.box,videoLoading && {backgroundColor:'rgba(0,0,0,0.5)',zIndex:999}]}>
+        <View style={[styles.box]}>
           <View style={styles.videoBox}>
             {
               !playable &&

@@ -1,4 +1,5 @@
 import {AxiosResponse} from 'axios';
+import {string} from "prop-types";
 
 export type ComplaintData={
     post_id:string,
@@ -319,4 +320,15 @@ export type Notify = {
         [key: string]: any
     },
     "links": string
+}
+
+export type DataList = {
+    avatar: string;
+    name: string;
+    createdAt: number;
+    lastUserName: string;
+    content: string;
+    unreadCount: number;
+    daoName: string;
+    guid: string;
 }
