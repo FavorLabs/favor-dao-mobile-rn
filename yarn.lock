@@ -4758,12 +4758,7 @@ expo-font@^11.1.1, expo-font@~11.1.1:
   dependencies:
     fontfaceobserver "^2.1.0"
 
-expo-keep-awake@^12.0.1:
-  version "12.0.1"
-  resolved "https://registry.npmmirror.com/expo-keep-awake/-/expo-keep-awake-12.0.1.tgz#19c5ab55391394ded3f6c262b0707c7140658a11"
-  integrity sha512-hqeCnb4033TyuZaXs93zTK7rjVJ3bywXATyMmKmKkLEsH2PKBAl/VmjlCOPQL/2Ncqz6aj7Wo//tjeJTARBD4g==
-
-expo-keep-awake@~12.0.1:
+expo-keep-awake@^12.0.1, expo-keep-awake@~12.0.1:
   version "12.0.1"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-12.0.1.tgz#19c5ab55391394ded3f6c262b0707c7140658a11"
   integrity sha512-hqeCnb4033TyuZaXs93zTK7rjVJ3bywXATyMmKmKkLEsH2PKBAl/VmjlCOPQL/2Ncqz6aj7Wo//tjeJTARBD4g==
@@ -8103,6 +8098,13 @@ react-native-autolink@^4.1.0:
   dependencies:
     autolinker "^3.16.2"
 
+react-native-background-actions@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmmirror.com/react-native-background-actions/-/react-native-background-actions-3.0.0.tgz#fbdaf31a5485cea68cff03358516da8ffc2a4fe0"
+  integrity sha512-O/KFdetp8n9cwSfPJQ7hPywTaEHO1ui7ISxKTGkzHxs3IVgEV+QOvKKLxAkTcQs1w5f68KK/LoQsEVwMpbVqew==
+  dependencies:
+    eventemitter3 "^4.0.7"
+
 react-native-background-timer@^2.4.1:
   version "2.4.1"
   resolved "https://registry.npmmirror.com/react-native-background-timer/-/react-native-background-timer-2.4.1.tgz#a3bc1cafa8c1e3aeefd0611de120298b67978a0f"
@@ -8180,9 +8182,9 @@ react-native-fast-image@^8.6.3:
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz#6edc3f9190092a909d636d93eecbcc54a8822255"
   integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
 
-"react-native-favor@https://github.com/FavorLabs/react-native-favor.git":
+"react-native-favor@https://github.com/FavorLabs/react-native-favor.git#vpn":
   version "1.4.1"
-  resolved "https://github.com/FavorLabs/react-native-favor.git#d1f42f0e7f82de45ca5fefb851c59a75e4f297e3"
+  resolved "https://github.com/FavorLabs/react-native-favor.git#61c9a51679fa50ba163bcccf95079a62affd3372"
 
 react-native-fs@^2.20.0:
   version "2.20.0"
@@ -8247,6 +8249,11 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
   dependencies:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
+
+react-native-linear-gradient@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.npmmirror.com/react-native-linear-gradient/-/react-native-linear-gradient-2.6.2.tgz#56598a76832724b2afa7889747635b5c80948f38"
+  integrity sha512-Z8Xxvupsex+9BBFoSYS87bilNPWcRfRsGC0cpJk72Nxb5p2nEkGSBv73xZbEHnW2mUFvP+huYxrVvjZkr/gRjQ==
 
 react-native-orientation-locker@^1.5.0:
   version "1.5.0"

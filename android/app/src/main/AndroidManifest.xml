@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="io.favorlabs.fultter_favor_dao">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+          package="io.favorlabs.fultter_favor_dao">
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.CAMERA"/>
   <uses-permission android:name="android.permission.INTERNET"/>
@@ -19,14 +20,22 @@
       <data android:scheme="https"/>
     </intent>
   </queries>
-  <application android:name=".MainApplication" android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:allowBackup="true" android:theme="@style/AppTheme" android:usesCleartextTraffic="true">
+  <application android:name=".MainApplication" android:label="@string/app_name" android:icon="@mipmap/ic_launcher"
+               android:roundIcon="@mipmap/ic_launcher_round" android:allowBackup="true" android:theme="@style/AppTheme"
+               android:usesCleartextTraffic="true">
     <meta-data android:name="expo.modules.updates.ENABLED" android:value="true"/>
     <meta-data android:name="expo.modules.updates.EXPO_SDK_VERSION" android:value="48.0.0"/>
     <meta-data android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH" android:value="ALWAYS"/>
     <meta-data android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS" android:value="0"/>
-    <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL" android:value="https://exp.host/@favorlabs/FavorDAO"/>
-    <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" tools:replace="android:value"/>
-    <activity android:name=".MainActivity" android:label="@string/app_name" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize" android:theme="@style/Theme.App.SplashScreen" android:exported="true" android:screenOrientation="portrait">
+    <meta-data android:name="expo.modules.updates.EXPO_UPDATE_URL"
+               android:value="https://exp.host/@favorlabs/FavorDAO"/>
+    <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false"
+               tools:replace="android:value"/>
+    <activity android:name=".MainActivity" android:label="@string/app_name"
+              android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+              android:launchMode="singleTask" android:windowSoftInputMode="adjustResize"
+              android:theme="@style/Theme.App.SplashScreen" android:exported="true"
+              android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
@@ -36,8 +45,15 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="io.favorlabs.fultter_favor_dao"/>
+        <data android:scheme="favordao"/>
       </intent-filter>
     </activity>
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>
+    <service
+        android:enabled="true"
+        android:exported="true"
+        android:stopWithTask="false"
+        android:name="com.asterinet.react.bgactions.RNBackgroundActionsTask"
+    />
   </application>
 </manifest>
