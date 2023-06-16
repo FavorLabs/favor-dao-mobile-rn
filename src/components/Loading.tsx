@@ -1,17 +1,30 @@
 import * as React from "react";
-import { StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {FontSize, FontFamily, Color} from "../GlobalStyles";
 import FastImage from 'react-native-fast-image';
+import {useCallback, useEffect, useState} from "react";
+import {useFocusEffect} from "@react-navigation/native";
+import RNExitApp from "react-native-exit-app";
 
 type LoadingType = {
   text?: string;
   visible?: boolean
+  timeout?: number
 };
 
-const Loading = ({text, visible}: LoadingType) => {
+const Loading = ({text, visible, timeout}: LoadingType) => {
   if (!visible) {
     return null
   }
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    if (timeout) {
+      setTimeout(() => {
+        setShow(true);
+      }, timeout)
+    }
+  }, [])
+
   return (
     <View style={styles.vectorParent}>
       <FastImage
@@ -19,7 +32,21 @@ const Loading = ({text, visible}: LoadingType) => {
         resizeMode="cover"
         source={require("../assets/loading.gif")}
       />
-      <Text style={styles.loading}>{text}</Text>
+
+      {
+        show ?
+          <>
+            <Text style={styles.loading}>Please try to exit and reopen FavorDAO</Text>
+            <TouchableOpacity style={styles.exit} onPress={() => {
+              RNExitApp.exitApp();
+            }}>
+              <Text style={styles.exit_text}>Exit</Text>
+            </TouchableOpacity>
+          </>
+          :
+          <Text style={styles.loading}>{text}</Text>
+      }
+
     </View>
   );
 };
@@ -49,6 +76,20 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: Color.whiteTransparent,
   },
+  exit: {
+    marginTop: 5,
+    backgroundColor: Color.color,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  exit_text: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: "500",
+  }
 });
 
 export default Loading;

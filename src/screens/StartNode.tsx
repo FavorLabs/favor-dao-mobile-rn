@@ -44,7 +44,6 @@ const StartNode = () => {
 
   useEffect(() => {
     getVersion();
-    console.log(typeof IS_TEST,1,2)
     IS_TEST ? getConfig() : getConfigStartNode();
   }, [])
   const getConfigStartNode = async () => {
@@ -103,7 +102,7 @@ const StartNode = () => {
   }
   const start = async () => {
     try {
-      setVisible(true);
+      await setVisible(true);
       const fc = config[selectedIndex];
       await startNode(fc);
     } catch (e) {

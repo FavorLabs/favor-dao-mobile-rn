@@ -106,14 +106,10 @@ class Favor extends EventEmitter {
     }
 
     async subProxy() {
-        if (!(this.api && this.config && this.ws)) {
+        if (!(this.config && this.ws)) {
             return;
         }
-        await Api.observeProxyGroup(
-          this.api,
-          this.config.proxyGroup,
-          this.config.proxyNodes,
-        )
+        await this.observeProxyGroup();
         this.ws.send(
           {
               id: 1,
@@ -129,6 +125,16 @@ class Favor extends EventEmitter {
               }
           })
     }
+    async observeProxyGroup(){
+       if (!(this.api && this.config)) {
+         return;
+       }
+       await Api.observeProxyGroup(
+         this.api,
+         this.config.proxyGroup,
+         this.config.proxyNodes,
+       )
+     }
 }
 
 

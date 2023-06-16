@@ -12,7 +12,7 @@ request.interceptors.request.use((config) => {
     config.headers['x-session-token'] = token;
   }
 
-  if(!config.headers['Content-Type']){
+  if (!config.headers['Content-Type']) {
     config.headers['Content-Type'] = "application/json"
   }
 
@@ -22,10 +22,13 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log(error.response);
-    return Promise.reject(
-      error.response?.data.msg ? Error(error.response?.data.msg) : error,
-    );
+    console.log(error.response)
+    if (error.response?.data.code === 500) {
+      return Promise.reject(Error('p2p network is unstable, please try again'));
+    } else if (error.response?.data.msg) {
+      return Promise.reject(Error(error.response?.data.msg))
+    }
+    return error;
   },
 );
 
