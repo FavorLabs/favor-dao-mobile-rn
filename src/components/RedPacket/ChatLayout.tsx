@@ -9,8 +9,8 @@ const ChatLayout: React.FC<Props> = (props) => {
 
     return (
         <View style={styles.container}>
-            <ChatNameBox isUser={true} showTime={true}></ChatNameBox>
-            <ChatNameBox isUser={false} showTime={true}></ChatNameBox>
+            {/*<ChatNameBox isUser={true} showTime={true}/>*/}
+            {/*<ChatNameBox isUser={false} showTime={true}/>*/}
         </View>
     )
 }
@@ -20,11 +20,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:'#FFFFFF'
     },
-    aa:{
-        width:430,
-        height:20,
-        backgroundColor:"red"
-    }
 })
 
 export default ChatLayout
