@@ -54,7 +54,7 @@ export function BottomTabNavigator() {
           />
           <BottomTabBar.Screen
             name={Screens.Main.Chat}
-            component={CometChatGroupListWithMessages}
+            component={ChatScreen}
             options={{
                 tabBarLabel: 'Chat',
                 tabBarIcon: ({focused, color, size}) => (

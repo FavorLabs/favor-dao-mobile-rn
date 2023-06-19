@@ -8,9 +8,10 @@ import Models from "../../declare/storeTypes";
 import {useResourceUrl} from "../../utils/hook";
 export type Props = {
   messageInfo: CometChat.BaseMessage;
+  isShowTime: boolean;
 };
 const ChatNameBox: React.FC<Props> = (props) => {
-  const { messageInfo } = props;
+  const { messageInfo, isShowTime } = props;
 
   const avatarsResUrl = useResourceUrl('avatars');
   const {user} = useSelector((state: Models) => state.global);
@@ -50,6 +51,7 @@ const ChatNameBox: React.FC<Props> = (props) => {
     <View style={styles.container}>
 
       {
+        isShowTime &&
         // @ts-ignore
           <Text style={styles.time}>{getTime(Number(messageInfo.updatedAt))}</Text>
       }

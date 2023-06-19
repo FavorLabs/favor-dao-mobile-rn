@@ -79,26 +79,6 @@ const StartNode = () => {
       .catch(() => {
         return null;
       });
-    const getPermissions = async () => {
-      if (Platform.OS === 'android') {
-        let granted = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        ]);
-        // @ts-ignore
-        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-          granted = await PermissionsAndroid.requestMultiple([
-            PermissionsAndroid.PERMISSIONS.CAMERA,
-            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          ]);
-        }
-      }
-    };
-    getPermissions();
   }
   const start = async () => {
     try {

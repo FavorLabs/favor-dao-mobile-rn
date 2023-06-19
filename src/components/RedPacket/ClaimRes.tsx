@@ -33,7 +33,7 @@ const ClaimRes: React.FC<Props> = (props) => {
         setLoding(true)
         try{
             const request =  () => RedpacketApi.claimRedpacket(url,redId)
-            const {data}= await request().catch(()=> ({data:{code:0}}))
+            const {data}= await request()
             if(data.code==0){
                 setClaimResStatus(false)
                 setLoding(false)
