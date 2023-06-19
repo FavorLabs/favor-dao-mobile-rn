@@ -2,9 +2,9 @@ import * as React from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {FontSize, FontFamily, Color} from "../GlobalStyles";
 import FastImage from 'react-native-fast-image';
-import {useCallback, useEffect, useState} from "react";
-import {useFocusEffect} from "@react-navigation/native";
+import {useEffect, useState} from "react";
 import RNExitApp from "react-native-exit-app";
+const Image = require('../assets/loading_gif.gif');
 
 type LoadingType = {
   text?: string;
@@ -30,7 +30,7 @@ const Loading = ({text, visible, timeout}: LoadingType) => {
       <FastImage
         style={styles.vectorIcon}
         resizeMode="cover"
-        source={require("../assets/loading.gif")}
+        source={Image}
       />
 
       {
@@ -54,7 +54,7 @@ const Loading = ({text, visible, timeout}: LoadingType) => {
 const styles = StyleSheet.create({
   vectorIcon: {
     width: 80,
-    height: 83,
+    height: 80,
   },
   loading: {
     fontSize: FontSize.size_mid,

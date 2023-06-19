@@ -8184,7 +8184,7 @@ react-native-fast-image@^8.6.3:
 
 "react-native-favor@https://github.com/FavorLabs/react-native-favor.git":
   version "1.4.2"
-  resolved "https://github.com/FavorLabs/react-native-favor.git#a330f373df380046f51417f987b3821589747f7a"
+  resolved "https://github.com/FavorLabs/react-native-favor.git#ed65ca6f87467116176539aa0e8119dfe5fbc042"
 
 react-native-fs@^2.20.0:
   version "2.20.0"
