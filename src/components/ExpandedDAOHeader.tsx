@@ -8,7 +8,7 @@ import Back from "./Back";
 import DAOInfo from "./DAOInfo";
 import BtnChatToggle from "./BtnChatToggle";
 import {Color, Padding} from "../GlobalStyles";
-import {useFocusEffect, useNavigation} from "@react-navigation/native";
+import {useFocusEffect, useNavigation, useRoute} from "@react-navigation/native";
 import {DaoInfo, Post} from "../declare/api/DAOApi";
 import {useIsLogin, useResourceUrl, useUrl} from "../utils/hook";
 import {getContent, getDebounce, getTime} from "../utils/util";
@@ -33,6 +33,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
     const [isLogin, gotoLogin] = useIsLogin();
     const [isJoin,setIsJoin] = useState<boolean>(daoInfo.is_joined);
     const [isLoading, setIsLoading] = useState(false);
+    const route = useRoute();
 
     const imagesResUrl = useResourceUrl('images');
 
@@ -41,6 +42,8 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
     }
 
     const toFeedsOfDao = async () => {
+        // @ts-ignore
+        if(route.name === 'ChatInDAO') return  navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : 'Mixed'});
         if (!isLogin) return gotoLogin();
         if(isLoading) return;
         if(!isJoin){

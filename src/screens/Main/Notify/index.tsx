@@ -28,7 +28,6 @@ import Toast from "react-native-toast-message";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import {updateState as globalUpdateState} from "../../../store/notify";
-import {read} from "react-native-fs";
 import NoDataShow from "../../../components/NoDataShow";
 
 const NotifyScreen = () => {

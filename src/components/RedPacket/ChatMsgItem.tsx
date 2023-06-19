@@ -65,8 +65,8 @@ const ChatMsgItem: React.FC<Props> = (props) => {
       setRedPacketId(messageInfo.customData.id)
       getRedPacketStatus();
     }
-  },[])
-  // @ts-ignore
+  })
+
   return (
     <View style={styles.item}>
       {
@@ -98,9 +98,10 @@ const ChatMsgItem: React.FC<Props> = (props) => {
               <Video
                   style={styles.video}
                   paused={videoPlay}
-                // @ts-ignore
+                  // @ts-ignore
                   source={{uri: messageInfo.data.url}}
                   // controls={true}
+                  repeat={true}
               />
             {
               videoPlay &&
@@ -117,7 +118,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
         type === 'file' &&
           <View style={styles.fileRow}>
               <View style={styles.fileContent}>
-                <View>
+                <View style={styles.fileTitle}>
                     <Text style={styles.fileNameText} numberOfLines={1}>
                       {
                       // @ts-ignore
@@ -131,7 +132,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                         source={require('../../assets/fileIcon.png')}
                     />
                     <View style={styles.fileType}>
-                        <Text style={styles.fileTypeText}>.{
+                        <Text style={styles.fileTypeText} numberOfLines={1}>.{
                           // @ts-ignore
                           messageInfo.data.name ? messageInfo.data.name.split('.')[1] : '?'
                         }</Text>
@@ -352,7 +353,7 @@ const styles = StyleSheet.create({
   },
   fileRow: {
     flexDirection: 'row',
-    maxWidth: '60%',
+    maxWidth: '65%',
   },
   fileContent: {
     backgroundColor: Color.color1,
@@ -362,19 +363,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  fileTitle: {
+    maxWidth: '70%',
+    paddingRight: 15,
+  },
   fileNameText: {
     fontSize: 16,
     fontWeight: '400',
     color: '#000',
-    marginRight: 30,
   },
   fileIconRow: {
     position: 'relative',
+    paddingLeft: 15,
   },
   fileType: {
     position: 'absolute',
     bottom: -6,
-    left: '30%',
+    left: '75%',
     backgroundColor: '#FF8D1A',
     borderRadius: 4,
     paddingHorizontal: 4

@@ -20,7 +20,7 @@ const ProtocolRadioSelect = ({value, setValue}: Props) => {
         <View style={styles.parent}>
             <AgreeCheckBox value={value} setValue={setValue}/>
             <View style={styles.description}>
-                <Text style={styles.iHaveCarefully}>{`I have carefully read and agree to `}</Text>
+                <Text style={styles.iHaveCarefully} numberOfLines={1}>{`I have carefully read and agree to `}</Text>
                 <TouchableOpacity onPress={toUserAgreement}>
                     <Text style={styles.theUserAgreement}>the user agreement</Text>
                 </TouchableOpacity>
