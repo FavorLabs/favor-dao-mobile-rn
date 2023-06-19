@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {Pressable, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
+import {Pressable, ScrollView, StyleSheet, Text, TextInput, View,TouchableOpacity} from "react-native";
 import BottomSheetModal from "../BottomSheetModal";
 
 import {useNavigation} from "@react-navigation/native";
@@ -66,6 +66,7 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
     }
     const url = useUrl();
     const confirm = async () => {
+        setLoading(true)
         try {
                 const privateKey = WalletController.exportPrivateKey(password);
                 const auth =  await WalletController.getSignatureData(privateKey, type);
@@ -79,17 +80,24 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                     amount:amount,
                     total:totalToNumber
                 }
-                console.log(res,'创建数据')
                 const request =  () => RedpacketApi.creatRedpacket(url,res)
                 const {data}= await request()
                 if (data.code==0){
-                    console.log(data.data.redpacket_id,title,'6666')
                     sendCustomMessage({id:data.data.redpacket_id,title:title})
                     Toast.show({
                         type: 'info',
                         text1: 'Send success!'
                     });
-                    navigation.goBack()
+                    setLoading(false)
+                    setVisible(false)
+                    if(redPacketType==0){
+                        navigation.goBack()
+                    }
+                    if (redPacketType==1){
+                        // @ts-ignore
+                        navigation.pop(1)
+                    }
+
                     }else {
                     Toast.show({
                         type: 'error',
@@ -159,13 +167,14 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                         secureTextEntry={true}
                     ></TextInput>
                 </View>
-                <Pressable onPress={confirm}>
+                <TouchableOpacity onPress={confirm}>
                     <FavorDaoButton
+                        isLoading={loading}
                         textValue="Confirm"
                         frame1171275771BackgroundColor="#ff8d1a"
                         cancelColor="#fff"
                     />
-                </Pressable>
+                </TouchableOpacity>
             </ScrollView>
         </BottomSheetModal>
     </View>

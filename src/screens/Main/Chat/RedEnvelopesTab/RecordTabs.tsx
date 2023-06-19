@@ -27,11 +27,10 @@ type FeedsOfDaoProps = {
 
 }
 export function RecordTabs(props: FeedsOfDaoProps) {
-    const {  } = props;
     return (
         // @ts-ignore
         <TopTab.Navigator screenOptions={REtabs} >
-            <TopTab.Screen name="Received" component={RecordReceived}/>
+            <TopTab.Screen name="Received" component={RecordReceived} />
             <TopTab.Screen name="Distributed" component={RecordDistributed}/>
         </TopTab.Navigator>
     );

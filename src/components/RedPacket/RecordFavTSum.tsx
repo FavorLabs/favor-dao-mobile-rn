@@ -1,57 +1,99 @@
 
 import * as React from "react";
 import {ScrollView, StyleSheet, Text, View, Image} from "react-native";
-export type Props ={
-}
-
-const RecordFavTSum = () => {
+import {useResourceUrl, useUrl} from "../../utils/hook";
+import {useSelector} from "react-redux";
+import Models from "../../declare/storeTypes";
+import RedpacketApi from "../../services/RedpacketApi";
+import {useEffect, useState} from "react";
+export type Props = {
+    type:number
+};
+const RecordFavTSum :React.FC<Props> = (props) => {
+    const {type}=props
+    const url = useUrl();
+    const avatarsResUrl = useResourceUrl('avatars');
+    const {user} = useSelector((state: Models) => state.global);
+    const [receivedSum,setReceivedSum]=useState(0)
+    const [distributedSum,setDistributedSum]=useState(0)
+    const getReceivedSum=async ()=>{
+        const request =  () => RedpacketApi.getUserClaims(url,{year:2023})
+        const res= await request()
+        if(res.data.code==0){
+            setReceivedSum(res.data.data.total_amount)
+        }else {
+            console.log('getReceivedSum Failed')
+        }
+    }
+    const getDistributedSum=async ()=>{
+        const request =  () => RedpacketApi.getUserSends(url,{year:2023})
+        const res= await request()
+        if(res.data.code==0){
+            setDistributedSum(res.data.data.total_amount)
+        }else {
+            console.log('getReceivedSum Failed')
+        }
+    }
+    useEffect(()=>{
+        getReceivedSum()
+        getDistributedSum()
+    },[])
 return (
     <View style={styles.body}>
         <View style={styles.yearNum}>
-            <Text style={styles.yearText}>2022</Text>
+            <Text style={styles.yearText}>2023</Text>
         </View>
-        <View style={styles.imgbox}>
+        <View style={styles.imgBox}>
             <Image
                 style={styles.image}
-                resizeMethod={"resize"}
-                source={{uri:'https://reactnative.dev/img/tiny_logo.png'}} />
+                resizeMode="cover"
+                source={{uri: `${avatarsResUrl}/${user?.avatar}`}}
+            />
         </View>
         <View style={styles.descriptionTextBox}>
-        <Text style={styles.descriptionText}>
+          <Text style={styles.descriptionText}>
             Andrew Parker received a total of
-        </Text>
+          </Text>
         </View>
         <View style={styles.favTBox}>
-        <Text style={styles.favTSum}>
-            234.20
-        </Text>
-        <Text style={styles.favtText}>
+            {
+                type == 0 &&
+                <Text style={styles.favTSum}>
+                    {receivedSum}
+                </Text>
+            }
+            {
+                type == 1 &&
+                <Text style={styles.favTSum}>
+                    {distributedSum}
+                </Text>
+            }
+          <Text style={styles.favtText}>
             FavT
-        </Text>
+          </Text>
         </View>
     </View>
 );
 };
 
 const styles = StyleSheet.create({
+    image:{
+        width:70,
+        height:70,
+        borderRadius:70,
+    },
+    imgBox:{
+        height:70,
+        alignItems:'center',
+        marginTop:20,
+        marginBottom:20
+    },
     descriptionText:{
         fontSize:18,
         textAlign:'center'
     },
     descriptionTextBox:{
         marginTop:5
-    },
-    image:{
-        width:70,
-        right:70,
-        borderRadius:35,
-    },
-    imgbox:{
-        marginTop:14,
-        display:'flex',
-        justifyContent:'center',
-        alignItems:'center',
-        height:70,
     },
     yearNum:{
         marginTop:20,
