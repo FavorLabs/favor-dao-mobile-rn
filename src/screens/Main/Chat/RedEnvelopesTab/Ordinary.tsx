@@ -17,14 +17,24 @@ const Ordinary: React.FC<Props> = (props) => {
     const [LuckyPacketQuantitySum,setLuckyPacketQuantitySum]=useState('')
     const [TotalAmountSum,setTotalAmountSum]=useState('')
     const [wishes,setWishes]=useState('')
+    const amountSum=useMemo(()=>{
+        // @ts-ignore
+        return LuckyPacketQuantitySum * TotalAmountSum
+    },[LuckyPacketQuantitySum,TotalAmountSum])
     const clearInp=()=>{
         setLuckyPacketQuantitySum('')
         setTotalAmountSum('')
         setWishes('')
     }
+    function isPositiveInt(str:string) {
+        return /^[1-9]\d*$/.test(str);
+    }
+    function isPositiveNumber(str:string) {
+        return /^\d+(\.\d+)?$/.test(str) && parseFloat(str) > 0;
+    }
     const createDisable = useMemo(() => {
         return !(
-            LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!==''&& wishes && LuckyPacketQuantitySum <= memberCount
+            isPositiveNumber(TotalAmountSum) && LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!=='' && isPositiveInt(LuckyPacketQuantitySum)  && wishes && LuckyPacketQuantitySum <= memberCount
         )
     }, [LuckyPacketQuantitySum,TotalAmountSum,wishes]);
     return (
@@ -50,7 +60,7 @@ const Ordinary: React.FC<Props> = (props) => {
                     setValue={setWishes}
                 />
                 <View style={[styles.titleParent, styles.contentSpaceBlock]}>
-                    <Text style={[styles.title3, styles.titleFlexBox]}>0.00</Text>
+                    <Text style={[styles.title3, styles.titleFlexBox]}>{amountSum}</Text>
                 </View>
             </ScrollView>
             <Pressable onPress={()=>setLuckyModal(true)} style={createDisable && { opacity: 0.5 }} disabled={createDisable}>
@@ -60,15 +70,16 @@ const Ordinary: React.FC<Props> = (props) => {
                     cancelColor="#fff"
                 />
             </Pressable>
-            <MoneyPacket visible={luckyModal}
-                         type={3}
-                         setVisible={setLuckyModal}
-                         redPacketType={1}
-                         title={wishes}
-                         amount={TotalAmountSum}
-                         total={LuckyPacketQuantitySum}
-                         clearInp={clearInp}
-                         sendCustomMessage={sendCustomMessage}
+            <MoneyPacket
+                visible={luckyModal}
+                type={3}
+                setVisible={setLuckyModal}
+                redPacketType={1}
+                title={wishes}
+                amount={TotalAmountSum}
+                total={LuckyPacketQuantitySum}
+                clearInp={clearInp}
+                sendCustomMessage={sendCustomMessage}
             />
         </View>
     )

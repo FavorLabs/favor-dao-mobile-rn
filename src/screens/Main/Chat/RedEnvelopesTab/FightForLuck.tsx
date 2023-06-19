@@ -4,6 +4,8 @@ import TextInputBlock from "../../../../components/TextInputBlock";
 import FavorDaoButton from "../../../../components/FavorDaoButton";
 import {useMemo, useState} from "react";
 import MoneyPacket from "../../../../components/RedPacket/MoneyPacket";
+import {isNumber, toNumber} from "lodash";
+import {string} from "prop-types";
 
 
 type Props ={
@@ -13,7 +15,6 @@ type Props ={
 const FightForLuck: React.FC<Props> = (props) => {
     const {route}=props
     const {memberCount, sendCustomMessage}=route.params
-    console.log(memberCount,sendCustomMessage,'f')
     const [luckyModal,setLuckyModal]=useState(false)
     const [LuckyPacketQuantitySum,setLuckyPacketQuantitySum]=useState('')
     const [TotalAmountSum,setTotalAmountSum]=useState('')
@@ -23,9 +24,16 @@ const FightForLuck: React.FC<Props> = (props) => {
         setTotalAmountSum('')
         setWishes('')
     }
+    function isPositiveInt(str:string) {
+        return /^[1-9]\d*$/.test(str);
+    }
+    function isPositiveNumber(str:string) {
+        return /^\d+(\.\d+)?$/.test(str) && parseFloat(str) > 0;
+    }
+
     const createDisable = useMemo(() => {
         return !(
-            LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!==''&& wishes && LuckyPacketQuantitySum <= memberCount
+            isPositiveNumber(TotalAmountSum) && LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!=='' && isPositiveInt(LuckyPacketQuantitySum)  && wishes && LuckyPacketQuantitySum <= memberCount
         )
     }, [LuckyPacketQuantitySum,TotalAmountSum,wishes]);
     return (

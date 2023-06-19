@@ -9,6 +9,9 @@ import FileDownloadSvg from "../../assets/svg/file-down-svg.svg";
 import {Color} from "../../GlobalStyles";
 import RedPacketApi from "../../services/RedpacketApi";
 import {RedPacketInfo} from "../../declare/api/RedapacketApi";
+import ClaimRes from "./ClaimRes";
+import Screens from "../../navigation/RouteNames";
+import {useNavigation} from "@react-navigation/native";
 
 export type Props = {
   isUser?: boolean,
@@ -18,23 +21,27 @@ export type Props = {
 };
 
 const ChatMsgItem: React.FC<Props> = (props) => {
+  const navigation = useNavigation();
   const url = useUrl();
   const avatarsResUrl = useResourceUrl('avatars');
   const { isUser, type, messageInfo, isMy } = props;
   const [videoPlay,setVideoPlay] = useState(true);
   const [redStatus,setRedStatus] = useState(2);
-
+  const [claimResStatus,setClaimResStatus] = useState(false)
+  const [redPacketId,setRedPacketId] = useState('')
   const VideoClick = () => {
     setVideoPlay(!videoPlay);
   };
 
   const clickRedPacket = () => {
     if(redStatus === 0 ) {
-
+      // @ts-ignore
+      navigation.navigate(Screens.ClaimDetails,{id:messageInfo.customData.id})
     } else if (redStatus === 1) {
-
+      // @ts-ignore
+      navigation.navigate(Screens.ClaimDetails,{id:messageInfo.customData.id})
     } else {
-
+      setClaimResStatus(true)
     }
   };
 
@@ -54,10 +61,11 @@ const ChatMsgItem: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if(type === 'redPacket') {
+      // @ts-ignore
+      setRedPacketId(messageInfo.customData.id)
       getRedPacketStatus();
     }
   },[])
-
   // @ts-ignore
   return (
     <View style={styles.item}>
@@ -113,7 +121,8 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                     <Text style={styles.fileNameText} numberOfLines={1}>
                       {
                       // @ts-ignore
-                      messageInfo.data.name}
+                        messageInfo.data.name ? messageInfo.data.name : 'undefined'
+                      }
                     </Text>
                 </View>
                 <View style={styles.fileIconRow}>
@@ -124,7 +133,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                     <View style={styles.fileType}>
                         <Text style={styles.fileTypeText}>.{
                           // @ts-ignore
-                          messageInfo.data.name.split('.')[1]
+                          messageInfo.data.name ? messageInfo.data.name.split('.')[1] : '?'
                         }</Text>
                     </View>
                 </View>
@@ -185,6 +194,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
               </LinearGradient>
           </TouchableOpacity>
       }
+          <ClaimRes claimResStatus={claimResStatus} setClaimResStatus={setClaimResStatus} id={redPacketId}/>
     </View>
   )
 }

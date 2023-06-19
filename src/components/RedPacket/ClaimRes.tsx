@@ -1,5 +1,5 @@
 import React, { useEffect,  useState, } from 'react';
-import {View, Text, StyleSheet, FlatList,Pressable, RefreshControl, ActivityIndicator, TouchableOpacity, Image, TextInput,} from 'react-native';
+import {Modal,View, Text, StyleSheet, FlatList,Pressable, RefreshControl, ActivityIndicator, TouchableOpacity, Image, TextInput,} from 'react-native';
 import { Dimensions } from 'react-native';
 import RedpacketApi from "../../services/RedpacketApi";
 import Screens from "../../navigation/RouteNames";
@@ -7,53 +7,54 @@ import {useNavigation} from "@react-navigation/native";
 import {useUrl} from "../../utils/hook";
 import Toast from "react-native-toast-message";
 import {stat} from "react-native-fs";
+import {isLoading} from "expo-font";
 export type Props = {
-
+    claimResStatus:boolean,
+    setClaimResStatus:Function,
+    id:string
 };
 
 const ClaimRes: React.FC<Props> = (props) => {
+    const {claimResStatus,setClaimResStatus,id}=props
     const url = useUrl();
     const navigation = useNavigation();
-    const id='648aa67967dc08706be71f08';
     const status=false
     const [state,setState]=useState(status)
-    const [displayStatus,setDisplayStatus]=useState(true)
+    const [redId,setRedId]=useState('')
+    const [loding,setLoding]=useState(false)
     const Width = Dimensions.get('window').width;
     const Height = Dimensions.get('window').height;
-    const {} = props;
     const todetails =  () => {
         // @ts-ignore
-        navigation.navigate(Screens.ClaimDetails,{id:id})
-        setDisplayStatus(false)
+        navigation.navigate(Screens.ClaimDetails,{id:redId})
+        setClaimResStatus(false)
     }
     const toopen = async () => {
+        setLoding(true)
         try{
-            const request =  () => RedpacketApi.claimRedpacket(url,'648aa67967dc08706be71f08')
-            const {data}= await request()
+            const request =  () => RedpacketApi.claimRedpacket(url,redId)
+            const {data}= await request().catch(()=> ({data:{code:0}}))
             if(data.code==0){
+                setClaimResStatus(false)
+                setLoding(false)
                 // @ts-ignore
-                navigation.navigate(Screens.ClaimDetails,{data:data.data})
-                setDisplayStatus(false)
-            }else {
-                setState(!state)
-            }
-            if(!data){
-
+                navigation.navigate(Screens.ClaimDetails,{id:redId})
             }
         } catch (e) {
-        if (e instanceof Error)
-        {
-            Toast.show({
-                type: 'error',
-                text1: e.message
-            });
-        }
+            setLoding(false)
+            setState(!state)
     }
-
     }
-
+    useEffect(()=>{
+        setRedId(id)
+    },[id])
     return (
-       <View style={[styles.container,{width:Width,height:Height},{display: displayStatus?"flex":"none"}]}>
+        <Modal
+            visible={claimResStatus}
+            transparent
+            animationType={'slide'}
+        >
+       <View style={[styles.container,{width:Width,height:Height}]}>
            <View style={styles.body}>
                <View style={styles.redpackbody}>
                    <View style={styles.redpackHead}>
@@ -72,15 +73,20 @@ const ClaimRes: React.FC<Props> = (props) => {
                        </View>
                    </View>
                            <View style={[styles.todetails,styles.bottom,{display: state?'flex':'none'}]}>
-                               <Pressable onPress={todetails} >
+                               <Pressable onPress={todetails} style={styles.textres}>
                                <Text style={styles.nametext}>View claim details</Text>
+                                   <Image
+                                       style={styles.icon}
+                                       resizeMode="cover"
+                                       source={require("../../assets/setting-right-icon.png")}
+                                   />
                                </Pressable>
                            </View>
                            <View style={[styles.todetails,styles.bottom,{display: !state?'flex':'none'}]}>
                                <View style={[styles.openBox1,styles.flex]}>
                                    <View style={[styles.openBox2,styles.flex]}>
                                        <Pressable onPress={toopen}>
-                                       <Text style={styles.opentext}>OPEN</Text>
+                                       <Text style={styles.opentext}>{loding?'Loding...':'Open'}</Text>
                                        </Pressable>
                                    </View>
                                </View>
@@ -88,7 +94,7 @@ const ClaimRes: React.FC<Props> = (props) => {
                </View>
 
                    <View style={[styles.close,{position:"absolute",bottom:0},styles.flex]}>
-                       <TouchableOpacity onPress={()=>setDisplayStatus(false)}>
+                       <TouchableOpacity onPress={()=>setClaimResStatus(false)}>
                        <Image
                            resizeMode={"contain"}
                            style={styles.closeimg}
@@ -99,10 +105,20 @@ const ClaimRes: React.FC<Props> = (props) => {
 
            </View>
        </View>
+        </Modal>
     )
 }
 
 const styles = StyleSheet.create({
+    textres:{
+        flexDirection:"row",
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    icon:{
+        height:14,
+        width:14
+    },
     closeimg:{
         height:"60%"
     },

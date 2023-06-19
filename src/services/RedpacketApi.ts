@@ -19,7 +19,7 @@ export default {
             url: url + `/redpacket/${id}`,
         });
     },
-    getUserClaims(url: string, params:number) {
+    getUserClaims(url: string, params:any) {
         return request({
             url: url + '/redpacket/stats/claims',
             params

@@ -1,23 +1,113 @@
 import * as React from "react";
-import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import ChatChannel from "../../../components/RedPacket/ChatChannel";
 import {Color, FontFamily, Padding, FontSize, Border} from "../../../GlobalStyles";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import SvgIcon from "../../../components/SvgIcon";
 import ClaimDetailsRight from "../../../assets/svg/claimDetailsRight.svg";
+import {useResourceUrl, useUrl} from "../../../utils/hook";
+import {useSelector} from "react-redux";
+import Models from "../../../declare/storeTypes";
+import RedpacketApi from "../../../services/RedpacketApi";
+import {useEffect, useState} from "react";
+import Toast from "react-native-toast-message";
+import {useRoute} from "@react-navigation/native";
+import {toNumber} from "lodash";
+import {getTime} from "../../../utils/util";
+import {useNavigation} from "@react-navigation/native";
+import Screens from "../../../navigation/RouteNames";
+
 export type Props = {
-data?:any,
-id?:string
+
 };
 const ClaimDetails:React.FC<Props> = (props) => {
-  const {data,id}=props
+  const navigation = useNavigation();
+  const url = useUrl();
+  const route=useRoute()
+  // @ts-ignore
+  const { id }=route.params
+  const [claimSumStatus,setClaimSumStatus]=useState(true)
+  const [claimSum,setClaim]=useState('')
+  const [claim_count,setClaim_count]=useState('')
+  const [total,setTotal]=useState('')
+  const [userData,setUserData]=useState([])
+  const getRedPacketInfo = async ()=>{
+    const request =  () => RedpacketApi.getRedPacketInfo(url,id)
+    const { data }= await request()
+    if (data.code==0){
+      setClaim_count(data.data.claim_count)
+      setTotal(data.data.total)
+      if(data.data.claim_amount){
+        setClaim(data.data.claim_amount)
+      }else {
+        setClaimSumStatus(false)
+      }
+    }else {
+      Toast.show({
+        type: 'error',
+        text1: 'Quest failed'
+      });
+    }
+  }
+  const getRedPacketUser=async ()=>{
+    const request =  () => RedpacketApi.getMyClaimList(url,{year:2023,redpacket_id:id})
+    const res= await request()
+    if(res.data.code==0){
+      setUserData(res.data.data.list)
+    }else {
+      Toast.show({
+        type: 'error',
+        text1: 'QuestUser failed'
+      });
+    }
+  }
+  const avatarsResUrl = useResourceUrl('avatars');
+  const {user} = useSelector((state: Models) => state.global);
+
+  const isMaxAmount=(amount:string)=>{
+    let mix=0;
+    userData.forEach((e,index)=>{
+      // @ts-ignore
+      const eAmount=toNumber(e.amount)
+      if(index==0){
+        mix=eAmount
+      }else {
+        if(eAmount-mix>0){
+          mix=eAmount
+        }
+      }
+    })
+    if(toNumber(amount)==mix){
+      return true
+    }
+  }
+  const renderItem = (item:any,isMax:boolean) => {
+    return (
+        <ChatChannel
+            avatar={{uri:`${avatarsResUrl}/${item.user_avatar}`}}
+            channelName={item.user_nickname}
+            isLuckKing={isMax}
+            amount={item.amount}
+            time={getTime(item.modified_on)}
+        />
+    );
+  }
+  useEffect(()=>{
+    getRedPacketInfo()
+    getRedPacketUser()
+  },[])
   return (
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}}>
       <View style={styles.container}>
         <View style={styles.header}>
           <FavorDaoNavBar title={'Claim Details'} rightComponent={
-            <TouchableOpacity style={styles.right}>
+            <TouchableOpacity style={styles.right} onPress={
+              ()=>{
+                // @ts-ignore
+                navigation.navigate(Screens.LuckyPacketRecord);
+              }
+            }>
               <SvgIcon svg={<ClaimDetailsRight/>}/>
             </TouchableOpacity>
           }/>
@@ -29,61 +119,38 @@ const ClaimDetails:React.FC<Props> = (props) => {
                 <Image
                   style={[styles.imageIcon, styles.iconLayout]}
                   resizeMode="cover"
-                  source={require("../../../assets/redUserImage.png")}
+                  source={{uri: `${avatarsResUrl}/${user?.avatar}`}}
                 />
               </View>
-              <Text style={[styles.andrewParker, styles.titleTypo]}>Andrew Parker</Text>
+              <Text style={[styles.andrewParker, styles.titleTypo]}>{user?.nickname}</Text>
               <Text style={[styles.mayYouBe, styles.title1Typo]}>
                 May you be happy and prosperous!
               </Text>
             </View>
-            <View style={styles.favt}>
-              <Text style={styles.favtNumber}>2.0 <Text style={styles.favtText}>FavT</Text></Text>
+            <View style={[styles.favt,{display: claimSumStatus?'flex':'none'}]}>
+              <Text style={styles.favtNumber}>{claimSum} <Text style={styles.favtText}>FavT</Text></Text>
             </View>
           </View>
 
           <View style={styles.frameView}>
             <View style={[styles.titleWrapper, styles.frameGroupFlexBox]}>
-              <Text style={styles.title1Typo}>Received：8/10</Text>
+              <Text style={styles.title1Typo}>Received：{claim_count}/{total}</Text>
             </View>
             <View style={styles.chatchannelParent}>
-              <ChatChannel
-                avatar={require("../../../assets/notification.png")}
-                channelName="Henry Arthur"
-                isLuckKing={true}
-                amount={2.0}
-                time={'2023-05-06 11:11:11'}
-              />
-              <ChatChannel
-                avatar={require("../../../assets/notification.png")}
-                channelName="Flores Juanita"
-                record={'1/1'}
-                amount={1.0}
-                time={'2023-05-06 11:11:11'}
-              />
-              <ChatChannel
-                avatar={require("../../../assets/notification.png")}
-                channelName="Miles Esther"
-                amount={1.0}
-                time={'2023-05-06 11:11:11'}
-              />
-              <ChatChannel
-                avatar={require("../../../assets/notification.png")}
-                channelName="Miles Esther"
-                amount={1.0}
-                time={'2023-05-06 11:11:11'}
-              />
-              <ChatChannel
-                avatar={require("../../../assets/notification.png")}
-                channelName="Miles Esther"
-                amount={1.0}
-                time={'2023-05-06 11:11:11'}
-              />
-              <ChatChannel
-                avatar={require("../../../assets/notification.png")}
-                channelName="Miles Esther"
-                amount={1.0}
-                time={'2023-05-06 11:11:11'}
+              <FlatList
+                  data={userData}
+                  // @ts-ignore
+                  renderItem={({item,index})=>{
+                    let isMax=false
+                    // @ts-ignore
+                    if(isMaxAmount(item.amount)){
+                      isMax=true
+                    }
+                    // @ts-ignore
+                    return <>{renderItem(item,isMax)}</>
+                  }}
+                  // @ts-ignore
+                  keyExtractor={item => item.id}
               />
             </View>
           </View>
@@ -137,6 +204,7 @@ const styles = StyleSheet.create({
   iconLayout: {
     height: 50,
     width: 50,
+    borderRadius:50
   },
   title1Typo: {
     color: '#999999',
