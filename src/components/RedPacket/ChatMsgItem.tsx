@@ -13,18 +13,18 @@ import ClaimRes from "./ClaimRes";
 import Screens from "../../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
 import ImgViews from "../ImgViews";
+import {getIntervalHours} from "../../utils/util";
 
 export type Props = {
   isUser?: boolean,
-  type?: string,
-  messageInfo?: CometChat.BaseMessage,
-  isMy?: boolean,
+  type: string,
+  messageInfo: CometChat.BaseMessage,
 };
 
 const ChatMsgItem: React.FC<Props> = (props) => {
   const navigation = useNavigation();
   const url = useUrl();
-  const {isUser, type, messageInfo, isMy} = props;
+  const {isUser, type, messageInfo } = props;
   const [videoPlay, setVideoPlay] = useState(true);
   const [redStatus, setRedStatus] = useState(2);
   const [claimResStatus, setClaimResStatus] = useState(false);
@@ -62,7 +62,9 @@ const ChatMsgItem: React.FC<Props> = (props) => {
       // @ts-ignore
       const { data } = await RedPacketApi.getRedPacketInfo(url,messageInfo.customData.id);
       const redPacket: RedPacketInfo = data.data;
-      if(redPacket.total === Number(redPacket.claim_count) || Number(redPacket.claim_amount) > 0) return setRedStatus(1);
+      const hour = getIntervalHours(data.data.created_on);
+      if (hour > 24) return setRedStatus(0);
+      if (redPacket.total === Number(redPacket.claim_count) || Number(redPacket.claim_amount) > 0) return setRedStatus(1);
       return setRedStatus(2);
     } catch (e) {
       if(e instanceof Error) {
@@ -72,14 +74,14 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    if(type === 'redPacket') {
+    if (type === 'redPacket') {
       // @ts-ignore
       setRedPacketId(messageInfo.customData.id)
       // @ts-ignore
       setSenderName(messageInfo.data.entities.sender.entity.name)
       getRedPacketStatus();
     }
-  })
+  },[])
 
   return (
     <View style={styles.item}>
@@ -227,7 +229,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                             }
                           </Text>
                           <Text style={[styles.Received, {display: redStatus !== 2 ? 'flex' : 'none'}]}>
-                              Received
+                            { redStatus === 1 ? 'Received' : 'Expired'}
                           </Text>
                       </View>
                   </View>

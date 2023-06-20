@@ -217,3 +217,10 @@ export const getChatsDaoName = (str: string) => {
     const parts = str.split('DAO');
     return parts[1]
 }
+
+export const getIntervalHours = (time: number) => {
+    const nowDate = Date.now() / 1000;
+    const diffInMs = Math.abs(nowDate - time);
+    const diffInHours = Math.floor(diffInMs / (60 * 60));
+    return diffInHours;
+}
