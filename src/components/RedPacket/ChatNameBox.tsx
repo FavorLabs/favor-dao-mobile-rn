@@ -20,7 +20,7 @@ const ChatNameBox: React.FC<Props> = (props) => {
   const [actionText,setActionText] = useState('');
   const [messageInfoType,setMessageInfoType] = useState('');
 
-  const judgmentType = () => {
+  const judgmentType = async () => {
     // @ts-ignore
     const category = messageInfo.getRawMessage().category;
     if(category === 'action') {
@@ -34,18 +34,19 @@ const ChatNameBox: React.FC<Props> = (props) => {
     } else if(category === 'message') {
       // @ts-ignore
       const messageType = messageInfo.getRawMessage().type;
-      setMessageInfoType(messageType)
+      await setMessageInfoType(messageType)
     } else if(category === 'custom') {
       // @ts-ignore
-      setMessageInfoType(messageInfo.getRawMessage().type)
+      await setMessageInfoType(messageInfo.getRawMessage().type)
     }
 
   };
 
   useEffect(()=> {
     setIsMy(messageInfo.getSender().getName() === user?.nickname ? true : false);
-    judgmentType();
+    // judgmentType();
   },[messageInfo])
+
 
   return (
     <View style={styles.container}>
@@ -57,7 +58,8 @@ const ChatNameBox: React.FC<Props> = (props) => {
       }
 
       {
-        !isAction ?
+        // @ts-ignore
+        messageInfo.getRawMessage().category !== 'action' ?
         <>
           {
             !isMy ?
@@ -67,7 +69,11 @@ const ChatNameBox: React.FC<Props> = (props) => {
                   <Text style={styles.name}>{messageInfo.getSender().getName()}</Text>
                 </View>
                 <View style={styles.msgbox}>
-                  <ChatMsgItem type={messageInfoType} messageInfo={messageInfo}/>
+                  <ChatMsgItem
+                    // @ts-ignore
+                    type={messageInfo.getRawMessage().type}
+                    messageInfo={messageInfo}
+                  />
                 </View>
               </>
               :
@@ -81,7 +87,12 @@ const ChatNameBox: React.FC<Props> = (props) => {
                 </View>
                 <View style={styles.msgboxIsMine}>
                   <View style={styles. msgboxIsMineBox}>
-                    <ChatMsgItem isUser={true} type={messageInfoType} messageInfo={messageInfo} isMy={true}/>
+                    <ChatMsgItem
+                      isUser={true}
+                      // @ts-ignore
+                      type={messageInfo.getRawMessage().type}
+                      messageInfo={messageInfo}
+                    />
                   </View>
                 </View>
               </>
@@ -91,7 +102,10 @@ const ChatNameBox: React.FC<Props> = (props) => {
         <>
           <View style={styles.actionRow}>
             <View style={styles.actionContent}>
-              <Text style={styles.actionText}>{actionText}</Text>
+              <Text style={styles.actionText}>{
+                // @ts-ignore
+                (messageInfo.action === 'joined' || messageInfo.action === 'left') && messageInfo.message
+              }</Text>
             </View>
           </View>
         </>
