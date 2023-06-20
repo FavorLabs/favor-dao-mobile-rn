@@ -34,6 +34,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
     const [isJoin,setIsJoin] = useState<boolean>(daoInfo.is_joined);
     const [isLoading, setIsLoading] = useState(false);
     const route = useRoute();
+    const [isChat, setIsChat] = useState(false);
 
     const imagesResUrl = useResourceUrl('images');
 
@@ -57,14 +58,12 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
         const guid = h64(Buffer.from(str), 0).toString()
         const group = await CometChat.getGroup(guid)
         // @ts-ignore
-        navigation.navigate(Screens.Main.Chat, {
-            group,
-            time: Date.now()
-        })
+        navigation.navigate(Screens.ChatInDAO,{ info: group });
     }
 
     useFocusEffect(useCallback(()=> {
         setIsLoading(false);
+        if(route.name === 'ChatInDAO') setIsChat(true);
     },[]))
 
     return (
@@ -83,7 +82,7 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
               {
                   isShowBtnChatToggle ?
                     <TouchableOpacity onPress={toFeedsOfDao}>
-                        <BtnChatToggle/>
+                        <BtnChatToggle isChat={isChat}/>
                     </TouchableOpacity>
                     : <View></View>
               }

@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import Video from 'react-native-video';
+import React, {useEffect, useState, useRef} from 'react';
+import {ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import Video, {OnBufferData} from 'react-native-video';
 import {useResourceUrl, useUrl} from "../../utils/hook";
 import LinearGradient from 'react-native-linear-gradient';
 import {CometChat} from "@cometchat-pro/react-native-chat";
@@ -12,6 +12,7 @@ import {RedPacketInfo} from "../../declare/api/RedapacketApi";
 import ClaimRes from "./ClaimRes";
 import Screens from "../../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
+import ImgViews from "../ImgViews";
 
 export type Props = {
   isUser?: boolean,
@@ -23,23 +24,33 @@ export type Props = {
 const ChatMsgItem: React.FC<Props> = (props) => {
   const navigation = useNavigation();
   const url = useUrl();
-  const avatarsResUrl = useResourceUrl('avatars');
-  const { isUser, type, messageInfo, isMy } = props;
-  const [videoPlay,setVideoPlay] = useState(true);
-  const [redStatus,setRedStatus] = useState(2);
-  const [claimResStatus,setClaimResStatus] = useState(false)
-  const [redPacketId,setRedPacketId] = useState('')
+  const {isUser, type, messageInfo, isMy} = props;
+  const [videoPlay, setVideoPlay] = useState(true);
+  const [redStatus, setRedStatus] = useState(2);
+  const [claimResStatus, setClaimResStatus] = useState(false);
+  const [redPacketId, setRedPacketId] = useState('');
+  const [imgShowStatus, setImgShowStatus] = useState(false);
+  const player = useRef<Video>(null);
+  const [videoLoading, setVideoLoading] = useState<boolean>(false);
+
   const VideoClick = () => {
-    setVideoPlay(!videoPlay);
+    if(videoLoading) return;
+    if(player.current) {
+      player.current.presentFullscreenPlayer();
+    }
   };
 
+  const buffer = (data: OnBufferData) => {
+    setVideoLoading(data.isBuffering)
+  }
+
   const clickRedPacket = () => {
-    if(redStatus === 0 ) {
+    if (redStatus === 0) {
       // @ts-ignore
-      navigation.navigate(Screens.ClaimDetails,{id:messageInfo.customData.id})
+      navigation.navigate(Screens.ClaimDetails, {id: messageInfo.customData.id})
     } else if (redStatus === 1) {
       // @ts-ignore
-      navigation.navigate(Screens.ClaimDetails,{id:messageInfo.customData.id})
+      navigation.navigate(Screens.ClaimDetails, {id: messageInfo.customData.id})
     } else {
       setClaimResStatus(true)
     }
@@ -48,19 +59,19 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   const getRedPacketStatus = async () => {
     try {
       // @ts-ignore
-      const { data } = await RedPacketApi.getRedPacketInfo(url,messageInfo.customData.id);
+      const {data} = await RedPacketApi.getRedPacketInfo(url, messageInfo.customData.id);
       const redPacket: RedPacketInfo = data.data;
-      if(redPacket.total === Number(redPacket.claim_count) || Number(redPacket.claim_amount) > 0) return setRedStatus(1);
+      if (redPacket.total === Number(redPacket.claim_count) || Number(redPacket.claim_amount) > 0) return setRedStatus(1);
       return setRedStatus(2);
     } catch (e) {
-      if(e instanceof Error) {
+      if (e instanceof Error) {
         console.log(e.message)
       }
     }
   }
 
   useEffect(() => {
-    if(type === 'redPacket') {
+    if (type === 'redPacket') {
       // @ts-ignore
       setRedPacketId(messageInfo.customData.id)
       getRedPacketStatus();
@@ -85,32 +96,57 @@ const ChatMsgItem: React.FC<Props> = (props) => {
       }
       {
         type === 'image' &&
-          <Image
-              style={[styles.image, styles.BDRmax]}
-              resizeMethod={"resize"}
-              resizeMode={"contain"}
-            // @ts-ignore
-              source={{uri: messageInfo.data.url}}/>
+          <>
+              <TouchableOpacity onPress={() => setImgShowStatus(true)} style={[styles.image, styles.BDRmax]}>
+                  <Image
+                      style={[styles.image, styles.BDRmax]}
+                      resizeMethod={"resize"}
+                      resizeMode={"contain"}
+                      // @ts-ignore
+                      source={{uri: messageInfo.data.url}}
+                  />
+              </TouchableOpacity>
+              <ImgViews
+                  visibleStatus={imgShowStatus}
+                  setImgShowStatus={setImgShowStatus}
+                  // @ts-ignore
+                  images={[{uri: messageInfo.data.url}]}
+                  imageIndex={0}
+              />
+          </>
       }
       {
         type === 'video' &&
           <TouchableOpacity style={[styles.videoBox, styles.video, styles.BDRmax]} onPress={VideoClick}>
+            {
+              videoLoading &&
+                <View style={styles.videoLoading}>
+                    <ActivityIndicator size={"large"}/>
+                </View>
+            }
               <Video
+                  ref={player}
                   style={styles.video}
                   paused={videoPlay}
-                  // @ts-ignore
+                // @ts-ignore
                   source={{uri: messageInfo.data.url}}
-                  // controls={true}
-                  repeat={true}
+                  controls={true}
+                  onFullscreenPlayerWillPresent={() => {
+                    setVideoPlay(false)
+                  }}
+                  onFullscreenPlayerWillDismiss={() => {
+                    setVideoPlay(true);
+                  }}
+                  onEnd={()=> setVideoPlay(true)}
+                  onBuffer={buffer}
               />
             {
               videoPlay &&
-              <TouchableOpacity style={styles.playPause} onPress={VideoClick}>
-                  <Image
-                      resizeMode="cover"
-                      source={require("../../assets/playcircle.png")}
-                  />
-              </TouchableOpacity>
+                    <Image
+                        style={styles.playPause}
+                        resizeMode="cover"
+                        source={require("../../assets/playcircle.png")}
+                    />
             }
           </TouchableOpacity>
       }
@@ -118,26 +154,26 @@ const ChatMsgItem: React.FC<Props> = (props) => {
         type === 'file' &&
           <View style={styles.fileRow}>
               <View style={styles.fileContent}>
-                <View style={styles.fileTitle}>
-                    <Text style={styles.fileNameText} numberOfLines={1}>
-                      {
-                      // @ts-ignore
-                        messageInfo.data.name ? messageInfo.data.name : 'undefined'
-                      }
-                    </Text>
-                </View>
-                <View style={styles.fileIconRow}>
-                    <Image
-                        style={styles.fileIcon}
-                        source={require('../../assets/fileIcon.png')}
-                    />
-                    <View style={styles.fileType}>
-                        <Text style={styles.fileTypeText} numberOfLines={1}>.{
+                  <View style={styles.fileTitle}>
+                      <Text style={styles.fileNameText} numberOfLines={1}>
+                        {
                           // @ts-ignore
-                          messageInfo.data.name ? messageInfo.data.name.split('.')[1] : '?'
-                        }</Text>
-                    </View>
-                </View>
+                          messageInfo.data.name ? messageInfo.data.name : 'undefined'
+                        }
+                      </Text>
+                  </View>
+                  <View style={styles.fileIconRow}>
+                      <Image
+                          style={styles.fileIcon}
+                          source={require('../../assets/fileIcon.png')}
+                      />
+                      <View style={styles.fileType}>
+                          <Text style={styles.fileTypeText} numberOfLines={1}>.{
+                            // @ts-ignore
+                            messageInfo.data.name ? messageInfo.data.name.split('.')[1] : '?'
+                          }</Text>
+                      </View>
+                  </View>
               </View>
               <TouchableOpacity style={styles.fileDown}>
                   <SvgIcon svg={<FileDownloadSvg/>} width={10} height={12}/>
@@ -146,7 +182,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
       }
       {
         type === 'redPacket' &&
-          <TouchableOpacity onPress={clickRedPacket} style={[styles.redPacket,styles.BDRmax]}>
+          <TouchableOpacity onPress={clickRedPacket} style={[styles.redPacket, styles.BDRmax]}>
               <LinearGradient start={{x: 0.0, y: 0}} end={{x: 1, y: 0}}
                               colors={['#FF8D1A', '#FF5530']}
                               style={[styles.redPacket, styles.BDRmax, {opacity: redStatus !== 2 ? 0.7 : 1}, {
@@ -195,7 +231,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
               </LinearGradient>
           </TouchableOpacity>
       }
-          <ClaimRes claimResStatus={claimResStatus} setClaimResStatus={setClaimResStatus} id={redPacketId}/>
+      <ClaimRes claimResStatus={claimResStatus} setClaimResStatus={setClaimResStatus} id={redPacketId}/>
     </View>
   )
 }
@@ -343,6 +379,18 @@ const styles = StyleSheet.create({
   video: {
     width: 250,
     height: 200
+  },
+  videoLoading: {
+    position: 'absolute',
+    top: 0,
+    left:0,
+    right:0,
+    bottom: 0,
+    zIndex: 999,
+    backgroundColor:'rgba(0,0,0,1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 17,
   },
   BDRmax: {
     borderRadius: 17

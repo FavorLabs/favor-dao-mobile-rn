@@ -1,11 +1,9 @@
 import * as React from "react";
-import {StyleSheet, View, Text, FlatList, TouchableOpacity, ActivityIndicator} from "react-native";
+import {StyleSheet, View, Text, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl} from "react-native";
 import ExpandedDAOHeader from "../../../components/ExpandedDAOHeader";
 import {useRoute} from "@react-navigation/native";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
-import {useDispatch} from "react-redux";
 import {DaoInfo} from "../../../declare/api/DAOApi";
-import ChatLayout from "../../../components/RedPacket/ChatLayout";
 import MessageInputer from "../../../components/RedPacket/MessageInputer";
 import DaoApi from "../../../services/DAOApi/Dao";
 import {useUrl} from "../../../utils/hook";
@@ -32,7 +30,7 @@ const ChatInDAOScreen = () => {
 
     const getDaoInfo = async () => {
         try {
-            const { data } = await DaoApi.getById(url, info.daoName);
+            const { data } = await DaoApi.getById(url, info.name);
             if (data.data) {
                 setDaoInfo(data.data);
             }
@@ -53,6 +51,7 @@ const ChatInDAOScreen = () => {
     }
 
     const handleLoadMore = async () => {
+        if(messageList.length < limit) return;
         if(!loading) setLoading(true);
         try {
             const data: CometChat.BaseMessage[] = await messagesRequest.fetchPrevious();
@@ -94,19 +93,28 @@ const ChatInDAOScreen = () => {
     },[]);
 
     useEffect(() => {
-        const listenerID = 'group_message_listener';
+        const listenerID = info.guid;
 
         CometChat.addMessageListener(
           listenerID,
           new CometChat.MessageListener({
               onTextMessageReceived: (textMessage:CometChat.TextMessage) => {
-                  setMessageList([textMessage,...messageList])
+                  // @ts-ignore
+                  if(textMessage.getReceiver().guid === info.guid) {
+                      setMessageList([textMessage,...messageList])
+                  }
               },
               onMediaMessageReceived: (mediaMessage: CometChat.MediaMessage) => {
-                  setMessageList([mediaMessage,...messageList])
+                  // @ts-ignore
+                  if(mediaMessage.getReceiver().guid === info.guid) {
+                      setMessageList([mediaMessage,...messageList])
+                  }
               },
               onCustomMessageReceived: (customMessage: CometChat.CustomMessage) => {
-                  setMessageList([customMessage,...messageList])
+                  // @ts-ignore
+                  if(customMessage.getReceiver().guid === info.guid) {
+                      setMessageList([customMessage,...messageList])
+                  }
               }
           }),
         );

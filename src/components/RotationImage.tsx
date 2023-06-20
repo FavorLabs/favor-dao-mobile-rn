@@ -62,14 +62,10 @@ const RotationImage: React.FC<Props> = (props) => {
       <>
         <View style={styles.container}>
           <SwiperFlatList
-              // autoplay
-              // autoplayDelay={1}
-              // autoplayLoop
               style={styles.swiper}
               showPagination= { info[3].length > 1 ? true : false}
               data={info[3]}
               renderItem={({ item }) => Item(item)}
-              // vertical={false}
           />
         </View>
         <ImgViews visibleStatus={imgShowStatus} images={setImgViewsData(info[3])} imageIndex={imgIndex} setImgShowStatus={setImgShowStatus}/>
