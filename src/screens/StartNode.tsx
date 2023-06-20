@@ -92,6 +92,7 @@ const StartNode = () => {
     }
   }
   const startNode = async (fc: FavorXConfig) => {
+    await Favor.stop();
     await Favor.startNode({
       "network-id": fc['network-id'],
       "boot-nodes": fc['bootnode'].join(','),
@@ -110,7 +111,6 @@ const StartNode = () => {
       }],
       'vpn-enable': Platform.OS === 'android'
     }).catch(async error => {
-      await Favor.stop();
       throw error
     })
     console.log("Node start success");
