@@ -8183,8 +8183,8 @@ react-native-fast-image@^8.6.3:
   integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
 
 "react-native-favor@https://github.com/FavorLabs/react-native-favor.git":
-  version "1.4.2"
-  resolved "https://github.com/FavorLabs/react-native-favor.git#ed65ca6f87467116176539aa0e8119dfe5fbc042"
+  version "1.4.3"
+  resolved "https://github.com/FavorLabs/react-native-favor.git#31e52fb587a7eb39f69feb26b2195b1d9166f3d1"
 
 react-native-fs@^2.20.0:
   version "2.20.0"

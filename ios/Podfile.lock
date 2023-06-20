@@ -453,7 +453,7 @@ PODS:
     - React-Core
   - react-native-document-picker (9.0.1):
     - React-Core
-  - react-native-favor (1.4.2):
+  - react-native-favor (1.4.3):
     - React-Core
   - react-native-get-random-values (1.8.0):
     - React-Core
@@ -1063,7 +1063,7 @@ SPEC CHECKSUMS:
   react-native-background-actions: 30c71460dd98a2aaae31f6f5c87546dd243b8921
   react-native-background-timer: 17ea5e06803401a379ebf1f20505b793ac44d0fe
   react-native-document-picker: 2b8f18667caee73a96708a82b284a4f40b30a156
-  react-native-favor: 6b3182d4e11a167af87e5bd34249b941e054f3a4
+  react-native-favor: 3e4449c158c387e6148505c6072ed54db2c01b76
   react-native-get-random-values: a6ea6a8a65dc93e96e24a11105b1a9c8cfe1d72a
   react-native-image-picker: ec9b713e248760bfa0f879f0715391de4651a7cb
   react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
