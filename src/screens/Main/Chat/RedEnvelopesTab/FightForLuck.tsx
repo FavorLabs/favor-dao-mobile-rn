@@ -2,10 +2,14 @@ import * as React from "react";
 import {Image, StyleSheet, View, Text, TouchableOpacity, ScrollView, Pressable,} from "react-native";
 import TextInputBlock from "../../../../components/TextInputBlock";
 import FavorDaoButton from "../../../../components/FavorDaoButton";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import MoneyPacket from "../../../../components/RedPacket/MoneyPacket";
 import {isNumber, toNumber} from "lodash";
 import {string} from "prop-types";
+import UserApi from "../../../../services/DAOApi/User";
+import Toast from "react-native-toast-message";
+import {useUrl} from "../../../../utils/hook";
+import {addDecimal} from "../../../../utils/balance";
 
 
 type Props ={
@@ -18,22 +22,36 @@ const FightForLuck: React.FC<Props> = (props) => {
     const [luckyModal,setLuckyModal]=useState(false)
     const [LuckyPacketQuantitySum,setLuckyPacketQuantitySum]=useState('')
     const [TotalAmountSum,setTotalAmountSum]=useState('')
+    const [balance, setBalance] = useState<string>('0');
     const [wishes,setWishes]=useState('')
-    const clearInp=()=>{
+    const url = useUrl();
+    const getBalance = async () => {
+        try {
+            const {data} = await UserApi.getAccounts(url);
+            setBalance(data.data[0].balance)
+        } catch (e) {
+            if (e instanceof Error)
+                Toast.show({
+                    type: 'error',
+                    // @ts-ignore
+                    text1: e.message,
+                });
+        }
+    }
+    const clearInp= ()=>{
         setLuckyPacketQuantitySum('')
         setTotalAmountSum('')
         setWishes('')
     }
+    useEffect(()=>{
+         getBalance()
+    },[])
     function isPositiveInt(str:string) {
         return /^[1-9]\d*$/.test(str);
     }
-    function isPositiveNumber(str:string) {
-        return /^\d+(\.\d+)?$/.test(str) && parseFloat(str) > 0;
-    }
-
     const createDisable = useMemo(() => {
         return !(
-            isPositiveNumber(TotalAmountSum) && LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!=='' && isPositiveInt(LuckyPacketQuantitySum)  && wishes && LuckyPacketQuantitySum <= memberCount
+            !(TotalAmountSum > addDecimal(balance)) && isPositiveInt(TotalAmountSum) && LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!=='' && isPositiveInt(LuckyPacketQuantitySum)  && wishes && LuckyPacketQuantitySum <= memberCount
         )
     }, [LuckyPacketQuantitySum,TotalAmountSum,wishes]);
     return (

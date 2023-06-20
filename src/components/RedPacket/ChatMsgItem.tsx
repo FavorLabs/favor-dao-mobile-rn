@@ -32,6 +32,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   const [imgShowStatus, setImgShowStatus] = useState(false);
   const player = useRef<Video>(null);
   const [videoLoading, setVideoLoading] = useState<boolean>(false);
+  const [senderName,setSenderName]=useState('')
 
   const VideoClick = () => {
     if(videoLoading) return;
@@ -45,12 +46,12 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   }
 
   const clickRedPacket = () => {
-    if (redStatus === 0) {
+    if(redStatus === 0 ) {
       // @ts-ignore
-      navigation.navigate(Screens.ClaimDetails, {id: messageInfo.customData.id})
+      navigation.navigate(Screens.ClaimDetails,{id:messageInfo.customData.id})
     } else if (redStatus === 1) {
       // @ts-ignore
-      navigation.navigate(Screens.ClaimDetails, {id: messageInfo.customData.id})
+      navigation.navigate(Screens.ClaimDetails,{id:messageInfo.customData.id})
     } else {
       setClaimResStatus(true)
     }
@@ -59,21 +60,23 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   const getRedPacketStatus = async () => {
     try {
       // @ts-ignore
-      const {data} = await RedPacketApi.getRedPacketInfo(url, messageInfo.customData.id);
+      const { data } = await RedPacketApi.getRedPacketInfo(url,messageInfo.customData.id);
       const redPacket: RedPacketInfo = data.data;
-      if (redPacket.total === Number(redPacket.claim_count) || Number(redPacket.claim_amount) > 0) return setRedStatus(1);
+      if(redPacket.total === Number(redPacket.claim_count) || Number(redPacket.claim_amount) > 0) return setRedStatus(1);
       return setRedStatus(2);
     } catch (e) {
-      if (e instanceof Error) {
+      if(e instanceof Error) {
         console.log(e.message)
       }
     }
   }
 
   useEffect(() => {
-    if (type === 'redPacket') {
+    if(type === 'redPacket') {
       // @ts-ignore
       setRedPacketId(messageInfo.customData.id)
+      // @ts-ignore
+      setSenderName(messageInfo.data.entities.sender.entity.name)
       getRedPacketStatus();
     }
   })
@@ -231,7 +234,9 @@ const ChatMsgItem: React.FC<Props> = (props) => {
               </LinearGradient>
           </TouchableOpacity>
       }
-      <ClaimRes claimResStatus={claimResStatus} setClaimResStatus={setClaimResStatus} id={redPacketId}/>
+          <ClaimRes claimResStatus={claimResStatus} setClaimResStatus={setClaimResStatus} id={redPacketId} senderName={senderName}
+              // @ts-ignore
+                    messageInfo={messageInfo}/>
     </View>
   )
 }

@@ -39,8 +39,13 @@ export default {
     },
     getMyClaimList(url: string,params:any) {
         return request({
-            url: url + '//redpacket/claims',
+            url: url + '/redpacket/claims',
             params
+        });
+    },
+    getClai(url:string,id:string) {
+        return request({
+            url: url + `/redpacket/claims/${id}`,
         });
     },
 }

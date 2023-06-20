@@ -10,13 +10,14 @@ import {useResourceUrl, useUrl} from "../../../utils/hook";
 import {useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import RedpacketApi from "../../../services/RedpacketApi";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import Toast from "react-native-toast-message";
 import {useRoute} from "@react-navigation/native";
 import {toNumber} from "lodash";
 import {getTime} from "../../../utils/util";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
+import {addDecimal} from "../../../utils/balance";
 
 export type Props = {
 
@@ -32,12 +33,19 @@ const ClaimDetails:React.FC<Props> = (props) => {
   const [claim_count,setClaim_count]=useState('')
   const [total,setTotal]=useState('')
   const [userData,setUserData]=useState([])
+  const [type,setType]=useState(0)
+  const [refund_status,setRefund_status]=useState(0)
+  const showClaimSum=useMemo(()=>{
+    return  parseFloat(claimSum)/1000
+  },[claimSum])
   const getRedPacketInfo = async ()=>{
     const request =  () => RedpacketApi.getRedPacketInfo(url,id)
     const { data }= await request()
     if (data.code==0){
       setClaim_count(data.data.claim_count)
       setTotal(data.data.total)
+      setType(data.data.type)
+      setRefund_status(data.data.refund_status)
       if(data.data.claim_amount){
         setClaim(data.data.claim_amount)
       }else {
@@ -51,7 +59,7 @@ const ClaimDetails:React.FC<Props> = (props) => {
     }
   }
   const getRedPacketUser=async ()=>{
-    const request =  () => RedpacketApi.getMyClaimList(url,{year:2023,redpacket_id:id})
+    const request =  () => RedpacketApi.getClai(url,id)
     const res= await request()
     if(res.data.code==0){
       setUserData(res.data.data.list)
@@ -128,13 +136,18 @@ const ClaimDetails:React.FC<Props> = (props) => {
               </Text>
             </View>
             <View style={[styles.favt,{display: claimSumStatus?'flex':'none'}]}>
-              <Text style={styles.favtNumber}>{claimSum} <Text style={styles.favtText}>FavT</Text></Text>
+              <Text style={styles.favtNumber}>{showClaimSum}<Text style={styles.favtText}>FavT</Text></Text>
             </View>
           </View>
 
           <View style={styles.frameView}>
             <View style={[styles.titleWrapper, styles.frameGroupFlexBox]}>
-              <Text style={styles.title1Typo}>Received：{claim_count}/{total}</Text>
+              {
+                refund_status == 0 && <Text style={styles.title1Typo}>Received：{claim_count}/{total}</Text>
+              }
+              {
+                  refund_status == 1 && <Text style={styles.title1Typo}>The luckpacket has expired. Received：{claim_count}/{total}</Text>
+              }
             </View>
             <View style={styles.chatchannelParent}>
               <FlatList
@@ -142,9 +155,11 @@ const ClaimDetails:React.FC<Props> = (props) => {
                   // @ts-ignore
                   renderItem={({item,index})=>{
                     let isMax=false
-                    // @ts-ignore
-                    if(isMaxAmount(item.amount)){
-                      isMax=true
+                    if(type == 0) {
+                      // @ts-ignore
+                      if(isMaxAmount(item.amount)){
+                        isMax=true
+                      }
                     }
                     // @ts-ignore
                     return <>{renderItem(item,isMax)}</>

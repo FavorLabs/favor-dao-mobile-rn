@@ -7,8 +7,12 @@ import {
   ImageSourcePropType,
 } from "react-native";
 import {Color, FontFamily, FontSize, Border, Padding} from "../../GlobalStyles";
+import {addDecimal} from "../../utils/balance";
+import {useState} from "react";
+import {toNumber} from "lodash";
 
 type ChatChannelType = {
+  isShowAvatar?:boolean
   avatar: ImageSourcePropType;
   channelName: string;
   amount: number;
@@ -17,12 +21,11 @@ type ChatChannelType = {
   record?: string;
 };
 
-const ChatChannel = ({avatar, channelName, amount, isLuckKing, record,time}: ChatChannelType) => {
-
+const ChatChannel = ({avatar, channelName, amount, isLuckKing, record,time,isShowAvatar=true}: ChatChannelType) => {
   return (
     <View style={[styles.chatchannel, styles.chatchannelFlexBox]}>
       <Image
-        style={styles.notificationIconLayout}
+        style={[styles.notificationIconLayout,{display:isShowAvatar?'flex':'none'}]}
         resizeMode="cover"
         source={avatar}
       />
@@ -41,7 +44,10 @@ const ChatChannel = ({avatar, channelName, amount, isLuckKing, record,time}: Cha
                 {channelName}
               </Text>
               <Text style={[styles.lastmsgtime, styles.channelnameTypo]}>
-                {amount}.0 FavT
+                {
+                  // @ts-ignore
+                    parseFloat(amount)/1000
+                }FavT
               </Text>
             </View>
             <View style={[styles.lastmessage,styles.chatchannelFlexBox]}>
