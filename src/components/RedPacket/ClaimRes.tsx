@@ -4,24 +4,26 @@ import { Dimensions } from 'react-native';
 import RedpacketApi from "../../services/RedpacketApi";
 import Screens from "../../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
-import {useUrl} from "../../utils/hook";
-import Toast from "react-native-toast-message";
-import {stat} from "react-native-fs";
-import {isLoading} from "expo-font";
+import {useResourceUrl, useUrl} from "../../utils/hook";
+import {getChatsAvatarUrl} from "../../utils/util";
+import {CometChat} from "@cometchat-pro/react-native-chat";
 export type Props = {
     claimResStatus:boolean,
     setClaimResStatus:Function,
-    id:string
+    id:string,
+    senderName:string,
+    messageInfo:CometChat.BaseMessage
 };
 
 const ClaimRes: React.FC<Props> = (props) => {
-    const {claimResStatus,setClaimResStatus,id}=props
+    const {claimResStatus,setClaimResStatus,id,senderName,messageInfo}=props
     const url = useUrl();
     const navigation = useNavigation();
     const status=false
     const [state,setState]=useState(status)
     const [redId,setRedId]=useState('')
     const [loding,setLoding]=useState(false)
+    const avatarsResUrl = useResourceUrl('avatars');
     const Width = Dimensions.get('window').width;
     const Height = Dimensions.get('window').height;
     const todetails =  () => {
@@ -62,11 +64,11 @@ const ClaimRes: React.FC<Props> = (props) => {
                    <View style={styles.msgbox}>
                        <View style={styles.flex}>
                            <View style={[styles.avatarbox,styles.flex]}>
-                               <Image style={styles.avatar} source={{uri:'https://reactnative.dev/img/tiny_logo.png'}}></Image>
+                               <Image style={styles.avatar} source={{uri:`${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender().getAvatar())}`}}></Image>
                            </View>
                        </View>
                        <View style={styles.name}>
-                           <Text style={styles.nametext}>Andrew parker</Text>
+                           <Text style={styles.nametext}>{senderName}</Text>
                        </View>
                        <View style={[styles.notice,styles.flex]}>
                            <Text style={styles.noticetext}>It has been collected completely </Text>

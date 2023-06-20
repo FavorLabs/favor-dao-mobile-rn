@@ -11,7 +11,7 @@ import RedpacketApi from "../../services/RedpacketApi";
 import {useUrl} from "../../utils/hook";
 import {toNumber} from "lodash";
 import Toast from "react-native-toast-message";
-import {addDecimal} from "../../utils/balance";
+import {addDecimal, mulDecimal} from "../../utils/balance";
 import UserApi from "../../services/DAOApi/User";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import sendCustomMessage = CometChat.sendCustomMessage;
@@ -66,8 +66,9 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
     }
     const url = useUrl();
     const confirm = async () => {
-        setLoading(true)
-        try {
+        if (!loading){
+            await setLoading(true)
+            try {
                 const privateKey = WalletController.exportPrivateKey(password);
                 const auth =  await WalletController.getSignatureData(privateKey, type);
                 const res={
@@ -77,7 +78,7 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                     },
                     type:redPacketType,
                     title:title,
-                    amount:amount,
+                    amount:mulDecimal(amount),
                     total:totalToNumber
                 }
                 const request =  () => RedpacketApi.creatRedpacket(url,res)
@@ -90,6 +91,7 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                     });
                     setLoading(false)
                     setVisible(false)
+                    setPassword('')
                     if(redPacketType==0){
                         navigation.goBack()
                     }
@@ -98,27 +100,34 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                         navigation.pop(1)
                     }
 
-                    }else {
+                }else {
                     Toast.show({
                         type: 'error',
                         text1: 'Send faild!'
                     });
+                    setPassword('')
                     setVisible(false)
                 }
-        } catch (e){
-            if (e instanceof Error)
-            {
-                Toast.show({
-                    type: 'error',
-                    text1: e.message
-                });
+            } catch (e){
+                setLoading(false)
+                setVisible(false)
+                if (e instanceof Error)
+                {
+                    Toast.show({
+                        type: 'error',
+                        text1: e.message
+                    });
+                }
+                console.log(e)
             }
-            console.log(e)
         }
     }
     useEffect(() => {
         getBalance()
-    }, [])
+        if (visible==false){
+            setPassword('')
+        }
+    }, [visible])
     return <View style={styles.body}>
         <BottomSheetModal
             height={'50%'}

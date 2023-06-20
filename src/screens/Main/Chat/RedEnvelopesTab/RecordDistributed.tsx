@@ -5,32 +5,43 @@ import {useResourceUrl, useUrl} from "../../../../utils/hook";
 import RedpacketApi from "../../../../services/RedpacketApi";
 import ChatChannel from "../../../../components/RedPacket/ChatChannel";
 import {getTime} from "../../../../utils/util";
-import {ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, FlatList, RefreshControl, ScrollView, StyleSheet, Text, View} from "react-native";
 const RecordDistributed = () => {
     const [userData,setUserData]=useState([])
     const [refreshing, setRefreshing] = React.useState(false);
     const [page,setPage]=useState(1)
     const [loading, setLoading] = useState(false);
+    const [total_rows,setTotal_rows]=useState(0)
+    const year =new Date().getFullYear()
+    const [years,setYears]=useState(year)
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const avatarsResUrl = useResourceUrl('avatars');
     const url = useUrl();
     const getRedPacketUser=async ()=>{
-        const request =  () => RedpacketApi.getMySendList(url,{year:2023})
+        const request =  () => RedpacketApi.getMySendList(url,{year:years,page:1})
         const res= await request()
         if(res.data.code==0){
-            setUserData(res.data.data.list)
-            setPage(page+1)
+            // @ts-ignore
+            await setUserData(() => [...res.data.data.list])
+            await setIsLoadingMore(
+                true
+            );
+            setTotal_rows(res.data.data.pager.total_rows)
+            await setPage(2)
         }else {
             console.log('getRedPacketUser Failed')
         }
     }
     const loadMore = async () => {
-        const request =  () => RedpacketApi.getMySendList(url,{year:2023,page:page,page_size:5})
+        const request =  () => RedpacketApi.getMySendList(url,{year:years,page:page})
         const res= await request()
         if(res.data.code==0){
             // @ts-ignore
-            setUserData([...userData,...res.data.data.list])
-            setPage(page+1)
+            await setUserData([...userData,...res.data.data.list])
+            await setIsLoadingMore(
+                res.data.data.pager.total_rows > page * 10,
+            );
+            await setPage(page+1)
         }else {
             console.log('loadMore Failed')
         }
@@ -38,7 +49,6 @@ const RecordDistributed = () => {
     const handleLoadMore = async () => {
         if (isLoadingMore && !loading) {
             setLoading(true);
-            // await sleep(2000);
             await loadMore();
             setLoading(false);
         }
@@ -46,8 +56,9 @@ const RecordDistributed = () => {
     const renderItem = (item:any) => {
         return (
             <ChatChannel
+                isShowAvatar={false}
                 avatar={{uri:`${avatarsResUrl}/${item.user_avatar}`}}
-                channelName={item.user_nickname}
+                channelName={item.title}
                 isLuckKing={false}
                 amount={item.amount}
                 time={getTime(item.modified_on)}
@@ -56,19 +67,18 @@ const RecordDistributed = () => {
         );
     }
     const onRefresh = async () => {
-        setRefreshing(true);
+        await setRefreshing(true);
         await getRedPacketUser();
-        setRefreshing(false);
+        await setRefreshing(false);
     };
     useEffect(()=>{
         getRedPacketUser()
-    },[])
+    },[years])
     return(
         <>
-            <RecordFavTSum type={1} />
-            <ScrollView >
-                <View style={styles.body}>
-                    <Text style={[styles.text,{display:'flex'}]}> Distributed a total of {userData.length} luckypackets</Text>
+            <RecordFavTSum type={1} setYears={setYears} years={years}/>
+            <Text style={[styles.text,{display:'flex'}]}> Distributed a total of {total_rows} luckypackets</Text>
+            <View style={styles.body}>
                     <FlatList
                         data={userData}
                         // @ts-ignore
@@ -76,6 +86,12 @@ const RecordDistributed = () => {
                             // @ts-ignore
                             return <>{renderItem(item)}</>
                         }}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
+                        }
                         onEndReached={handleLoadMore}
                         onEndReachedThreshold={0.2}
                         ListFooterComponent={() => (
@@ -92,19 +108,20 @@ const RecordDistributed = () => {
                         keyExtractor={item => item.id}
                     />
                 </View>
-            </ScrollView>
         </>
     )
 }
 const styles = StyleSheet.create({
     body:{
-        backgroundColor:'#FFFFFF'
+        backgroundColor:'#FFFFFF',
+        flex:1
     },
     text:{
         textAlign:'center',
         fontSize:15,
         color:'#939393',
-        fontWeight:"400"
+        fontWeight:"400",
+        backgroundColor:'#FFF'
     },
     footer: {
         width: '100%',
