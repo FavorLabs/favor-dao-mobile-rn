@@ -73,11 +73,6 @@ const ChatScreen = () => {
     try {
       const data = await conversationRequest.fetchNext()
       console.log(data,'getInfo');
-      data.map(item => {
-        if(item.getLastMessage()){
-          console.log(item.getLastMessage(),'lastMessage')
-        }
-      })
       let dataList:DataList[] = [];
       data.map(item => {
         // @ts-ignore
@@ -121,6 +116,8 @@ const ChatScreen = () => {
   };
 
   const toChatsDetail = (item:DataList) => {
+
+    CometChat.markAsRead(item.guid, CometChat.RECEIVER_TYPE.GROUP);
     // @ts-ignore
     navigation.navigate(Screens.ChatInDAO,{ info: item });
   }

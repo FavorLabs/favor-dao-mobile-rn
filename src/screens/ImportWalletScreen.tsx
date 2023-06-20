@@ -109,7 +109,7 @@ const ImportWallet = () => {
                                 type === 'mnemonic' ? 'Mnemonic words' : 'Private key'
                             }
                             placeholder={
-                                type === 'mnemonic' ? `Please enter mnemonic words，Separate with semicolons...` : 'Please enter private key'
+                                type === 'mnemonic' ? `Please enter mnemonic words，Separate with space...` : 'Please enter private key'
                             }
                             value={mnemonic}
                             setValue={setMnemonic}

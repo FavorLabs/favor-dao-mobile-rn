@@ -28,7 +28,6 @@ const ChatItem: React.FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toFeedsOfDao = async () => {
-    console.log(isLoading)
     if(isLoading) return ;
     if(isJoin === false){
       return Toast.show({
@@ -42,10 +41,7 @@ const ChatItem: React.FC<Props> = (props) => {
       const guid = h64(Buffer.from(str), 0).toString()
       const group = await CometChat.getGroup(guid)
       // @ts-ignore
-      await navigation.navigate(Screens.Main.Chat, {
-        group,
-        time: Date.now()
-      })
+      navigation.navigate(Screens.ChatInDAO,{ info: group });
       if(setIsShow) setIsShow(false)
     } catch (e) {
       if(e instanceof Error) {

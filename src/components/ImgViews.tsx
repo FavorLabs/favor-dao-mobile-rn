@@ -1,12 +1,13 @@
 import ImageView from "react-native-image-viewing";
 import React, {useState,useEffect} from "react";
 import RowUser from "./RowUser";
+import {ImageSource} from "react-native-image-viewing/dist/@types";
 
 export type Props = {
     visibleStatus: boolean,
-    images:any,
+    images:ImageSource[],
     imageIndex:number,
-    setImgShowStatus:any
+    setImgShowStatus: Function
 }
 const ImgViews: React.FC<Props> = (props) => {
     const {visibleStatus,images,imageIndex,setImgShowStatus} = props;
@@ -21,6 +22,8 @@ const ImgViews: React.FC<Props> = (props) => {
         images={images}
         imageIndex={imageIndex}
         visible={visible}
+        backgroundColor={'#000'}
+        // presentationStyle={'overFullScreen'}
         onRequestClose={() => {
             setIsVisible(false)
             setImgShowStatus(false)

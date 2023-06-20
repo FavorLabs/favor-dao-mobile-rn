@@ -2,16 +2,19 @@ import * as React from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { Color, Border } from "../GlobalStyles";
 
-type Props = {};
+type Props = {
+  isChat: boolean;
+};
 
 const BtnChatToggle: React.FC<Props> = (props) => {
+  const { isChat } = props
   return (
     <View style={styles.btnchattoggle}>
       <View style={styles.btnfeedsFlexBox}>
         <Image
           style={styles.alertCircleIcon}
           resizeMode="cover"
-          source={require("../assets/toChatIcon.png")}
+          source={isChat ? require("../assets/toUnionIcon.png") : require("../assets/toChatIcon.png")}
         />
       </View>
     </View>
