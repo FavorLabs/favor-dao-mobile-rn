@@ -64,7 +64,6 @@ const MessageInputer: React.FC<Props> = (props) => {
 
     CometChat.sendCustomMessage(customMessage).then(
       message => {
-        console.log('Custom message sent successfully:', {message});
         setMessageList([message, ...messageList])
       },
       error => {
@@ -181,10 +180,11 @@ const MessageInputer: React.FC<Props> = (props) => {
         CometChat.RECEIVER_TYPE.GROUP,
       );
 
-      mediaMessage.setData({
-        name: file.name,
-        type: file.type,
-      });
+        mediaMessage.setData({
+          name: file.name,
+          type: file.type,
+          size: res[0].size,
+        });
 
       CometChat.sendMessage(mediaMessage).then(
         message => {
@@ -231,7 +231,7 @@ const MessageInputer: React.FC<Props> = (props) => {
             cameraType: 'back',
           },
           (response: ImagePickerResponse) => {
-            console.log(response, 'response')
+            console.log(response,'response')
             if (response.didCancel) {
               return null;
             }
