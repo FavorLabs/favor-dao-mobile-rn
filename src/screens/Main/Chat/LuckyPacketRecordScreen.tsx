@@ -7,16 +7,18 @@ import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 
 const LuckyPacketRecordScreen = () => {
     return (
-        <BackgroundSafeAreaView headerStyle={{backgroundColor:'#F8F8F8'}}>
-            <View style={styles.header}>
-                <FavorDaoNavBar
-                    title="LuckyPacket Record"
-                    vector={require("../../../assets/vector6.png")}
-                />
-            </View>
-            <View style={styles.content}>
-                <View style={styles.feedsOfDao}>
-                    <RecordTabs />
+        <BackgroundSafeAreaView headerStyle={{backgroundColor:'#f8f8f8'}}>
+            <View style={{backgroundColor:'#F8F8F8',flex:1}}>
+                <View style={styles.header}>
+                    <FavorDaoNavBar
+                        title="LuckyPacket Record"
+                        vector={require("../../../assets/vector6.png")}
+                    />
+                </View>
+                <View style={styles.content}>
+                    <View style={styles.feedsOfDao}>
+                        <RecordTabs />
+                    </View>
                 </View>
             </View>
         </BackgroundSafeAreaView>
@@ -25,8 +27,8 @@ const LuckyPacketRecordScreen = () => {
 
 const styles = StyleSheet.create({
     header:{
-        paddingLeft:20,
-        paddingRight:20,
+        paddingLeft:10,
+        paddingRight:10,
         marginBottom:44
     },
     feedsOfDao: {
@@ -37,11 +39,6 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         justifyContent: 'space-between'
-    },
-    createWallet: {
-        backgroundColor: Color.color2,
-        flex: 1,
-        overflow: "hidden"
     },
 });
 
