@@ -1,5 +1,9 @@
 import axios from 'axios';
 import WalletController from "../libs/walletController";
+import {EventEmitter} from 'events'
+
+export const eventEmitter = new EventEmitter();
+export const errorEvent = 'network_error'
 
 const request = axios.create({
   baseURL: '',
@@ -22,13 +26,16 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log(error.response)
-    if (error.response?.data.code === 500) {
-      return Promise.reject(Error('p2p network is unstable, please try again'));
-    } else if (error.response?.data.msg) {
-      return Promise.reject(Error(error.response?.data.msg))
+    console.log(error)
+    if (error.response && error.response.data) {
+      if (error.response.data.message) {
+        return Promise.reject(Error('p2p network is unstable, please try again'));
+      } else if (error.response.data.msg) {
+        return Promise.reject(Error(error.response.data.msg))
+      }
     }
-    return error;
+    eventEmitter.emit('errorEvent')
+    return Promise.reject(error);
   },
 );
 
