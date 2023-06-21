@@ -37,23 +37,30 @@ const RecordFavTSum :React.FC<Props> = (props) => {
     const [receivedSum,setReceivedSum]=useState(0)
     const [distributedSum,setDistributedSum]=useState(0)
     const [pickerStatus,setPickerStatus]=useState(false)
+    const [loding,setLoding]=useState(false)
 
     const getReceivedSum=async ()=>{
+        await setLoding(true)
         const request =  () => RedpacketApi.getUserClaims(url,{year:years})
         const res= await request()
         if(res.data.code==0){
-            setReceivedSum(res.data.data.total_amount)
+            await setReceivedSum(res.data.data.total_amount)
+            await setLoding(false)
         }else {
             console.log('getReceivedSum Failed')
+            await setLoding(false)
         }
     }
     const getDistributedSum=async ()=>{
+        await setLoding(true)
         const request =  () => RedpacketApi.getUserSends(url,{year:years})
         const res= await request()
         if(res.data.code==0){
-            setDistributedSum(res.data.data.total_amount)
+            await setDistributedSum(res.data.data.total_amount)
+            await setLoding(false)
         }else {
             console.log('getReceivedSum Failed')
+            await setLoding(false)
         }
     }
     useEffect(()=>{
@@ -61,7 +68,6 @@ const RecordFavTSum :React.FC<Props> = (props) => {
         getDistributedSum()
     },[years])
 return (
-
     <View style={styles.body}>
         <Pressable style={styles.yearNum} onPress={()=>setPickerStatus(true)}>
             <Text style={styles.yearText}>{years}</Text>
@@ -75,31 +81,43 @@ return (
         </View>
         <View style={styles.descriptionTextBox}>
           <Text style={styles.descriptionText}>
-            Andrew Parker received a total of
+              {user?.nickname} received a total of
           </Text>
         </View>
         <View style={styles.favTBox}>
             {
-                type == 0 &&
+                type == 0 && !loding &&
                 <Text style={styles.favTSum}>
                     {
                         // @ts-ignore
                         parseFloat(receivedSum)/1000
                     }
+                    {'\u0020'}
+                    <Text style={styles.favtText}>
+                         FavT
+                    </Text>
                 </Text>
             }
             {
-                type == 1 &&
+                type == 1 && !loding &&
                 <Text style={styles.favTSum}>
                     {
                         // @ts-ignore
                         parseFloat(distributedSum)/1000
                     }
+                    {'\u0020'}
+                    <Text style={styles.favtText}>
+                        FavT
+                    </Text>
                 </Text>
             }
-          <Text style={styles.favtText}>
-            FavT
-          </Text>
+            {
+                loding &&
+                <View>
+                    <Text style={{textAlign:'center',marginTop:"35%",fontSize:25,marginBottom:15}}>Loding...</Text>
+                    <ActivityIndicator size="large" color="block" />
+                </View>
+            }
         </View>
         <Modal
             visible={pickerStatus}
@@ -129,7 +147,7 @@ return (
 
 const styles = StyleSheet.create({
     yearPickerBox:{
-       flex:1,
+        flex:1,
         justifyContent:'center',
         alignItems:'center'
     },
@@ -150,8 +168,8 @@ const styles = StyleSheet.create({
         marginBottom:20
     },
     descriptionText:{
-        fontSize:18,
-        textAlign:'center'
+        textAlign:'center',
+        fontSize:20
     },
     descriptionTextBox:{
         marginTop:5
@@ -169,14 +187,11 @@ const styles = StyleSheet.create({
         backgroundColor:"#F8F8F8"
     },
     favtText:{
-        fontSize:16,
-        height:16,
-        position:'absolute',
-        bottom:13,
-        right:"13%"
+        fontSize:20,
+        fontWeight:'normal'
     },
     favTSum:{
-        fontSize: 60,
+        fontSize: 40,
         fontWeight: "700",
     },
     favTBox:{

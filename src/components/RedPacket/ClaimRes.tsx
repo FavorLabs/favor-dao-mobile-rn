@@ -12,11 +12,12 @@ export type Props = {
     setClaimResStatus:Function,
     id:string,
     senderName:string,
-    messageInfo:CometChat.BaseMessage
+    messageInfo:CometChat.BaseMessage,
+    setRedStatus:Function
 };
 
 const ClaimRes: React.FC<Props> = (props) => {
-    const {claimResStatus,setClaimResStatus,id,senderName,messageInfo}=props
+    const {claimResStatus,setClaimResStatus,id,senderName,messageInfo,setRedStatus}=props
     const url = useUrl();
     const navigation = useNavigation();
     const status=false
@@ -36,6 +37,7 @@ const ClaimRes: React.FC<Props> = (props) => {
         try{
             const request =  () => RedpacketApi.claimRedpacket(url,redId)
             const {data}= await request()
+            setRedStatus(1)
             if(data.code==0){
                 setClaimResStatus(false)
                 setLoding(false)
@@ -43,6 +45,7 @@ const ClaimRes: React.FC<Props> = (props) => {
                 navigation.navigate(Screens.ClaimDetails,{id:redId})
             }
         } catch (e) {
+            setRedStatus(1)
             setLoding(false)
             setState(!state)
     }
@@ -76,11 +79,11 @@ const ClaimRes: React.FC<Props> = (props) => {
                    </View>
                            <View style={[styles.todetails,styles.bottom,{display: state?'flex':'none'}]}>
                                <Pressable onPress={todetails} style={styles.textres}>
-                               <Text style={styles.nametext}>View claim details</Text>
+                                   <Text style={styles.nametext}>View claim{'\u0020'}details{'\u0020'}</Text>
                                    <Image
                                        style={styles.icon}
-                                       resizeMode="cover"
-                                       source={require("../../assets/setting-right-icon.png")}
+                                       resizeMode="contain"
+                                       source={require("../../assets/right-vector.png")}
                                    />
                                </Pressable>
                            </View>
@@ -118,7 +121,7 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     icon:{
-        height:14,
+        height:"60%",
         width:14
     },
     closeimg:{
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
     nametext:{
         fontSize:14,
         color:'white',
-        textAlign:'center'
+        textAlign:'center',
     },
     name:{
       marginTop:10

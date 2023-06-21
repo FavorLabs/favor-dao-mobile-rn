@@ -38,19 +38,14 @@ export function RecordTabs(props: FeedsOfDaoProps) {
 
 const styles = StyleSheet.create({
     option: {
-        height: 30,
         paddingHorizontal: 11,
         paddingVertical: 3,
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 10,
-        marginTop:8,
-        marginBottom:8
     },
     optionText: {
         fontWeight: '500',
-        color: '#939393',
-        fontSize: 18
+        color: '#939393'
     },
     active: {
         backgroundColor: '#FF8D1A',

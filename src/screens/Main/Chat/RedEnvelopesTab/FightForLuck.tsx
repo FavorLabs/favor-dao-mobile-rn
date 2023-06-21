@@ -124,10 +124,9 @@ const styles = StyleSheet.create({
         alignSelf: "stretch",
     },
     title3: {
-        fontSize: 60,
+        fontSize: 50,
         letterSpacing: -1,
         fontWeight: "700",
-        height: 59,
         alignSelf: "stretch",
     },
 });

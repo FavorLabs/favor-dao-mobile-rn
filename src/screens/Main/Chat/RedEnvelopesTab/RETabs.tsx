@@ -41,7 +41,6 @@ export function RETabs(props: FeedsOfDaoProps) {
 
 const styles = StyleSheet.create({
     option: {
-        height: 30,
         paddingHorizontal: 11,
         paddingVertical: 3,
         justifyContent: 'center',

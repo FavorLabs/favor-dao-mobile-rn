@@ -1,5 +1,5 @@
 import * as React from "react";
-import {FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {FlatList, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
 import ChatChannel from "../../../components/RedPacket/ChatChannel";
 import {Color, FontFamily, Padding, FontSize, Border} from "../../../GlobalStyles";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
@@ -17,17 +17,13 @@ import {toNumber} from "lodash";
 import {getTime} from "../../../utils/util";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
-import {addDecimal} from "../../../utils/balance";
 
-export type Props = {
-
-};
-const ClaimDetails:React.FC<Props> = (props) => {
+const ClaimDetails = () => {
   const navigation = useNavigation();
   const url = useUrl();
   const route=useRoute()
   // @ts-ignore
-  const { id }=route.params
+  const { id } = route.params
   const [claimSumStatus,setClaimSumStatus]=useState(true)
   const [claimSum,setClaim]=useState('')
   const [claim_count,setClaim_count]=useState('')
@@ -35,6 +31,7 @@ const ClaimDetails:React.FC<Props> = (props) => {
   const [userData,setUserData]=useState([])
   const [type,setType]=useState(0)
   const [refund_status,setRefund_status]=useState(0)
+  const [loding,setLoding]=useState(true)
   const showClaimSum=useMemo(()=>{
     return  parseFloat(claimSum)/1000
   },[claimSum])
@@ -47,9 +44,11 @@ const ClaimDetails:React.FC<Props> = (props) => {
       setType(data.data.type)
       setRefund_status(data.data.refund_status)
       if(data.data.claim_amount){
-        setClaim(data.data.claim_amount)
+        await setClaim(data.data.claim_amount)
+        setLoding(false)
       }else {
         setClaimSumStatus(false)
+        setLoding(false)
       }
     }else {
       Toast.show({
@@ -120,62 +119,91 @@ const ClaimDetails:React.FC<Props> = (props) => {
             </TouchableOpacity>
           }/>
         </View>
-        <ScrollView>
-          <View style={[styles.redUser]}>
-            <View style={styles.frameContainer}>
-              <View style={[styles.imageWrapper, styles.wrapperSpaceBlock]}>
-                <Image
-                  style={[styles.imageIcon, styles.iconLayout]}
-                  resizeMode="cover"
-                  source={{uri: `${avatarsResUrl}/${user?.avatar}`}}
-                />
+        {
+          loding &&
+            <View>
+              <Text style={{textAlign:'center',marginTop:"35%",fontSize:25,marginBottom:15}}>Loding...</Text>
+              <ActivityIndicator size="large" color="#FF5530" />
+            </View>
+        }
+        {
+          !loding &&
+            <View style={{flex:1}}>
+              <View style={[styles.redUser]}>
+                <View style={styles.frameContainer}>
+                  <View style={[styles.imageWrapper, styles.wrapperSpaceBlock]}>
+                    <Image
+                        style={[styles.imageIcon, styles.iconLayout]}
+                        resizeMode="cover"
+                        source={{uri: `${avatarsResUrl}/${user?.avatar}`}}
+                    />
+                  </View>
+                  <Text style={[styles.andrewParker, styles.titleTypo]}>{user?.nickname}</Text>
+                  <Text style={[styles.mayYouBe, styles.title1Typo]}>
+                    May you be happy and prosperous!
+                  </Text>
+                </View>
+                <View style={[styles.favt,{display: claimSumStatus?'flex':'none'}]}>
+                  <Text style={styles.favtNumber}>{showClaimSum}<Text style={styles.favtText}>FavT</Text></Text>
+                </View>
               </View>
-              <Text style={[styles.andrewParker, styles.titleTypo]}>{user?.nickname}</Text>
-              <Text style={[styles.mayYouBe, styles.title1Typo]}>
-                May you be happy and prosperous!
-              </Text>
-            </View>
-            <View style={[styles.favt,{display: claimSumStatus?'flex':'none'}]}>
-              <Text style={styles.favtNumber}>{showClaimSum}<Text style={styles.favtText}>FavT</Text></Text>
-            </View>
-          </View>
 
-          <View style={styles.frameView}>
-            <View style={[styles.titleWrapper, styles.frameGroupFlexBox]}>
-              {
-                refund_status == 0 && <Text style={styles.title1Typo}>Received：{claim_count}/{total}</Text>
-              }
-              {
-                  refund_status == 1 && <Text style={styles.title1Typo}>The luckpacket has expired. Received：{claim_count}/{total}</Text>
-              }
-            </View>
-            <View style={styles.chatchannelParent}>
-              <FlatList
-                  data={userData}
-                  // @ts-ignore
-                  renderItem={({item,index})=>{
-                    let isMax=false
-                    if(type == 0) {
+              <View style={styles.frameView}>
+                <View style={[styles.titleWrapper, styles.frameGroupFlexBox]}>
+                  {
+                      refund_status == 0 && <Text style={styles.title1Typo}>Received：{claim_count}/{total}</Text>
+                  }
+                  {
+                      refund_status == 1 && <Text style={styles.title1Typo}>The luckpacket has expired. Received：{claim_count}/{total}</Text>
+                  }
+                </View>
+                <View style={styles.chatchannelParent}>
+                  <FlatList
+                      data={userData}
                       // @ts-ignore
-                      if(isMaxAmount(item.amount)){
-                        isMax=true
-                      }
-                    }
-                    // @ts-ignore
-                    return <>{renderItem(item,isMax)}</>
-                  }}
-                  // @ts-ignore
-                  keyExtractor={item => item.id}
-              />
+                      renderItem={({item,index})=>{
+                        let isMax=false
+                        if(type == 0) {
+                          // @ts-ignore
+                          if(isMaxAmount(item.amount)){
+                            isMax=true
+                          }
+                        }
+                        // @ts-ignore
+                        return <>{renderItem(item,isMax)}</>
+                      }}
+                      // @ts-ignore
+                      keyExtractor={item => item.id}
+                  />
+                </View>
+              </View>
             </View>
-          </View>
-        </ScrollView>
+        }
+      </View>
+      <View style={[styles.bottomBox,{display:refund_status==0?'none':'flex'}]}>
+        <Text style={styles.bottomText}>
+          Unclaimed luckpacket will be refunded upon expiration
+        </Text>
       </View>
     </BackgroundSafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  bottomBox:{
+    position:'absolute',
+    width:'100%',
+    bottom:'3%',
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  bottomText:{
+    color:'#939393',
+    fontSize:FontSize.size_mini,
+    textAlign:'center',
+    maxWidth:'70%',
+  },
   container: {
     flex: 1,
   },

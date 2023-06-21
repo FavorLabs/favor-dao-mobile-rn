@@ -84,22 +84,27 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                 const request =  () => RedpacketApi.creatRedpacket(url,res)
                 const {data}= await request()
                 if (data.code==0){
-                    sendCustomMessage({id:data.data.redpacket_id,title:title})
-                    Toast.show({
-                        type: 'info',
-                        text1: 'Send success!'
-                    });
-                    setLoading(false)
-                    setVisible(false)
-                    setPassword('')
-                    if(redPacketType==0){
-                        navigation.goBack()
-                    }
-                    if (redPacketType==1){
-                        // @ts-ignore
-                        navigation.pop(1)
-                    }
-
+                    await sendCustomMessage({id:data.data.redpacket_id,title:title})
+                    setTimeout(()=>{
+                        setPassword('')
+                         setLoading(false)
+                         setVisible(false)
+                        if(redPacketType==0){
+                            navigation.goBack()
+                            Toast.show({
+                                type: 'info',
+                                text1: 'Send success!'
+                            });
+                        }
+                        if (redPacketType==1){
+                            // @ts-ignore
+                            navigation.pop(1)
+                            Toast.show({
+                                type: 'info',
+                                text1: 'Send success!'
+                            });
+                        }
+                    },1200)
                 }else {
                     Toast.show({
                         type: 'error',
@@ -147,10 +152,12 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                     <View style={styles.favTBox}>
                         <Text style={styles.favTSum}>
                             {showAmount}
+
+                            <Text style={styles.favtText}>
+                                FavT
+                            </Text>
                         </Text>
-                        <Text style={styles.favtText}>
-                            FavT
-                        </Text>
+
                     </View>
                     <View style={styles.BalanceBox}>
                             <Text style={styles.BalanceText}>
@@ -207,7 +214,6 @@ const styles = StyleSheet.create({
     },
     textInp:{
         marginTop: 10,
-        height:57,
         backgroundColor: '#FFF',
         borderRadius: Border.br_3xs,
         padding: Padding.p_smi,
@@ -220,17 +226,14 @@ const styles = StyleSheet.create({
     },
     favtText:{
         fontSize:16,
-        height:16,
-        position:'absolute',
-        bottom:13,
-        right:"13%"
+        fontWeight:'normal'
     },
     favTSum:{
         fontSize: 60,
         fontWeight: "700",
     },
     favTBox:{
-        marginTop:8,
+        marginTop:5,
         display:"flex",
         alignItems:'center'
     },
@@ -249,7 +252,8 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'center',
         alignItems:'center',
-        height:50,
+        paddingTop:10,
+        paddingBottom:10,
         backgroundColor:'white',
         borderRadius:10
     },
@@ -257,12 +261,12 @@ const styles = StyleSheet.create({
 
     },
     bodyText:{
-        marginTop:23
+        marginTop:15
     },
     title: {
         textAlign: "left",
         letterSpacing: 0,
-        fontSize: 26,
+        fontSize: 20,
         fontWeight: "600",
         color: Color.iOSSystemLabelsLightPrimary,
         display: "flex",

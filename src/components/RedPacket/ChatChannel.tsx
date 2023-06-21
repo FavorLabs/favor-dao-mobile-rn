@@ -47,7 +47,7 @@ const ChatChannel = ({avatar, channelName, amount, isLuckKing, record,time,isSho
                 {
                   // @ts-ignore
                     parseFloat(amount)/1000
-                }FavT
+                } FavT
               </Text>
             </View>
             <View style={[styles.lastmessage,styles.chatchannelFlexBox]}>
@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
   notificationIconLayout: {
     height: 50,
     width: 50,
+    borderRadius:25
   },
   vectorIcon: {
     width: 23,

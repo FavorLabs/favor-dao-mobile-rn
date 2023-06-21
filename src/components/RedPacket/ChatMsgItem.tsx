@@ -236,9 +236,9 @@ const ChatMsgItem: React.FC<Props> = (props) => {
               </LinearGradient>
           </TouchableOpacity>
       }
-          <ClaimRes claimResStatus={claimResStatus} setClaimResStatus={setClaimResStatus} id={redPacketId} senderName={senderName}
+          <ClaimRes claimResStatus={claimResStatus} setClaimResStatus={setClaimResStatus} id={redPacketId} senderName={senderName} setRedStatus={setRedStatus}
               // @ts-ignore
-                    messageInfo={messageInfo}/>
+                    messageInfo={messageInfo} />
     </View>
   )
 }
