@@ -32,7 +32,7 @@ const MessageItem:React.FC<Props> = (props) => {
             <TouchableOpacity style={styles.notifyRight} onPress={navigationFn}>
                 <View style={[styles.infoTop, styles.flexRC]}>
                     <Text style={styles.name} numberOfLines={1}>{name}</Text>
-                    <Text style={styles.time} numberOfLines={1}>{getTime(createdAt as number)}</Text>
+                    { createdAt!==0 && <Text style={styles.time} numberOfLines={1}>{getTime(createdAt as number)}</Text> }
                 </View>
                 <View style={styles.flexRC}>
                     <View style={styles.content}>
