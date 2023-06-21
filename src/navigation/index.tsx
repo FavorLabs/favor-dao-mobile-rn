@@ -40,6 +40,7 @@ import ClaimDetails from "../screens/Main/Chat/ClaimDetails";
 import NodeApi from "../services/NodeApi";
 import BackgroundService from "react-native-background-actions";
 import Models from "../declare/storeTypes";
+import {eventEmitter, errorEvent} from "../services"
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,7 @@ function RootStack() {
   const {start} = useSelector((state: Models) => state.favorx)
   const [firstLoad, setFirstLoad] = useState(true);
   const [requestLoading, setRequestLoading] = useState(true);
+  const [networkError, setNetworkError] = useState(false);
   const [routeName, setRouteName] = useState(Screens.StartNode);
   const fullCount = useRef(0)
   const proxyCount = useRef(0)
@@ -65,6 +67,13 @@ function RootStack() {
         setRequestLoading(!res.connected?.length)
         proxyCount.current = res.connected?.length || 0
         updateService();
+      })
+      console.log(Favor.ws)
+      Favor.ws?.on('close', () => {
+        setRequestLoading(true);
+      })
+      eventEmitter.on(errorEvent, () => {
+        setNetworkError(true);
       })
     }
   }, [start])
@@ -161,6 +170,7 @@ function RootStack() {
         <Stack.Screen name={Screens.ClaimDetails} component={ClaimDetails}/>
       </Stack.Navigator>
       <Loading visible={visible} text={'Connecting to a p2p network'} timeout={10000}/>
+      <Loading visible={!visible && networkError} text={'Connecting to a p2p network'} timeout={0}/>
     </>
   );
 }
