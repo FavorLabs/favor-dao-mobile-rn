@@ -1,5 +1,14 @@
 import * as React from "react";
-import {StyleSheet, View, Text, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl} from "react-native";
+import {
+    StyleSheet,
+    View,
+    Text,
+    FlatList,
+    TouchableOpacity,
+    ActivityIndicator,
+    RefreshControl,
+    KeyboardAvoidingView, Platform
+} from "react-native";
 import ExpandedDAOHeader from "../../../components/ExpandedDAOHeader";
 import {useRoute} from "@react-navigation/native";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
@@ -141,35 +150,45 @@ const ChatInDAOScreen = () => {
       style={styles.loading}>loading...</Text></View>
 
     return (
-      <BackgroundSafeAreaView
-        headerStyle={{paddingTop: 0}}
-        headerComponent={daoInfo &&
-            <ExpandedDAOHeader daoInfo={daoInfo} isShowJoined={false} isShowBtnChatToggle={true}/>}
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={{flex: 1}}
       >
-          {/*<ChatLayout />*/}
-          <FlatList
-            // ref={flatListRef}
-            data={messageList}
-            renderItem={({item, index}) => renderItem(item, index)}
-            // @ts-ignore
-            keyExtractor={(item) => item.getId()}
-            inverted={true}
-            onEndReachedThreshold={0.2}
-            onEndReached={handleLoadMore}
-            ListFooterComponent={() => (
-              <>
-                  {
-                    loading &&
-                      <View style={styles.footer}>
-                          <ActivityIndicator size="large"/>
-                      </View>
-                  }
-              </>
-            )}
-          />
-          <MessageInputer guid={info.guid} setMessageList={setMessageList} messageList={messageList}
-                          memberCount={daoInfo?.follow_count}/>
-      </BackgroundSafeAreaView>
+          <BackgroundSafeAreaView
+            headerStyle={{paddingTop: 0}}
+            headerComponent={daoInfo &&
+                <ExpandedDAOHeader daoInfo={daoInfo} isShowJoined={false} isShowBtnChatToggle={true}/>}
+          >
+
+              <FlatList
+                // ref={flatListRef}
+                data={messageList}
+                renderItem={({item, index}) => renderItem(item, index)}
+                // @ts-ignore
+                keyExtractor={(item) => item.getId()}
+                inverted={true}
+                onEndReachedThreshold={0.2}
+                onEndReached={handleLoadMore}
+                ListFooterComponent={() => (
+                  <>
+                      {
+                        loading &&
+                          <View style={styles.footer}>
+                              <ActivityIndicator size="large"/>
+                          </View>
+                      }
+                  </>
+                )}
+              />
+
+              <MessageInputer
+                guid={info.guid}
+                setMessageList={setMessageList}
+                messageList={messageList}
+                memberCount={daoInfo?.follow_count}
+              />
+          </BackgroundSafeAreaView>
+      </KeyboardAvoidingView>
     );
 }
 const styles = StyleSheet.create({

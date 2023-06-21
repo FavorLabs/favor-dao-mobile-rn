@@ -4420,6 +4420,11 @@ elliptic@6.5.4, elliptic@^6.4.0, elliptic@^6.5.3, elliptic@^6.5.4:
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
 
+emoji-datasource@^6.0.0:
+  version "6.1.1"
+  resolved "https://registry.npmmirror.com/emoji-datasource/-/emoji-datasource-6.1.1.tgz#95a38737a322bedae130385c26ce291d0833ce62"
+  integrity sha512-fbS3QJpzGHhujvBULSKXcvsYmVg+1ldfI3VVXG3jnFuniZtkp7rz/OcTcQjbp3m43BYxmiJgKmaoOUPxXQupRQ==
+
 emoji-mart-native@^0.6.5-beta:
   version "0.6.5-beta"
   resolved "https://registry.npmmirror.com/emoji-mart-native/-/emoji-mart-native-0.6.5-beta.tgz#1f336a2e90f235467c06139a3b1912363e4a12c9"
@@ -8172,6 +8177,13 @@ react-native-elements@^3.4.3:
     react-native-ratings "8.0.4"
     react-native-size-matters "^0.3.1"
 
+react-native-emoji-selector@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npmmirror.com/react-native-emoji-selector/-/react-native-emoji-selector-0.2.0.tgz#b1ed980cd585a3fd0fca1da6a29006c1a5979615"
+  integrity sha512-+rPPWG5vl5AexdH8udEwtzdq9QUGD6kp+dQ8C/459d3ScM0S3UnT/qAvhmpsTgCbgjpdwiJIcrKNxKmGEDb15g==
+  dependencies:
+    emoji-datasource "^6.0.0"
+
 react-native-exit-app@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmmirror.com/react-native-exit-app/-/react-native-exit-app-1.1.0.tgz#5ec082152974240e2d6a93f1608efb49a4385f21"
@@ -8418,10 +8430,10 @@ react-native-video@^6.0.0-alpha.6:
     keymirror "^0.1.1"
     prop-types "^15.7.2"
 
-react-native-webrtc@106.0.7:
-  version "106.0.7"
-  resolved "https://registry.npmmirror.com/react-native-webrtc/-/react-native-webrtc-106.0.7.tgz#a00ec9828ecb9910ac525474c59b292eded7408f"
-  integrity sha512-Ro/NoxN/9/b/bcZErM+oVbWC8ZCplp00sHWDOOh289KDkAkFYZdyFZAKsgJQoMj5rOJZVzIIxuJW91ox+0k92w==
+react-native-webrtc@^111.0.1:
+  version "111.0.1"
+  resolved "https://registry.npmmirror.com/react-native-webrtc/-/react-native-webrtc-111.0.1.tgz#049a28e803e1259c07aca12f7e0b6bc69166d3ff"
+  integrity sha512-yMRmLFtKRDXaK5b/s92+ArsMElEEjZnGW2cE+GqTHxLka0Kj0qq/sgNS2sMTuJuZRhW4oT6ryMLwTYzIrGM1lQ==
   dependencies:
     adm-zip "0.5.9"
     base64-js "1.5.1"
