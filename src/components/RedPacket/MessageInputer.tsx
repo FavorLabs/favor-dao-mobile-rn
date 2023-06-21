@@ -8,17 +8,21 @@ import {
   TouchableOpacity,
   Platform,
   PermissionsAndroid,
+  Keyboard
 } from 'react-native';
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../navigation/RouteNames";
 import ImagePicker, {Video} from 'react-native-image-crop-picker';
 import DocumentPicker from 'react-native-document-picker';
-import { launchCamera } from 'react-native-image-picker';
+import {launchCamera} from 'react-native-image-picker';
 import Toast from "react-native-toast-message";
 import {getSize} from "../../utils/util";
 import Favor from "../../libs/favor";
 import {ImagePickerResponse} from "react-native-image-picker/src/types";
+
+import {StackNavigationProp} from "@react-navigation/stack";
+import EmojiSelector from 'react-native-emoji-selector'
 
 export type Props = {
   memberCount: number;
@@ -33,23 +37,23 @@ type CustomData = {
 }
 
 const MessageInputer: React.FC<Props> = (props) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
   const {guid, messageList, setMessageList, memberCount} = props;
-  const [contentShow, setContentShow] = useState(false);
+
   const [inputValue, setInputValue] = useState<string>('');
-  const textInputRef = useRef(null);
-  const sendShow = useMemo(() => inputValue ? true : false, [inputValue]);
 
-  // @ts-ignore
-  const { config } = Favor as FavorType;
+  const textInputRef = useRef<TextInput>(null);
 
-  const textMessage = useMemo(() =>
-    new CometChat.TextMessage(
-      guid,
-      inputValue,
-      'group',
-    ), [inputValue])
+  const sendShow = useMemo(() => !!inputValue, [inputValue]);
 
+  const [bottomType, setBottomType] = useState<'function' | 'emoji' | 'none'>('none');
+
+  const {config} = Favor;
+
+  const closeBottom = () => {
+    setBottomType('none');
+  }
   const sendCustomMessage = (customData: CustomData) => {
     const customMessage = new CometChat.CustomMessage(
       guid,
@@ -70,31 +74,9 @@ const MessageInputer: React.FC<Props> = (props) => {
   };
 
   const luckyPacketFun = () => {
-    // @ts-ignore
     navigation.navigate(Screens.RedEnvelopes, {sendCustomMessage: sendCustomMessage, memberCount: memberCount})
-    setContentShow(false);
+    closeBottom();
   }
-
-  const modifyContentShow = async () => {
-    if (sendShow) {
-      CometChat.sendMessage(textMessage).then(
-        (message) => {
-          setInputValue('')
-          console.log("Message sent successfully:", message);
-          setMessageList([message, ...messageList])
-          if (textInputRef.current) {
-            // @ts-ignore
-            textInputRef.current.blur();
-          }
-        },
-        (error) => {
-          console.log("Error sending message:", error);
-        }
-      );
-    } else {
-      setContentShow(!contentShow);
-    }
-  };
 
   const uploadImage = () => {
     ImagePicker.openPicker({
@@ -113,7 +95,7 @@ const MessageInputer: React.FC<Props> = (props) => {
           size: image.size,
           uri: Platform.OS === 'android' ? image.path : image.path.replace('file://', '')
         };
-        console.log(fileObj,'fileObj')
+        console.log(fileObj, 'fileObj')
 
         const mediaMessage = new CometChat.MediaMessage(
           guid,
@@ -126,11 +108,11 @@ const MessageInputer: React.FC<Props> = (props) => {
           message => {
             console.log('Message sent successfully:', message);
             setMessageList([message, ...messageList])
-            setContentShow(false);
+            closeBottom()
           },
           error => {
             console.log('Message sending failed with error:', error);
-            setContentShow(false);
+            closeBottom()
           }
         );
 
@@ -146,7 +128,7 @@ const MessageInputer: React.FC<Props> = (props) => {
       mediaType: 'video',
       compressVideoPreset: 'MediumQuality',
     }).then(async video => {
-      console.log(video,'videoInfo');
+      console.log(video, 'videoInfo');
       if (!checkVideoSize(video)) return;
       const mediaMessage = new CometChat.MediaMessage(
         guid,
@@ -182,47 +164,47 @@ const MessageInputer: React.FC<Props> = (props) => {
   };
 
   const uploadFile = async () => {
-      try {
-        const res = await DocumentPicker.pick({
-          type: [DocumentPicker.types.allFiles],
-        });
-        const file = {
-          name: res[0].name,
-          type: res[0].type,
-          uri: res[0].uri,
-        };
-        console.log(file,'file')
-        const mediaMessage = new CometChat.MediaMessage(
-          guid,
-          file,
-          CometChat.MESSAGE_TYPE.FILE,
-          CometChat.RECEIVER_TYPE.GROUP,
-        );
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+      });
+      const file = {
+        name: res[0].name,
+        type: res[0].type,
+        uri: res[0].uri,
+      };
+      console.log(file, 'file')
+      const mediaMessage = new CometChat.MediaMessage(
+        guid,
+        file,
+        CometChat.MESSAGE_TYPE.FILE,
+        CometChat.RECEIVER_TYPE.GROUP,
+      );
 
-        mediaMessage.setData({
-          name: file.name,
-          type: file.type,
-        });
+      mediaMessage.setData({
+        name: file.name,
+        type: file.type,
+      });
 
-        CometChat.sendMessage(mediaMessage).then(
-          message => {
-            console.log('Message sent successfully:', message);
-            setMessageList([message, ...messageList])
-            setContentShow(false);
-          },
-          error => {
-            console.log('Message sending failed with error:', error);
-            setContentShow(false);
-          }
-        );
-
-      } catch (err) {
-        if (DocumentPicker.isCancel(err)) {
-          console.log('user cancelled the picker');
-        } else {
-          console.log(err)
+      CometChat.sendMessage(mediaMessage).then(
+        message => {
+          console.log('Message sent successfully:', message);
+          setMessageList([message, ...messageList])
+          closeBottom()
+        },
+        error => {
+          console.log('Message sending failed with error:', error);
+          closeBottom()
         }
+      );
+
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('user cancelled the picker');
+      } else {
+        console.log(err)
       }
+    }
   };
 
   const takePhoto = async (mediaType = 'photo') => {
@@ -249,26 +231,26 @@ const MessageInputer: React.FC<Props> = (props) => {
             cameraType: 'back',
           },
           (response: ImagePickerResponse) => {
-            console.log(response,'response')
+            console.log(response, 'response')
             if (response.didCancel) {
               return null;
             }
             let type = null;
             let name = null;
-            if(response.assets)
-            if (Platform.OS === 'ios' && response.assets[0].fileName !== undefined) {
-              name = response.assets[0].fileName;
-              type = response.assets[0].type;
-            } else {
-              // @ts-ignore
-              type = response.assets[0].type;
-              name = 'Camera_001.jpeg';
-            }
+            if (response.assets)
+              if (Platform.OS === 'ios' && response.assets[0].fileName !== undefined) {
+                name = response.assets[0].fileName;
+                type = response.assets[0].type;
+              } else {
+                // @ts-ignore
+                type = response.assets[0].type;
+                name = 'Camera_001.jpeg';
+              }
             if (mediaType == 'video') {
               type = 'video/quicktime';
               name = 'Camera_002.mov';
             }
-            if(response.assets){
+            if (response.assets) {
               const file = {
                 name:
                   Platform.OS === 'android' && mediaType != 'video'
@@ -296,11 +278,11 @@ const MessageInputer: React.FC<Props> = (props) => {
                 message => {
                   console.log('Message sent successfully:', message);
                   setMessageList([message, ...messageList])
-                  setContentShow(false);
+                  closeBottom()
                 },
                 error => {
                   console.log('Message sending failed with error:', error);
-                  setContentShow(false);
+                  closeBottom()
                 }
               );
             }
@@ -312,9 +294,34 @@ const MessageInputer: React.FC<Props> = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (sendShow) setContentShow(false);
-  }, [sendShow])
+  const handleClickEmoji = () => {
+    if (bottomType === 'emoji') {
+      closeBottom();
+    } else {
+      Keyboard.dismiss()
+      setBottomType('emoji');
+    }
+  }
+  const handleClickAdd = () => {
+    if (bottomType === 'function') {
+      closeBottom();
+    } else {
+      Keyboard.dismiss()
+      setBottomType('function');
+    }
+  }
+  const handleClickSend = async () => {
+    const textMessage = new CometChat.TextMessage(guid, inputValue, CometChat.RECEIVER_TYPE.GROUP);
+    CometChat.sendMessage(textMessage).then(
+      (message) => {
+        setInputValue('');
+        setMessageList([message, ...messageList])
+      },
+      (error) => {
+        console.log("Error sending message:", error);
+      }
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -325,21 +332,34 @@ const MessageInputer: React.FC<Props> = (props) => {
             placeholder={'Message'}
             value={inputValue}
             onChangeText={text => setInputValue(text)}
+            onFocus={closeBottom}
             ref={textInputRef}
-            onSubmitEditing={modifyContentShow}
+            onSubmitEditing={handleClickSend}
             multiline={true}
           />
-          <Image style={styles.image} source={require("../../assets/ChatSmail.png")}/>
-          <TouchableOpacity onPress={modifyContentShow}>
-            <Image style={styles.image}
-                   source={sendShow ? require("../../assets/ChatToTop.png") : require("../../assets/ChatAdd.png")}/>
+          <TouchableOpacity onPress={handleClickEmoji}>
+            <Image style={styles.image} source={require("../../assets/ChatSmail.png")}/>
           </TouchableOpacity>
-          {/*<Image style={styles.image} source={require("../../assets/ChatToTop.png")}/>*/}
+          {
+            sendShow ?
+              <TouchableOpacity onPress={handleClickSend}>
+                <Image
+                  style={styles.image}
+                  source={require("../../assets/ChatToTop.png")}
+                />
+              </TouchableOpacity> :
+              <TouchableOpacity onPress={handleClickAdd}>
+                <Image
+                  style={styles.image}
+                  source={require("../../assets/ChatAdd.png")}
+                />
+              </TouchableOpacity>
+          }
         </View>
       </View>
       {
-        contentShow &&
-          <View style={styles.ationBox}>
+        bottomType === 'function' &&
+          <View style={styles.actionBox}>
               <View style={styles.flexToAct}>
                   <TouchableOpacity style={styles.actBox} onPress={uploadImage}>
                       <View style={styles.boxHead}>
@@ -348,7 +368,7 @@ const MessageInputer: React.FC<Props> = (props) => {
                       </View>
                       <Text style={styles.actName}>Picture</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.actBox} onPress={()=> takePhoto('photo')}>
+                  <TouchableOpacity style={styles.actBox} onPress={() => takePhoto('photo')}>
                       <View style={styles.boxHead}>
                           <Image style={styles.boxIcon} source={require("../../assets/ChatCaptureIcon.png")}
                                  resizeMode={"contain"}/>
@@ -364,7 +384,7 @@ const MessageInputer: React.FC<Props> = (props) => {
                   </TouchableOpacity>
               </View>
               <View style={styles.flexToAct}>
-                  <TouchableOpacity style={styles.actBox} onPress={()=> takePhoto('video')}>
+                  <TouchableOpacity style={styles.actBox} onPress={() => takePhoto('video')}>
                       <View style={styles.boxHead}>
                           <Image style={styles.boxIcon} source={require("../../assets/ChatRecordIcon.png")}
                                  resizeMode={"contain"}/>
@@ -386,6 +406,16 @@ const MessageInputer: React.FC<Props> = (props) => {
                       <Text style={styles.actName}>LuckyPacket</Text>
                   </TouchableOpacity>
               </View>
+          </View>
+      }
+      {
+        bottomType === 'emoji' &&
+          <View style={styles.actionBox}>
+              <EmojiSelector
+                  columns={10}
+                  showSearchBar={false}
+                  onEmojiSelected={emoji => setInputValue(v => v + emoji)}
+              />
           </View>
       }
     </View>
@@ -426,15 +456,11 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center'
   },
-  ationBox: {
+  actionBox: {
     height: 220,
-    display: "flex",
-    justifyContent: 'space-evenly',
-    paddingLeft: 45,
-    paddingRight: 45
   },
   image: {
     width: 26,
