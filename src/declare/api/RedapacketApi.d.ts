@@ -22,5 +22,7 @@ export type RedPacketInfo = {
     "total": number,
     "tx_id": string,
     "type": number,
-    "user_avatar": string
+    "user_avatar": string,
+    "is_timeout": boolean,
+    "user_nickname": string,
 }

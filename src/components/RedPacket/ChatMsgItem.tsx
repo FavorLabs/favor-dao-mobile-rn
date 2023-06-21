@@ -13,7 +13,7 @@ import ClaimRes from "./ClaimRes";
 import Screens from "../../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
 import ImgViews from "../ImgViews";
-import {getIntervalHours} from "../../utils/util";
+import RNFS from 'react-native-fs';
 
 export type Props = {
   isUser?: boolean,
@@ -32,7 +32,8 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   const [imgShowStatus, setImgShowStatus] = useState(false);
   const player = useRef<Video>(null);
   const [videoLoading, setVideoLoading] = useState<boolean>(false);
-  const [senderName,setSenderName]=useState('')
+  const [senderName,setSenderName]=useState('');
+  const [downloading, setDownloading] = useState(false);
 
   const VideoClick = () => {
     if(videoLoading) return;
@@ -62,8 +63,8 @@ const ChatMsgItem: React.FC<Props> = (props) => {
       // @ts-ignore
       const { data } = await RedPacketApi.getRedPacketInfo(url,messageInfo.customData.id);
       const redPacket: RedPacketInfo = data.data;
-      const hour = getIntervalHours(data.data.created_on);
-      if (hour > 24) return setRedStatus(0);
+      // const hour = getIntervalHours(data.data.created_on);
+      if (data.data.is_timeout) return setRedStatus(0);
       if (redPacket.total === Number(redPacket.claim_count) || Number(redPacket.claim_amount) > 0) return setRedStatus(1);
       return setRedStatus(2);
     } catch (e) {
@@ -72,6 +73,36 @@ const ChatMsgItem: React.FC<Props> = (props) => {
       }
     }
   }
+
+  const downloadFile = async () => {
+    if(downloading) return;
+    setDownloading(true);
+    const fileDest = `${RNFS.DocumentDirectoryPath}/downLoad`;
+
+    RNFS.mkdir(fileDest).then(()=>{
+      RNFS.downloadFile({
+        // @ts-ignore
+        fromUrl: messageInfo.data.url,
+        // @ts-ignore
+        toFile: `${fileDest}${messageInfo.data.name}`,
+        progressDivider: 5,
+        // progress: (res) => {
+        //   const progress = res.bytesWritten / res.contentLength;
+        //   console.log(`Downloaded ${progress * 100}%`);
+        // },
+      }).promise.then(res => {
+        console.log('success')
+        setDownloading(false);
+      })
+        .catch(e => {
+          console.log(e);
+          setDownloading(false);
+        });
+    }).catch(err => {
+      console.log(err);
+      setDownloading(false);
+    });
+  };
 
   useEffect(() => {
     if (type === 'redPacket') {
@@ -86,7 +117,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   return (
     <View style={styles.item}>
       {
-
         type === 'text' &&
           <View style={[styles.container, styles.BDRmax, {backgroundColor: isUser ? '#FF8D1A' : '#FFFFFF'}]}>
               <Text
@@ -160,12 +190,32 @@ const ChatMsgItem: React.FC<Props> = (props) => {
           <View style={styles.fileRow}>
               <View style={styles.fileContent}>
                   <View style={styles.fileTitle}>
-                      <Text style={styles.fileNameText} numberOfLines={1}>
+                      <Text style={styles.fileNameText} numberOfLines={2}>
                         {
                           // @ts-ignore
                           messageInfo.data.name ? messageInfo.data.name : 'undefined'
                         }
                       </Text>
+                    {
+                      // @ts-ignore
+                      messageInfo.data.size &&
+                      (
+                        // @ts-ignore
+                        messageInfo.data.size.toString().length > 6 ?
+                      <Text numberOfLines={1} style={styles.fileSize}>
+                        {
+                          // @ts-ignore
+                          (messageInfo.data.size/1000/1000).toFixed(1)
+                        }M
+                      </Text> :
+                      <Text numberOfLines={1} style={styles.fileSize}>
+                         {
+                           // @ts-ignore
+                           (messageInfo.data.size/1000).toFixed(1)
+                         }KB
+                      </Text>
+                      )
+                    }
                   </View>
                   <View style={styles.fileIconRow}>
                       <Image
@@ -180,9 +230,17 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                       </View>
                   </View>
               </View>
-              <TouchableOpacity style={styles.fileDown}>
+            { !isUser && (
+              downloading ?
+                <View style={styles.fileDown}>
+                  <ActivityIndicator size="small"/>
+                </View>
+                :
+              <TouchableOpacity style={styles.fileDown} onPress={downloadFile}>
                   <SvgIcon svg={<FileDownloadSvg/>} width={10} height={12}/>
               </TouchableOpacity>
+            )
+            }
           </View>
       }
       {
@@ -353,7 +411,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: 'row',
     alignItems: "center",
-    opacity: 0.7
   },
   item: {
     marginTop: 4
@@ -408,9 +465,9 @@ const styles = StyleSheet.create({
   },
   fileRow: {
     flexDirection: 'row',
-    maxWidth: '65%',
   },
   fileContent: {
+    width: 200,
     backgroundColor: Color.color1,
     padding: 16,
     borderRadius: 16,
@@ -419,7 +476,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   fileTitle: {
-    maxWidth: '70%',
+    flex: 1,
+    justifyContent: "space-between",
     paddingRight: 15,
   },
   fileNameText: {
@@ -427,11 +485,19 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#000',
   },
+  fileSize: {
+    color: '#999999',
+    fontWeight: '400',
+    fontSize: 12,
+  },
   fileIconRow: {
     position: 'relative',
     paddingLeft: 15,
   },
   fileType: {
+    width: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
     bottom: -6,
     left: '75%',
@@ -442,7 +508,7 @@ const styles = StyleSheet.create({
   fileTypeText: {
     color: '#fff',
     fontSize: 8,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   fileIcon: {
     width: 30,

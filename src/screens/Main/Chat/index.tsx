@@ -12,6 +12,7 @@ import {useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import Screens from "../../../navigation/RouteNames";
 import {DataList} from "../../../declare/api/DAOApi";
+import NoDataShow from "../../../components/NoDataShow";
 
 const ChatScreen = () => {
     const navigation = useNavigation();
@@ -47,7 +48,7 @@ const ChatScreen = () => {
             let dataList: DataList[] = data.map(item => ({
                 avatar: getChatsAvatarUrl(item.getIcon()),
                 name: item.getName(),
-                createdAt: item.getCreatedAt(),
+                createdAt: 0,
                 lastUserName: '',
                 content: '',
                 unreadCount: 0,
@@ -100,7 +101,6 @@ const ChatScreen = () => {
     };
 
     const toChatsDetail = (item: DataList) => {
-
         CometChat.markAsRead(item.guid, CometChat.RECEIVER_TYPE.GROUP);
         // @ts-ignore
         navigation.navigate(Screens.ChatInDAO, {info: item});
@@ -111,7 +111,7 @@ const ChatScreen = () => {
     }, [user])
 
     useEffect(() => {
-        searchValue ? getSearchInfo(true) : getInfo(true);
+      searchValue ? getSearchInfo(true) : getInfo(true);
     }, [conversationRequest, groupsRequest])
 
     const onRefresh = async () => {
@@ -121,61 +121,75 @@ const ChatScreen = () => {
         setRefreshing(false);
     };
 
-    return (
-      <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
-          <View style={styles.container}>
-              <SearchHead
-                tittle={'Chats'}
-                getSearchBlur={getSearch}
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
+  return (
+    <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
+      <View style={styles.container}>
+        <SearchHead
+          tittle={'Chats Groups'}
+          getSearchBlur={getSearch}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+        />
+        <FlatList
+          data={list}
+          renderItem={({item}) => <MessageItem
+            avatar={item.avatar}
+            name={item.name}
+            createdAt={item.createdAt}
+            lastUserName={item.lastUserName}
+            content={item.content}
+            unreadCount={item.unreadCount}
+            navigationFn={() =>toChatsDetail(item)}
+          />}
+          keyExtractor={(item, index) => `conversation-${index}`}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.2}
+          ListFooterComponent={() => (
+            <>
+              {
+                loading &&
+                  <View style={styles.footer}>
+                      <ActivityIndicator size="large"/>
+                  </View>
+              }
+            </>
+          )}
+          ListEmptyComponent={!list.length && !refreshing ?
+            <View style={styles.noData}>
+              <NoDataShow
+                title={'No news'}
+                image={require('../../../assets/chatGroupNoData.png')}
+                description={`Please initiate a chat first`}
               />
-              <FlatList
-                data={list}
-                renderItem={({item}) => <MessageItem
-                  avatar={item.avatar}
-                  name={item.name}
-                  createdAt={item.createdAt}
-                  lastUserName={item.lastUserName}
-                  content={item.content}
-                  unreadCount={item.unreadCount}
-                  navigationFn={() => toChatsDetail(item)}
-                />}
-                keyExtractor={(item, index) => `conversation-${index}`}
-                refreshControl={
-                    <RefreshControl
-                      refreshing={refreshing}
-                      onRefresh={onRefresh}
-                    />
-                }
-                onEndReached={handleLoadMore}
-                onEndReachedThreshold={0.2}
-                ListFooterComponent={() => (
-                  <>
-                      {
-                        loading &&
-                          <View style={styles.footer}>
-                              <ActivityIndicator size="large"/>
-                          </View>
-                      }
-                  </>
-                )}
-              />
-          </View>
-      </BackgroundSafeAreaView>
-    )
+            </View>
+            : null
+          }
+        />
+      </View>
+    </BackgroundSafeAreaView>
+  )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    footer: {
-        width: '100%',
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
+  container: {
+    flex: 1,
+  },
+  footer: {
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noData: {
+    flex: 1,
+    marginTop: '40%',
+  },
 });
 
 export default ChatScreen;
