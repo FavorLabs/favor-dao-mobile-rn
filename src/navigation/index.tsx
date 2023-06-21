@@ -160,7 +160,7 @@ function RootStack() {
         <Stack.Screen name={Screens.Notifications} component={NotificationsScreen}/>
         <Stack.Screen name={Screens.ClaimDetails} component={ClaimDetails}/>
       </Stack.Navigator>
-      <Loading visible={visible} text={'Connecting to a p2p network'} timeout={7000}/>
+      <Loading visible={visible} text={'Connecting to a p2p network'} timeout={10000}/>
     </>
   );
 }
