@@ -57,7 +57,6 @@ const ChatScreen = () => {
             }));
             refresh ? await setList(dataList) : await setList(v => v.concat(dataList));
             await setIsLoadingMore(data.length >= limit)
-            await setLoading(false)
         } catch (e) {
             if (e instanceof Error) console.error(e.message)
         }
@@ -66,6 +65,7 @@ const ChatScreen = () => {
     const getInfo = async (refresh?: boolean) => {
         try {
             const data = await conversationRequest.fetchNext()
+            console.log(data, 'getInfo');
             let dataList: DataList[] = data.map(item => ({
                 avatar: getChatsAvatarUrl((item.getConversationWith() as CometChat.Group).getIcon()),
                 name: item.getConversationWith().getName(),
@@ -80,8 +80,6 @@ const ChatScreen = () => {
             await setIsLoadingMore(data.length >= limit)
         } catch (e) {
             if (e instanceof Error) console.error(e.message)
-        }finally {
-            await setLoading(false)
         }
     }
 
@@ -116,10 +114,6 @@ const ChatScreen = () => {
       searchValue ? getSearchInfo(true) : getInfo(true);
     }, [conversationRequest, groupsRequest])
 
-    useEffect(()=>{
-        setLoading(true)
-    },[])
-
     const onRefresh = async () => {
         await init();
         setRefreshing(true);
@@ -136,55 +130,47 @@ const ChatScreen = () => {
           searchValue={searchValue}
           setSearchValue={setSearchValue}
         />
-          {
-              loading &&
-              <ActivityIndicator size="large" color="#FF5530" />
+        <FlatList
+          data={list}
+          renderItem={({item}) => <MessageItem
+            avatar={item.avatar}
+            name={item.name}
+            createdAt={item.createdAt}
+            lastUserName={item.lastUserName}
+            content={item.content}
+            unreadCount={item.unreadCount}
+            navigationFn={() =>toChatsDetail(item)}
+          />}
+          keyExtractor={(item, index) => `conversation-${index}`}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
           }
-          {
-              !loading &&
-              <FlatList
-                  data={list}
-                  renderItem={({item}) => <MessageItem
-                      avatar={item.avatar}
-                      name={item.name}
-                      createdAt={item.createdAt}
-                      lastUserName={item.lastUserName}
-                      content={item.content}
-                      unreadCount={item.unreadCount}
-                      navigationFn={() =>toChatsDetail(item)}
-                  />}
-                  keyExtractor={(item, index) => `conversation-${index}`}
-                  refreshControl={
-                      <RefreshControl
-                          refreshing={refreshing}
-                          onRefresh={onRefresh}
-                      />
-                  }
-                  onEndReached={handleLoadMore}
-                  onEndReachedThreshold={0.2}
-                  ListFooterComponent={() => (
-                      <>
-                          {
-                              loading &&
-                              <View style={styles.footer}>
-                                  <ActivityIndicator size="large"/>
-                              </View>
-                          }
-                      </>
-                  )}
-                  ListEmptyComponent={!list.length && !refreshing ?
-                      <View style={styles.noData}>
-                          <NoDataShow
-                              title={'No news'}
-                              image={require('../../../assets/chatGroupNoData.png')}
-                              description={`Please initiate a chat first`}
-                          />
-                      </View>
-                      : null
-                  }
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.2}
+          ListFooterComponent={() => (
+            <>
+              {
+                loading &&
+                  <View style={styles.footer}>
+                      <ActivityIndicator size="large"/>
+                  </View>
+              }
+            </>
+          )}
+          ListEmptyComponent={!list.length && !refreshing ?
+            <View style={styles.noData}>
+              <NoDataShow
+                title={'No news'}
+                image={require('../../../assets/chatGroupNoData.png')}
+                description={`Please initiate a chat first`}
               />
+            </View>
+            : null
           }
-
+        />
       </View>
     </BackgroundSafeAreaView>
   )
