@@ -79,7 +79,7 @@ const FightForLuck: React.FC<Props> = (props) => {
                     placeholder={`Please enter best wishes`}
                     value={wishes}
                     setValue={setWishes}
-                    maxLength={13}
+                    maxLength={30}
                 />
                 <View style={[styles.titleParent, styles.contentSpaceBlock]}>
                     <Text style={[styles.title3, styles.titleFlexBox]}>{TotalAmountSum}</Text>

@@ -262,7 +262,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
           <View style={{flex:1,maxHeight:windowHeight*0.25}}>
           <ScrollView>
             <Text style={styles.description} numberOfLines={seeMoreStatus ? undefined : 1}>
-              {info.description}
+              <Text numberOfLines={1} style={styles.showMore}>[#{info.title}#]</Text>{info.description}
             </Text>
           </ScrollView>
           </View>

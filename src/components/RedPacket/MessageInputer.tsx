@@ -20,9 +20,10 @@ import Toast from "react-native-toast-message";
 import {getSize} from "../../utils/util";
 import Favor from "../../libs/favor";
 import {ImagePickerResponse} from "react-native-image-picker/src/types";
-
 import {StackNavigationProp} from "@react-navigation/stack";
 import EmojiSelector from 'react-native-emoji-selector'
+import { Message } from '../../declare/api/nodeApi';
+import User = CometChat.User;
 
 export type Props = {
   memberCount: number;
@@ -50,10 +51,21 @@ const MessageInputer: React.FC<Props> = (props) => {
   const [bottomType, setBottomType] = useState<'function' | 'emoji' | 'none'>('none');
 
   const {config} = Favor;
+  const [loginUser,setLoginUser] = useState<User | null>(null);
+
+  useEffect(()=> {
+    CometChat.getLoggedinUser()
+      .then((user) => setLoginUser(user))
+      .catch((error) => {
+        const errorCode = error?.message || 'ERROR';
+        console.log(errorCode)
+      });
+  },[]);
 
   const closeBottom = () => {
     setBottomType('none');
   }
+
   const sendCustomMessage = (customData: CustomData) => {
     const customMessage = new CometChat.CustomMessage(
       guid,
@@ -61,15 +73,7 @@ const MessageInputer: React.FC<Props> = (props) => {
       'redPacket',
       customData,
     );
-
-    CometChat.sendCustomMessage(customMessage).then(
-      message => {
-        setMessageList([message, ...messageList])
-      },
-      error => {
-        console.log('Failed to send custom message:', {error});
-      }
-    );
+    messageProcess(customMessage,'redPacket','custom')
   };
 
   const luckyPacketFun = () => {
@@ -94,27 +98,16 @@ const MessageInputer: React.FC<Props> = (props) => {
           size: image.size,
           uri: Platform.OS === 'android' ? image.path : image.path.replace('file://', '')
         };
-        console.log(fileObj, 'fileObj')
-
         const mediaMessage = new CometChat.MediaMessage(
           guid,
           fileObj,
           CometChat.MESSAGE_TYPE.IMAGE,
           CometChat.RECEIVER_TYPE.GROUP,
         );
-
-        CometChat.sendMessage(mediaMessage).then(
-          message => {
-            console.log('Message sent successfully:', message);
-            setMessageList([message, ...messageList])
-            closeBottom()
-          },
-          error => {
-            console.log('Message sending failed with error:', error);
-            closeBottom()
-          }
-        );
-
+        mediaMessage.setData({
+          'url': fileObj.uri,
+        });
+        messageProcess(mediaMessage,'image');
       } else return Toast.show({
         type: 'error',
         text1: 'PickedImage error',
@@ -127,7 +120,6 @@ const MessageInputer: React.FC<Props> = (props) => {
       mediaType: 'video',
       compressVideoPreset: 'MediumQuality',
     }).then(async video => {
-      console.log(video, 'videoInfo');
       if (!checkVideoSize(video)) return;
       const mediaMessage = new CometChat.MediaMessage(
         guid,
@@ -139,14 +131,10 @@ const MessageInputer: React.FC<Props> = (props) => {
         CometChat.MESSAGE_TYPE.VIDEO,
         CometChat.RECEIVER_TYPE.GROUP
       );
-
-      try {
-        const response = await CometChat.sendMessage(mediaMessage);
-        console.log('CometChat send video message successful:', response);
-        setMessageList([response, ...messageList]);
-      } catch (error) {
-        console.log('CometChat send video message failed with error:', error);
-      }
+      mediaMessage.setData({
+        'url': video.path,
+      });
+      messageProcess(mediaMessage,'video');
     })
   };
 
@@ -172,32 +160,19 @@ const MessageInputer: React.FC<Props> = (props) => {
         type: res[0].type,
         uri: res[0].uri,
       };
-      console.log(file, 'file')
+
       const mediaMessage = new CometChat.MediaMessage(
         guid,
         file,
         CometChat.MESSAGE_TYPE.FILE,
         CometChat.RECEIVER_TYPE.GROUP,
       );
-
-        mediaMessage.setData({
-          name: file.name,
-          type: file.type,
-          size: res[0].size,
-        });
-
-      CometChat.sendMessage(mediaMessage).then(
-        message => {
-          console.log('Message sent successfully:', message);
-          setMessageList([message, ...messageList])
-          closeBottom()
-        },
-        error => {
-          console.log('Message sending failed with error:', error);
-          closeBottom()
-        }
-      );
-
+      mediaMessage.setData({
+        name: file.name,
+        type: file.type,
+        size: res[0].size,
+      });
+      messageProcess(mediaMessage,'file');
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         console.log('user cancelled the picker');
@@ -231,7 +206,6 @@ const MessageInputer: React.FC<Props> = (props) => {
             cameraType: 'back',
           },
           (response: ImagePickerResponse) => {
-            console.log(response,'response')
             if (response.didCancel) {
               return null;
             }
@@ -274,17 +248,10 @@ const MessageInputer: React.FC<Props> = (props) => {
                 CometChat.RECEIVER_TYPE.GROUP,
               );
 
-              CometChat.sendMessage(mediaMessage).then(
-                message => {
-                  console.log('Message sent successfully:', message);
-                  setMessageList([message, ...messageList])
-                  closeBottom()
-                },
-                error => {
-                  console.log('Message sending failed with error:', error);
-                  closeBottom()
-                }
-              );
+              mediaMessage.setData({
+                'url': file.uri
+              });
+              messageProcess(mediaMessage,mediaType === 'photo' ? 'image':'video');
             }
           },
         );
@@ -311,17 +278,76 @@ const MessageInputer: React.FC<Props> = (props) => {
     }
   }
   const handleClickSend = async () => {
-    const textMessage = new CometChat.TextMessage(guid, inputValue, CometChat.RECEIVER_TYPE.GROUP);
-    CometChat.sendMessage(textMessage).then(
-      (message) => {
-        setInputValue('');
-        setMessageList([message, ...messageList])
-      },
-      (error) => {
-        console.log("Error sending message:", error);
-      }
-    );
+    const messageInput = inputValue.trim();
+    const textMessage: any = new CometChat.TextMessage(guid, messageInput, CometChat.RECEIVER_TYPE.GROUP);
+    textMessage.setData({
+      'text': messageInput,
+    });
+    messageProcess(textMessage,'text');
   };
+
+  const messageProcess = (userMessage:  CometChat.MediaMessage |  CometChat.TextMessage | CometChat.CustomMessage,type: string, category: string = 'message') => {
+    userMessage.setSender(loginUser as User);
+    // @ts-ignore
+    userMessage._id = Date.now().toString();
+    // @ts-ignore
+    userMessage.setId(userMessage._id);
+    // @ts-ignore
+    userMessage.updatedAt = Date.now() / 1000;
+    userMessage.setRawMessage({
+      category,
+      type,
+    });
+
+    // @ts-ignore
+    setMessageList(v => [userMessage, ...v]);
+    if (category === 'message') closeBottom();
+    if (type === 'text') setInputValue('');
+
+    if(category === 'custom') {
+      CometChat.sendCustomMessage(userMessage as CometChat.CustomMessage).then(
+        message => {
+          // @ts-ignore
+          setMessageList(v => messageSent(v,message,userMessage._id));
+        },
+        error => {
+          Toast.show({
+            type: 'error',
+            text1: error,
+          });
+          // @ts-ignore
+          setMessageList(v => messageSendError(v,userMessage._id));
+        }
+      );
+    } else {
+      CometChat.sendMessage(userMessage).then(
+        message => {
+          // @ts-ignore
+          setMessageList(v => messageSent(v,message,userMessage._id));
+        },
+        error => {
+          Toast.show({
+            type: 'error',
+            text1: error,
+          });
+          // @ts-ignore
+          setMessageList(v => messageSendError(v,userMessage._id));
+        }
+      )
+    }
+
+
+  }
+
+  const messageSent = (messageList: CometChat.BaseMessage[], message:any, id:string ):CometChat.BaseMessage[] => {
+    // @ts-ignore
+    return messageList.map(obj => obj._id === id ? message : obj)
+  }
+
+  const messageSendError = (messageList: CometChat.BaseMessage[],id: string):CometChat.BaseMessage[] => {
+    // @ts-ignore
+    return  messageList.filter(v => (v._id !== id || !v._id))
+  }
 
   return (
     <View style={styles.container}>

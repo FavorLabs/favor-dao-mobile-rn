@@ -153,9 +153,8 @@ const ClaimDetails = () => {
                     />
                   </View>
                   <Text style={[styles.andrewParker, styles.titleTypo]}>{senderName}</Text>
-                  <Text style={styles.redPacketTitle} numberOfLines={1}>{RPTitle}</Text>
-                  <Text style={[styles.mayYouBe, styles.title1Typo]}>
-                    May you be happy and prosperous!
+                    <Text style={[styles.mayYouBe, styles.title1Typo,{maxWidth:'70%'}]}>
+                      {RPTitle}
                   </Text>
                 </View>
                 <View style={[styles.favt,{display: claimSumStatus?'flex':'none'}]}>

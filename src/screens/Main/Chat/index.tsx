@@ -65,7 +65,6 @@ const ChatScreen = () => {
     const getInfo = async (refresh?: boolean) => {
         try {
             const data = await conversationRequest.fetchNext()
-            console.log(data, 'getInfo');
             let dataList: DataList[] = data.map(item => ({
                 avatar: getChatsAvatarUrl((item.getConversationWith() as CometChat.Group).getIcon()),
                 name: item.getConversationWith().getName(),

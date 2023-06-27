@@ -30,7 +30,7 @@ const ChatInDAOScreen = () => {
     const url = useUrl();
     const [daoInfo, setDaoInfo] = useState<DaoInfo>();
     const [loading, setLoading] = useState(false);
-    const [messageList, setMessageList] = useState<CometChat.BaseMessage[]>([]);
+    const [messageList, setMessageList] = useState<CometChat.BaseMessage[] | CometChat.TextMessage[] | CometChat.MediaMessage[] | CometChat.CustomMessage[]>([]);
 
     const messagesRequest = useMemo(() =>
         new CometChat.MessagesRequestBuilder()
@@ -140,7 +140,8 @@ const ChatInDAOScreen = () => {
               message.getId(),
               message.getReceiverId(),
               message.getReceiverType(),
-              message.getSender().getUid(),
+              // @ts-ignore
+              message.getSender() ? message.getSender().getUid() : message.sender.uid,
             )
         }
     }, [messageList[0]])
@@ -187,6 +188,8 @@ const ChatInDAOScreen = () => {
                 messageList={messageList}
                 memberCount={daoInfo?.follow_count}
               />
+
+
           </BackgroundSafeAreaView>
       </KeyboardAvoidingView>
     );
@@ -194,12 +197,12 @@ const ChatInDAOScreen = () => {
 const styles = StyleSheet.create({
     loadingContent: {
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#ffffff',
         justifyContent: 'center',
         alignItems: 'center',
     },
     loading: {
-        color: Color.color1,
+        color: '#000000',
         fontSize: FontSize.size_xl,
         fontWeight: '600',
     },

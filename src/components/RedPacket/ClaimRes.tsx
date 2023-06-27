@@ -12,7 +12,7 @@ export type Props = {
     setClaimResStatus:Function,
     id:string,
     senderName:string,
-    messageInfo:CometChat.BaseMessage,
+    messageInfo:CometChat.BaseMessage | any,
     setRedStatus:Function
 };
 
@@ -69,15 +69,22 @@ const ClaimRes: React.FC<Props> = (props) => {
                             <View style={[styles.msgbox,{top:0.65 * 0.88 * Height * 0.4 - (0.75 * Width * 0.25 * 0.5)}]}>
                                 <View style={styles.flex}>
                                     <View style={[styles.avatarbox,styles.flex,{width: 0.75 * Width * 0.25,height:0.75 * Width * 0.25,borderRadius:0.75 * Width * 0.25 * 0.5}]}>
-                                        <Image style={[{width: 0.75 * Width * 0.25 * 0.7,height:0.75 * Width * 0.25 * 0.7,borderRadius:0.75 * Width * 0.25 * 0.7 * 0.5}]} source={{uri:`${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender().getAvatar())}`}}></Image>
+                                        <Image style={[{width: 0.75 * Width * 0.25 * 0.7,height:0.75 * Width * 0.25 * 0.7,borderRadius:0.75 * Width * 0.25 * 0.7 * 0.5}]} source={{uri:`${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender() ? messageInfo.getSender().getAvatar() : messageInfo.sender.avatar)}`}}></Image>
                                     </View>
                                 </View>
                                 <View style={{marginTop:0.75 * Width * 0.25 * 0.7 * 0.1}}>
                                     <Text style={[styles.nametext,{fontSize:0.75 * Width * 0.25 * 0.7*0.3}]}>{senderName}</Text>
                                 </View>
                                 <View style={[{marginTop:0.75 * Width * 0.25 * 0.7 * 0.2},styles.flex]}>
-                                    <Text style={[styles.noticetext,{fontSize:0.75 * Width * 0.25 * 0.7*0.3 }]}>It has been collected completely </Text>
-                                </View>
+                                    {
+                                      state &&  <Text style={[styles.noticetext,{fontSize:0.75 * Width * 0.25 * 0.7*0.3 }]}>It has been collected completely</Text>
+                                    }
+                                    {
+                                      !state &&
+                                      // @ts-ignore
+                                      <Text style={[styles.noticetext,{fontSize:0.75 * Width * 0.25 * 0.7*0.3}]}>{messageInfo.customData.title}</Text>
+                                    }
+                                        </View>
                             </View>
                             <View style={[styles.todetails,styles.bottom,{display: state?'flex':'none'}]}>
                                 <Pressable onPress={todetails} style={styles.textres}>
