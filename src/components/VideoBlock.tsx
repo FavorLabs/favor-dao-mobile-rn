@@ -44,6 +44,17 @@ const VideoBlock: React.FC<Props> = (props) => {
         }))
       }
     }
+    if(ShieldAct.Type=='2'){
+      if(ShieldAct.Id==postInfo.id){
+        setShieldStatus(false)
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'',
+            Id:''
+          }
+        }))
+      }
+    }
   }
   useEffect(()=>{
     Shield()

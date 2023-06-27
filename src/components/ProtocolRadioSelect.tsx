@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
+        paddingTop:5,
+        paddingBottom:5
     },
 });
 

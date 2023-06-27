@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  Platform, ActivityIndicator
+  Platform, ActivityIndicator,Dimensions
 } from "react-native";
 import VideoDetailButton from "../components/VideoDetailButton";
 import {useNavigation, useRoute} from "@react-navigation/native";
@@ -33,6 +33,7 @@ import Models from "../declare/storeTypes";
 
 export type Props = {};
 const VideoPlayScreen: React.FC<Props> = (props) => {
+  const windowHeight = Dimensions.get('window').height;
   const navigation = useNavigation();
   const route = useRoute();
   const url = useUrl();
@@ -258,9 +259,13 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
               </Text>
             </View>
           </View>
-          <Text style={styles.description} numberOfLines={seeMoreStatus ? undefined : 1}>
-            {info.description}
-          </Text>
+          <View style={{flex:1,maxHeight:windowHeight*0.25}}>
+          <ScrollView>
+            <Text style={styles.description} numberOfLines={seeMoreStatus ? undefined : 1}>
+              {info.description}
+            </Text>
+          </ScrollView>
+          </View>
           <View style={styles.tags}>
             {
               Object.keys(videoData.tags).map(item => (

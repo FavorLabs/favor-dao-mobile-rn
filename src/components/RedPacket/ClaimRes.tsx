@@ -1,5 +1,5 @@
 import React, { useEffect,  useState, } from 'react';
-import {Modal,View, Text, StyleSheet, FlatList,Pressable, RefreshControl, ActivityIndicator, TouchableOpacity, Image, TextInput,} from 'react-native';
+import {Modal,View, Text, StyleSheet, FlatList,Pressable, RefreshControl, ActivityIndicator, TouchableWithoutFeedback,TouchableOpacity, Image, TextInput,} from 'react-native';
 import { Dimensions } from 'react-native';
 import RedpacketApi from "../../services/RedpacketApi";
 import Screens from "../../navigation/RouteNames";
@@ -59,57 +59,58 @@ const ClaimRes: React.FC<Props> = (props) => {
             transparent
             animationType={'slide'}
         >
-       <View style={[styles.container,{width:Width,height:Height}]}>
-           <View style={styles.body}>
-               <View style={styles.redpackbody}>
-                   <View style={styles.redpackHead}>
-                   </View>
-                   <View style={styles.msgbox}>
-                       <View style={styles.flex}>
-                           <View style={[styles.avatarbox,styles.flex]}>
-                               <Image style={styles.avatar} source={{uri:`${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender().getAvatar())}`}}></Image>
-                           </View>
-                       </View>
-                       <View style={styles.name}>
-                           <Text style={styles.nametext}>{senderName}</Text>
-                       </View>
-                       <View style={[styles.notice,styles.flex]}>
-                           <Text style={styles.noticetext}>It has been collected completely </Text>
-                       </View>
-                   </View>
-                           <View style={[styles.todetails,styles.bottom,{display: state?'flex':'none'}]}>
-                               <Pressable onPress={todetails} style={styles.textres}>
-                                   <Text style={styles.nametext}>View claim{'\u0020'}details{'\u0020'}</Text>
-                                   <Image
-                                       style={styles.icon}
-                                       resizeMode="contain"
-                                       source={require("../../assets/right-vector.png")}
-                                   />
-                               </Pressable>
-                           </View>
-                           <View style={[styles.todetails,styles.bottom,{display: !state?'flex':'none'}]}>
-                               <View style={[styles.openBox1,styles.flex]}>
-                                   <View style={[styles.openBox2,styles.flex]}>
-                                       <Pressable onPress={toopen}>
-                                       <Text style={styles.opentext}>{loding?'Loding...':'Open'}</Text>
-                                       </Pressable>
-                                   </View>
-                               </View>
-                           </View>
-               </View>
-
-                   <View style={[styles.close,{position:"absolute",bottom:0},styles.flex]}>
-                       <TouchableOpacity onPress={()=>setClaimResStatus(false)}>
-                       <Image
-                           resizeMode={"contain"}
-                           style={styles.closeimg}
-                           source={require("../../assets/xCircle.png")}
-                       />
-                       </TouchableOpacity>
-                   </View>
-
-           </View>
-       </View>
+            <TouchableWithoutFeedback onPress={()=>setClaimResStatus(false)}>
+                <View style={[styles.container,{width:Width,height:Height}]}>
+                    <TouchableWithoutFeedback>
+                    <View style={{width:0.75 * Width,height:0.65 * Height}}>
+                        <View style={[styles.redpackBody,{width:0.75 * Width,height:0.65 * 0.88 * Height,borderRadius: 0.75 * Width * 0.1}]}>
+                            <View style={[styles.redpackHead,{shadowOffset:{width:0,height:0.65 * 0.88 * Height * 0.006},height: 0.65 * 0.88 * Height * 0.8,borderBottomRightRadius:0.65 * 0.88 * Height * 0.4,borderBottomLeftRadius: 0.65 * 0.88 * Height * 0.4,top:-0.65 * 0.88 * Height * 0.4 }]}>
+                            </View>
+                            <View style={[styles.msgbox,{top:0.65 * 0.88 * Height * 0.4 - (0.75 * Width * 0.25 * 0.5)}]}>
+                                <View style={styles.flex}>
+                                    <View style={[styles.avatarbox,styles.flex,{width: 0.75 * Width * 0.25,height:0.75 * Width * 0.25,borderRadius:0.75 * Width * 0.25 * 0.5}]}>
+                                        <Image style={[{width: 0.75 * Width * 0.25 * 0.7,height:0.75 * Width * 0.25 * 0.7,borderRadius:0.75 * Width * 0.25 * 0.7 * 0.5}]} source={{uri:`${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender().getAvatar())}`}}></Image>
+                                    </View>
+                                </View>
+                                <View style={{marginTop:0.75 * Width * 0.25 * 0.7 * 0.1}}>
+                                    <Text style={[styles.nametext,{fontSize:0.75 * Width * 0.25 * 0.7*0.3}]}>{senderName}</Text>
+                                </View>
+                                <View style={[{marginTop:0.75 * Width * 0.25 * 0.7 * 0.2},styles.flex]}>
+                                    <Text style={[styles.noticetext,{fontSize:0.75 * Width * 0.25 * 0.7*0.3 }]}>It has been collected completely </Text>
+                                </View>
+                            </View>
+                            <View style={[styles.todetails,styles.bottom,{display: state?'flex':'none'}]}>
+                                <Pressable onPress={todetails} style={styles.textres}>
+                                    <Text style={styles.nametext}>View claim{'\u0020'}details{'\u0020'}</Text>
+                                    <Image
+                                        style={{width:0.75 * Width * 0.25*0.7*0.5*0.5,height:0.75 * Width * 0.25*0.7*0.5*0.5}}
+                                        resizeMode="contain"
+                                        source={require("../../assets/right-vector.png")}
+                                    />
+                                </Pressable>
+                            </View>
+                            <View style={[styles.todetails,styles.bottom,{display: !state?'flex':'none'}]}>
+                                <View style={[styles.openBox1,styles.flex,{width: 0.75 * Width * 0.25,height: 0.75 * Width * 0.25,borderRadius: 0.75 * Width * 0.25 *0.5}]}>
+                                    <Pressable onPress={toopen}>
+                                        <View style={[styles.openBox2,{width: 0.75 * Width * 0.25 *0.7,height: 0.75 * Width * 0.25*0.7,borderRadius: 0.75 * Width * 0.25*0.7*0.5},styles.flex]}>
+                                            <Text style={[styles.opentext,{fontSize:0.75 * Width * 0.25*0.7*0.5*0.5}]}>{loding?'Loding':'Open'}</Text>
+                                        </View>
+                                    </Pressable>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={[styles.close,{position:"absolute",bottom:0},styles.flex]}>
+                            <TouchableOpacity onPress={()=>setClaimResStatus(false)}><Image
+                                resizeMode={"contain"}
+                                style={styles.closeimg}
+                                source={require("../../assets/xCircle.png")}
+                            />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    </TouchableWithoutFeedback>
+                </View>
+            </TouchableWithoutFeedback>
         </Modal>
     )
 }
@@ -120,10 +121,6 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center'
     },
-    icon:{
-        height:"60%",
-        width:14
-    },
     closeimg:{
         height:"60%"
     },
@@ -132,54 +129,34 @@ const styles = StyleSheet.create({
         height:'12%'
     },
     opentext:{
-        fontSize:16,
         color:'#FFFFFF',
         fontWeight:"600",
-        textAlign:'center'
+        textAlign:'center',
     },
     openBox1:{
-      width:94,
-        height:94,
-        borderRadius:47,
         backgroundColor:'#FA4D26'
     },
     openBox2:{
-        width:74,
-        height:74,
-        borderRadius:37,
         backgroundColor:'#FF8D1A'
     },
     todetails:{
         display:"flex",
         flexDirection:'row',
         justifyContent:'center',
-        width:'100%'
+        width:'100%',
     },
     bottom:{
       position:'absolute',
       bottom:'5%'
     },
     noticetext:{
-        fontSize:14,
         color:'#FF8D1A',
         textAlign:'center',
         width:'80%'
     },
-    notice:{
-        marginTop:20
-    },
     nametext:{
-        fontSize:14,
         color:'white',
         textAlign:'center',
-    },
-    name:{
-      marginTop:10
-    },
-    avatar:{
-      width:46,
-      height:46,
-        borderRadius:23
     },
     flex:{
         display:"flex",
@@ -187,35 +164,24 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     },
     avatarbox:{
-        width:66,
-        height:66,
-        borderRadius:33,
         backgroundColor:'#FF8D1A'
     },
     msgbox:{
         width:"100%",
         position:"absolute",
-        top:210-33,
     },
     redpackHead:{
-        height:370,
         width:'100%',
         backgroundColor:'orange',
-        borderBottomRightRadius:140,
-        borderBottomLeftRadius:140,
         position:'absolute',
-        top:-160
+        elevation: 5,
+        shadowColor:'black',
+        shadowOpacity: 0.6,
+        shadowRadius: 5,
     },
-    redpackbody:{
-        width:'100%',
-        height:'88%',
+    redpackBody:{
         backgroundColor:'#E0362B',
-        borderRadius:30,
         overflow:'hidden'
-    },
-    body:{
-        width:'75%',
-        height:'65%',
     },
     container:{
         position:'absolute',
@@ -226,5 +192,4 @@ const styles = StyleSheet.create({
         justifyContent:'center'
     }
 })
-
 export default ClaimRes

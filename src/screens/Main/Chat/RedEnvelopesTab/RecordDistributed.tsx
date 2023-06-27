@@ -5,8 +5,11 @@ import {useResourceUrl, useUrl} from "../../../../utils/hook";
 import RedpacketApi from "../../../../services/RedpacketApi";
 import ChatChannel from "../../../../components/RedPacket/ChatChannel";
 import {getTime} from "../../../../utils/util";
-import {ActivityIndicator, FlatList, RefreshControl, ScrollView, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, FlatList, RefreshControl, ScrollView, StyleSheet, Text, View, TouchableOpacity} from "react-native";
+import Screens from "../../../../navigation/RouteNames";
+import {useNavigation} from "@react-navigation/native";
 const RecordDistributed = () => {
+    const navigation = useNavigation();
     const [userData,setUserData]=useState([])
     const [refreshing, setRefreshing] = React.useState(false);
     const [page,setPage]=useState(1)
@@ -55,6 +58,9 @@ const RecordDistributed = () => {
     };
     const renderItem = (item:any) => {
         return (
+            <TouchableOpacity  onPress={()=> {
+                // @ts-ignore
+                navigation.push(Screens.ClaimDetails,{unToRecord:true,id:item.id})}}>
             <ChatChannel
                 isShowAvatar={false}
                 avatar={{uri:`${avatarsResUrl}/${item.user_avatar}`}}
@@ -64,6 +70,7 @@ const RecordDistributed = () => {
                 time={getTime(item.modified_on)}
                 record={`${item.refund_status?'Expired':''} ${item.claim_count}/${item.total}`}
             />
+            </TouchableOpacity>
         );
     }
     const onRefresh = async () => {

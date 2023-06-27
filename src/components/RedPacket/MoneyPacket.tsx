@@ -40,6 +40,7 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
     const [loading, setLoading] = useState(false);
     const totalToNumber=useMemo(()=> toNumber(total),[total])
     const [balance, setBalance] = useState<string>('0');
+    const [sendTitle,setSendTitle]=useState('')
     const showAmount=useMemo(()=>
     {
         if (redPacketType==0){
@@ -70,60 +71,68 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
             await setLoading(true)
             try {
                 const privateKey = WalletController.exportPrivateKey(password);
-                const auth =  await WalletController.getSignatureData(privateKey, type);
-                const res={
-                    auth:{
-                        ...auth,
-                        type:'wallet_connect'
-                    },
-                    type:redPacketType,
-                    title:title,
-                    amount:mulDecimal(amount),
-                    total:totalToNumber
-                }
-                const request =  () => RedpacketApi.creatRedpacket(url,res)
-                const {data}= await request()
-                if (data.code==0){
-                    await sendCustomMessage({id:data.data.redpacket_id,title:title})
-                    setTimeout(()=>{
+                try {
+                    const auth =  await WalletController.getSignatureData(privateKey,type);
+                    const res={
+                        auth:{
+                            ...auth,
+                            type:'wallet_connect'
+                        },
+                        type:redPacketType,
+                        title:sendTitle,
+                        amount:mulDecimal(amount),
+                        total:totalToNumber
+                    }
+                    const request =  () => RedpacketApi.creatRedpacket(url,res)
+                    const {data}= await request()
+                    if (data.code==0){
+                        await sendCustomMessage({id:data.data.redpacket_id,title:sendTitle})
+                        setTimeout(()=>{
+                            setPassword('')
+                            setLoading(false)
+                            setVisible(false)
+                            if(redPacketType==0){
+                                navigation.goBack()
+                                Toast.show({
+                                    type: 'info',
+                                    text1: 'Send success!'
+                                });
+                            }
+                            if (redPacketType==1){
+                                // @ts-ignore
+                                navigation.pop(1)
+                                Toast.show({
+                                    type: 'info',
+                                    text1: 'Send success!'
+                                });
+                            }
+                        },1200)
+                    }else {
+                        Toast.show({
+                            type: 'error',
+                            text1: 'Send faild!'
+                        });
                         setPassword('')
-                         setLoading(false)
-                         setVisible(false)
-                        if(redPacketType==0){
-                            navigation.goBack()
-                            Toast.show({
-                                type: 'info',
-                                text1: 'Send success!'
-                            });
-                        }
-                        if (redPacketType==1){
-                            // @ts-ignore
-                            navigation.pop(1)
-                            Toast.show({
-                                type: 'info',
-                                text1: 'Send success!'
-                            });
-                        }
-                    },1200)
-                }else {
-                    Toast.show({
-                        type: 'error',
-                        text1: 'Send faild!'
-                    });
-                    setPassword('')
+                        setVisible(false)
+                    }
+                }catch (e){
+                    setLoading(false)
                     setVisible(false)
+                    if (e instanceof Error)
+                    {
+                        Toast.show({
+                            type: 'error',
+                            text1: e.message
+                        });
+                    }
                 }
-            } catch (e){
-                setLoading(false)
+            } catch {
                 setVisible(false)
-                if (e instanceof Error)
-                {
-                    Toast.show({
-                        type: 'error',
-                        text1: e.message
-                    });
-                }
-                console.log(e)
+                setLoading(false)
+                Toast.show({
+                    type: 'error',
+                    text1:'Wrong password!'
+                });
             }
         }
     }
@@ -132,7 +141,12 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
         if (visible==false){
             setPassword('')
         }
-    }, [visible])
+        if(title==''){
+            setSendTitle('Favt')
+        }else {
+            setSendTitle(title)
+        }
+    }, [visible,title])
     return <View style={styles.body}>
         <BottomSheetModal
             height={'50%'}
@@ -152,9 +166,8 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                     <View style={styles.favTBox}>
                         <Text style={styles.favTSum}>
                             {showAmount}
-
                             <Text style={styles.favtText}>
-                                FavT
+                                {'\u0020'}FavT
                             </Text>
                         </Text>
 

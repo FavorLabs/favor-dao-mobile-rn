@@ -73,7 +73,6 @@ const RowUser: React.FC<Props> = (props) => {
   }
   const uDelDaoMsg = async () => {
     try {
-      if(postInfo.ref_id=='000000000000000000000000'){
         const request =  () => PostApi.deletePost(url,postInfo.id)
         const {data}=await request()
         if(data.code==0){
@@ -83,27 +82,11 @@ const RowUser: React.FC<Props> = (props) => {
           });
           dispatch(globalUpdateState({
             ShieldAct:{
-              Type:'1',
+              Type:'2',
               Id:postInfo.id
             }
           }))
         }
-      }else {
-        const request =  () => PostApi.deletePost(url,postInfo.id)
-        const {data}=await request()
-        if(data.code==0){
-          Toast.show({
-            type: 'info',
-            text1: 'Delete success!'
-          });
-          dispatch(globalUpdateState({
-            ShieldAct:{
-              Type:'1',
-              Id:postInfo.ref_id
-            }
-          }))
-        }
-      }
     } catch (e) {
       if (e instanceof Error)
       {
