@@ -7,7 +7,7 @@ import {useSelector} from "react-redux";
 import Models from "../../declare/storeTypes";
 import {useResourceUrl} from "../../utils/hook";
 export type Props = {
-  messageInfo: CometChat.BaseMessage;
+  messageInfo: CometChat.BaseMessage | CometChat.TextMessage | CometChat.MediaMessage | CometChat.CustomMessage | any;
   isShowTime: boolean;
 };
 const ChatNameBox: React.FC<Props> = (props) => {
@@ -16,35 +16,10 @@ const ChatNameBox: React.FC<Props> = (props) => {
   const avatarsResUrl = useResourceUrl('avatars');
   const {user} = useSelector((state: Models) => state.global);
   const [isMy,setIsMy] = useState(false);
-  const [isAction,setIsAction] = useState(false);
-  const [actionText,setActionText] = useState('');
-  const [messageInfoType,setMessageInfoType] = useState('');
-
-  const judgmentType = async () => {
-    // @ts-ignore
-    const category = messageInfo.getRawMessage().category;
-    if(category === 'action') {
-      setIsAction(true);
-      // @ts-ignore
-      const joinStatus = messageInfo.action;
-      if(joinStatus === 'left' || joinStatus === 'joined') {
-        // @ts-ignore
-        setActionText(messageInfo.message)
-      }
-    } else if(category === 'message') {
-      // @ts-ignore
-      const messageType = messageInfo.getRawMessage().type;
-      await setMessageInfoType(messageType)
-    } else if(category === 'custom') {
-      // @ts-ignore
-      await setMessageInfoType(messageInfo.getRawMessage().type)
-    }
-
-  };
 
   useEffect(()=> {
-    setIsMy(messageInfo.getSender().getName() === user?.nickname ? true : false);
-    // judgmentType();
+    // @ts-ignore
+    setIsMy(messageInfo.getSender() ? messageInfo.getSender().getName() === user?.nickname : messageInfo.sender.name === user?.nickname);
   },[messageInfo])
 
 
@@ -65,8 +40,12 @@ const ChatNameBox: React.FC<Props> = (props) => {
             !isMy ?
               <>
                 <View style={styles.flexBox}>
-                  <Image style={styles.image} source={{uri: `${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender().getAvatar())}`}} />
-                  <Text style={styles.name}>{messageInfo.getSender().getName()}</Text>
+                  <Image style={styles.image} source={{uri: `${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender() ? messageInfo.getSender().getAvatar() : messageInfo.sender.avatar)}`}} />
+                  <Text style={styles.name}>{
+                    messageInfo.getSender() ?
+                    messageInfo.getSender().getName() :
+                      messageInfo.sender.name
+                  }</Text>
                 </View>
                 <View style={styles.msgbox}>
                   <ChatMsgItem
@@ -81,8 +60,8 @@ const ChatNameBox: React.FC<Props> = (props) => {
                 <View style={styles.flexBoxIsMine}>
                   <View></View>
                   <View style={styles.flexBox}>
-                    <Text style={styles.name}>{messageInfo.getSender().getName()}</Text>
-                    <Image style={styles.imageIsMine} source={{uri: `${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender().getAvatar())}`}}></Image>
+                    <Text style={styles.name}>{messageInfo.getSender() ? messageInfo.getSender().getName() : messageInfo.sender.name}</Text>
+                    <Image style={styles.imageIsMine} source={{uri: `${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender() ? messageInfo.getSender().getAvatar() : messageInfo.sender.avatar)}`}}></Image>
                   </View>
                 </View>
                 <View style={styles.msgboxIsMine}>
