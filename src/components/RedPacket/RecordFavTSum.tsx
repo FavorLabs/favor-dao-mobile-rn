@@ -124,7 +124,7 @@ return (
             transparent
             animationType={'slide'}
         >
-            <View style={[styles.yearPickerBox,{width:Width,height:Height,backgroundColor:'rgba(0,0,0,0.4)'}]}>
+            <View style={[styles.yearPickerBox,{width:Width,height:Height,backgroundColor:'rgba(0,0,0,0.2)'}]}>
                 <Picker
                     selectedValue={years}
                     onValueChange={(itemValue, itemIndex) =>
@@ -133,11 +133,12 @@ return (
                         setPickerStatus(false)
                     }
                 }
-                    style={[styles.yearPicker]}
+                    style={styles.yearPicker}
+
                 >
-                    <Picker.Item label={`${year}`} value={year} />
-                    <Picker.Item label={`${year-1}`} value={year-1} />
-                    <Picker.Item label={`${year-2}`} value={year-2} />
+                    <Picker.Item label={`${year}`} value={year} color={'#0078FF'} />
+                    <Picker.Item label={`${year-1}`} value={year-1} color={'#0078FF'}/>
+                    <Picker.Item label={`${year-2}`} value={year-2} color={'#0078FF'}/>
                 </Picker>
             </View>
             </Modal>
@@ -152,9 +153,10 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     yearPicker:{
-       backgroundColor:'white',
+       backgroundColor:'rgb(255,255,255)',
         borderRadius:50,
-        width:'60%'
+        width:'60%',
+        color:'#0078FF33'
     },
     image:{
         width:70,

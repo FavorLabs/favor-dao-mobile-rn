@@ -9,7 +9,7 @@ import RecordDistributed from "./RecordDistributed";
 export const REtabs = {
     header: () => null,
     tabBarIndicatorStyle: { backgroundColor: '#eaeaea', display: 'none' },
-    tabBarLabel: ({ focused, color, children }: { focused: boolean, color: string, children: string }) => {
+    tabBarLabel: ({ focused, children }: { focused: boolean, color: string, children: string }) => {
         return (
             <View style={[styles.option,focused && styles.active]}>
                 <Text style={[styles.optionText,focused && styles.activeText]}>{children}</Text>

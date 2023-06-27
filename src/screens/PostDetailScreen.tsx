@@ -7,7 +7,7 @@ import {PostInfo} from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
 import NewsBlock from "../components/NewsBlock";
 import QuoteBlock from "../components/QuoteBlock";
-import {Color} from "../GlobalStyles";
+import {Color, FontSize, Padding} from "../GlobalStyles";
 import OperationBlock from "../components/OperationBlock";
 import Comment from "../components/Comment";
 import {getDebounce} from "../utils/util";
@@ -38,7 +38,7 @@ const PostDetailScreen = () => {
           navigation.navigate('PostDetail',{postId: data.data.ref_id})
           return;
         }
-        setPostInfo(data.data);
+        await setPostInfo(data.data);
         if (data.data.author_dao.id) setIsReTransfer(true);
       }
     } catch (e) {
@@ -82,6 +82,19 @@ const PostDetailScreen = () => {
                         : postInfo.orig_type === 1 ?
                           <VideoBlockItem postInfo={postInfo} isQuote={true} showOperate={false}/> : <></>
                       : <></>
+                  }
+                  {
+                      !postInfo.orig_contents[0] && postInfo.ref_id!=='000000000000000000000000' &&
+                      <View style={{backgroundColor:'#EAEAEA'}}>
+                        <Text style={{
+                          fontSize: FontSize.bodyBody17_size,
+                          letterSpacing: 0,
+                          lineHeight: 22,
+                          fontWeight: '400',
+                          textAlign: "left",
+                          paddingHorizontal: Padding.p_base,
+                          paddingVertical: 10}}>Sorry, this news has been deleted by the author</Text>
+                      </View>
                   }
                   <OperationBlock postInfo={postInfo} type={0}/>
                 </View>

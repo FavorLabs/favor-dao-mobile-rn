@@ -1,12 +1,15 @@
 import * as React from "react";
 import RecordFavTSum from "../../../../components/RedPacket/RecordFavTSum";
-import {FlatList, StyleSheet, Text, View, ScrollView, RefreshControl, ActivityIndicator} from "react-native";
+import {FlatList, StyleSheet, Text, View, ScrollView, RefreshControl, ActivityIndicator,TouchableOpacity} from "react-native";
 import ChatChannel from "../../../../components/RedPacket/ChatChannel";
 import {getTime} from "../../../../utils/util";
 import {useEffect, useState,} from "react";
 import {useResourceUrl, useUrl} from "../../../../utils/hook";
 import RedpacketApi from "../../../../services/RedpacketApi";
+import Screens from "../../../../navigation/RouteNames";
+import {useNavigation} from "@react-navigation/native";
 const RecordReceived = () => {
+    const navigation = useNavigation();
     const [userData,setUserData]=useState([])
     const [refreshing, setRefreshing] = React.useState(false);
     const [page,setPage]=useState(1)
@@ -55,6 +58,9 @@ const RecordReceived = () => {
     };
     const renderItem = (item:any) => {
         return (
+            <TouchableOpacity  onPress={()=> {
+                // @ts-ignore
+                navigation.push(Screens.ClaimDetails,{unToRecord:true,id:item.redpacket_id})}}>
             <ChatChannel
                 avatar={{uri:`${avatarsResUrl}/${item.user_avatar}`}}
                 channelName={item.user_nickname}
@@ -62,6 +68,7 @@ const RecordReceived = () => {
                 amount={item.amount}
                 time={getTime(item.modified_on)}
             />
+            </TouchableOpacity>
         );
     }
     const onRefresh = async () => {

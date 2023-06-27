@@ -22,13 +22,13 @@ const FightForLuck: React.FC<Props> = (props) => {
     const [luckyModal,setLuckyModal]=useState(false)
     const [LuckyPacketQuantitySum,setLuckyPacketQuantitySum]=useState('')
     const [TotalAmountSum,setTotalAmountSum]=useState('')
-    const [balance, setBalance] = useState<string>('0');
+    const [balance,setBalance]=useState(0)
     const [wishes,setWishes]=useState('')
     const url = useUrl();
     const getBalance = async () => {
         try {
             const {data} = await UserApi.getAccounts(url);
-            setBalance(data.data[0].balance)
+            setBalance(toNumber(data.data[0].balance))
         } catch (e) {
             if (e instanceof Error)
                 Toast.show({
@@ -51,9 +51,10 @@ const FightForLuck: React.FC<Props> = (props) => {
     }
     const createDisable = useMemo(() => {
         return !(
-            !(TotalAmountSum > addDecimal(balance)) && isPositiveInt(TotalAmountSum) && LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!=='' && isPositiveInt(LuckyPacketQuantitySum)  && wishes && LuckyPacketQuantitySum <= memberCount
+            // @ts-ignore
+            !(toNumber(TotalAmountSum) > parseFloat(balance)/1000) && isPositiveInt(TotalAmountSum) && LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!=='' && isPositiveInt(LuckyPacketQuantitySum)  && LuckyPacketQuantitySum <= memberCount
         )
-    }, [LuckyPacketQuantitySum,TotalAmountSum,wishes]);
+    }, [LuckyPacketQuantitySum,TotalAmountSum]);
     return (
         <View style={styles.container}>
             <ScrollView>
@@ -62,12 +63,14 @@ const FightForLuck: React.FC<Props> = (props) => {
                     placeholder={`Please enter the quantity of luckypacket`}
                     value={LuckyPacketQuantitySum}
                     setValue={setLuckyPacketQuantitySum}
-                    keyboardType={'numeric'}
+                    numberInput={true}
                     AdditionalInformation={`(There are ${memberCount} people in this group)`}
                 />
                 <TextInputBlock
                     title={'Total amount'}
-                    placeholder={`Please enter the amounts                                             FavT`}
+                    placeholder={`Please enter the amounts`}
+                    lastPlaceholder={'FavT'}
+                    numberInput={true}
                     value={TotalAmountSum}
                     setValue={setTotalAmountSum}
                 />
@@ -76,6 +79,7 @@ const FightForLuck: React.FC<Props> = (props) => {
                     placeholder={`Please enter best wishes`}
                     value={wishes}
                     setValue={setWishes}
+                    maxLength={13}
                 />
                 <View style={[styles.titleParent, styles.contentSpaceBlock]}>
                     <Text style={[styles.title3, styles.titleFlexBox]}>{TotalAmountSum}</Text>

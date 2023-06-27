@@ -2,7 +2,7 @@ import * as React from "react";
 import {StyleSheet, View, Image, Text, TouchableOpacity} from "react-native";
 import NewsContent from "./NewsContent";
 import OperationBlock from "./OperationBlock";
-import { Color, Padding } from "../GlobalStyles";
+import {Color, FontSize, Padding} from "../GlobalStyles";
 import {DaoInfo, PostInfo } from "../declare/api/DAOApi";
 import VideoBlockItem from "./VideoBlockItem";
 import Screens from "../navigation/RouteNames";
@@ -19,16 +19,18 @@ export type Props = {
 const NewsCard: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
   const { postInfo } = props;
-  const { contents, orig_contents, type, orig_type, dao } = postInfo;
+  const { contents, orig_contents, type, orig_type, dao ,ref_id} = postInfo;
   const navigation = useNavigation();
   const [shieldStatus,setShieldStatus]=useState(true)
+  const [delContents,setDelContents]=useState(false)
+  const [oldDelContents,setOldDelContents]=useState(true)
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
     // @ts-ignore
     navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao , type : 'Mixed'});
     event.stopPropagation();
   };
   const { ShieldAct} = useSelector((state: Models) => state.global);
-  const Shield = () => {
+  const Shield = async () => {
     if(ShieldAct.Type=='0'){
      if(ShieldAct.Id==dao.id || ( postInfo.author_dao && ShieldAct.Id==postInfo.author_dao.id)){
        setShieldStatus(false)
@@ -51,37 +53,73 @@ const NewsCard: React.FC<Props> = (props) => {
         }))
       }
     }
-
+    if(ShieldAct.Type=='2'){
+      if(ShieldAct.Id==postInfo.id){
+        setShieldStatus(false)
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'',
+            Id:''
+          }
+        }))
+      }
+      if(ShieldAct.Id==postInfo.ref_id){
+        setOldDelContents(false)
+        setDelContents(true)
+        dispatch(globalUpdateState({
+          ShieldAct:{
+            Type:'',
+            Id:''
+          }
+        }))
+      }
+    }
   }
   useEffect(()=>{
     Shield()
   },[ShieldAct])
+  useEffect(()=>{
+    if(orig_contents==null && ref_id!=='000000000000000000000000'){
+      setDelContents(true)
+    }
+  },[])
   return (
     <View style={[styles.feedsJoinedInner,{display:shieldStatus?'flex':'none'}]}>
       <View style={styles.groupParent}>
-        {
-          !contents &&
-            <TouchableOpacity onPress={toDaoCommunity}>
-              <View style={styles.retransRow}>
-                <Image source={require('../assets/reTransFerIcon.png')} style={styles.retransImg}/>
-                <Text style={styles.daoName} numberOfLines={1}>{dao.name}</Text>
-                <Text style={styles.retranText}>retransfer this</Text>
-              </View>
-            </TouchableOpacity>
-        }
+          {
+              !contents &&
+              <TouchableOpacity onPress={toDaoCommunity}>
+                <View style={styles.retransRow}>
+                  <Image source={require('../assets/reTransFerIcon.png')} style={styles.retransImg}/>
+                  <Text style={styles.daoName} numberOfLines={1}>{dao.name}</Text>
+                  <Text style={styles.retranText}>retransfer this</Text>
+                </View>
+              </TouchableOpacity>
+          }
 
-        {
-          contents?.length &&
-            <NewsContent postInfo={postInfo}  showOperate={true}/>
-        }
-
-        {
-          orig_contents?.length ?
-            orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}  showOperate={!contents  ? true : false }/>
-              : orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true} isReTransfer={!contents  ? true : false} showOperate={!contents  ? true : false}/> : <></>
-            : <></>
-        }
-
+          {
+              contents?.length &&
+              <NewsContent postInfo={postInfo}  showOperate={true}/>
+          }
+        <View style={{display:oldDelContents?"flex":'none'}}>
+          {
+            orig_contents?.length ?
+                orig_type === 0 ? <NewsContent postInfo={postInfo} isQuote={true}  showOperate={!contents  ? true : false }/>
+                    : orig_type === 1 ? <VideoBlockItem postInfo={postInfo} isQuote={true} isReTransfer={!contents  ? true : false} showOperate={!contents  ? true : false}/> : <></>
+                : <></>
+          }
+        </View>
+            <View style={{backgroundColor:'#EAEAEA',display:delContents?'flex':'none'}}>
+              <Text style={{
+                fontSize: FontSize.bodyBody17_size,
+                letterSpacing: 0,
+                lineHeight: 22,
+                // fontWeight: '400',
+                fontWeight: '400',
+                textAlign: "left",
+                paddingHorizontal: Padding.p_base,
+                paddingVertical: 10}}>Sorry, this news has been deleted by the author</Text>
+            </View>
         <OperationBlock postInfo={postInfo} type={contents?.length && orig_contents?.length ? 0 : orig_type}/>
         <View style={styles.frameChild} />
       </View>

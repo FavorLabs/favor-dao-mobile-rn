@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Text, StyleSheet, View, TextInput} from "react-native";
+import {Text, StyleSheet, View, TextInput, Platform} from "react-native";
 import {FontSize, FontFamily, Color, Border, Padding} from "../GlobalStyles";
 import {useEffect, useState} from "react";
 
@@ -11,16 +11,22 @@ type TextInputBlockType = React.ComponentProps<typeof TextInput> & {
     disable?:boolean
     username?:string
     AdditionalInformation?:string
+    lastPlaceholder?:string
+    maxLength?:number
+    numberInput?:boolean
 }
 
 const TextInputBlock = (props: TextInputBlockType) => {
     const [editablestatus,setEditablestatus] = useState(true)
     const {
         title,
+        lastPlaceholder,
         value,
         setValue,
         height = 100,
+        maxLength = 9999999999999,
         username,
+        numberInput= false,
         disable,
         AdditionalInformation,
         ...inputProps
@@ -39,23 +45,58 @@ const TextInputBlock = (props: TextInputBlockType) => {
           <Text style={styles.title}>{title}</Text>
           <Text style={[styles.title,styles.username,{display:username?'flex':'none'}]}>{username}</Text>
           <Text style={[styles.AdditionalInformation,{display:AdditionalInformation?'flex':'none'}]}>{AdditionalInformation}</Text>
-          <TextInput
-            style={[styles.input, inputProps.multiline && {height: height,textAlignVertical: 'top'}]}
-            value={value}
-            onChangeText={setValue}
-            editable={editablestatus}
-            {
-                ...inputProps
-            }
-          />
+          {
+              lastPlaceholder &&
+              <View style={{flex:1,justifyContent:'center'}}>
+                  <TextInput
+                      style={[styles.input, inputProps.multiline && {height: height,textAlignVertical: 'top'}]}
+                      value={value}
+                      onChangeText={setValue}
+                      editable={editablestatus}
+                      maxLength={maxLength?maxLength:99999999999999999999}
+                      keyboardType={numberInput?'numeric':'default'}
+                      {
+                          ...inputProps
+                      }
+                  />
+                  <View style={[styles.lastPlaceholder,{display:!value?'flex':'none'}]}>
+                      <Text style={[styles.lastPlaceholderText,{color: Platform.OS === 'ios'?'#999':'gray',fontWeight:Platform.OS === 'ios'?'normal':'800'}]}>{lastPlaceholder}</Text>
+                  </View>
+
+              </View>
+          }
+          {
+              !lastPlaceholder &&
+              <TextInput
+                  style={[styles.input, inputProps.multiline && {height: height,textAlignVertical: 'top'}]}
+                  value={value}
+                  onChangeText={setValue}
+                  editable={editablestatus}
+                  maxLength={maxLength?maxLength:99999999999999999999}
+                  keyboardType={numberInput?'numeric':'default'}
+                  {
+                      ...inputProps
+                  }
+              />
+          }
       </View>
     );
 };
-
 const styles = StyleSheet.create({
     AdditionalInformation:{
         fontSize:13,
         color:'#939393'
+    },
+    lastPlaceholderText:{
+        fontSize:13,
+        marginTop:10,
+        width:'120%',
+    },
+    lastPlaceholder:{
+        position:'absolute',
+        right:10,
+        height:"100%",
+        justifyContent:"center",
     },
     title: {
         textAlign: "left",

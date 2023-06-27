@@ -23,39 +23,53 @@ const ClaimDetails = () => {
   const url = useUrl();
   const route=useRoute()
   // @ts-ignore
-  const { id } = route.params
+  const {id, unToRecord=false} = route.params
   const [claimSumStatus,setClaimSumStatus]=useState(true)
   const [claimSum,setClaim]=useState('')
   const [claim_count,setClaim_count]=useState('')
   const [total,setTotal]=useState('')
   const [userData,setUserData]=useState([])
+  const [senderName,setSenderName]=useState('')
+  const [senderAvatar,setSenderAvatar]=useState('')
   const [type,setType]=useState(0)
   const [refund_status,setRefund_status]=useState(0)
+  const [RPTitle,setRPTitle]=useState('')
   const [loding,setLoding]=useState(true)
   const showClaimSum=useMemo(()=>{
     return  parseFloat(claimSum)/1000
   },[claimSum])
   const getRedPacketInfo = async ()=>{
-    const request =  () => RedpacketApi.getRedPacketInfo(url,id)
-    const { data }= await request()
-    if (data.code==0){
-      setClaim_count(data.data.claim_count)
-      setTotal(data.data.total)
-      setType(data.data.type)
-      setRefund_status(data.data.refund_status)
-      if(data.data.claim_amount){
-        await setClaim(data.data.claim_amount)
-        setLoding(false)
+    try {
+      const request =  () => RedpacketApi.getRedPacketInfo(url,id)
+      const { data }= await request()
+      if (data.code==0){
+        setClaim_count(data.data.claim_count)
+        setTotal(data.data.total)
+        setType(data.data.type)
+        setRPTitle(data.data.title)
+        setSenderName(data.data.user_nickname)
+        setSenderAvatar(data.data.user_avatar)
+        setRefund_status(data.data.refund_status)
+        if(data.data.claim_amount){
+          await setClaim(data.data.claim_amount)
+          setLoding(false)
+        }else {
+          setClaimSumStatus(false)
+          setLoding(false)
+        }
       }else {
-        setClaimSumStatus(false)
-        setLoding(false)
+        Toast.show({
+          type: 'error',
+          text1: 'Quest failed'
+        });
       }
-    }else {
-      Toast.show({
-        type: 'error',
-        text1: 'Quest failed'
-      });
+    }catch (e){
+      if (e instanceof Error) {
+        console.log(e.message)
+      }
+       setLoding(false)
     }
+
   }
   const getRedPacketUser=async ()=>{
     const request =  () => RedpacketApi.getClai(url,id)
@@ -109,7 +123,7 @@ const ClaimDetails = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <FavorDaoNavBar title={'Claim Details'} rightComponent={
-            <TouchableOpacity style={styles.right} onPress={
+            <TouchableOpacity style={[styles.right,{display:unToRecord?'none':'flex'}]} onPress={
               ()=>{
                 // @ts-ignore
                 navigation.navigate(Screens.LuckyPacketRecord);
@@ -135,16 +149,17 @@ const ClaimDetails = () => {
                     <Image
                         style={[styles.imageIcon, styles.iconLayout]}
                         resizeMode="cover"
-                        source={{uri: `${avatarsResUrl}/${user?.avatar}`}}
+                        source={{uri: `${avatarsResUrl}/${senderAvatar}`}}
                     />
                   </View>
-                  <Text style={[styles.andrewParker, styles.titleTypo]}>{user?.nickname}</Text>
+                  <Text style={[styles.andrewParker, styles.titleTypo]}>{senderName}</Text>
+                  <Text style={styles.redPacketTitle} numberOfLines={1}>{RPTitle}</Text>
                   <Text style={[styles.mayYouBe, styles.title1Typo]}>
                     May you be happy and prosperous!
                   </Text>
                 </View>
                 <View style={[styles.favt,{display: claimSumStatus?'flex':'none'}]}>
-                  <Text style={styles.favtNumber}>{showClaimSum}<Text style={styles.favtText}>FavT</Text></Text>
+                  <Text style={styles.favtNumber}>{showClaimSum}<Text style={styles.favtText}>{'\u0020'}FavT</Text></Text>
                 </View>
               </View>
 
@@ -190,6 +205,12 @@ const ClaimDetails = () => {
 };
 
 const styles = StyleSheet.create({
+  redPacketTitle:{
+    textAlign:"center",
+    maxWidth:"80%",
+    color:'#999999',
+    marginTop:5,
+  },
   bottomBox:{
     position:'absolute',
     width:'100%',

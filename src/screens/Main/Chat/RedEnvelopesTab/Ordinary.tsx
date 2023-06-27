@@ -9,6 +9,7 @@ import Toast from "react-native-toast-message";
 import {addDecimal} from "../../../../utils/balance";
 import {string} from "prop-types";
 import {useUrl} from "../../../../utils/hook";
+import {toNumber} from "lodash";
 
 
 type Props ={
@@ -21,7 +22,7 @@ const Ordinary: React.FC<Props> = (props) => {
     const [luckyModal,setLuckyModal]=useState(false)
     const [LuckyPacketQuantitySum,setLuckyPacketQuantitySum]=useState('')
     const [TotalAmountSum,setTotalAmountSum]=useState('')
-    const [balance, setBalance] = useState<string>('0');
+    const [balance, setBalance] = useState(0);
     const [wishes,setWishes]=useState('')
     const url = useUrl();
     const amountSum=useMemo(()=>{
@@ -31,7 +32,7 @@ const Ordinary: React.FC<Props> = (props) => {
     const getBalance = async () => {
         try {
             const {data} = await UserApi.getAccounts(url);
-            setBalance(data.data[0].balance)
+            setBalance(toNumber(data.data[0].balance))
         } catch (e) {
             if (e instanceof Error)
                 Toast.show({
@@ -52,9 +53,9 @@ const Ordinary: React.FC<Props> = (props) => {
     const createDisable = useMemo(() => {
         return !(
             // @ts-ignore
-            !((LuckyPacketQuantitySum * TotalAmountSum) > addDecimal(balance)) && isPositiveInt(TotalAmountSum) && LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!=='' && isPositiveInt(LuckyPacketQuantitySum)  && wishes && LuckyPacketQuantitySum <= memberCount
+            !(toNumber((LuckyPacketQuantitySum * TotalAmountSum)) > parseFloat(balance)/1000) && isPositiveInt(TotalAmountSum) && LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!=='' && isPositiveInt(LuckyPacketQuantitySum)  && LuckyPacketQuantitySum <= memberCount
         )
-    }, [LuckyPacketQuantitySum,TotalAmountSum,wishes]);
+    }, [LuckyPacketQuantitySum,TotalAmountSum]);
     useEffect(()=>{
         getBalance()
     },[])
@@ -65,13 +66,16 @@ const Ordinary: React.FC<Props> = (props) => {
                     title={`OrdinaryPacket quantity`}
                     placeholder={`Please enter the quantity of ordinarypacket`}
                     value={LuckyPacketQuantitySum}
+                    numberInput={true}
                     setValue={setLuckyPacketQuantitySum}
                     AdditionalInformation={`(There are ${memberCount} people in this group)`}
                 />
                 <TextInputBlock
                     title={'Total amount'}
-                    placeholder={`Please enter the amounts                                FavT`}
+                    placeholder={`Please enter the amounts`}
                     value={TotalAmountSum}
+                    numberInput={true}
+                    lastPlaceholder={'FavT'}
                     setValue={setTotalAmountSum}
                 />
                 <TextInputBlock
@@ -79,6 +83,7 @@ const Ordinary: React.FC<Props> = (props) => {
                     placeholder={`Please enter best wishes`}
                     value={wishes}
                     setValue={setWishes}
+                    maxLength={13}
                 />
                 <View style={[styles.titleParent, styles.contentSpaceBlock]}>
                     <Text style={[styles.title3, styles.titleFlexBox]}>{amountSum}</Text>
