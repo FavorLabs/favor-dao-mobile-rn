@@ -21,6 +21,7 @@ import {useKeepAwake} from 'expo-keep-awake'
 import BackgroundService from 'react-native-background-actions';
 import {sleep} from "./src/utils/util";
 import {Color} from "./src/GlobalStyles";
+import {Audio} from "expo-av";
 
 function App() {
   // AsyncStorage.clear().catch(console.error)
@@ -49,6 +50,10 @@ function App() {
   useEffect(() => {
     async function fetch() {
       await loadFont().catch(Alert.alert);
+      Audio.setAudioModeAsync({
+        playThroughEarpieceAndroid: false,
+        shouldDuckAndroid: true
+      });
       analytics().logEvent('app_open', {
         platform: Platform.OS
       })
