@@ -1,19 +1,14 @@
-import React, {useCallback, useEffect, useRef, useState, createContext} from 'react';
-import {useDispatch, useSelector} from "react-redux";
+import React, { useEffect, useState} from 'react';
 import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator, Animated} from 'react-native';
 import {FontSize, Color, Border, FontFamily, Padding} from "../GlobalStyles";
 import {Page, PostInfo} from "../declare/api/DAOApi";
 import PostApi from '../services/DAOApi/Post';
 import {useIsLogin, useUrl} from '../utils/hook';
-import {sleep} from '../utils/util';
 import NewsCard from "./NewsCard";
 import DaoCardList from "./DaoCardList";
-import QuoteNews from "./QuoteNews";
 import VideoBlock from "./VideoBlock";
-import ReTransfer from "./ReTransfer";
 import NoDataShow from "./NoDataShow";
 import ToolDaoList from "./ToolDaoList";
-import Models from "../declare/storeTypes";
 import Toast from "react-native-toast-message";
 
 export type Props = {
