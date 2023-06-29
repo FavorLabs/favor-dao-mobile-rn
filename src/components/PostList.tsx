@@ -150,7 +150,7 @@ const PostList: React.FC<Props> = (props) => {
             return renderItem(item)
           }
         }}
-        keyExtractor={item => item.id}
+        keyExtractor={(item,index) => item.id+`${index}`}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

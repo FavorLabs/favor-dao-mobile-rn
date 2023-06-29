@@ -50,6 +50,9 @@ const Ordinary: React.FC<Props> = (props) => {
     function isPositiveInt(str:string) {
         return /^[1-9]\d*$/.test(str);
     }
+    function isIntege(str:string) {
+        return /^\d+$/.test(str);
+    }
     const createDisable = useMemo(() => {
         return !(
             // @ts-ignore
@@ -59,6 +62,15 @@ const Ordinary: React.FC<Props> = (props) => {
     useEffect(()=>{
         getBalance()
     },[])
+    useEffect(()=>{
+        if(!isIntege(TotalAmountSum) && TotalAmountSum!=''){
+            Toast.show({
+                type: 'error',
+                // @ts-ignore
+                text1: 'must be an positive integer',
+            });
+        }
+    },[TotalAmountSum])
     return (
         <View style={styles.container}>
             <ScrollView>

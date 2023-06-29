@@ -49,12 +49,24 @@ const FightForLuck: React.FC<Props> = (props) => {
     function isPositiveInt(str:string) {
         return /^[1-9]\d*$/.test(str);
     }
+    function isIntege(str:string) {
+        return /^\d+$/.test(str);
+    }
     const createDisable = useMemo(() => {
         return !(
             // @ts-ignore
             !(toNumber(TotalAmountSum) > parseFloat(balance)/1000) && isPositiveInt(TotalAmountSum) && LuckyPacketQuantitySum.trim()!=='' && TotalAmountSum.trim()!=='' && isPositiveInt(LuckyPacketQuantitySum)  && LuckyPacketQuantitySum <= memberCount
         )
     }, [LuckyPacketQuantitySum,TotalAmountSum]);
+    useEffect(()=>{
+        if(!isIntege(TotalAmountSum) && TotalAmountSum!=''){
+            Toast.show({
+                type: 'error',
+                // @ts-ignore
+                text1: 'must be an positive integer',
+            });
+        }
+    },[TotalAmountSum])
     return (
         <View style={styles.container}>
             <ScrollView>

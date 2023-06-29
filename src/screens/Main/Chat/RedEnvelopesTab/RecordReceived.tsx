@@ -111,7 +111,7 @@ const RecordReceived = () => {
                     </>
                 )}
                 // @ts-ignore
-                keyExtractor={item => item.id}
+                keyExtractor={(item,index) => item.id+`${index}`}
             />
         </View>
         </>

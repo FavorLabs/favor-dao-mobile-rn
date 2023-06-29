@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Platform,
   PermissionsAndroid,
-  Keyboard
+  Keyboard,
+  Dimensions
 } from 'react-native';
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import {useNavigation} from "@react-navigation/native";
@@ -24,6 +25,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import EmojiSelector from 'react-native-emoji-selector'
 import { Message } from '../../declare/api/nodeApi';
 import User = CometChat.User;
+import BottomItem from "./BottomItem";
 
 export type Props = {
   memberCount: number;
@@ -38,6 +40,8 @@ type CustomData = {
 }
 
 const MessageInputer: React.FC<Props> = (props) => {
+  const Width = Dimensions.get('window').width;
+  const Height = Dimensions.get('window').height;
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const {guid, messageList, setMessageList, memberCount} = props;
@@ -385,58 +389,64 @@ const MessageInputer: React.FC<Props> = (props) => {
       </View>
       {
         bottomType === 'function' &&
-          <View style={styles.actionBox}>
+          <View style={{height:0.22 * Height}}>
               <View style={styles.flexToAct}>
-                  <TouchableOpacity style={styles.actBox} onPress={uploadImage}>
-                      <View style={styles.boxHead}>
-                          <Image style={styles.boxIcon} source={require("../../assets/ChatPicIcon.png")}
-                                 resizeMode={"contain"}/>
-                      </View>
-                      <Text style={styles.actName}>Picture</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.actBox} onPress={() => takePhoto('photo')}>
-                      <View style={styles.boxHead}>
-                          <Image style={styles.boxIcon} source={require("../../assets/ChatCaptureIcon.png")}
-                                 resizeMode={"contain"}/>
-                      </View>
-                      <Text style={styles.actName}>Capture</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.actBox} onPress={uploadVideo}>
-                      <View style={styles.boxHead}>
-                          <Image style={styles.boxIcon} source={require("../../assets/ChatVideoIcon.png")}
-                                 resizeMode={"contain"}/>
-                      </View>
-                      <Text style={styles.actName}>Video</Text>
-                  </TouchableOpacity>
+                <BottomItem
+                fn={uploadImage}
+                title={'Picture'}
+                >
+                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
+                         source={require("../../assets/ChatPicIcon.png")}
+                         resizeMode={"contain"}/>
+                </BottomItem>
+                <BottomItem
+                    fn={()=>takePhoto('photo')}
+                    title={'Capture'}
+                >
+                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
+                         source={require("../../assets/ChatCaptureIcon.png")}
+                         resizeMode={"contain"}/>
+                </BottomItem>
+                <BottomItem
+                    fn={uploadVideo}
+                    title={'Video'}
+                >
+                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
+                         source={require("../../assets/ChatVideoIcon.png")}
+                         resizeMode={"contain"}/>
+                </BottomItem>
               </View>
               <View style={styles.flexToAct}>
-                  <TouchableOpacity style={styles.actBox} onPress={() => takePhoto('video')}>
-                      <View style={styles.boxHead}>
-                          <Image style={styles.boxIcon} source={require("../../assets/ChatRecordIcon.png")}
-                                 resizeMode={"contain"}/>
-                      </View>
-                      <Text style={styles.actName}>Record</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.actBox} onPress={uploadFile}>
-                      <View style={styles.boxHead}>
-                          <Image style={styles.boxIcon} source={require("../../assets/ChatFileIcon.png")}
-                                 resizeMode={"contain"}/>
-                      </View>
-                      <Text style={styles.actName}>File</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.actBox} onPress={luckyPacketFun}>
-                      <View style={styles.boxHead}>
-                          <Image style={styles.boxIcon} source={require("../../assets/ChatLuckyPacketIcon.png")}
-                                 resizeMode={"contain"}/>
-                      </View>
-                      <Text style={styles.actName}>LuckyPacket</Text>
-                  </TouchableOpacity>
+                <BottomItem
+                    fn={() => takePhoto('video')}
+                    title={'Record'}
+                >
+                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
+                         source={require("../../assets/ChatRecordIcon.png")}
+                         resizeMode={"contain"}/>
+                </BottomItem>
+                <BottomItem
+                    fn={uploadFile}
+                    title={'File'}
+                >
+                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
+                         source={require("../../assets/ChatFileIcon.png")}
+                         resizeMode={"contain"}/>
+                </BottomItem>
+                <BottomItem
+                    fn={luckyPacketFun}
+                    title={'LuckyPacket'}
+                >
+                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
+                         source={require("../../assets/ChatLuckyPacketIcon.png")}
+                         resizeMode={"contain"}/>
+                </BottomItem>
               </View>
           </View>
       }
       {
         bottomType === 'emoji' &&
-          <View style={styles.actionBox}>
+          <View style={{height:0.22 * Height}}>
               <EmojiSelector
                   columns={10}
                   showSearchBar={false}
@@ -455,28 +465,24 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     opacity: 0.8,
     color: '#999999',
-    width: "200%",
+    width: "300%",
     position: 'absolute',
-    left: "-50%",
-    bottom: -7,
-    textAlign: "center"
+    left: "-100%",
+    textAlign: "center",
   },
   boxIcon: {
     width: 18,
     height: 18
   },
   boxHead: {
-    width: 44,
-    height: 44,
-    borderRadius: 8,
-    backgroundColor: "#FFFFFF",
     display: "flex",
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor:'#FFF'
   },
   actBox: {
-    height: 60,
-    width: 44,
+    height:'60%',
+    width:'10%',
   },
   flexToAct: {
     flex: 1,
@@ -484,9 +490,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center'
-  },
-  actionBox: {
-    height: 220,
   },
   image: {
     width: 26,
