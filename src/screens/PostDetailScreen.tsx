@@ -6,11 +6,9 @@ import {useUrl, useScreenDimensions} from "../utils/hook";
 import {PostInfo} from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
 import NewsBlock from "../components/NewsBlock";
-import QuoteBlock from "../components/QuoteBlock";
 import {Color, FontSize, Padding} from "../GlobalStyles";
 import OperationBlock from "../components/OperationBlock";
 import Comment from "../components/Comment";
-import {getDebounce} from "../utils/util";
 import NewsContent from "../components/NewsContent";
 import VideoBlockItem from "../components/VideoBlockItem";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
