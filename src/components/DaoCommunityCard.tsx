@@ -67,7 +67,7 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
         </View>
         <View style={styles.introductionRow}>
           {/* @ts-ignore */}
-          <TextParsed content={dao.introduction} style={[styles.description, styles.titleClr]} numberOfLines={3} />
+          <TextParsed content={dao.introduction} style={[styles.description, styles.titleClr]} numberOfLines={2} />
         </View>
       </View>
     </View>

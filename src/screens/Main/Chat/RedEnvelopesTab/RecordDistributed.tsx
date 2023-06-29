@@ -112,7 +112,7 @@ const RecordDistributed = () => {
                             </>
                         )}
                         // @ts-ignore
-                        keyExtractor={item => item.id}
+                        keyExtractor={(item,index) => item.id+`${index}`}
                     />
                 </View>
         </>
