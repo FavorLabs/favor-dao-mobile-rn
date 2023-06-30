@@ -23,7 +23,7 @@ import Favor from "../../libs/favor";
 import {ImagePickerResponse} from "react-native-image-picker/src/types";
 import {StackNavigationProp} from "@react-navigation/stack";
 import EmojiSelector from 'react-native-emoji-selector'
-import { Message } from '../../declare/api/nodeApi';
+import {Message} from '../../declare/api/nodeApi';
 import User = CometChat.User;
 import BottomItem from "./BottomItem";
 
@@ -31,7 +31,6 @@ export type Props = {
   memberCount: number;
   guid: string;
   setMessageList: Function;
-  messageList: CometChat.BaseMessage[];
 };
 
 type CustomData = {
@@ -44,7 +43,7 @@ const MessageInputer: React.FC<Props> = (props) => {
   const Height = Dimensions.get('window').height;
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const {guid, messageList, setMessageList, memberCount} = props;
+  const {guid, setMessageList, memberCount} = props;
 
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -55,16 +54,16 @@ const MessageInputer: React.FC<Props> = (props) => {
   const [bottomType, setBottomType] = useState<'function' | 'emoji' | 'none'>('none');
 
   const {config} = Favor;
-  const [loginUser,setLoginUser] = useState<User | null>(null);
+  const [loginUser, setLoginUser] = useState<User | null>(null);
 
-  useEffect(()=> {
+  useEffect(() => {
     CometChat.getLoggedinUser()
       .then((user) => setLoginUser(user))
       .catch((error) => {
         const errorCode = error?.message || 'ERROR';
         console.log(errorCode)
       });
-  },[]);
+  }, []);
 
   const closeBottom = () => {
     setBottomType('none');
@@ -77,7 +76,7 @@ const MessageInputer: React.FC<Props> = (props) => {
       'redPacket',
       customData,
     );
-    messageProcess(customMessage,'redPacket','custom')
+    messageProcess(customMessage, 'redPacket', 'custom')
   };
 
   const luckyPacketFun = () => {
@@ -111,7 +110,7 @@ const MessageInputer: React.FC<Props> = (props) => {
         mediaMessage.setData({
           'url': fileObj.uri,
         });
-        messageProcess(mediaMessage,'image');
+        messageProcess(mediaMessage, 'image');
       } else return Toast.show({
         type: 'error',
         text1: 'PickedImage error',
@@ -138,7 +137,7 @@ const MessageInputer: React.FC<Props> = (props) => {
       mediaMessage.setData({
         'url': video.path,
       });
-      messageProcess(mediaMessage,'video');
+      messageProcess(mediaMessage, 'video');
     })
   };
 
@@ -176,7 +175,7 @@ const MessageInputer: React.FC<Props> = (props) => {
         type: file.type,
         size: res[0].size,
       });
-      messageProcess(mediaMessage,'file');
+      messageProcess(mediaMessage, 'file');
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         console.log('user cancelled the picker');
@@ -255,7 +254,7 @@ const MessageInputer: React.FC<Props> = (props) => {
               mediaMessage.setData({
                 'url': file.uri
               });
-              messageProcess(mediaMessage,mediaType === 'photo' ? 'image':'video');
+              messageProcess(mediaMessage, mediaType === 'photo' ? 'image' : 'video');
             }
           },
         );
@@ -287,10 +286,10 @@ const MessageInputer: React.FC<Props> = (props) => {
     textMessage.setData({
       'text': messageInput,
     });
-    messageProcess(textMessage,'text');
+    messageProcess(textMessage, 'text');
   };
 
-  const messageProcess = (userMessage:  CometChat.MediaMessage |  CometChat.TextMessage | CometChat.CustomMessage,type: string, category: string = 'message') => {
+  const messageProcess = (userMessage: CometChat.MediaMessage | CometChat.TextMessage | CometChat.CustomMessage, type: string, category: string = 'message') => {
     userMessage.setSender(loginUser as User);
     // @ts-ignore
     userMessage._id = Date.now().toString();
@@ -308,11 +307,11 @@ const MessageInputer: React.FC<Props> = (props) => {
     if (category === 'message') closeBottom();
     if (type === 'text') setInputValue('');
 
-    if(category === 'custom') {
+    if (category === 'custom') {
       CometChat.sendCustomMessage(userMessage as CometChat.CustomMessage).then(
         message => {
           // @ts-ignore
-          setMessageList(v => messageSent(v,message,userMessage._id));
+          setMessageList(v => messageSent(v, message, userMessage._id));
         },
         error => {
           Toast.show({
@@ -320,14 +319,14 @@ const MessageInputer: React.FC<Props> = (props) => {
             text1: error,
           });
           // @ts-ignore
-          setMessageList(v => messageSendError(v,userMessage._id));
+          setMessageList(v => messageSendError(v, userMessage._id));
         }
       );
     } else {
       CometChat.sendMessage(userMessage).then(
         message => {
           // @ts-ignore
-          setMessageList(v => messageSent(v,message,userMessage._id));
+          setMessageList(v => messageSent(v, message, userMessage._id));
         },
         error => {
           Toast.show({
@@ -335,7 +334,7 @@ const MessageInputer: React.FC<Props> = (props) => {
             text1: error,
           });
           // @ts-ignore
-          setMessageList(v => messageSendError(v,userMessage._id));
+          setMessageList(v => messageSendError(v, userMessage._id));
         }
       )
     }
@@ -343,14 +342,14 @@ const MessageInputer: React.FC<Props> = (props) => {
 
   }
 
-  const messageSent = (messageList: CometChat.BaseMessage[], message:any, id:string ):CometChat.BaseMessage[] => {
+  const messageSent = (messageList: CometChat.BaseMessage[], message: any, id: string): CometChat.BaseMessage[] => {
     // @ts-ignore
     return messageList.map(obj => obj._id === id ? message : obj)
   }
 
-  const messageSendError = (messageList: CometChat.BaseMessage[],id: string):CometChat.BaseMessage[] => {
+  const messageSendError = (messageList: CometChat.BaseMessage[], id: string): CometChat.BaseMessage[] => {
     // @ts-ignore
-    return  messageList.filter(v => (v._id !== id || !v._id))
+    return messageList.filter(v => (v._id !== id || !v._id))
   }
 
   return (
@@ -389,64 +388,46 @@ const MessageInputer: React.FC<Props> = (props) => {
       </View>
       {
         bottomType === 'function' &&
-          <View style={{height:0.22 * Height}}>
+          <View style={{height: 0.22 * Height}}>
               <View style={styles.flexToAct}>
-                <BottomItem
-                fn={uploadImage}
-                title={'Picture'}
-                >
-                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
-                         source={require("../../assets/ChatPicIcon.png")}
-                         resizeMode={"contain"}/>
-                </BottomItem>
-                <BottomItem
-                    fn={()=>takePhoto('photo')}
-                    title={'Capture'}
-                >
-                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
-                         source={require("../../assets/ChatCaptureIcon.png")}
-                         resizeMode={"contain"}/>
-                </BottomItem>
-                <BottomItem
-                    fn={uploadVideo}
-                    title={'Video'}
-                >
-                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
-                         source={require("../../assets/ChatVideoIcon.png")}
-                         resizeMode={"contain"}/>
-                </BottomItem>
+                  <BottomItem
+                      fn={uploadImage}
+                      title={'Picture'}
+                      imageUrl={require("../../assets/ChatPicIcon.png")}
+                  />
+                  <BottomItem
+                      fn={() => takePhoto('photo')}
+                      title={'Capture'}
+                      imageUrl={require("../../assets/ChatCaptureIcon.png")}
+                  />
+                  <BottomItem
+                      fn={uploadVideo}
+                      title={'Video'}
+                      imageUrl={require("../../assets/ChatVideoIcon.png")}
+                  />
               </View>
               <View style={styles.flexToAct}>
-                <BottomItem
-                    fn={() => takePhoto('video')}
-                    title={'Record'}
-                >
-                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
-                         source={require("../../assets/ChatRecordIcon.png")}
-                         resizeMode={"contain"}/>
-                </BottomItem>
-                <BottomItem
-                    fn={uploadFile}
-                    title={'File'}
-                >
-                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
-                         source={require("../../assets/ChatFileIcon.png")}
-                         resizeMode={"contain"}/>
-                </BottomItem>
-                <BottomItem
-                    fn={luckyPacketFun}
-                    title={'LuckyPacket'}
-                >
-                  <Image style={{height:0.06 * Width,width:0.06 * Width}}
-                         source={require("../../assets/ChatLuckyPacketIcon.png")}
-                         resizeMode={"contain"}/>
-                </BottomItem>
+                  <BottomItem
+                      fn={() => takePhoto('video')}
+                      title={'Record'}
+                      imageUrl={require("../../assets/ChatRecordIcon.png")}
+                  />
+                  <BottomItem
+                      fn={uploadFile}
+                      title={'File'}
+                      imageUrl={require("../../assets/ChatFileIcon.png")}
+                  />
+                  <BottomItem
+                      fn={luckyPacketFun}
+                      title={'LuckyPacket'}
+                      imageUrl={require("../../assets/ChatLuckyPacketIcon.png")}
+                  />
               </View>
           </View>
       }
       {
         bottomType === 'emoji' &&
-          <View style={{height:0.22 * Height}}>
+          <View style={{height: 0.22 * Height}}>
               <EmojiSelector
                   columns={10}
                   showSearchBar={false}
@@ -460,30 +441,6 @@ const MessageInputer: React.FC<Props> = (props) => {
 }
 
 const styles = StyleSheet.create({
-  actName: {
-    fontSize: 12,
-    fontWeight: '400',
-    opacity: 0.8,
-    color: '#999999',
-    width: "300%",
-    position: 'absolute',
-    left: "-100%",
-    textAlign: "center",
-  },
-  boxIcon: {
-    width: 18,
-    height: 18
-  },
-  boxHead: {
-    display: "flex",
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor:'#FFF'
-  },
-  actBox: {
-    height:'60%',
-    width:'10%',
-  },
   flexToAct: {
     flex: 1,
     display: 'flex',
@@ -505,7 +462,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingLeft: 20,
     paddingRight: 20,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    textAlignVertical: 'top',
+    maxHeight: 260,
   },
   container: {
     backgroundColor: '#F4F4F5'
