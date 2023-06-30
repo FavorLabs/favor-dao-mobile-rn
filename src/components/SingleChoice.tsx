@@ -53,28 +53,25 @@ const styles = StyleSheet.create({
   },
   descriptionFlexBox: {
     flexDirection: "row",
+    justifyContent: 'space-between',
     alignSelf: "stretch",
   },
   title: {
     fontSize: FontSize.bodyBody17_size,
-    lineHeight: 23,
     fontWeight: "600",
     display: "flex",
-    width: 343,
     alignItems: "center",
   },
   description: {
     fontSize: FontSize.size_mini,
     lineHeight: 20,
     fontWeight: '400',
-    width: 157,
   },
   checkboxIcon: {
     maxWidth: 100,
     maxHeight: 100,
     width: 16,
     height: 16,
-    marginLeft: 134,
   },
   frameChild: {
     borderStyle: "solid",

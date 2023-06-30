@@ -49,7 +49,7 @@ const ModifyName: React.FC<Props> = (props) => {
     if (user?.nickname === nickName){
       return Toast.show({
         type: 'error',
-        text1: 'Nickname duplication!',
+        text1: 'Nickname duplication',
       })
     }
 

@@ -11,7 +11,7 @@ import {
   Pressable
 } from "react-native";
 import Video, {OnBufferData} from 'react-native-video';
-import {useResourceUrl, useUrl} from "../../utils/hook";
+import { useUrl } from "../../utils/hook";
 import LinearGradient from 'react-native-linear-gradient';
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import SvgIcon from "../SvgIcon";
@@ -52,13 +52,11 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   const [fileVideoLoading, setFileVideoLoading] = useState(false);
 
   const imageClick = () => {
-    // @ts-ignore
     if (messageInfo._id) return;
     setImgShowStatus(true);
   }
 
   const VideoClick = () => {
-    // @ts-ignore
     if (messageInfo._id) return;
     if (videoLoading) return;
     if (player.current) {
@@ -71,12 +69,8 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   }
 
   const clickRedPacket = () => {
-    // @ts-ignore
     if (messageInfo._id) return;
-    if (redStatus === 0) {
-      // @ts-ignore
-      navigation.navigate(Screens.ClaimDetails, {id: messageInfo.customData.id})
-    } else if (redStatus === 1) {
+    if (redStatus === 0 || redStatus === 1) {
       // @ts-ignore
       navigation.navigate(Screens.ClaimDetails, {id: messageInfo.customData.id})
     } else {
@@ -86,10 +80,8 @@ const ChatMsgItem: React.FC<Props> = (props) => {
 
   const getRedPacketStatus = async () => {
     try {
-      // @ts-ignore
       const {data} = await RedPacketApi.getRedPacketInfo(url, messageInfo.customData.id);
       const redPacket: RedPacketInfo = data.data;
-      // const hour = getIntervalHours(data.data.created_on);
       if (data.data.is_timeout) return setRedStatus(0);
       if (redPacket.total === Number(redPacket.claim_count) || Number(redPacket.claim_amount) > 0) return setRedStatus(1);
       return setRedStatus(2);
@@ -105,12 +97,9 @@ const ChatMsgItem: React.FC<Props> = (props) => {
     setDownloading(true);
 
     if (Platform.OS === 'ios') {
-      // @ts-ignore
       const fileName = messageInfo.data.name.replace(/\s/g, "");
       FileSystem.downloadAsync(
-        // @ts-ignore
         `${messageInfo.data.url}`,
-        // @ts-ignore
         `${FileSystem.documentDirectory}${fileName}`
       )
         .then(({uri}) => {
@@ -122,12 +111,10 @@ const ChatMsgItem: React.FC<Props> = (props) => {
         setDownloading(false);
       })
     } else {
-      // @ts-ignore
       const fileDest = `${RNFS.DownloadDirectoryPath}/downLoad/${messageInfo.data.name}`;
       console.log(fileDest, 'fileDest')
       RNFS.mkdir(fileDest).then(() => {
         RNFS.downloadFile({
-          // @ts-ignore
           fromUrl: messageInfo.data.url,
           toFile: fileDest,
         }).promise.then(res => {
@@ -147,7 +134,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   const fileClick = () => {
     if (messageInfo._id) return;
     const fileType = messageInfo.data.type.split('/')[0]
-    console.log(fileType, 'fileType')
     if (fileType === 'image') {
       setFileImgStatus(true);
     } else if (fileType === 'video') {
@@ -156,16 +142,13 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   }
 
   const fileVideoBuffer = (data: OnBufferData) => {
-    console.log(data.isBuffering,'data.isBuffering')
     setFileVideoLoading(data.isBuffering)
   }
 
 
   useEffect(() => {
     if (type === 'redPacket') {
-      // @ts-ignore
       setRedPacketId(messageInfo.customData.id)
-      // @ts-ignore
       setSenderName(messageInfo.getSender() ? messageInfo.getSender().getName() : messageInfo.sender.name)
       getRedPacketStatus();
     }
@@ -174,7 +157,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   return (
     <View style={styles.item}>
       {
-        // @ts-ignore
         (isUser && messageInfo._id) &&
           <View style={styles.sendLoading}>
               <ActivityIndicator size={'small'}/>
@@ -187,7 +169,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                   style={[styles.text, {color: isUser ? 'white' : 'black'}]}
               >
                 {
-                  // @ts-ignore
                   messageInfo.data.text
                 }
               </Text>
@@ -207,7 +188,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                       style={[styles.image, styles.BDRmax]}
                       resizeMethod={"resize"}
                       resizeMode={"contain"}
-                    // @ts-ignore
                       source={{uri: messageInfo.data.url}}
                       onLoadStart={() => setImageLoading(true)}
                       onLoadEnd={() => setImageLoading(false)}
@@ -216,7 +196,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
               <ImgViews
                   visibleStatus={imgShowStatus}
                   setImgShowStatus={setImgShowStatus}
-                // @ts-ignore
                   images={[{uri: messageInfo.data.url}]}
                   imageIndex={0}
               />
@@ -235,7 +214,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                   ref={player}
                   style={styles.video}
                   paused={videoPlay}
-                // @ts-ignore
                   source={{uri: messageInfo.data.url}}
                   controls={true}
                   onFullscreenPlayerWillPresent={() => {
@@ -270,25 +248,20 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                       <View style={styles.fileTitle}>
                           <Text style={styles.fileNameText} numberOfLines={2}>
                             {
-                              // @ts-ignore
                               messageInfo.data.name ? messageInfo.data.name : 'undefined'
                             }
                           </Text>
                         {
-                          // @ts-ignore
                           messageInfo.data.size &&
                           (
-                            // @ts-ignore
                             messageInfo.data.size.toString().length > 6 ?
                               <Text numberOfLines={1} style={styles.fileSize}>
                                 {
-                                  // @ts-ignore
                                   (messageInfo.data.size / 1000 / 1000).toFixed(1)
                                 }M
                               </Text> :
                               <Text numberOfLines={1} style={styles.fileSize}>
                                 {
-                                  // @ts-ignore
                                   (messageInfo.data.size / 1000).toFixed(1)
                                 }KB
                               </Text>
@@ -302,7 +275,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                           />
                           <View style={styles.fileType}>
                               <Text style={styles.fileTypeText} numberOfLines={1}>.{
-                                // @ts-ignore
                                 messageInfo.data.name ? messageInfo.data.name.split('.')[1] : '?'
                               }</Text>
                           </View>
@@ -367,7 +339,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                       <View style={styles.RPText}>
                           <Text style={styles.Msg} numberOfLines={1} ellipsizeMode={"tail"}>
                             {
-                              // @ts-ignore
                               messageInfo.customData.title
                             }
                           </Text>
@@ -384,7 +355,6 @@ const ChatMsgItem: React.FC<Props> = (props) => {
          type === 'redPacket' &&
           <ClaimRes claimResStatus={claimResStatus} setClaimResStatus={setClaimResStatus} id={redPacketId}
                     senderName={senderName} setRedStatus={setRedStatus}
-            // @ts-ignore
                     messageInfo={messageInfo}
           />
       }

@@ -16,11 +16,10 @@ import {DaoInfo} from "../../../declare/api/DAOApi";
 import MessageInputer from "../../../components/RedPacket/MessageInputer";
 import DaoApi from "../../../services/DAOApi/Dao";
 import {useUrl} from "../../../utils/hook";
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import {Color, FontSize} from "../../../GlobalStyles";
 import ChatNameBox from "../../../components/RedPacket/ChatNameBox";
-import {getTime} from "../../../utils/util";
 
 const ChatInDAOScreen = () => {
     const limit = 10;
@@ -135,13 +134,13 @@ const ChatInDAOScreen = () => {
 
     useEffect(() => {
         const message = messageList[0];
-        if (message) {
+        // @ts-ignore
+        if (message && !message._id) {
             CometChat.markAsRead(
               message.getId(),
               message.getReceiverId(),
               message.getReceiverType(),
-              // @ts-ignore
-              message.getSender() ? message.getSender().getUid() : message.sender.uid,
+              message.getSender().getUid(),
             )
         }
     }, [messageList[0]])
@@ -185,7 +184,6 @@ const ChatInDAOScreen = () => {
               <MessageInputer
                 guid={info.guid}
                 setMessageList={setMessageList}
-                messageList={messageList}
                 memberCount={daoInfo?.follow_count}
               />
 
