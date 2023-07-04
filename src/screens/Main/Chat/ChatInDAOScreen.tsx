@@ -16,7 +16,7 @@ import {DaoInfo} from "../../../declare/api/DAOApi";
 import MessageInputer from "../../../components/RedPacket/MessageInputer";
 import DaoApi from "../../../services/DAOApi/Dao";
 import {useUrl} from "../../../utils/hook";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useRef, useState} from "react";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import {Color, FontSize} from "../../../GlobalStyles";
 import ChatNameBox from "../../../components/RedPacket/ChatNameBox";
@@ -35,6 +35,15 @@ const ChatInDAOScreen = () => {
         new CometChat.MessagesRequestBuilder()
           .setGUID(info.guid).setLimit(limit).build()
       , [info.guid])
+
+    const flatListRef = useRef(null);
+
+    const scrollToBottom = () => {
+        if (flatListRef.current) {
+            // @ts-ignore
+            flatListRef.current.scrollToIndex({ index: 0 });
+        }
+    };
 
     const getDaoInfo = async () => {
         try {
@@ -161,7 +170,7 @@ const ChatInDAOScreen = () => {
           >
 
               <FlatList
-                // ref={flatListRef}
+                ref={flatListRef}
                 data={messageList}
                 renderItem={({item, index}) => renderItem(item, index)}
                 // @ts-ignore
@@ -185,6 +194,7 @@ const ChatInDAOScreen = () => {
                 guid={info.guid}
                 setMessageList={setMessageList}
                 memberCount={daoInfo?.follow_count}
+                scrollToBottom={scrollToBottom}
               />
 
 

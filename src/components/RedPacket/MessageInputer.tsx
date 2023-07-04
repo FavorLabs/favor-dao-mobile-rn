@@ -35,6 +35,7 @@ export type Props = {
   memberCount: number;
   guid: string;
   setMessageList: Function;
+  scrollToBottom: Function;
 };
 
 type CustomData = {
@@ -47,7 +48,7 @@ const MessageInputer: React.FC<Props> = (props) => {
   const Height = Dimensions.get('window').height;
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const {guid, setMessageList, memberCount} = props;
+  const {guid, setMessageList, memberCount, scrollToBottom } = props;
 
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -310,6 +311,7 @@ const MessageInputer: React.FC<Props> = (props) => {
     setMessageList(v => [userMessage, ...v]);
     if (category === 'message') closeBottom();
     if (type === 'text') setInputValue('');
+    scrollToBottom();
 
     if (category === 'custom') {
       CometChat.sendCustomMessage(userMessage as CometChat.CustomMessage).then(
