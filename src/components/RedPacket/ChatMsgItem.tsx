@@ -26,6 +26,7 @@ import ImgViews from "../ImgViews";
 import RNFS from 'react-native-fs';
 import * as FileSystem from 'expo-file-system';
 import {Icon} from "@rneui/themed";
+import PlayCircle from "../../assets/svg/NewsFeed/playCircle.svg";
 
 export type Props = {
   isUser?: boolean,
@@ -232,11 +233,9 @@ const ChatMsgItem: React.FC<Props> = (props) => {
               />
             {
               videoPlay &&
-                <Image
-                    style={styles.playPause}
-                    resizeMode="cover"
-                    source={require("../../assets/playCircle.png")}
-                />
+                <View style={styles.playPause}>
+                    <SvgIcon svg={<PlayCircle/>} width={40} height={40}/>
+                </View>
             }
           </TouchableOpacity>
       }
