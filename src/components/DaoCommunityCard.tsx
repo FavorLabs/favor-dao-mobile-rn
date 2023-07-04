@@ -9,14 +9,6 @@ import Screens from "../navigation/RouteNames";
 import TextParsed from "./TextParsed";
 
 type Props = {
-  // daoCardInfo: {
-  //   backgroundImg : any,
-  //   avatar: any,
-  //   daoName: string,
-  //   joined: string,
-  //   level: string,
-  //   description: string
-  // };
   daoCardInfo: PostInfo
 };
 
@@ -40,7 +32,7 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
 
   return (
     <TouchableOpacity onPress={getDebounce(onPress)}>
-    <View style={[styles.frameParent, styles.frameParentBg]}>
+    <View style={[styles.frameParent,styles.frameParentBg]}>
       <View style={[styles.previewWrapper, styles.frameParentBg]}>
         <Image
           style={styles.previewIcon}
@@ -111,8 +103,7 @@ const styles = StyleSheet.create({
     color: Color.iOSSystemLabelsLightPrimary,
     textAlignVertical: 'bottom',
   },
-  subtitleParent: {
-  },
+  subtitleParent: {},
   label1: {
     fontSize: FontSize.paragraphP313_size,
     lineHeight: 18,

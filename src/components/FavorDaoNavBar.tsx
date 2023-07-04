@@ -8,14 +8,16 @@ import {
 } from "react-native";
 import {FontSize, FontFamily, Color} from "../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
+import SvgIcon from "./SvgIcon";
+import BlueLeftArrow from '../assets/svg/blueLeftArrow.svg';
 
 type FavorDaoNavBarType = {
   title?: string;
-  vector?: ImageSourcePropType;
+  // vector?: ImageSourcePropType;
   rightComponent?: React.ReactNode;
 };
 
-const FavorDaoNavBar = ({title, vector,rightComponent}: FavorDaoNavBarType) => {
+const FavorDaoNavBar = ({title,rightComponent}: FavorDaoNavBarType) => {
   const navigation = useNavigation()
   const back = () => {
     navigation.goBack();
@@ -25,10 +27,7 @@ const FavorDaoNavBar = ({title, vector,rightComponent}: FavorDaoNavBarType) => {
     <View style={styles.container}>
 
       <TouchableOpacity style={styles.left} onPress={back}>
-        <Image
-          style={styles.vectorIcon} resizeMode="cover"
-          source={vector || require("../assets/vector6.png")}
-        />
+        <SvgIcon svg={<BlueLeftArrow/>}/>
         <Text style={styles.backText}>Back</Text>
       </TouchableOpacity>
 
@@ -50,25 +49,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   left: {
-    // position: 'absolute',
-    // left: 0,
-    // top: 0,
-    // bottom: 0,
     width: '20%',
     flexDirection: "row",
     alignItems: "center",
     justifyContent: 'flex-start',
-  },
-  vectorIcon: {
-    width: 8,
-    height: 14,
   },
   backText: {
     fontSize: FontSize.bodyBody17_size,
     lineHeight: 23,
     fontWeight: '400',
     color: Color.royalblue_100,
-    marginLeft: 5,
   },
   center: {
     maxWidth: '60%',
@@ -82,10 +72,6 @@ const styles = StyleSheet.create({
     color: Color.iOSSystemLabelsLightPrimary,
   },
   right: {
-    // position: 'absolute',
-    // right: 0,
-    // top: 0,
-    // bottom: 0,
     width: '20%',
     alignItems: 'flex-end',
   },

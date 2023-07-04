@@ -8,6 +8,10 @@ import RowUser from "./RowUser";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
 import {useEffect, useMemo, useState} from "react";
+import SvgIcon from "./SvgIcon";
+import Lock from "../assets/svg/NewsFeed/lock.svg";
+import UnLock from "../assets/svg/NewsFeed/unlock.svg"
+import PlayCircle from "../assets/svg/NewsFeed/playCircle.svg"
 
 type Props = {
   postInfo: PostInfo
@@ -70,20 +74,14 @@ const VideoBlockItem: React.FC<Props> = (props) => {
               <View style={styles.rectangleParent}>
                   <View style={styles.subtitleParent}>
                       <Text style={styles.subtitle}>{isSubscribedStatus ? 'Unlock' : 'Locked'} </Text>
-                      <Image
-                          style={styles.lockIcon}
-                          resizeMode="cover"
-                          source={isSubscribedStatus ? require("../assets/unlock.png") : require("../assets/lock.png")}
-                      />
+                      <SvgIcon svg={isSubscribedStatus ? <UnLock/> : <Lock/>} width={15}/>
                   </View>
               </View>
           }
 
-          <Image
-            style={styles.playCircleIcon}
-            resizeMode="cover"
-            source={require("../assets/playcircle.png")}
-          />
+          <View style={styles.playBlock}>
+            <SvgIcon svg={<PlayCircle/>} width={40} height={40}/>
+          </View>
 
         </View>
       </TouchableOpacity>
@@ -112,29 +110,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   imageIcon: {
-    height: "100%",
-    width: "100%",
     top: "0%",
     right: "0%",
     bottom: "0%",
     left: "0%",
-    maxWidth: "100%",
-    maxHeight: "100%",
-    overflow: "hidden",
     position: "absolute",
   },
   subtitle: {
     fontSize: FontSize.size_xs,
     fontWeight: "500",
     color: Color.darkslategray_400,
-    lineHeight: 20,
     letterSpacing: 0,
-    marginRight: 2,
-  },
-  lockIcon: {
-    marginLeft: 2,
-    width: 15,
-    height: 15,
+    marginRight: 4,
   },
   subtitleParent: {
     flex: 1,
@@ -151,16 +138,18 @@ const styles = StyleSheet.create({
     width: 82,
     backgroundColor: Color.color1,
   },
-  playCircleIcon: {
-    top: 84,
-    left: 182,
-    width: 47,
-    height: 43,
-    overflow: "hidden",
+  playBlock: {
+    left: 40,
+    right: 40,
+    top: 40,
+    bottom: 40,
     position: "absolute",
+    alignItems: "center",
+    justifyContent: 'center'
   },
   imageParent: {
     height: 210,
+    position: "relative",
   },
   rowUserParent: {
     paddingHorizontal: 0,

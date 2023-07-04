@@ -22,8 +22,7 @@ import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import analytics from "@react-native-firebase/analytics";
 import Favor from "../libs/favor";
 
-export type Props = {};
-const CreateNewsScreen: React.FC<Props> = (props) => {
+const CreateNewsScreen = () => {
   const url = useUrl();
   const navigation = useNavigation();
   const dispatch = useDispatch()
@@ -112,10 +111,7 @@ const CreateNewsScreen: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar
-          title="Create news"
-          vector={require("../assets/vector6.png")}
-        />
+        <FavorDaoNavBar title="Create news"/>
         <ScrollView style={styles.scrollWrap}>
           <TextInputParsedBlock
             title={'News description'}

@@ -4,9 +4,10 @@ import {
   StyleSheet,
   Text,
   View,
-  ImageSourcePropType,
 } from "react-native";
 import { FontSize, FontFamily, Color } from "../GlobalStyles";
+import SvgIcon from "./SvgIcon";
+import ChevronLeft from '../assets/svg/chevronLeft.svg';
 
 type BackType = {
   /** Style props */
@@ -26,26 +27,16 @@ const Back = ({ backColor }: BackType) => {
 
   return (
     <View style={styles.back}>
-      <Image
-        style={styles.chevronLeftIcon}
-        resizeMode="cover"
-        source={require("../assets/chevronleft.png")}
-      />
+      <SvgIcon svg={<ChevronLeft/>} width={24} height={24}/>
       <Text style={[styles.back1, backStyle]}>Back</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  chevronLeftIcon: {
-    width: 24,
-    height: 24,
-    overflow: "hidden",
-  },
   back1: {
     fontSize: FontSize.size_mid,
     letterSpacing: 0,
-    lineHeight: 23,
     fontWeight: '400',
     color: Color.color1,
     textAlign: "left",

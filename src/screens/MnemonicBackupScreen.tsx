@@ -30,7 +30,6 @@ const Mnemonic = () => {
       <View style={styles.mnemonic}>
         <FavorDaoNavBar
           title={type === 'privateKey' ? 'Private Key' : 'Mnemonic words'}
-          vector={require("../assets/vector6.png")}
         />
         <ScrollView>
           <View style={styles.titleParent}>

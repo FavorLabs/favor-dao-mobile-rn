@@ -93,7 +93,7 @@ const PublishContainer: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.publishes}>
-      <Text style={styles.title}>Publishes</Text>
+      <Text style={styles.title}>{daoInfo.type === 0 ? 'Publishes' : 'Tool'}</Text>
       {
         daoInfo.type === 0 ?
           <>
@@ -101,7 +101,7 @@ const PublishContainer: React.FC<Props> = (props) => {
             <PublishesItem type={'Videos'} daoInfo={daoInfo} lastPost={lastPostVideo} setIsShow={setIsShow}/>
           </>
           :
-          <PublishesItem type={'HomePage'} daoInfo={daoInfo}/>
+          <PublishesItem type={daoInfo.name} daoInfo={daoInfo}/>
       }
     </View>
   );

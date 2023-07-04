@@ -1,6 +1,5 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator} from 'react-native';
-import {CometChatGroupListWithMessages} from '../../../cometchat-pro-react-native-ui-kit/CometChatWorkspace/src/index'
 import {Color} from "../../../GlobalStyles";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import SearchHead from "../../../components/SearchHead";
@@ -99,7 +98,7 @@ const ChatScreen = () => {
         }
     };
 
-    const toChatsDetail = (item: DataList) => {
+    const toChatsDetail = async (item: DataList) => {
         CometChat.markAsRead(item.guid, CometChat.RECEIVER_TYPE.GROUP);
         // @ts-ignore
         navigation.navigate(Screens.ChatInDAO, {info: item});

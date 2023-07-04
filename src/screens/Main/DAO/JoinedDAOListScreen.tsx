@@ -13,8 +13,6 @@ import Models from "../../../declare/storeTypes";
 import NoDataShow from "../../../components/NoDataShow";
 import {updateState as globalUpdateState} from "../../../store/global";
 import {useIsFocused} from "@react-navigation/native";
-import {getContent, getTime} from "../../../utils/util";
-import Toast from "react-native-toast-message";
 
 export type Props = {};
 const JoinedDAOListScreen: React.FC<Props> = (props) => {

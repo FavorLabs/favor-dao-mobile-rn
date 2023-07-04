@@ -1,14 +1,14 @@
 import * as React from "react";
 import {StyleSheet, View, Pressable} from "react-native";
-import FavorDaoNavBar from "../components/FavorDaoNavBar";
-import TextInputBlock from "../components/TextInputBlock";
-import FavorDaoButton from "../components/FavorDaoButton";
-import {Padding, Color} from "../GlobalStyles";
+import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
+import TextInputBlock from "../../../components/TextInputBlock";
+import FavorDaoButton from "../../../components/FavorDaoButton";
+import {Padding, Color} from "../../../GlobalStyles";
 import {useMemo, useState} from "react";
-import WalletController from "../libs/walletController";
+import WalletController from "../../../libs/walletController";
 import Toast from "react-native-toast-message";
 import {useNavigation} from "@react-navigation/native";
-import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
 const ImportWallet = () => {
   const navigation = useNavigation();
@@ -56,10 +56,7 @@ const ImportWallet = () => {
   return (
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
       <View style={[styles.importWallet, styles.importWalletSpaceBlock]}>
-        <FavorDaoNavBar
-          title="Change Password"
-          vector={require("../assets/vector6.png")}
-        />
+        <FavorDaoNavBar title="Change Password"/>
         <View style={styles.content}>
           <View>
             <TextInputBlock

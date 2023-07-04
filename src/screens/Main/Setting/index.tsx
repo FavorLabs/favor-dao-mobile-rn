@@ -11,11 +11,10 @@ import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import VPNSetting from "../../../components/VPNSetting";
-// import ServiceComponent from "../../../components/ServiceComponent";
-// import PromotionTasks from "../../../components/PromotionTasks";
+import SvgIcon from "../../../components/SvgIcon";
+import UnionSetting from '../../../assets/svg/Setting/unionSetting.svg';
 
-export type Props = {};
-const SettingScreen: React.FC<Props> = (props) => {
+const SettingScreen = () => {
   const navigation = useNavigation();
   const goToSetting = () => {
     // @ts-ignore
@@ -28,12 +27,8 @@ const SettingScreen: React.FC<Props> = (props) => {
         <View style={styles.titleWrapper}>
           <Text style={styles.title}>Profile</Text>
 
-          <TouchableOpacity onPress={goToSetting}>
-            <Image
-              style={styles.settingIcon}
-              resizeMode="cover"
-              source={require("../../../assets/union-Setting.png")}
-            />
+          <TouchableOpacity onPress={goToSetting} style={styles.settingIcon}>
+            <SvgIcon svg={<UnionSetting/>} width={22} height={22}/>
           </TouchableOpacity>
         </View>
         <ScrollView>
@@ -50,8 +45,6 @@ const SettingScreen: React.FC<Props> = (props) => {
             </View>
             <View style={styles.settingpannel}>
               <DAOManagementContainer/>
-              {/*<ServiceComponent />*/}
-              {/*<PromotionTasks />*/}
             </View>
           </View>
         </ScrollView>
@@ -77,14 +70,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: FontSize.size_15xl,
     letterSpacing: -1,
-    lineHeight: 41,
     fontWeight: "700",
     color: Color.iOSSystemLabelsLightPrimary,
     textAlign: "left",
   },
   settingIcon: {
-    width: 22,
-    height: 22,
     marginRight: 6
   },
   sendbar: {

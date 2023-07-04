@@ -2,13 +2,12 @@ import React, {useRef, useState} from 'react';
 import {View,  StyleSheet} from 'react-native';
 import {DAOTopTabNavigator} from "../../../navigation/TopTabBar";
 import { Color } from "../../../GlobalStyles";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {updateState as searchUpdateState} from "../../../store/search";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import SearchHead from "../../../components/SearchHead";
 
-export type Props = {};
-const DAOScreen: React.FC<Props> = (props) => {
+const DAOScreen = () => {
   const dispatch = useDispatch()
   const [searchValue, setSearchValue] = useState<string>('');
 

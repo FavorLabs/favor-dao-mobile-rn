@@ -99,7 +99,6 @@ const ImportWallet = () => {
           <KeyboardAwareScrollView contentContainerStyle={[styles.importWalletSpaceBlock]}>
               <FavorDaoNavBar
                 title={type === 'mnemonic' ? 'Import wallet' : 'Import private key'}
-                vector={require("../assets/vector6.png")}
               />
               <View style={styles.content}>
                   <ScrollView>

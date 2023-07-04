@@ -10,10 +10,7 @@ const LuckyPacketRecordScreen = () => {
         <BackgroundSafeAreaView headerStyle={{backgroundColor:'#f8f8f8'}}>
             <View style={{backgroundColor:'#F8F8F8',flex:1}}>
                 <View style={styles.header}>
-                    <FavorDaoNavBar
-                        title="LuckyPacket Record"
-                        vector={require("../../../assets/vector6.png")}
-                    />
+                    <FavorDaoNavBar title="LuckyPacket Record"/>
                 </View>
                 <View style={styles.content}>
                     <View style={styles.feedsOfDao}>

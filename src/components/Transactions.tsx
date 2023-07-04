@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
-  ActivityIndicator, FlatList,
-  Image,
+  ActivityIndicator,
+  FlatList,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -19,6 +19,10 @@ import UserApi from "../services/DAOApi/User";
 import {useUrl} from "../utils/hook";
 import Toast from "react-native-toast-message";
 import { Page, TransactionInfo} from "../declare/api/DAOApi";
+import SvgIcon from "./SvgIcon";
+import TransactionIcon from '../assets/svg/Setting/transactionIcon.svg';
+import RevenueIcon from '../assets/svg/Setting/revenueIcon.svg';
+import ExpensesIcon from '../assets/svg/Setting/expensesIcon.svg';
 
 type Props = {};
 const Transactions: React.FC<Props> = (props) => {
@@ -80,11 +84,7 @@ const Transactions: React.FC<Props> = (props) => {
   return (
     <>
       <TouchableOpacity style={styles.mainbuttonParent} onPress={showPopUp}>
-        <Image
-          style={styles.mainbuttonIcon}
-          resizeMode="cover"
-          source={require("../assets/transaction-icon.png")}
-        />
+        <SvgIcon svg={<TransactionIcon/>} width={50} height={50}/>
         <Text style={styles.text}>Transaction</Text>
       </TouchableOpacity>
 
@@ -94,12 +94,10 @@ const Transactions: React.FC<Props> = (props) => {
           {transactions.map((item, index) => (
             <View key={index} style={[styles.transRow, index === transactions.length-1 && styles.lastItem]}>
               <View style={styles.transRowLeft}>
-                <Image
-                  style={styles.transRowIcon}
-                  source={ user?.address === item.subject_id ? require('../assets/revenueIcon.png') : require('../assets/expensesIcon.png')}
-                />
+                <View style={{marginRight: 10}}>
+                  <SvgIcon svg={user?.address === item.subject_id ? <RevenueIcon/> : <ExpensesIcon/>} width={20} height={20}/>
+                </View>
                 <View style={styles.transBlock}>
-                  {/*<Text style={styles.transName} numberOfLines={1}>{item.name}</Text>*/}
                   <Text style={styles.transAddress} numberOfLines={1} ellipsizeMode="middle">FavT • { user?.address === item.subject_id ? item.account_id.reference : item.subject_id }</Text>
                 </View>
               </View>
@@ -118,11 +116,6 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  mainbuttonIcon: {
-    borderRadius: Border.br_101xl,
-    width: 50,
-    height: 50,
   },
   text: {
     fontSize: FontSize.size_mini,
@@ -161,12 +154,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-  },
-  transRowIcon: {
-    width: 20,
-    height: 20,
-    borderRadius: 20,
-    marginRight: 10,
   },
   transBlock: {
     flex: 1,

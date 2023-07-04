@@ -36,10 +36,7 @@ const UserSetting: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar
-          title="Setting"
-          vector={require("../../../assets/vector6.png")}
-        />
+        <FavorDaoNavBar title="Setting"/>
         <ScrollView>
           <UserSettingItem title={'Modify name'} onClick={goToModifyName}/>
           <UserSettingItem title={'Change password'} onClick={goToChangePassword}/>
@@ -47,7 +44,7 @@ const UserSetting: React.FC<Props> = (props) => {
           <UserSettingItem title={'Log out'} onClick={goToLogOut}/>
           <View style={styles.version}>
             <Text style={styles.about}>About</Text>
-            <Text style={styles.versionText}>version {packageInfo.version}.0629</Text>
+            <Text style={styles.versionText}>version {packageInfo.version}.0703</Text>
           </View>
         </ScrollView>
       </View>

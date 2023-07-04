@@ -5,7 +5,6 @@ import {
   View,
   Text,
   Pressable,
-  SafeAreaView,
   ScrollView,
   TouchableOpacity,
   Platform, ActivityIndicator,Dimensions
@@ -76,7 +75,6 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
         if (videoData.author_dao.id) setIsReTransfer(true);
         if (videoData.member !== 0 && !videoData.dao.is_subscribed) setSubModal(true);
         setTime(videoData.author_dao.id ? videoData.origCreatedAt : videoData.created_on)
-        console.log(videoData,'videoData')
       }
     } catch (e) {
       Toast.show({
@@ -92,7 +90,6 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
   const info = useMemo(() => {
     if (!videoData) return {};
     const obj = getContent(videoData.type === 2 || videoData.type === 3 ? videoData.orig_contents : videoData.contents);
-    console.log(obj,'obj')
     return {
       title: obj[1][0].content,
       description: obj[2][0].content,

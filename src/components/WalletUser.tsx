@@ -14,6 +14,8 @@ import Screens from "../navigation/RouteNames";
 import {useResourceUrl} from "../utils/hook";
 import BottomSheetModal from "./BottomSheetModal";
 import Clipboard from '@react-native-clipboard/clipboard';
+import SvgIcon from "./SvgIcon";
+import SettingBackupIcon from '../assets/svg/Setting/settingBackupIcon.svg';
 
 type Props = {};
 const WalletUser: React.FC<Props> = (props) => {
@@ -89,11 +91,9 @@ const WalletUser: React.FC<Props> = (props) => {
         </TouchableWithoutFeedback>
         <TouchableOpacity onPress={getDebounce(toBackUp)}>
           <View style={[styles.backupbutton, styles.addresslineFlexBox]}>
-            <Image
-              style={styles.icon}
-              resizeMode="cover"
-              source={require("../assets/setting-backup-icon.png")}
-            />
+            <View style={{marginRight: 6}}>
+              <SvgIcon svg={<SettingBackupIcon/>} width={15} height={15} />
+            </View>
             <Text style={[styles.xc8320fTypo]} numberOfLines={1}>Backup</Text>
           </View>
         </TouchableOpacity>
@@ -127,10 +127,6 @@ const styles = StyleSheet.create({
   backUpDialog: {
     // flex: 1,
     paddingTop: 10,
-  },
-  closeIcon: {
-    width: 40,
-    height: 40,
   },
   forMnemonic: {
     marginVertical: 20,
@@ -167,11 +163,6 @@ const styles = StyleSheet.create({
   },
   username: {
     marginTop: 6,
-  },
-  icon: {
-    width: 15,
-    height: 15,
-    marginRight: 6,
   },
   backupbutton: {
     backgroundColor: Color.iOSSystemFillsLightTertiary,

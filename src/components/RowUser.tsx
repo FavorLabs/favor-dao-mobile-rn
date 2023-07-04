@@ -22,6 +22,8 @@ import Models from "../declare/storeTypes";
 import ActionSheet from 'react-native-actionsheet';
 import PostApi from '../services/DAOApi/Post';
 import {updateState as globalUpdateState} from "../store/global";
+import SvgIcon from "./SvgIcon";
+import Operate from "../assets/svg/NewsFeed/operate.svg"
 
 
 type Props = {
@@ -36,7 +38,7 @@ const RowUser: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
   const [operateImgStatus,setOperateImgStatus] = useState<boolean>(true)
   const [actionSheetType,setActionSheetType] = useState<number>(1)
-  const { time , daoInfo,postInfo,showOperate} = props;
+  const { time , daoInfo,postInfo,showOperate } = props;
   const url = useUrl();
   const navigation = useNavigation();
   const avatarsResUrl = useResourceUrl('avatars');
@@ -44,7 +46,7 @@ const RowUser: React.FC<Props> = (props) => {
   const route = useRoute();
   // @ts-ignore
   const routeName = route.name;
-  const { dao,user } = useSelector((state: Models) => state.global);
+  const { dao } = useSelector((state: Models) => state.global);
 
   const delSheetRef = useRef<ActionSheet>(null);
   const shieldSheetRef = useRef<ActionSheet>(null);
@@ -222,15 +224,7 @@ const RowUser: React.FC<Props> = (props) => {
         ]
     )
   }
-  const delStyles = {
-    titleBox: {
-      background: 'pink'
-    },
-    titleText: {
-      fontSize: 16,
-      color: '#000'
-    }
-  }
+
   return (
 
       <View style={styles.rowUser}>
@@ -247,9 +241,12 @@ const RowUser: React.FC<Props> = (props) => {
               </TouchableOpacity>
             </View>
           <TouchableOpacity onPress={ActShow}>
-            <View style={[styles.delActArea,{display:operateImgStatus?"flex":"none"}]}>
-              <Image style={[styles.resetImg,{display:operateImgStatus?"flex":"none"}]} source={require("../assets/operate.png")}  />
-            </View>
+            {
+              operateImgStatus &&
+                <View style={styles.delActArea}>
+                    <SvgIcon svg={<Operate/>} width={20} height={5}/>
+                </View>
+            }
           </TouchableOpacity>
         </View>
         { actionSheetType== 0 &&
@@ -291,7 +288,6 @@ const RowUser: React.FC<Props> = (props) => {
               }}
           />
         }
-
       </View>
 
   );
@@ -327,20 +323,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  retTransferText: {
-    color: Color.iOSSystemTintsDisableLight,
-    marginRight: 4,
-  },
-  reTransfer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  daoName: {
-    fontSize: FontSize.bodyBody17_size,
-    lineHeight: 23,
-    color: Color.iOSSystemLabelsLightPrimary,
-  },
   subtitleParent: {
     marginLeft: 12
   },
@@ -352,10 +334,6 @@ const styles = StyleSheet.create({
   rowUser: {
     paddingHorizontal: Padding.p_base,
     paddingVertical: 0
-  },
-  resetImg:{
-    width:20,
-    height:5
   },
   delActArea:{
     width:30,

@@ -24,7 +24,7 @@ import UserSetting from "../screens/Main/Setting/UserSetting";
 import ModifyName from "../screens/Main/Setting/ModifyName";
 import AccountCancellation from "../screens/Main/Setting/AccountCancellation";
 import LogOut from "../screens/Main/Setting/LogOut";
-import ChangePasswordScreen from "../screens/ChangePasswordScreen";
+import ChangePasswordScreen from "../screens/Main/Setting/ChangePasswordScreen";
 import UserAgreementScreen from "../screens/UserAgreementScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import ComplaintScreen from "../screens/ComplaintScreen";

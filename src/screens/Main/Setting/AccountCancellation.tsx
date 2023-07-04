@@ -3,7 +3,6 @@ import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image,} from "reac
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
-import TextInputBlock from "../../../components/TextInputBlock";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
@@ -13,7 +12,7 @@ import {useUrl} from "../../../utils/hook";
 import {updateState as globalUpdateState} from "../../../store/global";
 import {updateState as notifyUpdateState} from "../../../store/notify";
 import Toast from "react-native-toast-message";
-import {Color, FontFamily} from "../../../GlobalStyles";
+import { Color, FontFamily } from "../../../GlobalStyles";
 import {
   AccountCancellationIntroduction,
   AccountCancellationOne,
@@ -24,10 +23,10 @@ import BottomSheetModal from "../../../components/BottomSheetModal";
 import {SignatureData} from "../../../declare/api/DAOApi";
 import WalletController from "../../../libs/walletController";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
+import SvgIcon from "../../../components/SvgIcon";
+import AccountIcon from '../../../assets/svg/Setting/accountIcon.svg'
 
-type Props = {};
-
-const AccountCancellation: React.FC<Props> = (props) => {
+const AccountCancellation = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const url = useUrl();
@@ -80,20 +79,13 @@ const AccountCancellation: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar
-          title="Account cancellation"
-          vector={require("../../../assets/vector6.png")}
-        />
+        <FavorDaoNavBar title="Account cancellation"/>
 
         <ScrollView>
           <View style={styles.topBlock}>
             <View style={styles.titleRow}>
               <Text style={styles.title}>{AccountCancellationTitle}</Text>
-              <Image
-                style={styles.accountIcon}
-                resizeMode="cover"
-                source={require("../../../assets/AccountIcon.png")}
-              />
+              <SvgIcon svg={<AccountIcon/>} width={60} height={51}/>
             </View>
             <Text style={styles.introduction}>
               {AccountCancellationIntroduction}
@@ -150,12 +142,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 41,
     color: Color.iOSSystemLabelsLightPrimary,
-    width: '50%',
-  },
-  accountIcon: {
-    width: 60,
-    height: 51,
-    marginLeft: 10,
+    width: '55%',
+    marginRight: 10,
   },
   introduction: {
     marginTop: 5,

@@ -26,6 +26,10 @@ import EmojiSelector from 'react-native-emoji-selector'
 import {Message} from '../../declare/api/nodeApi';
 import User = CometChat.User;
 import BottomItem from "./BottomItem";
+import SvgIcon from "../SvgIcon";
+import ChatSmail from '../../assets/svg/Chat/ChatSmail.svg'
+import ChatAdd from '../../assets/svg/Chat/ChatAdd.svg'
+import ChatToTop from '../../assets/svg/Chat/ChatToTop.svg'
 
 export type Props = {
   memberCount: number;
@@ -366,24 +370,12 @@ const MessageInputer: React.FC<Props> = (props) => {
             onSubmitEditing={handleClickSend}
             multiline={true}
           />
-          <TouchableOpacity onPress={handleClickEmoji}>
-            <Image style={styles.image} source={require("../../assets/ChatSmail.png")}/>
+          <TouchableOpacity onPress={handleClickEmoji} style={{marginLeft: 10}}>
+            <SvgIcon svg={<ChatSmail/>} width={24} height={24}/>
           </TouchableOpacity>
-          {
-            sendShow ?
-              <TouchableOpacity onPress={handleClickSend}>
-                <Image
-                  style={styles.image}
-                  source={require("../../assets/ChatToTop.png")}
-                />
-              </TouchableOpacity> :
-              <TouchableOpacity onPress={handleClickAdd}>
-                <Image
-                  style={styles.image}
-                  source={require("../../assets/ChatAdd.png")}
-                />
-              </TouchableOpacity>
-          }
+          <TouchableOpacity onPress={sendShow ? handleClickSend : handleClickAdd} style={{marginLeft: 10}}>
+            <SvgIcon svg={sendShow ? <ChatToTop/> : <ChatAdd/>} width={24} height={24}/>
+          </TouchableOpacity>
         </View>
       </View>
       {

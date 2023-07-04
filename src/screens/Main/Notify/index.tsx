@@ -50,7 +50,6 @@ const NotifyScreen = () => {
     const pageData = await refresh ? {page: 1, page_size: pageInfo.page_size} : pageInfo;
     try {
       const {data} = await NotifyApi.getNotifyGroup(url, pageData)
-      console.log(data.data, 'notifyGroup')
       if(data.data?.list){
         if(refresh) {
           setList(data.data?.list)
@@ -88,7 +87,6 @@ const NotifyScreen = () => {
   const getSystemGroup = async () => {
     const {data} = await NotifyApi.getNotifyOrgan(url);
     if (data.data?.list) {
-      console.log(data.data, 'SystemGroup')
       setSystemList(data.data?.list)
     }
   }

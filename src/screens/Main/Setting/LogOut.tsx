@@ -3,13 +3,10 @@ import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image,} from "reac
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
-import TextInputBlock from "../../../components/TextInputBlock";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import FavorDaoButton from "../../../components/FavorDaoButton";
-import UserApi from '../../../services/DAOApi/User';
-import {useUrl} from "../../../utils/hook";
 import {updateState as globalUpdateState} from "../../../store/global";
 import {updateState as notifyUpdateState} from "../../../store/notify";
 import Toast from "react-native-toast-message";
@@ -22,13 +19,12 @@ import WalletController from '../../../libs/walletController';
 import BottomSheetModal from "../../../components/BottomSheetModal";
 import InputPassword from "../../../components/InputPassword";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
+import LogOutIcon from '../../../assets/svg/Setting/logOutIcon.svg';
+import SvgIcon from "../../../components/SvgIcon";
 
-type Props = {};
-
-const LogOut: React.FC<Props> = (props) => {
+const LogOut = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const url = useUrl();
   const {user} = useSelector((state: Models) => state.global);
 
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
@@ -76,20 +72,13 @@ const LogOut: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar
-          title="Log out"
-          vector={require("../../../assets/vector6.png")}
-        />
+        <FavorDaoNavBar title="Log out"/>
 
         <ScrollView>
           <View style={styles.topBlock}>
             <View style={styles.titleRow}>
               <Text style={styles.title}>{LogOutTitle}</Text>
-              <Image
-                style={styles.accountIcon}
-                resizeMode="cover"
-                source={require("../../../assets/logOutIcon.png")}
-              />
+              <SvgIcon svg={<LogOutIcon/>} width={40} height={40}/>
             </View>
             <Text style={styles.introduction}>
               {LogOutIntroduction}
@@ -145,11 +134,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     lineHeight: 41,
     color: Color.iOSSystemLabelsLightPrimary,
-  },
-  accountIcon: {
-    width: 40,
-    height: 41,
-    marginLeft: 20,
+    marginRight: 20,
   },
   introduction: {
     marginTop: 5,

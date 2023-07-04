@@ -235,7 +235,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                 <Image
                     style={styles.playPause}
                     resizeMode="cover"
-                    source={require("../../assets/playcircle.png")}
+                    source={require("../../assets/playCircle.png")}
                 />
             }
           </TouchableOpacity>
@@ -556,7 +556,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     display: "flex",
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    width: 40,
+    height: 40
   },
   videoBox: {
     position: 'relative',
