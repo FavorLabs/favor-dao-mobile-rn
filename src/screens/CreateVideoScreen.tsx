@@ -24,8 +24,7 @@ import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import analytics from "@react-native-firebase/analytics";
 import Favor from "../libs/favor";
 
-export type Props = {};
-const CreateVideoScreen: React.FC<Props> = (props) => {
+const CreateVideoScreen = () => {
   const url = useUrl();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const dispatch = useDispatch()
@@ -118,10 +117,7 @@ const CreateVideoScreen: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar
-          title="Create Video"
-          vector={require("../assets/vector6.png")}
-        />
+        <FavorDaoNavBar title="Create Video"/>
         <ScrollView style={styles.scrollWrap}>
           <TextInputBlock
             title={'Video title'}

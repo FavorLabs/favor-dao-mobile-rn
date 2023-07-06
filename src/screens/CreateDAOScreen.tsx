@@ -7,7 +7,6 @@ import UploadImage from "../components/UploadImage";
 import {Border, Color, FontFamily, FontSize, Padding} from "../GlobalStyles";
 import SwitchButton from "../components/SwitchButton";
 import DaoApi from '../services/DAOApi/Dao';
-import ImageApi from '../services/DAOApi/Image';
 import {useResourceUrl, useUrl} from "../utils/hook";
 import {useNavigation} from "@react-navigation/native";
 import {DaoParams} from "../declare/api/DAOApi";
@@ -21,8 +20,7 @@ import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import analytics from "@react-native-firebase/analytics";
 import Favor from "../libs/favor";
 
-export type Props = {};
-const CreateDAOScreen: React.FC<Props> = (props) => {
+const CreateDAOScreen = () => {
   const url = useUrl();
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -117,10 +115,7 @@ const CreateDAOScreen: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar
-          title="Create DAO"
-          vector={require("../assets/vector6.png")}
-        />
+        <FavorDaoNavBar title="Create DAO"/>
       <ScrollView style={styles.scrollWrap}>
         <TextInputBlock
           title={'Name'}

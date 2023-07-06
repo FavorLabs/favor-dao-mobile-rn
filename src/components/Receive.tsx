@@ -1,26 +1,19 @@
 import * as React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Border, FontSize, FontFamily, Color } from "../GlobalStyles";
+import SvgIcon from "./SvgIcon";
+import DepositIcon from '../assets/svg/Setting/depositIcon.svg';
 
 const Receive = () => {
   return (
     <View style={styles.receive}>
-      <Image
-        style={styles.mainbuttonIcon}
-        resizeMode="cover"
-        source={require("../assets/deposit-icon.png")}
-      />
+      <SvgIcon svg={<DepositIcon/>} width={50} height={50}/>
       <Text style={styles.text}>Deposit</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  mainbuttonIcon: {
-    borderRadius: Border.br_101xl,
-    width: 50,
-    height: 50,
-  },
   text: {
     fontSize: FontSize.size_mini,
     letterSpacing: 0,

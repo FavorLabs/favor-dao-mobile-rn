@@ -1,26 +1,19 @@
 import * as React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Border, FontSize, FontFamily, Color } from "../GlobalStyles";
+import SvgIcon from "./SvgIcon";
+import WithDrawIcon from '../assets/svg/Setting/withDrawIcon.svg';
 
 const Send = () => {
   return (
     <View style={styles.send}>
-      <Image
-        style={styles.mainbuttonIcon}
-        resizeMode="cover"
-        source={require("../assets/withdraw-icon.png")}
-      />
+      <SvgIcon svg={<WithDrawIcon/>} width={50} height={50}/>
       <Text style={styles.text}>Withdraw</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  mainbuttonIcon: {
-    borderRadius: Border.br_101xl,
-    width: 50,
-    height: 50,
-  },
   text: {
     fontSize: FontSize.size_mini,
     letterSpacing: 0,

@@ -13,16 +13,20 @@ import {useEffect, useRef, useState} from "react";
 import ActionSheet from 'react-native-actionsheet'
 import Screens from "../navigation/RouteNames";
 import {useNavigation, useRoute} from "@react-navigation/native";
-import {StackNavigationProp} from "@react-navigation/stack";
 import {useIsLogin, useUrl} from "../utils/hook";
 import PostApi from '../services/DAOApi/Post';
-import {getDebounce} from "../utils/util";
 import {ReTransferPost} from "../declare/api/DAOApi";
 import Toast from 'react-native-toast-message';
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import analytics from "@react-native-firebase/analytics";
 import Favor from "../libs/favor";
+import SvgIcon from "./SvgIcon";
+import WatchIcon from '../assets/svg/NewsFeed/watchIcon.svg';
+import TransFerIcon from '../assets/svg/NewsFeed/transFerIcon.svg';
+import MessageInfo from '../assets/svg/NewsFeed/messageInfo.svg';
+import UnLike from '../assets/svg/NewsFeed/unLike.svg';
+import Like from '../assets/svg/NewsFeed/like.svg';
 
 type Props = {
   postInfo: PostInfo;
@@ -33,7 +37,6 @@ const OperationBlock: React.FC<Props> = (props) => {
   const {postInfo, type} = props;
   const {id, ref_id, contents} = props.postInfo;
   const url = useUrl();
-  // const { token } = useSelector((state: any) => state.wallet);
   const {dao} = useSelector((state: Models) => state.global);
   const [isLogin, gotoLogin] = useIsLogin();
 
@@ -49,23 +52,17 @@ const OperationBlock: React.FC<Props> = (props) => {
   const [like, setLike] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(postInfo?.upvote_count);
   const [watchCount, setWatchCount] = useState<number>(postInfo?.view_count);
-  const [refCount, setRefCount] = useState<number>(postInfo.ref_count);
-  const [commentOnCount, setCommentOnCount] = useState<number>(postInfo.comment_count);
   const [isLikeLoading, setIsLikeLoading] = useState<boolean>(false);
 
   const showActionSheet = (e: { preventDefault: () => void; }) => {
-    if (isLogin) {
-      if (dao) {
-        actionSheetRef.current?.show();
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'please create a community!'
-        });
-        e.preventDefault()
-      }
+    if(!isLogin) return gotoLogin();
+    if (dao) {
+      actionSheetRef.current?.show();
     } else {
-      gotoLogin();
+      Toast.show({
+        type: 'error',
+        text1: 'please create a community!'
+      });
       e.preventDefault()
     }
   }
@@ -174,25 +171,17 @@ const OperationBlock: React.FC<Props> = (props) => {
   }, [])
 
   return (
-    <View style={styles.like}>
+    <View style={styles.container}>
 
       <View style={styles.look}>
-        <Image
-          style={styles.icons8Share1}
-          resizeMode="cover"
-          source={require("../assets/icons8share-1.png")}
-        />
+        <SvgIcon svg={<WatchIcon/>} width={22} height={22}/>
         <Text style={[styles.symbol, styles.symbolTypo]} numberOfLines={1}>{watchCount}</Text>
       </View>
 
 
       <View style={styles.look}>
         <TouchableOpacity onPress={showActionSheet} style={styles.touch}>
-          <Image
-            style={styles.icons8Share1}
-            resizeMode="cover"
-            source={require("../assets/icons8share-11.png")}
-          />
+          <SvgIcon svg={<TransFerIcon/>} width={22} height={22}/>
           <Text style={[styles.symbol, styles.symbolTypo]} numberOfLines={1}>{postInfo?.ref_count}</Text>
         </TouchableOpacity>
       </View>
@@ -200,11 +189,7 @@ const OperationBlock: React.FC<Props> = (props) => {
 
       <View style={styles.look}>
         <TouchableOpacity onPress={toPostDerail} style={styles.touch}>
-          <Image
-            style={styles.icons8Share1}
-            resizeMode="cover"
-            source={require("../assets/icons8comments-1.png")}
-          />
+          <SvgIcon svg={<MessageInfo/>} width={22} height={22}/>
           <Text style={[styles.symbol, styles.symbolTypo]} numberOfLines={1}>{postInfo?.comment_count}</Text>
         </TouchableOpacity>
       </View>
@@ -213,11 +198,7 @@ const OperationBlock: React.FC<Props> = (props) => {
         <TouchableOpacity onPress={postLike} style={styles.touch}>
           {
             isLikeLoading ? <ActivityIndicator size="small"/> :
-              <Image
-                style={styles.icons8Share1}
-                resizeMode="cover"
-                source={like ? require("../assets/icons8facebooklike-1.png") : require("../assets/like.png")}
-              />
+            <SvgIcon svg={ like ? <Like/> : <UnLike/> } width={22} height={22}/>
           }
           <Text style={[like ? styles.symbol3 : styles.symbol, styles.symbolTypo]} numberOfLines={1}>{likeCount}</Text>
         </TouchableOpacity>
@@ -243,10 +224,20 @@ const OperationBlock: React.FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Color.color1,
+    marginTop: 10,
+    paddingTop: Padding.p_8xs,
+    paddingHorizontal: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: 'center',
+  },
   symbolTypo: {
     marginLeft: 6,
     fontWeight: '400',
     fontSize: FontSize.size_mini,
+    maxWidth: '70%'
   },
   icons8Share1: {
     width: 20,
@@ -259,28 +250,18 @@ const styles = StyleSheet.create({
     color: Color.iOSSystemLabelsLightPrimary,
   },
   look: {
-    display: 'flex',
     flex: 1,
     flexDirection: "row",
     justifyContent: 'center',
     alignItems: 'center',
   },
   touch: {
-    display: 'flex',
     flex: 1,
     flexDirection: "row",
     justifyContent: 'center',
     alignItems: 'center',
   },
-  like: {
-    backgroundColor: Color.color1,
-    marginTop: 10,
-    paddingTop: Padding.p_8xs,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: 'center',
-  },
+
 });
 
 export default OperationBlock;

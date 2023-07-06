@@ -1,13 +1,14 @@
 import * as React from "react";
 import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
-import {useSelector} from "react-redux";
-import Models from "../declare/storeTypes";
 import {useEffect, useState} from "react";
 import UserApi from "../services/DAOApi/User";
 import {useUrl} from "../utils/hook";
 import {addDecimal} from "../utils/balance";
 import Toast from "react-native-toast-message";
+import SvgIcon from "./SvgIcon";
+import ReTransFerIcon from '../assets/svg/NewsFeed/reTransFerIcon.svg';
+import Subtract from '../assets/svg/Setting/subtract.svg';
 
 type Props = {};
 const BalanceBackContainer: React.FC<Props> = (props) => {
@@ -33,19 +34,14 @@ const BalanceBackContainer: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.balanceback}>
-      <View>
         <View style={styles.row}>
           <Text style={styles.title}>Balance</Text>
           <TouchableOpacity onPress={getBalance}>
-            <Image source={require('../assets/reTransFerIcon.png')} style={styles.retransImg}/>
+            <SvgIcon svg={<ReTransFerIcon/>} width={20}/>
           </TouchableOpacity>
         </View>
         <View style={styles.balances}>
-          <Image
-            style={styles.tokenavatarIcon}
-            resizeMode="cover"
-            source={require("../assets/subtract.png")}
-          />
+          <SvgIcon svg={<Subtract/>} width={30} height={34}/>
           <View style={styles.values}>
             <Text style={styles.balanceNum} numberOfLines={1}>
               { addDecimal(balance) }
@@ -53,7 +49,6 @@ const BalanceBackContainer: React.FC<Props> = (props) => {
             <Text style={styles.valuesofusdt}>FavT</Text>
           </View>
         </View>
-      </View>
     </View>
   );
 };
@@ -64,56 +59,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  valuesofusdtFlexBox: {
-    textAlign: "left",
-    position: "absolute",
-  },
   title: {
-    fontSize: FontSize.size_mid,
-    lineHeight: 23,
+    fontSize: FontSize.size_mini,
     fontWeight: "600",
     color: Color.iOSSystemLabelsLightPrimary,
     letterSpacing: 0,
   },
-  tokenavatarIcon: {
-    // borderRadius: Border.br_21xl,
-    width: 50,
-    height: 56,
-  },
   valuesofusdt: {
-    fontSize: FontSize.size_15xl,
-    lineHeight: 41,
-    fontWeight: "700",
+    marginLeft: 5,
+    fontSize: 14,
+    fontWeight: "500",
     color: Color.iOSSystemLabelsLightPrimary,
+    alignSelf: 'flex-end',
+    bottom: 6
   },
   balanceNum: {
-    flex: 1,
+    letterSpacing: -1,
     fontSize: FontSize.size_15xl,
-    lineHeight: 41,
     fontWeight: "700",
     color: Color.iOSSystemLabelsLightPrimary,
   },
-  valueoftoken: {
-    top: 0,
-    left: 0,
-    fontSize: FontSize.paragraphP313_size,
-    lineHeight: 20,
-    fontWeight: '400',
-    color: '#939393',
-    width: 88,
-    letterSpacing: 0,
-  },
   values: {
-    flex: 1,
-    height: 65,
+    maxWidth: '80%',
     marginLeft: 12,
     flexDirection: 'row',
-    alignItems: 'center'
+    flexWrap: 'nowrap',
   },
   balances: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 10,
   },
   balanceback: {
@@ -121,12 +96,8 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_3xs,
     backgroundColor: Color.color1,
     paddingHorizontal: Padding.p_base,
-    paddingVertical: Padding.p_3xl,
+    paddingVertical: Padding.p_xs,
   },
-  retransImg: {
-    width: 18,
-    height: 15,
-  }
 });
 
 export default BalanceBackContainer;

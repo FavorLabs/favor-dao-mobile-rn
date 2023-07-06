@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   FlatList,
   RefreshControl,
@@ -10,13 +9,10 @@ import {
   TouchableOpacity
 } from 'react-native';
 import {Color, Padding} from "../../../GlobalStyles";
-import PostList from "../../../components/PostList";
 import DaoBriefCard from "../../../components/DaoBriefCard";
-import DaoCommunityCard from "../../../components/DaoCommunityCard";
 import {DaoInfo, DAOPage, Page, PostInfo} from "../../../declare/api/DAOApi";
 import PostApi from "../../../services/DAOApi/Post";
 import {useUrl} from "../../../utils/hook";
-import {getDebounce, query, sleep} from "../../../utils/util";
 import {useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import NoDataShow from "../../../components/NoDataShow";
@@ -24,11 +20,9 @@ import DaoInfoHeader from "../../../components/DaoInfoHeader";
 import PublishContainer from "../../../components/PublishContainer";
 import Chats from "../../../components/Chats";
 import BottomSheetModal from "../../../components/BottomSheetModal";
-import {useNavigation} from "@react-navigation/native";
 import Toast from "react-native-toast-message";
 
-type Props = {};
-const RecommendDAOListScreen: React.FC<Props> = (props) => {
+const RecommendDAOListScreen = () => {
   const url = useUrl();
   const {daoSearch} = useSelector((state: Models) => state.search);
   const [pageData, setPageData] = useState<DAOPage>({
@@ -98,7 +92,6 @@ const RecommendDAOListScreen: React.FC<Props> = (props) => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // await sleep(2000);
     await refreshPage();
     setRefreshing(false);
   };

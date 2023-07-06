@@ -95,10 +95,7 @@ const CreateWallet = () => {
   return <>
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
       <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
-        <FavorDaoNavBar
-          title="Create wallet"
-          vector={require("../assets/vector6.png")}
-        />
+        <FavorDaoNavBar title="Create wallet"/>
 
           <View style={styles.content}>
             <ScrollView>

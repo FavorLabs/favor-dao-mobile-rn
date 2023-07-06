@@ -1,9 +1,9 @@
 import * as React from "react";
-import {StyleSheet, View, Image, Text, TouchableOpacity} from "react-native";
+import {StyleSheet, View, Text, TouchableOpacity} from "react-native";
 import NewsContent from "./NewsContent";
 import OperationBlock from "./OperationBlock";
 import {Color, FontSize, Padding} from "../GlobalStyles";
-import {DaoInfo, PostInfo } from "../declare/api/DAOApi";
+import { PostInfo } from "../declare/api/DAOApi";
 import VideoBlockItem from "./VideoBlockItem";
 import Screens from "../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
@@ -11,6 +11,8 @@ import {useEffect, useState} from "react";
 import {useSelector,useDispatch} from "react-redux";
 import Models from "../declare/storeTypes";
 import {updateState as globalUpdateState} from "../store/global";
+import SvgIcon from "./SvgIcon";
+import ReTransFerIcon from "../assets/svg/NewsFeed/reTransFerIcon.svg"
 
 export type Props = {
   postInfo: PostInfo;
@@ -90,7 +92,7 @@ const NewsCard: React.FC<Props> = (props) => {
               !contents &&
               <TouchableOpacity onPress={toDaoCommunity}>
                 <View style={styles.retransRow}>
-                  <Image source={require('../assets/reTransFerIcon.png')} style={styles.retransImg}/>
+                  <SvgIcon svg={<ReTransFerIcon/>} width={20} height={16}/>
                   <Text style={styles.daoName} numberOfLines={1}>{dao.name}</Text>
                   <Text style={styles.retranText}>retransfer this</Text>
                 </View>
@@ -147,13 +149,10 @@ const styles = StyleSheet.create({
     marginTop: 14,
     alignSelf: "stretch",
   },
-  retransImg: {
-    width: 24,
-    height: 20,
-  },
   retransRow: {
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: Padding.p_base,
     paddingVertical: 10,
   },

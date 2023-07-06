@@ -38,7 +38,6 @@ export default {
         })
     },
     delNotifyAll(url: string, id: string) {
-        console.log(id,'--------------------------------')
         return request({
             method: 'delete',
             url: url + '/notify/group/' + id

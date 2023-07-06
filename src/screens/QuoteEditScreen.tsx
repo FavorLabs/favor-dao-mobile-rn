@@ -5,7 +5,6 @@ import {useNavigation, useRoute} from "@react-navigation/native";
 import {FontSize, FontFamily, Color, Border, Padding} from "../GlobalStyles";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import FavorDaoButton from "../components/FavorDaoButton";
-import TextInputBlock from "../components/TextInputBlock";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import {useEffect, useMemo, useState} from "react";
 import {useUrl} from "../utils/hook";
@@ -19,8 +18,7 @@ import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
-type Props = {}
-const QuoteEdit: React.FC<Props> = (props) => {
+const QuoteEdit = () => {
   const navigation = useNavigation();
   const route = useRoute();
   // @ts-ignore
@@ -108,7 +106,6 @@ const QuoteEdit: React.FC<Props> = (props) => {
 
         <FavorDaoNavBar
           title="Create Quote"
-          vector={require("../assets/vector6.png")}
         />
         <ScrollView style={styles.scrollWrap}>
           <View style={[styles.instanceParent, styles.bottombuttonFlexBox]}>

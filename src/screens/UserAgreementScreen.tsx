@@ -2,19 +2,16 @@ import * as React from "react";
 import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image,} from "react-native";
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import {useNavigation} from "@react-navigation/native";
-import Screens from "../navigation/RouteNames";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import Models from "../declare/storeTypes";
 import FavorDaoButton from "../components/FavorDaoButton";
-import {useUrl} from "../utils/hook";
 import {updateState as globalUpdateState} from "../store/global";
 import {Color, FontFamily} from "../GlobalStyles";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import SvgIcon from "../components/SvgIcon";
+import WaringIcon from '../assets/svg/waringIcon.svg';
 
-type Props = {};
-
-const UserAgreementScreen: React.FC<Props> = (props) => {
+const UserAgreementScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -79,17 +76,14 @@ const UserAgreementScreen: React.FC<Props> = (props) => {
       <View style={styles.container}>
         <FavorDaoNavBar
           title="User agreement"
-          vector={require("../assets/vector6.png")}
         />
 
         <View style={styles.topBlock}>
           <View style={styles.titleRow}>
             <Text style={styles.title}>User agreement</Text>
-            <Image
-              style={styles.accountIcon}
-              resizeMode="cover"
-              source={require("../assets/waringIcon.png")}
-            />
+            <View  style={styles.accountIcon}>
+              <SvgIcon svg={<WaringIcon/>} width={60} height={60}/>
+            </View>
           </View>
           <Text style={styles.introduction}>
             Please read the following user agreement carefully
@@ -101,7 +95,7 @@ const UserAgreementScreen: React.FC<Props> = (props) => {
             {
               textList.map((item,index) => {
                 return (
-                  <View key={index} style={[styles.descriptionItem, index=== textList.length -1 && {marginBottom:0}]}>
+                  <View key={index} style={[styles.descriptionItem, index === textList.length -1 && {marginBottom:0}]}>
                     <Text style={styles.descriptionTitle}>{item.title}</Text>
                     <Text style={styles.descriptionContent}>{item.content}</Text>
                   </View>
@@ -151,8 +145,6 @@ const styles = StyleSheet.create({
     maxWidth: '50%'
   },
   accountIcon: {
-    width: 60,
-    height: 60,
     marginLeft: 20,
   },
   introduction: {

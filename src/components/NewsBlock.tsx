@@ -1,7 +1,6 @@
-import React, {useMemo, useState} from "react";
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import {PostInfo} from "../declare/api/DAOApi";
-import NewsContent from "./NewsContent";
 import NewsDescription from "./NewsDescription";
 import RotationImage from "./RotationImage";
 import {getContent} from "../utils/util";
@@ -37,7 +36,7 @@ const NewsBlock: React.FC<Props> = (props) => {
       </TouchableOpacity>
 
       {
-        info[3] && <RotationImage postInfo={props.postInfo} isQuote={isQuote} isReTransfer={isReTransfer} toPostDerail={toPostDerail}/>
+        info[3] && <RotationImage postInfo={props.postInfo} isQuote={isQuote} isReTransfer={isReTransfer}/>
       }
     </View>
   )

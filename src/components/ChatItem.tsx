@@ -15,6 +15,9 @@ import {CometChat} from "@cometchat-pro/react-native-chat";
 import Screens from "../navigation/RouteNames";
 import {useFocusEffect, useNavigation} from "@react-navigation/native";
 import {useCallback, useState} from "react";
+import SvgIcon from "./SvgIcon";
+import ChatIcon from '../assets/svg/Dao/chatIcon.svg';
+import RightArrow from '../assets/svg/Dao/rightArrow.svg';
 
 type Props = {
   daoInfo: DaoInfo;
@@ -60,9 +63,7 @@ const ChatItem: React.FC<Props> = (props) => {
   return (
     <TouchableOpacity onPress={toFeedsOfDao}>
     <View style={[styles.notificationParent, styles.parentFlexBox]}>
-      <View style={styles.notification}>
-        <Text style={styles.title}>G</Text>
-      </View>
+      <SvgIcon svg={<ChatIcon/>} width={50} height={50}/>
       <View style={styles.channelinfoParent}>
         <View style={styles.channelinfo}>
           <View style={[styles.channelnamelLasttime, styles.parentFlexBox]}>
@@ -86,11 +87,7 @@ const ChatItem: React.FC<Props> = (props) => {
                 {/*  +99*/}
                 {/*</Text>*/}
               </View>
-              <Image
-                style={styles.enterIcon}
-                resizeMode="cover"
-                source={require("../assets/enter1.png")}
-              />
+              <SvgIcon svg={<RightArrow/>} width={18} height={18}/>
             </View>
           </View>
         </View>
@@ -117,14 +114,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: Color.color,
     fontSize: FontSize.size_9xl,
-  },
-  notification: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    backgroundColor: '#007AFF',
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   channelname: {
     fontSize: FontSize.size_mini,
@@ -188,11 +177,6 @@ const styles = StyleSheet.create({
   msgcount: {
     height: 14,
     flex: 1,
-  },
-  enterIcon: {
-    width: 21,
-    height: 18,
-    overflow: "hidden",
   },
   msgcountParent: {
     width: 45,

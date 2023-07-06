@@ -8,12 +8,9 @@ import {FeedsOfDaoNavigator} from "./Main/FeedsOfDAOs/FeedsOfDaoTabBar";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {updateState as globalUpdateState} from "../store/global";
 import {useDispatch, useSelector} from "react-redux";
-import Models from "../declare/storeTypes";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
-type Props = {};
-
-const FeedsOfDAO: React.FC<Props> = (props) => {
+const FeedsOfDAO = () => {
   const dispatch = useDispatch();
   const route = useRoute();
   // @ts-ignore
@@ -33,7 +30,6 @@ const FeedsOfDAO: React.FC<Props> = (props) => {
       headerComponent={<ExpandedDAOHeader daoInfo={daoInfo}/>}
     >
       <View style={styles.feedsOfDao}>
-        {/*<ExpandedDAOHeader daoInfo={daoInfo}/>*/}
         {isShow && <FeedsOfDaoNavigator type={type}/>}
       </View>
     </BackgroundSafeAreaView>

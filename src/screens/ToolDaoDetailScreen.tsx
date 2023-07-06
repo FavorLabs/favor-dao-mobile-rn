@@ -1,16 +1,14 @@
 import * as React from "react";
-import {StyleSheet, View, Text, FlatList, TouchableOpacity} from "react-native";
+import {StyleSheet, View } from "react-native";
 import {WebView} from 'react-native-webview';
 import ExpandedDAOHeader from "../components/ExpandedDAOHeader";
-import {Color, FontFamily, FontSize} from "../GlobalStyles";
+import { Color } from "../GlobalStyles";
 import {useRoute} from "@react-navigation/native";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {useEffect, useState} from "react";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
-type Props = {};
-
-const ToolDaoDetailScreen: React.FC<Props> = (props) => {
+const ToolDaoDetailScreen = () => {
   const route = useRoute();
   // @ts-ignore
   const {daoInfo} = route.params as { daoInfo: DaoInfo };
@@ -43,7 +41,6 @@ const styles = StyleSheet.create({
   },
   urlBlock: {
     flex: 1,
-    backgroundColor: 'red'
   }
 });
 

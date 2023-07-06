@@ -14,10 +14,7 @@ const RedEnvelopesScreen = () => {
         <BackgroundSafeAreaView headerStyle={{backgroundColor:'#F8F8F8'}}>
             <View style={{flex:1,backgroundColor:'#F8F8F8'}}>
                 <View style={styles.header}>
-                    <FavorDaoNavBar
-                        title="LuckyPacket"
-                        vector={require("../../../assets/vector6.png")}
-                    />
+                    <FavorDaoNavBar title="LuckyPacket"/>
                 </View>
                 <View style={styles.content}>
                     <View style={styles.feedsOfDao}>

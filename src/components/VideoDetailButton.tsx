@@ -7,7 +7,6 @@ import {PostInfo} from "../declare/api/DAOApi";
 import {useIsLogin, useResourceUrl, useScreenDimensions, useUrl} from "../utils/hook";
 import {useEffect, useRef, useState} from "react";
 import PostApi from "../services/DAOApi/Post";
-import {getDebounce} from "../utils/util";
 import ChunkSourceInfo from "./ChunkSourceInfo";
 import Screens from "../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
@@ -17,12 +16,14 @@ import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import CommentModal from "./CommentModal";
 import BottomSheetModal from "./BottomSheetModal";
-import loading from "./Loading";
-import DaoApi from "../services/DAOApi/Dao";
-import JoinButton from "./JoinButton";
-import VideoJoinButton from "./VideoJoinButton";
 import analytics from "@react-native-firebase/analytics";
 import Favor from "../libs/favor";
+import SvgIcon from "./SvgIcon";
+import TransFerIcon from '../assets/svg/NewsFeed/videoTransFerIcon.svg';
+import MessageInfo from '../assets/svg/NewsFeed/videoMessage.svg';
+import UnLike from '../assets/svg/NewsFeed/videoUnLike.svg';
+import Like from '../assets/svg/NewsFeed/like.svg';
+import SourceInfoIcon from '../assets/svg/NewsFeed/sourceInfoIcon.svg';
 
 type Props = {
   postInfo: PostInfo;
@@ -33,7 +34,6 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   const {postInfo, vSrc} = props;
   const url = useUrl();
   const navigation = useNavigation();
-  const avatarsResUrl = useResourceUrl('avatars');
   const {dao} = useSelector((state: Models) => state.global);
   const [isLogin, gotoLogin] = useIsLogin();
 
@@ -126,18 +126,14 @@ const VideoDetailButton: React.FC<Props> = (props) => {
   };
 
   const showActionSheet = (e: { preventDefault: () => void; }) => {
-    if (isLogin) {
-      if (dao) {
-        actionSheetRef.current?.show();
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'please create a community!'
-        });
-        e.preventDefault()
-      }
+    if(!isLogin) return gotoLogin();
+    if (dao) {
+      actionSheetRef.current?.show();
     } else {
-      gotoLogin();
+      Toast.show({
+        type: 'error',
+        text1: 'please create a community!'
+      });
       e.preventDefault()
     }
   }
@@ -167,11 +163,7 @@ const VideoDetailButton: React.FC<Props> = (props) => {
           <TouchableOpacity onPress={postLike}>
             {
               isLikeLoading ? <ActivityIndicator size="small"/> :
-                <Image
-                  style={[styles.image]}
-                  resizeMode="cover"
-                  source={like ? require("../assets/frameLiked.png") : require("../assets/frame.png")}
-                />
+              <SvgIcon svg={like ? <Like/> : <UnLike/>} width={30} height={30}/>
             }
           </TouchableOpacity>
           <Text style={[styles.text]}>{likeCount}</Text>
@@ -182,22 +174,14 @@ const VideoDetailButton: React.FC<Props> = (props) => {
             if (!isLogin) return gotoLogin();
             setCommentModal(true)
           }}>
-            <Image
-              style={[styles.image]}
-              resizeMode="cover"
-              source={require("../assets/icons8comments-2.png")}
-            />
+            <SvgIcon svg={<MessageInfo/>} width={30} height={30}/>
           </TouchableOpacity>
           <Text style={[styles.text]}>{commentOnCount}</Text>
         </View>
 
         <View style={[styles.threeButton]}>
           <TouchableOpacity onPress={showActionSheet}>
-            <Image
-              style={[styles.image]}
-              resizeMode="cover"
-              source={require("../assets/frame1.png")}
-            />
+            <SvgIcon svg={<TransFerIcon/>} width={30} height={30}/>
           </TouchableOpacity>
           <Text style={[styles.text]}>{refCount}</Text>
         </View>
@@ -207,11 +191,7 @@ const VideoDetailButton: React.FC<Props> = (props) => {
         <TouchableOpacity onPress={() => {
           if (videoHash) setSourceInfoModal(true);
         }} style={styles.circle}>
-          <Image
-            style={[styles.alertCircleIcon]}
-            resizeMode="cover"
-            source={require("../assets/alertcircle.png")}
-          />
+          <SvgIcon svg={<SourceInfoIcon/>} width={30} height={30}/>
         </TouchableOpacity>
       </View>
 
@@ -251,23 +231,11 @@ const VideoDetailButton: React.FC<Props> = (props) => {
 };
 
 const styles = StyleSheet.create({
-  avatarBlock: {
-    alignItems: 'center',
-  },
-  joinBtn: {
-    alignItems: 'center',
-    marginTop: '-15%'
-  },
   placeholderParent: {
     flex: 1,
     alignItems: "center",
     justifyContent: 'space-between',
     marginTop: 20,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 40,
   },
   threeButton: {
     display: 'flex',
@@ -277,12 +245,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 15,
   },
-  image: {
-    width: 30,
-    height: 30,
-  },
   text: {
-    // marginTop: 5,
     color: Color.color1,
     fontWeight: '400',
     lineHeight: 20,
@@ -293,34 +256,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 40,
   },
-  alertCircleIcon: {
-    height: 30,
-    width: 30,
-  },
   groupParent: {
     bottom: 30,
     right: 15,
     position: "absolute",
     display: 'flex',
     justifyContent: 'center',
-  },
-
-  footer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: Color.color2
-  },
-  footerInput: {
-    flex: 1,
-    marginRight: 20,
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: Color.color1
-  },
+  }
 });
 
 export default VideoDetailButton;

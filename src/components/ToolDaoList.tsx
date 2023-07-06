@@ -3,16 +3,11 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
-  SafeAreaView,
-  ScrollView,
   FlatList,
   Image,
   TouchableOpacity
 } from 'react-native';
-import { FontSize, Color, Border, FontFamily, Padding } from "../GlobalStyles";
-import DaoCommunityCard from "./DaoCommunityCard";
-import {DaoInfo, Page, PostInfo} from "../declare/api/DAOApi";
+import { DaoInfo, Page } from "../declare/api/DAOApi";
 import {useResourceUrl, useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
 import {useNavigation} from "@react-navigation/native";
@@ -130,7 +125,6 @@ const styles = StyleSheet.create({
   text: {
     fontWeight: '500',
     fontSize: 15,
-    lineHeight: 20,
     color: '#848488',
     maxWidth: 70,
   },

@@ -13,7 +13,6 @@ import NewsContent from "../components/NewsContent";
 import VideoBlockItem from "../components/VideoBlockItem";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Toast from "react-native-toast-message";
-import show = Toast.show;
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 
 const PostDetailScreen = () => {
@@ -22,8 +21,6 @@ const PostDetailScreen = () => {
   const {postId} = route.params as { postId: string };
 
   const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
-  const [isReTransfer, setIsReTransfer] = useState<boolean>(false);
-  const [requestId, setRequestId] = useState<string>(postId)
 
   const navigation = useNavigation();
 
@@ -37,7 +34,6 @@ const PostDetailScreen = () => {
           return;
         }
         await setPostInfo(data.data);
-        if (data.data.author_dao.id) setIsReTransfer(true);
       }
     } catch (e) {
       Toast.show({

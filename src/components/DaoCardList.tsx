@@ -108,7 +108,7 @@ const DaoCardList: React.FC<Props> = (props) => {
           horizontal={true}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
-          // keyExtractor={item => item.id}
+          keyExtractor={item => item.id}
         />
         <View style={[styles.frameInner, styles.lineViewBorder]} />
       </View>
@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   frameInner: {
-    // marginTop: 20,
     alignSelf: "stretch",
   },
   lineViewBorder: {

@@ -17,10 +17,8 @@ import PostApi from "../services/DAOApi/Post";
 import Toast from "react-native-toast-message";
 import {useIsLogin, useUrl} from '../utils/hook';
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
-type Props = {
-};
 
-const ComplaintScreen: React.FC<Props> = (props:Props) => {
+const ComplaintScreen = () => {
     const route = useRoute();
     const {daoInfo , postInfo} = route.params as { daoInfo:DaoInfo, postInfo:PostInfo;};
     const [loading, setLoading] = useState(false);
@@ -83,10 +81,7 @@ const ComplaintScreen: React.FC<Props> = (props:Props) => {
     return (
         <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
         <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
-            <FavorDaoNavBar
-                title="Report"
-                vector={require("../assets/vector6.png")}
-            />
+            <FavorDaoNavBar title="Report"/>
             <View style={styles.content}>
                 <ScrollView>
                     <TextInputBlock

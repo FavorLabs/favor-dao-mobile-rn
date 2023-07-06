@@ -1,10 +1,15 @@
 import * as React from "react";
 import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
-import { FontFamily, Color, FontSize, Border } from "../GlobalStyles";
+import {FontFamily, Color, FontSize, Border} from "../GlobalStyles";
 import {getDebounce} from "../utils/util";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
+import {useResourceUrl} from "../utils/hook";
+import SvgIcon from "./SvgIcon";
+import NewsIcon from '../assets/svg/Dao/newsIcon.svg';
+import VideoIcon from '../assets/svg/Dao/videoIcon.svg';
+import RightArrow from '../assets/svg/Dao/rightArrow.svg';
 
 type Props = {
   type: string;
@@ -16,58 +21,54 @@ type Props = {
   setIsShow?: (a: boolean) => void;
 };
 const PublishesItem: React.FC<Props> = (props) => {
-  const { type, daoInfo, lastPost, setIsShow } = props;
+  const {type, daoInfo, lastPost, setIsShow} = props;
   const navigation = useNavigation();
+  const avatarsResUrl = useResourceUrl('avatars');
 
   const onPress = () => {
     if (setIsShow) setIsShow(false)
-    if(daoInfo.type === 0 ){
+    if (daoInfo.type === 0) {
       // @ts-ignore
-      navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : type});
+      navigation.navigate(Screens.FeedsOfDAO, {daoInfo: daoInfo, type: type});
     } else {
       // @ts-ignore
-      navigation.navigate(Screens.ToolDaoDetail,{ daoInfo : daoInfo});
+      navigation.navigate(Screens.ToolDaoDetail, {daoInfo: daoInfo});
     }
   }
 
   return (
     <TouchableOpacity onPress={getDebounce(onPress)}>
-    <View style={[styles.channelitemwithseperator, styles.iconwithbackgroundFlexBox,]}>
-        <Image
-          style={styles.vectorIcon}
-          resizeMode="cover"
-          source={type === 'News' ? require("../assets/newsIcon.png") : require("../assets/videoIcon.png")}
-        />
-      <View style={styles.channelinfo}>
-        <View style={styles.publishes}>
-          <View style={styles.channelnamelLasttime}>
-            <Text style={styles.channelname}>{type}</Text>
-            <Text style={[styles.lastmsgtime, styles.subtitleTypo]} numberOfLines={1}>
-              { lastPost?.createTime }
-            </Text>
-          </View>
-          <View style={styles.lastmessage}>
-            <Text style={[styles.messageinfo, styles.subtitleLayout]} numberOfLines={1}>
-              { lastPost?.text }
-            </Text>
-            <View style={styles.msgcountParent}>
-              <View style={styles.msgcount}>
-                <View style={styles.msgcountChild} />
-                <Text style={[styles.subtitle, styles.subtitleLayout]}>
-                  +99
-                </Text>
+      <View style={[styles.channelitemwithseperator, styles.iconwithbackgroundFlexBox,]}>
+        {
+          daoInfo.type === 0 ?
+            <SvgIcon svg={type === 'News' ? <NewsIcon/> : <VideoIcon/>} width={50} height={50}/>
+            :
+            <Image
+              style={styles.vectorIcon}
+              resizeMode="cover"
+              source={{uri: `${avatarsResUrl}/${daoInfo.avatar}`}}
+            />
+        }
+        <View style={styles.channelinfo}>
+          <View style={styles.publishes}>
+            <View style={styles.channelnamelLasttime}>
+              <Text style={styles.channelname}>{type}</Text>
+              <Text style={[styles.lastmsgtime, styles.subtitleTypo]} numberOfLines={1}>
+                {lastPost?.createTime}
+              </Text>
+            </View>
+            <View style={styles.lastmessage}>
+              <Text style={[styles.messageinfo, styles.subtitleLayout]} numberOfLines={1}>
+                {lastPost?.text}
+              </Text>
+              <View style={styles.msgcountParent}>
+                <SvgIcon svg={<RightArrow/>} width={18} height={18}/>
               </View>
-              <Image
-                style={styles.enterIcon}
-                resizeMode="cover"
-                source={require("../assets/enter.png")}
-              />
             </View>
           </View>
+          <View style={styles.channelinfoChild}/>
         </View>
-        <View style={styles.channelinfoChild} />
       </View>
-    </View>
     </TouchableOpacity>
   )
 };
@@ -150,15 +151,9 @@ const styles = StyleSheet.create({
     height: 14,
     width: 23,
   },
-  enterIcon: {
-    height: 18,
-    overflow: "hidden",
-    width: 18,
-  },
   msgcountParent: {
     alignItems: "flex-end",
     justifyContent: "flex-end",
-    width: 18,
     marginLeft: 12,
     flexDirection: "row",
   },

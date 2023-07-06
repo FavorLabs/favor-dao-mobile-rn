@@ -1,8 +1,7 @@
 import * as React from "react";
-import {StyleSheet, View, Text, TouchableOpacity, ScrollView} from "react-native";
+import {StyleSheet, View, TouchableOpacity, ScrollView} from "react-native";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import {useNavigation} from "@react-navigation/native";
-import Screens from "../../../navigation/RouteNames";
 import TextInputBlock from "../../../components/TextInputBlock";
 import {useEffect, useMemo, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
@@ -15,9 +14,7 @@ import Toast from "react-native-toast-message";
 import {hasWhiteSpace} from "../../../utils/util";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 
-type Props = {};
-
-const ModifyName: React.FC<Props> = (props) => {
+const ModifyName = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const url = useUrl();
@@ -87,10 +84,7 @@ const ModifyName: React.FC<Props> = (props) => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar
-          title="Modify name"
-          vector={require("../../../assets/vector6.png")}
-        />
+        <FavorDaoNavBar title="Modify name"/>
         <ScrollView>
           <TextInputBlock
             title={'Modify name'}

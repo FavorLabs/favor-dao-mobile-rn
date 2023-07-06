@@ -1,6 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator, Animated} from 'react-native';
-import {FontSize, Color, Border, FontFamily, Padding} from "../GlobalStyles";
+import {View, Text, StyleSheet, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import {Page, PostInfo} from "../declare/api/DAOApi";
 import PostApi from '../services/DAOApi/Post';
 import {useIsLogin, useUrl} from '../utils/hook';
@@ -24,7 +23,7 @@ export type Props = {
 const PostList: React.FC<Props> = (props) => {
   const {type, daoId, focus = false, query, isHome = false, isNewsFocus, setIsNewsFocus} = props;
   const url = useUrl();
-  const [isLogin, gotoLogin] = useIsLogin();
+  const [ isLogin ] = useIsLogin();
   const [pageData, setPageData] = useState<Page>({
     page: 1,
     page_size: 5,
@@ -82,25 +81,15 @@ const PostList: React.FC<Props> = (props) => {
   };
 
   const renderItem = (item: PostInfo) => {
-    if (item.type === -1) {
-      // return <DaoCardList />;
-    } else if (item.type === 0) {
+    if(item.type === 0 || item.type === 2 || item.type === 3) {
       return <NewsCard postInfo={item}/>
-    } else if (item.type === 1) {
+    } else if(item.type === 1) {
       return <VideoBlock postInfo={item}/>
-    } else if (item.type === 2) {
-      // return <ReTransfer postInfo={item}/>
-      return <NewsCard postInfo={item}/>
-    } else if (item.type === 3) {
-      // return <QuoteNews postInfo={item}/>
-      return <NewsCard postInfo={item}/>
     }
-
   }
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // await sleep(2000);
     await refreshPage();
     setRefreshing(false);
   };
@@ -108,7 +97,6 @@ const PostList: React.FC<Props> = (props) => {
   const handleLoadMore = async () => {
     if (isLoadingMore && !loading) {
       setLoading(true);
-      // await sleep(2000);
       await loadMore();
       setLoading(false);
     }

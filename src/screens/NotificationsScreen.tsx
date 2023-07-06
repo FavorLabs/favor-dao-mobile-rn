@@ -19,7 +19,7 @@ import {useResourceUrl, useUrl} from "../utils/hook";
 import SvgIcon from "../components/SvgIcon";
 import DeleteSvg from "../assets/svg/deleteIcon.svg";
 import {Color} from "../GlobalStyles";
-import {getTime} from "../utils/util";
+import {getDebounce, getTime} from "../utils/util";
 import Toast from "react-native-toast-message";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useDispatch, useSelector} from "react-redux";
@@ -46,6 +46,7 @@ const NotificationsScreen = () => {
     page: 1,
     page_size: 10,
   });
+  const [delLoading, setDelLoading] = useState(false);
 
   const getNotify = async (refresh?: boolean) => {
     const pageData = await refresh ? {page: 1, page_size: pageInfo.page_size} : pageInfo;
@@ -104,7 +105,9 @@ const NotificationsScreen = () => {
   }
 
   const delNotify = async () => {
+    if(delLoading) return;
     try {
+      setDelLoading(true);
      const {data} = await NotifyApi.delNotifyAll(url, id);
       if(data.data) {
         setNotifyList([]);
@@ -120,6 +123,8 @@ const NotificationsScreen = () => {
           text1: e.message
         })
       }
+    } finally {
+      setDelLoading(false)
     }
   }
 

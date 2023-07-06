@@ -11,13 +11,12 @@ import Models from "../declare/storeTypes";
 
 type Props = {
   postInfo: PostInfo,
-  isReTransfer?: boolean
 };
 
 const VideoBlock: React.FC<Props> = (props) => {
   const dispatch = useDispatch()
-  const { postInfo, isReTransfer } = props;
-  const { contents, orig_contents, type, orig_type, dao } = postInfo;
+  const { postInfo } = props;
+  const { dao } = postInfo;
   const [shieldStatus,setShieldStatus]=useState(true)
   const { ShieldAct} = useSelector((state: Models) => state.global);
 
@@ -61,7 +60,7 @@ const VideoBlock: React.FC<Props> = (props) => {
   },[ShieldAct])
   return (
     <View style={[styles.rowUserParent,{display:shieldStatus?'flex':'none'}]}>
-      <VideoBlockItem postInfo={postInfo} isReTransfer={isReTransfer} showOperate={true} />
+      <VideoBlockItem postInfo={postInfo} showOperate={true} />
       <OperationBlock postInfo={postInfo} type={1}/>
       <View style={[styles.frameChild, styles.likeSpaceBlock]} />
     </View>
@@ -82,7 +81,6 @@ const styles = StyleSheet.create({
   rowUserParent: {
     paddingHorizontal: 0,
     paddingTop: Padding.p_3xs,
-    // marginTop: 10,
     backgroundColor: Color.color1,
     alignSelf: "stretch",
   },

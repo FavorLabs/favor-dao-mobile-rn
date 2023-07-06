@@ -14,8 +14,6 @@ import {useIsLogin} from "../utils/hook";
 
 export const TopBarOptions = {
     header: () => null,
-    // tabBarActiveTintColor: 'white',
-    // tabBarInactiveTintColor: 'gray',
     tabBarPressColor: 'transparent',
     tabBarIndicatorStyle: {backgroundColor: '#eaeaea', display: 'none'},
     tabBarItemStyle: {fontSize: 24},
@@ -90,7 +88,7 @@ const styles = StyleSheet.create({
         borderRadius: Border.br_29xl
     },
     text: {
-        // fontSize: FontSize.bodyBody17_size,
+        fontSize: FontSize.bodyBody17_size,
         fontWeight: '600',
     },
 })
