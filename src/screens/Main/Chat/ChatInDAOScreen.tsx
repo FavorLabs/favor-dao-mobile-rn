@@ -10,7 +10,7 @@ import {
     KeyboardAvoidingView, Platform
 } from "react-native";
 import ExpandedDAOHeader from "../../../components/ExpandedDAOHeader";
-import {useRoute} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import {DaoInfo} from "../../../declare/api/DAOApi";
 import MessageInputer from "../../../components/RedPacket/MessageInputer";
@@ -20,6 +20,10 @@ import {useEffect, useMemo, useRef, useState} from "react";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import {Color, FontSize} from "../../../GlobalStyles";
 import ChatNameBox from "../../../components/RedPacket/ChatNameBox";
+import {sleep} from "../../../utils/util";
+import User = CometChat.User;
+import navigation from "../../../navigation";
+import Toast from "react-native-toast-message";
 
 const ChatInDAOScreen = () => {
     const limit = 10;
@@ -30,6 +34,8 @@ const ChatInDAOScreen = () => {
     const [daoInfo, setDaoInfo] = useState<DaoInfo>();
     const [loading, setLoading] = useState(false);
     const [messageList, setMessageList] = useState<CometChat.BaseMessage[] | CometChat.TextMessage[] | CometChat.MediaMessage[] | CometChat.CustomMessage[]>([]);
+    const [more, setMore] = useState(true);
+    const navigation = useNavigation();
 
     const messagesRequest = useMemo(() =>
         new CometChat.MessagesRequestBuilder()
@@ -37,6 +43,7 @@ const ChatInDAOScreen = () => {
       , [info.guid])
 
     const flatListRef = useRef(null);
+    const [loginUser, setLoginUser] = useState<User | null>(null);
 
     const scrollToBottom = () => {
         if (flatListRef.current) {
@@ -52,30 +59,30 @@ const ChatInDAOScreen = () => {
                 setDaoInfo(data.data);
             }
         } catch (e) {
-            if (e instanceof Error) console.error(e.message);
-        }
-    }
-
-    const getMessageInfo = async () => {
-        try {
-            const data: CometChat.BaseMessage[] = await messagesRequest.fetchPrevious();
-            await setMessageList(data.reverse());
-        } catch (e) {
             if (e instanceof Error) {
-                console.log(e.message)
-            }
+                Toast.show({
+                    type: 'error',
+                    text1: e.message
+                });
+                navigation.goBack();
+            };
         }
     }
 
     const handleLoadMore = async () => {
-        if (messageList.length < limit) return;
         if (!loading) setLoading(true);
         try {
             const data: CometChat.BaseMessage[] = await messagesRequest.fetchPrevious();
             setMessageList([...messageList, ...data.reverse()]);
+            if (data.length < limit) {
+                setMore(false);
+            }
         } catch (e) {
             if (e instanceof Error) {
-                console.log(e.message)
+                Toast.show({
+                    type: 'error',
+                    text1: e.message
+                });
             }
         } finally {
             setLoading(false)
@@ -99,14 +106,22 @@ const ChatInDAOScreen = () => {
 
         return (
           <>
-              <ChatNameBox messageInfo={item} isShowTime={isShowTime}/>
+              <ChatNameBox messageInfo={item} isShowTime={isShowTime} isMy={item.getSender() ? loginUser?.getUid() === item.getSender().getUid() : true}/>
           </>
         )
     }
 
     useEffect(() => {
         getDaoInfo();
-        getMessageInfo();
+    }, []);
+
+    useEffect(() => {
+        CometChat.getLoggedinUser()
+          .then((user) => setLoginUser(user))
+          .catch((error) => {
+              const errorCode = error?.message || 'ERROR';
+              console.log(errorCode)
+          });
     }, []);
 
     useEffect(() => {
@@ -154,51 +169,59 @@ const ChatInDAOScreen = () => {
         }
     }, [messageList[0]])
 
-
-    if (!messageList.length || !daoInfo) return <View style={styles.loadingContent}><Text
-      style={styles.loading}>loading...</Text></View>
-
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={{flex: 1}}
       >
-          <BackgroundSafeAreaView
-            headerStyle={{paddingTop: 0}}
-            headerComponent={daoInfo &&
+        {
+          daoInfo ?
+            <BackgroundSafeAreaView
+              headerStyle={{paddingTop: 0}}
+              headerComponent={daoInfo &&
                 <ExpandedDAOHeader daoInfo={daoInfo} isShowJoined={false} isShowBtnChatToggle={true}/>}
-          >
+            >
 
-              <FlatList
-                ref={flatListRef}
-                data={messageList}
-                renderItem={({item, index}) => renderItem(item, index)}
-                // @ts-ignore
-                keyExtractor={(item) => item.getId()}
-                inverted={true}
-                onEndReachedThreshold={0.2}
-                onEndReached={handleLoadMore}
-                ListFooterComponent={() => (
-                  <>
-                      {
-                        loading &&
+                <FlatList
+                  style={{flex: 1}}
+                  contentContainerStyle={{minHeight: '100%'}}
+                  ref={flatListRef}
+                  data={messageList}
+                  renderItem={({item, index}) => renderItem(item, index)}
+                  // @ts-ignore
+                  keyExtractor={(item) => item.getId()}
+                  inverted={true}
+                  onEndReachedThreshold={0.2}
+                  onEndReached={more ? handleLoadMore : undefined}
+                  ListFooterComponent={() => (
+                    <>
+                        {
+                          loading &&
                           <View style={styles.footer}>
                               <ActivityIndicator size="large"/>
                           </View>
-                      }
-                  </>
-                )}
-              />
+                        }
+                    </>
+                  )}
+                />
 
-              <MessageInputer
-                guid={info.guid}
-                setMessageList={setMessageList}
-                memberCount={daoInfo?.follow_count}
-                scrollToBottom={scrollToBottom}
-              />
+                <MessageInputer
+                  guid={info.guid}
+                  setMessageList={setMessageList}
+                  memberCount={daoInfo?.follow_count}
+                  scrollToBottom={scrollToBottom}
+                  loginUser={loginUser}
+                />
+            </BackgroundSafeAreaView>
+            :
+            <View style={styles.loadingContent}>
+                <Text style={styles.loading}>
+                    loading...
+                </Text>
+            </View>
+        }
 
 
-          </BackgroundSafeAreaView>
       </KeyboardAvoidingView>
     );
 }

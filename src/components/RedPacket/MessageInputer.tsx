@@ -36,6 +36,7 @@ export type Props = {
   guid: string;
   setMessageList: Function;
   scrollToBottom: Function;
+  loginUser: User | null
 };
 
 type CustomData = {
@@ -48,7 +49,7 @@ const MessageInputer: React.FC<Props> = (props) => {
   const Height = Dimensions.get('window').height;
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const {guid, setMessageList, memberCount, scrollToBottom } = props;
+  const {guid, setMessageList, memberCount, scrollToBottom, loginUser } = props;
 
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -59,16 +60,6 @@ const MessageInputer: React.FC<Props> = (props) => {
   const [bottomType, setBottomType] = useState<'function' | 'emoji' | 'none'>('none');
 
   const {config} = Favor;
-  const [loginUser, setLoginUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    CometChat.getLoggedinUser()
-      .then((user) => setLoginUser(user))
-      .catch((error) => {
-        const errorCode = error?.message || 'ERROR';
-        console.log(errorCode)
-      });
-  }, []);
 
   const closeBottom = () => {
     setBottomType('none');
