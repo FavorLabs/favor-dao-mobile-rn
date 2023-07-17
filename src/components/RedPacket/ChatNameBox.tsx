@@ -9,19 +9,13 @@ import {useResourceUrl} from "../../utils/hook";
 export type Props = {
   messageInfo: CometChat.BaseMessage | CometChat.TextMessage | CometChat.MediaMessage | CometChat.CustomMessage | any;
   isShowTime: boolean;
+  isMy: boolean
 };
 const ChatNameBox: React.FC<Props> = (props) => {
-  const { messageInfo, isShowTime } = props;
+  const { messageInfo, isShowTime, isMy } = props;
 
   const avatarsResUrl = useResourceUrl('avatars');
   const {user} = useSelector((state: Models) => state.global);
-  const [isMy,setIsMy] = useState(false);
-
-  useEffect(()=> {
-    // @ts-ignore
-    setIsMy(messageInfo.getSender() ? messageInfo.getSender().getName() === user?.nickname : messageInfo.sender.name === user?.nickname);
-  },[messageInfo])
-
 
   return (
     <View style={styles.container}>
@@ -60,7 +54,7 @@ const ChatNameBox: React.FC<Props> = (props) => {
                 <View style={styles.flexBoxIsMine}>
                   <View></View>
                   <View style={styles.flexBox}>
-                    <Text style={styles.name}>{messageInfo.getSender() ? messageInfo.getSender().getName() : messageInfo.sender.name}</Text>
+                    <Text style={styles.name}>{user?.nickname}</Text>
                     <Image style={styles.imageIsMine} source={{uri: `${avatarsResUrl}/${getChatsAvatarUrl(messageInfo.getSender() ? messageInfo.getSender().getAvatar() : messageInfo.sender.avatar)}`}}></Image>
                   </View>
                 </View>

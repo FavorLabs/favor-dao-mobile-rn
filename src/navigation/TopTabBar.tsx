@@ -4,8 +4,6 @@ import RecommendScreen from "../screens/Main/Feeds/RecommendScreen";
 import JoinedScreen from "../screens/Main/Feeds/JoinedScreen";
 import RecommendDAOListScreen from "../screens/Main/DAO/RecommendDAOListScreen";
 import JoinedDAOListScreen from "../screens/Main/DAO/JoinedDAOListScreen";
-import ReadScreen from "../screens/Main/Notify/ReadScreen";
-import UnreadScreen from "../screens/Main/Notify/UnreadScreen";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 
 const TopTab = createMaterialTopTabNavigator();
@@ -64,16 +62,6 @@ export function DAOTopTabNavigator() {
       <TopTab.Navigator screenOptions={TopBarOptions}>
           <TopTab.Screen name="DAOs" component={RecommendDAOListScreen}/>
           <TopTab.Screen name="Joined" component={JoinedDAOListScreen}/>
-      </TopTab.Navigator>
-    );
-}
-
-export function NotifyTopTabNavigator() {
-    return (
-      // @ts-ignore
-      <TopTab.Navigator screenOptions={TopBarOptions}>
-          <TopTab.Screen name="Read" component={ReadScreen}/>
-          <TopTab.Screen name="Unread" component={UnreadScreen}/>
       </TopTab.Navigator>
     );
 }

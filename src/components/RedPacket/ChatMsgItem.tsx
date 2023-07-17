@@ -51,6 +51,11 @@ const ChatMsgItem: React.FC<Props> = (props) => {
   const [fileImgStatus, setFileImgStatus] = useState(false);
   const [fileVideoStatus, setFileVideoStatus] = useState(false);
   const [fileVideoLoading, setFileVideoLoading] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  const handleVideoLoad = () => {
+    setVideoLoaded(true)
+  }
 
   const imageClick = () => {
     if (messageInfo._id) return;
@@ -204,40 +209,50 @@ const ChatMsgItem: React.FC<Props> = (props) => {
       }
       {
         type === 'video' &&
-          <TouchableOpacity style={[styles.videoBox, styles.video, styles.BDRmax]} onPress={VideoClick}>
-            {
-              videoLoading &&
-                <View style={styles.videoLoading}>
-                    <ActivityIndicator size={"large"}/>
-                </View>
-            }
+        (
+          videoLoaded ?
+            <TouchableOpacity style={[styles.videoBox, styles.video, styles.BDRmax]} onPress={VideoClick}>
+              {
+                videoLoading &&
+                  <View style={styles.videoLoading}>
+                      <ActivityIndicator size={"large"}/>
+                  </View>
+              }
               <Video
-                  ref={player}
-                  style={styles.video}
-                  paused={videoPlay}
-                  source={{uri: messageInfo.data.url}}
-                  controls={true}
-                  onFullscreenPlayerWillPresent={() => {
-                    setVideoPlay(false);
-                  }}
-                  onFullscreenPlayerWillDismiss={() => {
-                    setVideoPlay(true);
-                  }}
-                  onEnd={() => {
-                    setVideoPlay(true);
-                    if (player.current) {
-                      player.current.seek(0)
-                    }
-                  }}
-                  onBuffer={buffer}
+                ref={player}
+                style={styles.video}
+                paused={videoPlay}
+                source={{uri: messageInfo.data.url}}
+                controls={true}
+                onFullscreenPlayerWillPresent={() => {
+                  setVideoPlay(false);
+                }}
+                onFullscreenPlayerWillDismiss={() => {
+                  setVideoPlay(true);
+                }}
+                onEnd={() => {
+                  setVideoPlay(true);
+                  if (player.current) {
+                    player.current.seek(0)
+                  }
+                }}
+                onBuffer={buffer}
               />
-            {
-              videoPlay &&
-                <View style={styles.playPause}>
-                    <SvgIcon svg={<PlayCircle/>} width={40} height={40}/>
-                </View>
-            }
-          </TouchableOpacity>
+              {/*{*/}
+              {/*  videoPlay &&*/}
+              {/*    <View style={styles.playPause}>*/}
+              {/*        <SvgIcon svg={<PlayCircle/>} width={40} height={40}/>*/}
+              {/*    </View>*/}
+              {/*}*/}
+            </TouchableOpacity>
+            :
+            <TouchableOpacity style={[styles.videoBox, styles.video, styles.BDRmax]} onPress={handleVideoLoad}>
+              <View style={styles.playPause}>
+                <SvgIcon svg={<PlayCircle/>} width={40} height={40}/>
+              </View>
+            </TouchableOpacity>
+        )
+
       }
       {
         type === 'file' &&

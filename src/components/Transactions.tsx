@@ -18,7 +18,7 @@ import Models from "../declare/storeTypes";
 import UserApi from "../services/DAOApi/User";
 import {useUrl} from "../utils/hook";
 import Toast from "react-native-toast-message";
-import { Page, TransactionInfo} from "../declare/api/DAOApi";
+import {Page, TransactionInfo} from "../declare/api/DAOApi";
 import SvgIcon from "./SvgIcon";
 import TransactionIcon from '../assets/svg/Setting/transactionIcon.svg';
 import RevenueIcon from '../assets/svg/Setting/revenueIcon.svg';
@@ -35,7 +35,7 @@ const Transactions: React.FC<Props> = (props) => {
   const [refreshing, setRefreshing] = useState(false);
   const [pageInfo, setPageInfo] = useState<Page>({
     page: 1,
-    page_size: 10000,
+    page_size: 10,
   });
 
   const showPopUp = () => {
@@ -48,9 +48,9 @@ const Transactions: React.FC<Props> = (props) => {
     try {
       const {data} = await UserApi.getTransaction(url, pageData);
       if (data.data.list) {
-        refresh ? setTransactions(data.data.list) : setTransactions([...transactions, ...data.data.list]);
-        setIsLoadingMore(data.data.pager.total_rows > pageData.page * pageData.page_size,);
-        setPageInfo({...pageInfo, page: ++pageData.page});
+        refresh ? setTransactions(data.data.list) : setTransactions(v => [...v, ...data.data.list]);
+        setIsLoadingMore(data.data.pager.total_rows > pageData.page * pageData.page_size);
+        setPageInfo({...pageInfo, page: ++pageData.page})
       }
     } catch (e) {
       if (e instanceof Error) {
@@ -90,21 +90,45 @@ const Transactions: React.FC<Props> = (props) => {
 
       <BottomSheetModal visible={popUpShow} setVisible={setPopUpShow} height={'50%'}>
         <Text style={styles.title}>Transaction</Text>
-        <ScrollView style={styles.scrollView}>
-          {transactions.map((item, index) => (
-            <View key={index} style={[styles.transRow, index === transactions.length-1 && styles.lastItem]}>
+        <FlatList
+          style={styles.scrollView}
+          data={transactions}
+          renderItem={({item, index}) => (
+            <View style={[styles.transRow, index === transactions.length - 1 && styles.lastItem]}>
               <View style={styles.transRowLeft}>
                 <View style={{marginRight: 10}}>
-                  <SvgIcon svg={user?.address === item.subject_id ? <RevenueIcon/> : <ExpensesIcon/>} width={20} height={20}/>
+                  <SvgIcon svg={user?.address === item.subject_id ? <RevenueIcon/> : <ExpensesIcon/>} width={20}
+                           height={20}/>
                 </View>
                 <View style={styles.transBlock}>
-                  <Text style={styles.transAddress} numberOfLines={1} ellipsizeMode="middle">FavT • { user?.address === item.subject_id ? item.account_id.reference : item.subject_id }</Text>
+                  <Text style={styles.transAddress} numberOfLines={1} ellipsizeMode="middle">FavT
+                    • {user?.address === item.subject_id ? item.account_id.reference : item.subject_id}</Text>
                 </View>
               </View>
-              <Text style={[styles.transName,styles.transPrice]} numberOfLines={1} ellipsizeMode="middle">{addDecimal(user?.address === item.subject_id ? sliceStr(item.pay_amount) : item.pay_amount)}.00</Text>
+              <Text style={[styles.transName, styles.transPrice]} numberOfLines={1}
+                    ellipsizeMode="middle">{addDecimal(user?.address === item.subject_id ? sliceStr(item.pay_amount) : item.pay_amount)}.00</Text>
             </View>
-          ))}
-        </ScrollView>
+          )}
+          keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent={() => (
+            <>
+              {
+                loading &&
+                  <View style={styles.footer}>
+                      <ActivityIndicator size="large"/>
+                  </View>
+              }
+            </>
+          )}
+        />
       </BottomSheetModal>
     </>
   );

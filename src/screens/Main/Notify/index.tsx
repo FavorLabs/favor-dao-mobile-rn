@@ -10,7 +10,6 @@ import {
   RefreshControl,
   ActivityIndicator
 } from 'react-native';
-import {NotifyTopTabNavigator} from "../../../navigation/TopTabBar";
 import {Color, FontFamily, FontSize, Padding} from "../../../GlobalStyles";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import NotifyApi from "../../../services/DAOApi/Notify";
