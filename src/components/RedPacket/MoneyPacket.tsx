@@ -87,7 +87,6 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                     const {data}= await request()
                     if (data.code==0){
                         await sendCustomMessage({id:data.data.redpacket_id,title:sendTitle})
-                        setTimeout(()=>{
                             setPassword('')
                             setLoading(false)
                             setVisible(false)
@@ -106,7 +105,6 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                                     text1: 'Send success!'
                                 });
                             }
-                        },1200)
                     }else {
                         Toast.show({
                             type: 'error',

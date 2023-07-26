@@ -1,5 +1,5 @@
 import * as React from "react";
-import {FlatList, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
+import {FlatList, Image, ScrollView, RefreshControl,StyleSheet, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
 import ChatChannel from "../../../components/RedPacket/ChatChannel";
 import {Color, FontFamily, Padding, FontSize, Border} from "../../../GlobalStyles";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
@@ -72,7 +72,7 @@ const ClaimDetails = () => {
 
   }
   const getRedPacketUser=async ()=>{
-    const request =  () => RedpacketApi.getClai(url,id)
+    const request =  () => RedpacketApi.getClai(url,id,{page:1,page_size:claim_count})
     const res= await request()
     if(res.data.code==0){
       setUserData(res.data.data.list)
@@ -116,8 +116,10 @@ const ClaimDetails = () => {
   }
   useEffect(()=>{
     getRedPacketInfo()
-    getRedPacketUser()
   },[])
+  useEffect(()=>{
+    getRedPacketUser()
+  },[claim_count])
   return (
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}}>
       <View style={styles.container}>
@@ -143,7 +145,7 @@ const ClaimDetails = () => {
         {
           !loding &&
             <View style={{flex:1}}>
-              <View style={[styles.redUser]}>
+              <View style={styles.redUser}>
                 <View style={styles.frameContainer}>
                   <View style={[styles.imageWrapper, styles.wrapperSpaceBlock]}>
                     <Image
@@ -187,23 +189,29 @@ const ClaimDetails = () => {
                         return <>{renderItem(item,isMax)}</>
                       }}
                       // @ts-ignore
-                      keyExtractor={item => item.id}
+                      keyExtractor={(item,index) => item.id+index}
                   />
+                  <View style={[styles.bottomBox,{display:refund_status==0?'none':'flex'}]}>
+                    <Text style={styles.bottomText}>
+                      Unclaimed luckpacket will be refunded upon expiration
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
         }
-      </View>
-      <View style={[styles.bottomBox,{display:refund_status==0?'none':'flex'}]}>
-        <Text style={styles.bottomText}>
-          Unclaimed luckpacket will be refunded upon expiration
-        </Text>
       </View>
     </BackgroundSafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  footer: {
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   redPacketTitle:{
     textAlign:"center",
     maxWidth:"80%",
@@ -225,12 +233,12 @@ const styles = StyleSheet.create({
     maxWidth:'70%',
   },
   container: {
-    flex: 1,
+    flex: 1
   },
   header: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: Color.color2
+    backgroundColor: Color.color2,
   },
   right: {
     width: 38,
@@ -427,7 +435,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   chatchannelParent: {
-    alignSelf: "stretch",
+    alignSelf: "stretch"
   },
   channelinfoChild: {
     borderStyle: "solid",
@@ -449,6 +457,8 @@ const styles = StyleSheet.create({
   },
   frameView: {
     alignItems: "center",
+    flex:1,
+    paddingBottom:20
   },
   background: {
     height: "100%",
