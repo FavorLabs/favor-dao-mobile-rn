@@ -43,9 +43,10 @@ export default {
             params
         });
     },
-    getClai(url:string,id:string) {
+    getClai(url:string,id:string,params:any) {
         return request({
             url: url + `/redpacket/claims/${id}`,
+            params
         });
     },
 }
