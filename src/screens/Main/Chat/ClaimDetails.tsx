@@ -191,11 +191,11 @@ const ClaimDetails = () => {
                       // @ts-ignore
                       keyExtractor={(item,index) => item.id+index}
                   />
-                  <View style={[styles.bottomBox,{display:refund_status==0?'none':'flex'}]}>
-                    <Text style={styles.bottomText}>
-                      Unclaimed luckpacket will be refunded upon expiration
-                    </Text>
-                  </View>
+                </View>
+                <View style={[styles.bottomBox,{display:refund_status==0?'none':'flex'}]}>
+                  <Text style={styles.bottomText}>
+                    Unclaimed luckpacket will be refunded upon expiration
+                  </Text>
                 </View>
               </View>
             </View>
@@ -219,12 +219,11 @@ const styles = StyleSheet.create({
     marginTop:5,
   },
   bottomBox:{
-    position:'absolute',
     width:'100%',
-    bottom:'3%',
-    flex:1,
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    position:'absolute',
+    bottom:0
   },
   bottomText:{
     color:'#939393',
@@ -435,7 +434,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   chatchannelParent: {
-    alignSelf: "stretch"
+    alignSelf: "stretch",
+    paddingBottom:"13%"
   },
   channelinfoChild: {
     borderStyle: "solid",
@@ -458,7 +458,8 @@ const styles = StyleSheet.create({
   frameView: {
     alignItems: "center",
     flex:1,
-    paddingBottom:20
+    paddingBottom:20,
+    position:"relative"
   },
   background: {
     height: "100%",
