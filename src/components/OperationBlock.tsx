@@ -27,6 +27,7 @@ import TransFerIcon from '../assets/svg/NewsFeed/transFerIcon.svg';
 import MessageInfo from '../assets/svg/NewsFeed/messageInfo.svg';
 import UnLike from '../assets/svg/NewsFeed/unLike.svg';
 import Like from '../assets/svg/NewsFeed/like.svg';
+import {strings} from "../locales/i18n";
 
 type Props = {
   postInfo: PostInfo;
@@ -61,7 +62,7 @@ const OperationBlock: React.FC<Props> = (props) => {
     } else {
       Toast.show({
         type: 'error',
-        text1: 'please create a community!'
+        text1: `${strings('OperationBlock.Toast.noCommunity')}`
       });
       e.preventDefault()
     }
@@ -95,7 +96,7 @@ const OperationBlock: React.FC<Props> = (props) => {
     } catch (e) {
       Toast.show({
         type: 'error',
-        text1: 'post like error',
+        text1: `${strings('OperationBlock.Toast.postLikeError')}`,
       })
     } finally {
       setIsLikeLoading(false);
@@ -125,19 +126,19 @@ const OperationBlock: React.FC<Props> = (props) => {
         if (data.data) {
           return Toast.show({
             type: 'info',
-            text1: 'reTransfer success!!',
+            text1: `${strings('OperationBlock.Toast.reTransferSuccess')}`,
           })
         }
       } else {
         return Toast.show({
           type: 'error',
-          text1: 'reTransfer error!!',
+          text1: `${strings('OperationBlock.Toast.reTransferError')}`,
         })
       }
     } catch (e) {
       return Toast.show({
         type: 'error',
-        text1: 'reTransfer error!!',
+        text1: `${strings('OperationBlock.Toast.reTransferError')}`,
       })
     }
   };
@@ -206,8 +207,12 @@ const OperationBlock: React.FC<Props> = (props) => {
 
       <ActionSheet
         ref={actionSheetRef}
-        title={'ReTransfer & Quote'}
-        options={['ReTransfer', 'Quote', 'Cancel']}
+        title={strings('OperationBlock.ReTransferAndQuote')}
+        options={[
+          strings('OperationBlock.ReTransfer'),
+          strings('OperationBlock.Quote'),
+          strings('OperationBlock.Cancel')
+        ]}
         cancelButtonIndex={2}
         onPress={(index: number) => {
           if (index < screens.length) {

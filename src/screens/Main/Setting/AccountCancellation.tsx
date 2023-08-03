@@ -13,11 +13,6 @@ import {updateState as globalUpdateState} from "../../../store/global";
 import {updateState as notifyUpdateState} from "../../../store/notify";
 import Toast from "react-native-toast-message";
 import { Color, FontFamily } from "../../../GlobalStyles";
-import {
-  AccountCancellationIntroduction,
-  AccountCancellationOne,
-  AccountCancellationTitle, AccountCancellationTwo
-} from "../../../config/constants";
 import InputPassword from "../../../components/InputPassword";
 import BottomSheetModal from "../../../components/BottomSheetModal";
 import {SignatureData} from "../../../declare/api/DAOApi";
@@ -25,6 +20,7 @@ import WalletController from "../../../libs/walletController";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import SvgIcon from "../../../components/SvgIcon";
 import AccountIcon from '../../../assets/svg/Setting/accountIcon.svg'
+import {strings} from "../../../locales/i18n";
 
 const AccountCancellation = () => {
   const dispatch = useDispatch();
@@ -61,7 +57,7 @@ const AccountCancellation = () => {
       }))
       Toast.show({
         type: 'info',
-        text1: 'Account cancellation success!'
+        text1: strings('AccountCancellation.success')
       })
       // @ts-ignore
       navigation.navigate(Screens.Main.Feeds);
@@ -79,29 +75,29 @@ const AccountCancellation = () => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar title="Account cancellation"/>
+        <FavorDaoNavBar title={strings('AccountCancellation.title')}/>
 
         <ScrollView>
           <View style={styles.topBlock}>
             <View style={styles.titleRow}>
-              <Text style={styles.title}>{AccountCancellationTitle}</Text>
+              <Text style={styles.title}>{strings('AccountCancellation.title')}</Text>
               <SvgIcon svg={<AccountIcon/>} width={60} height={51}/>
             </View>
             <Text style={styles.introduction}>
-              {AccountCancellationIntroduction}
+              {strings('AccountCancellation.Tips')}
             </Text>
           </View>
 
           <View style={styles.description}>
-            <Text style={[styles.descriptionText, styles.topText]}>{AccountCancellationOne}</Text>
-            <Text style={styles.descriptionText}>{AccountCancellationTwo}</Text>
+            <Text style={[styles.descriptionText, styles.topText]}>{strings('AccountCancellation.oneText')}</Text>
+            <Text style={styles.descriptionText}>{strings('AccountCancellation.twoText')}</Text>
           </View>
         </ScrollView>
 
         <View style={styles.instanceParent}>
           <TouchableOpacity onPress={showBottomSheet}>
             <FavorDaoButton
-              textValue="Unregister"
+              textValue={strings('AccountCancellation.Unregister')}
               frame1171275771BackgroundColor="#FF564F"
               cancelColor="#fff"
               isLoading={btnLoading}

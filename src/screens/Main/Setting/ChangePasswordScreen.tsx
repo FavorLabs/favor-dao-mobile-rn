@@ -9,6 +9,7 @@ import WalletController from "../../../libs/walletController";
 import Toast from "react-native-toast-message";
 import {useNavigation} from "@react-navigation/native";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
+import {strings} from "../../../locales/i18n";
 
 const ImportWallet = () => {
   const navigation = useNavigation();
@@ -27,27 +28,27 @@ const ImportWallet = () => {
     if (confirmDisable) {
       return Toast.show({
         type: 'error',
-        text1: 'Please complete all options',
+        text1: strings('ChangePassword.Toast.allOptions'),
       })
     }
     setLoading(true)
     try {
       WalletController.exportMnemonic(oldPassword);
       if (password !== repeatPassword) {
-        return Toast.show({type: 'error', text1: 'Two inconsistent passwords'})
+        return Toast.show({type: 'error', text1: strings('ChangePassword.Toast.twoPasswords')})
       }
       WalletController.changePassword(password, oldPassword);
       navigation.goBack();
       Toast.show({
         type: 'info',
         // @ts-ignore
-        text1: 'Change password successfully'
+        text1: strings('ChangePassword.Toast.successfully')
       })
     } catch (e) {
       Toast.show({
         type: 'error',
         // @ts-ignore
-        text1: 'Original password is wrong'
+        text1: strings('ChangePassword.Toast.OriginalWrong')
       })
     } finally {
       setLoading(false);
@@ -56,25 +57,25 @@ const ImportWallet = () => {
   return (
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
       <View style={[styles.importWallet, styles.importWalletSpaceBlock]}>
-        <FavorDaoNavBar title="Change Password"/>
+        <FavorDaoNavBar title={strings('ChangePassword.title')}/>
         <View style={styles.content}>
           <View>
             <TextInputBlock
-              title={'Original password'}
-              placeholder={`Please enter original passwords`}
+              title={strings('ChangePassword.OriginalPassword')}
+              placeholder={strings('ChangePassword.OriginalPasswordPlaceholder')}
               value={oldPassword}
               setValue={setOldPassword}
               secureTextEntry={true}
             />
             <TextInputBlock
-              title={'Password'}
-              placeholder={`Please enter new passwords`}
+              title={strings('ChangePassword.Password')}
+              placeholder={strings('ChangePassword.PasswordPlaceholder')}
               value={password}
               setValue={setPassword}
               secureTextEntry={true}
             />
             <TextInputBlock
-              placeholder={`Please enter passwords again`}
+              placeholder={strings('ChangePassword.passwordsAgain')}
               value={repeatPassword}
               setValue={setRepeatPassword}
               secureTextEntry={true}
@@ -83,7 +84,7 @@ const ImportWallet = () => {
           <Pressable style={[{marginTop: 20}, confirmDisable && {opacity: 0.5}]} disabled={loading} onPress={change}>
             <FavorDaoButton
               isLoading={loading}
-              textValue="Confirm"
+              textValue={strings('ChangePassword.Confirm')}
               frame1171275771BackgroundColor="#ff8d1a"
               cancelColor="#fff"
             />

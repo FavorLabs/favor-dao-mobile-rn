@@ -10,6 +10,7 @@ import {Color, FontFamily} from "../GlobalStyles";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import SvgIcon from "../components/SvgIcon";
 import WaringIcon from '../assets/svg/waringIcon.svg';
+import {strings} from "../locales/i18n";
 
 const UserAgreementScreen = () => {
   const dispatch = useDispatch();
@@ -18,48 +19,48 @@ const UserAgreementScreen = () => {
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
   const [textList,setTextList] = useState([
     {
-      title: "1.Introduction",
-      content: "Welcome to FavorDAO, a decentralized, community-driven Web3 toolbox that provides cryptocurrency investment advice and community management tools. By using our services, you agree to these terms of service, which govern your use of the platform.",
+      title: strings('UserAgreement.Introduction'),
+      content: strings('UserAgreement.IntroductionText'),
     },
     {
-      title: "2.Eligibility",
-      content: "To use FavorDAO, you must be at least 18 years old and have the legal capacity to enter into a contract. By using our services, you represent and warrant that you meet these eligibility requirements.",
+      title: strings('UserAgreement.Eligibility'),
+      content: strings('UserAgreement.EligibilityText'),
     },
     {
-      title: "3.User Account",
-      content: "To use our services, you must create a user account using a digital wallet. You are responsible for maintaining the security of your account and any associated passwords or private keys. You agree to notify us immediately if you suspect any unauthorized use of your account.",
+      title: strings('UserAgreement.UserAccount'),
+      content: strings('UserAgreement.UserAccountText'),
     },
     {
-      title: "4.Community Creation and Management",
-      content: "FavorDAO allows users to create and manage decentralized autonomous organizations (DAOs) within the platform. You agree to comply with all applicable laws and regulations in creating and managing your DAO, and to assume full responsibility for all actions taken by your DAO.",
+      title: strings('UserAgreement.Community'),
+      content: strings('UserAgreement.CommunityText'),
     },
     {
-      title: "5.Content Creation and Subscription",
-      content: "FavorDAO allows users to create and publish content, and to offer subscriptions to their content. You agree to comply with all applicable laws and regulations in creating and publishing your content, and to assume full responsibility for the accuracy and legality of your content.",
+      title: strings('UserAgreement.Subscription'),
+      content: strings('UserAgreement.SubscriptionText'),
     },
     {
-      title: "6.Rewards and Incentives",
-      content: "FavorDAO provides various tools for users to earn rewards and incentives, including subscription fees, airdrops, and promotional tasks. You agree to comply with all applicable laws and regulations in earning rewards and incentives, and to assume full responsibility for any tax liabilities arising from such rewards and incentives.",
+      title: strings('UserAgreement.Incentives'),
+      content: strings('UserAgreement.IncentivesText'),
     },
     {
-      title: "7.Disclaimer of Warranties",
-      content: 'FavorDAO provides its services on an "as is" and "as available" basis, without any warranties of any kind, express or implied. We do not warrant that our services will be uninterrupted or error-free, and we disclaim any warranties of merchantability, fitness for a particular purpose, and non-infringement.',
+      title: strings('UserAgreement.Warranties'),
+      content: strings('UserAgreement.WarrantiesText'),
     },
     {
-      title: "8.Limitation of Liability",
-      content: "In no event shall FavorDAO be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in connection with your use of our services, including but not limited to damages for loss of profits, goodwill, use, data, or other intangible losses.",
+      title: strings('UserAgreement.Limitation'),
+      content: strings('UserAgreement.LimitationText'),
     },
     {
-      title: "9.Indemnification",
-      content: "You agree to indemnify and hold FavorDAO and its affiliates, officers, agents, and employees harmless from any claim or demand, including reasonable attorneys' fees, arising out of or in connection with your use of our services, your content, or your violation of these terms of service.",
+      title: strings('UserAgreement.Indemnification'),
+      content: strings('UserAgreement.IndemnificationText'),
     },
     {
-      title: "10.Governing Law and Jurisdiction",
-      content: "These terms of service shall be governed by and construed in accordance with the laws of the jurisdiction in which FavorDAO is incorporated. Any dispute arising out of or in connection with these terms of service shall be resolved exclusively in the courts of that jurisdiction.",
+      title: strings('UserAgreement.Jurisdiction'),
+      content: strings('UserAgreement.JurisdictionText'),
     },
     {
-      title: "11.Amendments",
-      content: "FavorDAO reserves the right to amend these terms of service at any time and without prior notice. Your continued use of our services after any such amendments shall constitute your acceptance of the amended terms of service.",
+      title: strings('UserAgreement.Amendments'),
+      content: strings('UserAgreement.AmendmentsText'),
     },
   ])
 
@@ -75,18 +76,18 @@ const UserAgreementScreen = () => {
     <BackgroundSafeAreaView>
       <View style={styles.container}>
         <FavorDaoNavBar
-          title="User agreement"
+          title={strings('UserAgreement.title')}
         />
 
         <View style={styles.topBlock}>
           <View style={styles.titleRow}>
-            <Text style={styles.title}>User agreement</Text>
+            <Text style={styles.title}>{strings('UserAgreement.UserAgreementTitle')}</Text>
             <View  style={styles.accountIcon}>
               <SvgIcon svg={<WaringIcon/>} width={60} height={60}/>
             </View>
           </View>
           <Text style={styles.introduction}>
-            Please read the following user agreement carefully
+            {strings('UserAgreement.introduction')}
           </Text>
         </View>
 
@@ -108,7 +109,7 @@ const UserAgreementScreen = () => {
         <View style={styles.instanceParent}>
           <TouchableOpacity onPress={confirmClick}>
             <FavorDaoButton
-              textValue="Confirm"
+              textValue={strings('UserAgreement.ConfirmButton')}
               frame1171275771BackgroundColor="#FF564F"
               cancelColor="#fff"
               isLoading={btnLoading}

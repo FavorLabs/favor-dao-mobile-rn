@@ -9,6 +9,7 @@ import JoinButton from "./JoinButton";
 import {useEffect, useState} from "react";
 import DaoApi from "../services/DAOApi/Dao";
 import Toast from "react-native-toast-message";
+import {strings} from "../locales/i18n";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -34,7 +35,7 @@ const DAOInfo: React.FC<Props> = (props) => {
       const { data } = await DaoApi.bookmark(url, daoInfo.id);
       if(data.data) {
         setJoinStatus(data.data.status);
-        if(data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
+        if(data.data.status) Toast.show({type: 'info', text1: strings('VideoPlayScreen.Toast.JoinSuccess')});
       }
 
     } catch (e) {
@@ -69,7 +70,7 @@ const DAOInfo: React.FC<Props> = (props) => {
             />
             <View style={styles.daoname}>
               <Text style={styles.title} numberOfLines={1}>{daoInfo.name}</Text>
-              <Text style={styles.subtitle} numberOfLines={1}>{daoInfo.follow_count} members</Text>
+              <Text style={styles.subtitle} numberOfLines={1}>{daoInfo.follow_count}{strings('DAOInfo.members')}</Text>
             </View>
             {
               dao?.id !== daoInfo.id && isShowJoined &&

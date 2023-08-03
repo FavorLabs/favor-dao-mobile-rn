@@ -8,6 +8,7 @@ import {getTime} from "../../../../utils/util";
 import {ActivityIndicator, FlatList, RefreshControl, ScrollView, StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import Screens from "../../../../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
+import {strings} from "../../../../locales/i18n";
 const RecordDistributed = () => {
     const navigation = useNavigation();
     const [userData,setUserData]=useState([])
@@ -68,7 +69,7 @@ const RecordDistributed = () => {
                 isLuckKing={false}
                 amount={item.amount}
                 time={getTime(item.modified_on)}
-                record={`${item.refund_status?'Expired':''} ${item.claim_count}/${item.total}`}
+                record={`${item.refund_status?strings('RecordDistributed.Expired'):''} ${item.claim_count}/${item.total}`}
             />
             </TouchableOpacity>
         );
@@ -83,8 +84,8 @@ const RecordDistributed = () => {
     },[years])
     return(
         <>
-            <RecordFavTSum type={1} setYears={setYears} years={years}/>
-            <Text style={[styles.text,{display:'flex'}]}> Distributed a total of {total_rows} luckypackets</Text>
+            <RecordFavTSum type={1} setYears={setYears} years={years} typeText={strings('RecordDistributed.distributed')}/>
+            <Text style={[styles.text,{display:'flex'}]}>{strings('RecordDistributed.Distributed')}{total_rows}{strings('RecordDistributed.luckypackets')}</Text>
             <View style={styles.body}>
                     <FlatList
                         data={userData}

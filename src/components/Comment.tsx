@@ -21,6 +21,7 @@ import CommentItem from "./CommentItem";
 import ReplyModal from "./ReplyModal";
 import analytics from "@react-native-firebase/analytics";
 import Favor from "../libs/favor";
+import {strings} from "../locales/i18n";
 
 export type Props = {
     postId: string;
@@ -69,7 +70,7 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
 
     const sendComment = async () => {
         if (!isLogin) return gotoLogin();
-        if (!comment.trim()) return Toast.show({type: 'info', text1: 'Please enter your comment!'});
+        if (!comment.trim()) return Toast.show({type: 'info', text1: strings('Comment.Toast.enterText')});
         if(isLoading) return ;
         try {
             setIsLoading(true);
@@ -104,7 +105,7 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
                 }
                 setList(list => [...list, commentInfo])
                 setComment('');
-                Toast.show({type: 'info', text1: 'comment success!'})
+                Toast.show({type: 'info', text1: strings('Comment.Toast.commentSuccess')})
                 analytics().logEvent('comment', {
                     platform: Platform.OS,
                     networkId: Favor.networkId,
@@ -141,14 +142,14 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
           )}
           ListEmptyComponent={
               <View style={styles.noReply}>
-                  <Text style={styles.noReplyText}>No comment yet</Text>
+                  <Text style={styles.noReplyText}>{strings('Comment.noReplyText')}</Text>
               </View>
           }
         />
         <View style={styles.footer}>
             <TextInput
               style={styles.footerInput}
-              placeholder={'Comment...'}
+              placeholder={strings('Comment.commentPlaceholder')}
               placeholderTextColor={Color.darkslategray_400}
               value={comment}
               onChangeText={(value) => {
@@ -157,7 +158,7 @@ const Comment = ({postId, postType, headerComponents = null}: Props) => {
             />
             <TouchableOpacity onPress={getDebounce(sendComment)}>
                 {
-                    isLoading ? <ActivityIndicator size="small"/> :<Text>Send</Text>
+                    isLoading ? <ActivityIndicator size="small"/> :<Text>{strings('Comment.SendButton')}</Text>
                 }
             </TouchableOpacity>
         </View>

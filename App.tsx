@@ -1,18 +1,14 @@
 import React, {useEffect, useRef, useState} from "react";
 import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Alert, AppState, Platform} from 'react-native';
+import {StyleSheet, Alert, AppState, Platform, ActivityIndicator, View} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import RootStack from "./src/navigation";
 import {store, persiStore} from './src/store';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
-import * as Font from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
 import {NavigationContainer} from "@react-navigation/native";
 import WalletBottomSheet from "./src/components/WalletBottomSheet";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import RNExitApp from 'react-native-exit-app';
 import FirebaseMessaging from "./src/components/FirebaseMessaging";
 import analytics from '@react-native-firebase/analytics';
 import {NavigationState} from "@react-navigation/routers";
@@ -26,30 +22,8 @@ import {Audio} from "expo-av";
 function App() {
   // AsyncStorage.clear().catch(console.error)
   useKeepAwake();
-  const [fontsLoaded, setFontsLoader] = useState(false);
-  const loadFont = async () => {
-    SplashScreen.preventAutoHideAsync();
-    try {
-      await Font.loadAsync({
-        'ABeeZee_regular': require('./src/assets/fonts/ABeeZee_regular.ttf'),
-        'Inter_bold': require('./src/assets/fonts/Inter_bold.ttf'),
-        'Inter_light': require('./src/assets/fonts/Inter_light.ttf'),
-        'Inter_medium': require('./src/assets/fonts/Inter_medium.ttf'),
-        'Inter_regular': require('./src/assets/fonts/Inter_regular.ttf'),
-        'Inter_semibold': require('./src/assets/fonts/Inter_semibold.ttf'),
-      });
-    } catch (e) {
-      console.warn('error', e);
-    } finally {
-      console.log('loaded')
-      SplashScreen.hideAsync();
-      setFontsLoader(true);
-    }
-  }
-
   useEffect(() => {
     async function fetch() {
-      await loadFont().catch(Alert.alert);
       Audio.setAudioModeAsync({
         playThroughEarpieceAndroid: false,
         shouldDuckAndroid: true
@@ -127,8 +101,6 @@ function App() {
     }
   };
 
-  if (!fontsLoaded) return null;
-
   return (
     <Provider store={store}>
       <PersistGate persistor={persiStore}>
@@ -161,5 +133,11 @@ export default function HeadlessCheck({isHeadless}: { isHeadless: boolean }) {
 const styles = StyleSheet.create({
   container: {
     //
-  }
+  },
+  loader: {
+    backgroundColor: '#fff',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

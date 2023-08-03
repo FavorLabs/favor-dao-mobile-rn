@@ -18,6 +18,7 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 import ImageApi from "../services/DAOApi/Image";
 import {useResourceUrl} from "../utils/hook";
 import LoadingSpinner from "./LoadingSpinner";
+import {strings} from "../locales/i18n";
 
 export type Props = {
   setVideo: React.Dispatch<React.SetStateAction<string>>;
@@ -44,7 +45,6 @@ type FavorType = {
 
 const UploadVideo: React.FC<Props> = (props) => {
   const {setVideo, thumbnail, setThumbnail, autoThumbnail, setAutoThumbnail} = props;
-  const dispatch = useDispatch();
   const imagesResUrl = useResourceUrl('images');
 
   const [showSelect, setShowSelect] = useState<boolean>(true);
@@ -55,18 +55,8 @@ const UploadVideo: React.FC<Props> = (props) => {
   const [videoSize, setVideoSize] = useState<number>(0);
   const [videoDuration, setVideoDuration] = useState<number | null>(0);
 
-  // const { api, debugApi, ws, config } = useSelector((state: Models) => state.global);
   // @ts-ignore
   const {api, debugApi, ws, config} = Favor as FavorType;
-
-  useEffect(() => {
-    // dispatch({
-    //   type: 'global/updateState',
-    //   payload: {
-    //     ws: null
-    //   }
-    // })
-  }, []);
 
   const init = () => {
     setProgressValue(0);
@@ -85,7 +75,6 @@ const UploadVideo: React.FC<Props> = (props) => {
       compressVideoPreset: 'Passthrough'
     }).then(async video => {
       setShowSelect(false);
-      console.log('video', video);
       if (!checkVideoSize(video)) return;
       setVideoName(video.filename as string);
       setVideoSize(video.size);
@@ -104,7 +93,7 @@ const UploadVideo: React.FC<Props> = (props) => {
     if (config?.videoLimitSize && (video.size / 1024 > config.videoLimitSize)) {
       Toast.show({
         type: 'info',
-        text1: `Video needs to be less than ${getSize(config.videoLimitSize, 1)}`
+        text1: `${strings('UploadVideo.Toast.VideoSize')}${getSize(config.videoLimitSize, 1)}`
       })
       return false;
     } else {
@@ -144,7 +133,7 @@ const UploadVideo: React.FC<Props> = (props) => {
 
     let storageTimer: NodeJS.Timer | null = null;
     let downloadTimer: NodeJS.Timer | null = null;
-    if (!ws) throw new Error('Websocket not connected');
+    if (!ws) throw new Error(strings('UploadVideo.throw.wsError'));
 
     return new Promise((resolve: UploadResolve, reject) => {
       const downloadFailed = () => {
@@ -165,12 +154,12 @@ const UploadVideo: React.FC<Props> = (props) => {
               return reject(err || res?.error?.message);
             }
             if (!res) {
-              return reject('JsonPpcResponse is undefined');
+              return reject(strings('UploadVideo.throw.jsonError'));
             }
             storageResult = res.result;
             console.log('storageResult', storageResult);
             storageTimer = setTimeout(() => {
-              reject('Failed to connect to the P2P network');
+              reject(strings('UploadVideo.throw.p2pNetworkError'));
             }, 1000 * 20);
             ws.on(storageResult, async (res: any) => {
               console.log('storageArr', res);
@@ -197,11 +186,11 @@ const UploadVideo: React.FC<Props> = (props) => {
         overlay = connected.filter((item) => bad[item] < 2 || !bad[item])[0];
         console.log('overlay', overlay);
         if (!overlay) {
-          reject('Failed to connect to the P2P network');
+          reject(strings('UploadVideo.throw.p2pNetworkError'));
           return;
         }
         if (downloadResult) {
-          setStatusTip('Switching nodes for upload');
+          setStatusTip(strings('UploadVideo.statusTip.Switching'));
         }
         let res = null;
         try {
@@ -228,7 +217,7 @@ const UploadVideo: React.FC<Props> = (props) => {
         console.log('progress', p);
         if (p === 100) {
           resolve({
-            text: 'Upload successful',
+            text: strings('UploadVideo.statusTip.UploadSuccessful'),
             overlay,
           });
           return;
@@ -267,7 +256,7 @@ const UploadVideo: React.FC<Props> = (props) => {
           console.log('download', res);
           let downloadData = res.find((item) => item.Overlay === overlay);
           if (!downloadData) return;
-          setStatusTip('Uploading the file to the P2P storage node');
+          setStatusTip(strings('UploadVideo.statusTip.UploadingP2P'));
           // @ts-ignore
           clearTimeout(downloadTimer);
           downloadTimer = setTimeout(() => {
@@ -284,7 +273,7 @@ const UploadVideo: React.FC<Props> = (props) => {
           console.log('progress', p);
           if (p === 100) {
             resolve({
-              text: 'Upload successful',
+              text: strings('UploadVideo.statusTip.UploadSuccessful'),
               overlay,
             });
           }
@@ -294,7 +283,7 @@ const UploadVideo: React.FC<Props> = (props) => {
       ws.on('choiceOverlay', choiceOverlay);
       ws.on('chunkInfoSubscribe', chunkInfoSubscribe);
       ws.on('download', download);
-      setStatusTip('Uploading the file to the P2P storage node');
+      setStatusTip(strings('UploadVideo.statusTip.UploadingP2P'));
       ws.emit('groupSubscribe');
     }).finally(() => {
       if (storageResult) {
@@ -331,7 +320,7 @@ const UploadVideo: React.FC<Props> = (props) => {
   const uploadVideo = async (video: Video) => {
     try {
       setUploading(true);
-      setStatusTip('Uploading the file to local node');
+      setStatusTip(strings('UploadVideo.statusTip.UploadingLocal'));
 
       await Api.observeStorageGroup(api, config.storeGroup, config.storeNodes);
 
@@ -357,7 +346,7 @@ const UploadVideo: React.FC<Props> = (props) => {
         SessionStorage.setItem('uploaded_list', JSON.stringify(uploadedList));
       } else {
         setProgressValue(100);
-        setStatusTip('Upload successful');
+        setStatusTip(strings('UploadVideo.statusTip.UploadSuccessful'));
         Toast.show({type: 'success', text1: 'Upload successful'});
       }
       setVideo(`${hash}?oracles=${uploadOverlay}`);
@@ -384,7 +373,7 @@ const UploadVideo: React.FC<Props> = (props) => {
                 source={require("../assets/uploadcloud2.png")}
               />
               <Text style={styles.tips}>
-                Upload Video
+                {strings('UploadVideo.UploadVideo')}
               </Text>
             </TouchableOpacity>
           </View>

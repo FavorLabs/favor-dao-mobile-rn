@@ -10,6 +10,7 @@ import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import TextParsed from "./TextParsed";
 import Toast from "react-native-toast-message";
+import {strings} from "../locales/i18n";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -46,9 +47,9 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if(showMore) {
-      setMoreText('Show less');
+      setMoreText(strings('DaoCardItem.ShowLess'));
     } else {
-      setMoreText('Show More');
+      setMoreText(strings('DaoCardItem.SeeMore'));
     }
   },[showMore])
 
@@ -58,7 +59,7 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
       setBtnLoading(true);
       const { data } = await DaoApi.bookmark(url, daoInfo.id);
       setIsJoin(data.data.status);
-      if(data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
+      if(data.data.status) Toast.show({type: 'info', text1: strings('VideoPlayScreen.Toast.JoinSuccess')});
     } catch (e) {
       if (e instanceof Error) console.error(e.message);
     } finally {
@@ -90,7 +91,7 @@ const DaoInfoHeader: React.FC<Props> = (props) => {
           />
           <View style={styles.topLeftRight}>
             <Text style={styles.name} numberOfLines={1}>{daoInfo.name}</Text>
-            <Text style={styles.joined} numberOfLines={1}>joined: {daoInfo.follow_count}</Text>
+            <Text style={styles.joined} numberOfLines={1}>{strings('DAO.Joined')}: {daoInfo.follow_count}</Text>
           </View>
         </View>
 

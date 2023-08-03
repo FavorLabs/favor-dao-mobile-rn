@@ -4,6 +4,7 @@ import {Color, FontSize, FontFamily} from "../GlobalStyles";
 import AgreeCheckBox from "./AgreeCheckbox";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../navigation/RouteNames";
+import {strings} from "../locales/i18n";
 
 type Props = {
     value: boolean
@@ -20,9 +21,9 @@ const ProtocolRadioSelect = ({value, setValue}: Props) => {
         <View style={styles.parent}>
             <AgreeCheckBox value={value} setValue={setValue}/>
             <View style={styles.description}>
-                <Text style={styles.iHaveCarefully} numberOfLines={1}>{`I have carefully read and agree to `}</Text>
+                <Text style={styles.iHaveCarefully} numberOfLines={1}>{strings('CreateWalletScreen.ProtocolRadioSelect.text')}</Text>
                 <TouchableOpacity onPress={toUserAgreement}>
-                    <Text style={styles.theUserAgreement}>the user agreement</Text>
+                    <Text style={styles.theUserAgreement}>{strings('CreateWalletScreen.ProtocolRadioSelect.theUserAgreement')}</Text>
                 </TouchableOpacity>
             </View>
         </View>

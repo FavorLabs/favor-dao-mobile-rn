@@ -11,6 +11,7 @@ import Models from "../declare/storeTypes";
 import Screens from "../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
 import Toast from "react-native-toast-message";
+import {strings} from "../locales/i18n";
 
 type PostDetailHeaderType = {
   postInfo: PostInfo | null;
@@ -40,7 +41,7 @@ const PostDetailHeader = ({
       try {
         const { data } = await DaoApi.bookmark(url, postInfo.dao.id);
         setIsJoin(data.data.status);
-        if(data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
+        if(data.data.status) Toast.show({type: 'info', text1: strings('PostDetailScreen.PostDetailHeader.Toast.JoinSuccess')});
         setBtnLoading(false)
       } catch (e) {
         if (e instanceof Error) console.error(e.message);
@@ -61,7 +62,7 @@ const PostDetailHeader = ({
 
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
     // @ts-ignore
-    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : postInfo?.dao , type : 'Mixed'});
+    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : postInfo?.dao , type : strings('FeedsOfDaoTabBar.Mixed')});
     event.stopPropagation();
   };
 

@@ -28,6 +28,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import {updateState as globalUpdateState} from "../../../store/notify";
 import NoDataShow from "../../../components/NoDataShow";
+import {strings} from "../../../locales/i18n";
 
 const NotifyScreen = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -165,14 +166,14 @@ const NotifyScreen = () => {
     <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
       <View style={styles.container}>
         <View style={styles.frameParent}>
-          <Text style={styles.title}>Notifications</Text>
+          <Text style={styles.title}>{strings('Notify.title')}</Text>
           <View style={styles.systemBox}>
             {
               systemList.map(item => (
                 <TouchableOpacity key={item.id} style={{alignItems: 'center'}} onPress={() => {
                   gotoNotifications({
                     id: item.id,
-                    name: item.name,
+                    name: strings(`Notify.${item.name}`),
                     avatar: item.avatar,
                     isSystem: item.key === 'sys',
                     key: item.key
@@ -184,7 +185,7 @@ const NotifyScreen = () => {
                       !!item.unreadCount && <View style={styles.unread}></View>
                     }
                   </View>
-                  <Text style={styles.iconText}>{item.name}</Text>
+                  <Text style={styles.iconText}>{strings(`Notify.${item.name}`)}</Text>
                 </TouchableOpacity>
               ))
             }
@@ -192,7 +193,7 @@ const NotifyScreen = () => {
           </View>
         </View>
         <View style={styles.list}>
-          { list.length ? <Text style={styles.text}>Message list</Text> : <></> }
+          { list.length ? <Text style={styles.text}>{strings('Notify.MessageList')}</Text> : <></> }
           <FlatList data={list}
                     renderItem={({item}) => (
                       <View style={[styles.notifyBox, styles.flexRC]}>

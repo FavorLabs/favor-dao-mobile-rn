@@ -3,6 +3,7 @@ import {Image, StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, Aler
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
 import {updateState as globalUpdateState} from "../store/global";
 import {useDispatch} from "react-redux";
+import {strings} from "../locales/i18n";
 
 type Props = {
   isJoin: boolean;
@@ -17,15 +18,15 @@ const VideoJoinButton: React.FC<Props> = (props) => {
   const onClick = async () => {
     if(isJoin) {
       Alert.alert(
-        'Cancel Join',
-        'Are you sure you want to cancel joining？',
+        strings('JoinButton.alert.title'),
+        strings('JoinButton.alert.message'),
         [
           {
-            text: 'No',
+            text: strings('JoinButton.alert.No'),
             style: 'cancel'
           },
           {
-            text: 'Yes',
+            text: strings('JoinButton.alert.Yes'),
             onPress: async () => {
               await handle();
               dispatch(globalUpdateState({
@@ -54,7 +55,7 @@ const VideoJoinButton: React.FC<Props> = (props) => {
         isLoading ? <ActivityIndicator size="small"/> :
         !isJoin ?
           <View style={[styles.joinButton,styles.join]}>
-            <Text style={[styles.joinText, styles.join]}>Join</Text>
+            <Text style={[styles.joinText, styles.join]}>{strings('JoinButton.Join')}</Text>
           </View>
           :
           <Image

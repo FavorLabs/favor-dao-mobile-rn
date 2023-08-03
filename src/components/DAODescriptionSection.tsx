@@ -6,6 +6,7 @@ import UploadImage from "./UploadImage";
 import {DaoInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 import TextInputParsedBlock from "./TextInputParsedBlock";
+import {strings} from "../locales/i18n";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -38,7 +39,7 @@ const DAODescriptionSection: React.FC<Props> = (props) => {
         <View style={styles.daoname}>
           <Text style={styles.title} numberOfLines={1}>{daoInfo.name}</Text>
           <Text style={[styles.subtitle, styles.subtitleTypo]}>
-            { daoInfo.follow_count } members
+            { daoInfo.follow_count } {strings('DAODescriptionSection.members')}
           </Text>
         </View>
       </View>
@@ -48,12 +49,12 @@ const DAODescriptionSection: React.FC<Props> = (props) => {
       <UploadImage imageType={'banner'} isShowSelector={false} upImage={daoInfo.banner} setUpImage={setBanner} multiple={false}/>
 
       <TextInputParsedBlock
-        title={'DAO description'}
+        title={strings('DAODescriptionSection.DAODescription')}
         value={daoDescription}
         setValue={setDaoDescription}
         multiline={true}
         // parsed={true}
-        placeholder={'Your description...'}
+        placeholder={strings('DAODescriptionSection.DAODescriptionPlaceholder')}
       />
 
     </View>

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import VideoDetailButton from "../components/VideoDetailButton";
 import {useNavigation, useRoute} from "@react-navigation/native";
-import {FontSize, FontFamily, Color, Border} from "../GlobalStyles";
+import {FontSize, Color} from "../GlobalStyles";
 import {useIsLogin, useResourceUrl, useUrl} from "../utils/hook";
 import PostApi from "../services/DAOApi/Post";
 import {PostInfo} from "../declare/api/DAOApi";
@@ -29,9 +29,9 @@ import Screens from "../navigation/RouteNames";
 import DaoApi from "../services/DAOApi/Dao";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
+import {strings} from "../locales/i18n";
 
-export type Props = {};
-const VideoPlayScreen: React.FC<Props> = (props) => {
+const VideoPlayScreen = () => {
   const windowHeight = Dimensions.get('window').height;
   const navigation = useNavigation();
   const route = useRoute();
@@ -106,7 +106,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
     // @ts-ignore
     navigation.navigate(Screens.FeedsOfDAO, {
       daoInfo: videoData?.author_dao.avatar ? videoData?.author_dao : videoData?.dao,
-      type: 'Mixed'
+      type: strings('FeedsOfDaoTabBar.Mixed')
     });
     event.stopPropagation();
   };
@@ -129,7 +129,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
       try {
         const {data} = await DaoApi.bookmark(url, videoData.dao.id);
         setIsJoin(data.data.status);
-        if (data.data.status) Toast.show({type: 'info', text1: 'Join success!'});
+        if (data.data.status) Toast.show({type: 'info', text1: strings('VideoPlayScreen.Toast.JoinSuccess')});
       } catch (e) {
         if (e instanceof Error) console.error(e.message);
       } finally {
@@ -271,7 +271,7 @@ const VideoPlayScreen: React.FC<Props> = (props) => {
             }
             <TouchableOpacity onPress={seeMoreClick}>
               <Text style={[styles.tag, styles.showMore]}>
-                {seeMoreStatus ? 'Show Less' : 'See More'}
+                {seeMoreStatus ? strings('VideoPlayScreen.ShowLess') : strings('VideoPlayScreen.SeeMore')}
               </Text>
             </TouchableOpacity>
           </View>

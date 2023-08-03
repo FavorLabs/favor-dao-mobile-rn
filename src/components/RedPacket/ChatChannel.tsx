@@ -10,6 +10,7 @@ import {Color, FontFamily, FontSize, Border, Padding} from "../../GlobalStyles";
 import {addDecimal} from "../../utils/balance";
 import {useState} from "react";
 import {toNumber} from "lodash";
+import {strings} from "../../locales/i18n";
 
 type ChatChannelType = {
   isShowAvatar?:boolean
@@ -63,7 +64,7 @@ const ChatChannel = ({avatar, channelName, amount, isLuckKing, record,time,isSho
                           source={require("../../assets/luck-king.png")}
                       />
                       <Text style={styles.luckText}>
-                          Luck King
+                        {strings('ChatChannel.LuckKing')}
                       </Text>
                   </View>
               }
@@ -98,7 +99,6 @@ const styles = StyleSheet.create({
   },
   channelnameTypo: {
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.headingH613,
     fontWeight: "500",
     fontSize: FontSize.bodyBody17_size,
   },

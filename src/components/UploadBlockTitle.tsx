@@ -2,6 +2,7 @@ import React, {useRef, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from "react-native";
 import {Picker} from "@react-native-picker/picker";
 import {Border, Color, FontFamily, FontSize} from "../GlobalStyles";
+import {strings} from "../locales/i18n";
 
 export type Props = {
   type: string;
@@ -32,7 +33,7 @@ const UploadBlocakTitle: React.FC<Props> = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.titleWrap}>
-        <Text style={styles.title}>Upload { type }</Text>
+        <Text style={styles.title}>{strings('UploadImage.UploadTitle.UploadText')}{strings(`UploadImage.UploadTitle.${type}`)}</Text>
         { isShowSelector && <TouchableOpacity onPress={openPicker}>
             <View style={styles.selector}>
                 <Image

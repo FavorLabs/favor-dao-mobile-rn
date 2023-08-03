@@ -10,6 +10,7 @@ import {DaoInfo} from "../declare/api/DAOApi";
 import {addDecimal, mulDecimal} from "../utils/balance";
 import {getDebounce} from "../utils/util";
 import Toast from "react-native-toast-message";
+import {strings} from "../locales/i18n";
 
 type Props = {
   daoMode: number;
@@ -25,7 +26,7 @@ const ContentInfoContainer: React.FC<Props> = (props) => {
       <SwitchButton mode={daoMode} setMode={setDaoMode} />
       <View style={[styles.price, styles.priceFlexBox]}>
         <Text style={[styles.membershipPrice, styles.textFlexBox]}>
-          Subscribe Price
+          {strings('ContentInfoContainer.SubscribePrice')}
         </Text>
         <View style={styles.frameParent}>
           <View style={styles.rectangleParent}>
@@ -33,7 +34,7 @@ const ContentInfoContainer: React.FC<Props> = (props) => {
             <TextInput
               // keyboardType="numeric"
               style={styles.searchInput}
-              placeholder={'Search'}
+              placeholder={strings('ContentInfoContainer.placeholder')}
               value={daoPrice}
               onChangeText={text => setDaoPrice(text)}
             />
@@ -77,9 +78,7 @@ const styles = StyleSheet.create({
   text: {
     top: 12,
     left: 10,
-    fontSize: FontSize.capsCaps310SemiBold_size,
     fontWeight: "300",
-    fontFamily: FontFamily.interLight,
     position: "absolute",
   },
   rectangleParent: {

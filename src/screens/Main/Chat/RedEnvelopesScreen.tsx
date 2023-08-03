@@ -5,6 +5,7 @@ import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import {RETabs} from "./RedEnvelopesTab/RETabs";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import {useRoute} from "@react-navigation/native";
+import {strings} from "../../../locales/i18n";
 
 const RedEnvelopesScreen = () => {
     const route = useRoute();
@@ -14,7 +15,7 @@ const RedEnvelopesScreen = () => {
         <BackgroundSafeAreaView headerStyle={{backgroundColor:'#F8F8F8'}}>
             <View style={{flex:1,backgroundColor:'#F8F8F8'}}>
                 <View style={styles.header}>
-                    <FavorDaoNavBar title="LuckyPacket"/>
+                    <FavorDaoNavBar title={strings('RedEnvelopesScreen.title')}/>
                 </View>
                 <View style={styles.content}>
                     <View style={styles.feedsOfDao}>

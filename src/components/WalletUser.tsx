@@ -16,6 +16,7 @@ import BottomSheetModal from "./BottomSheetModal";
 import Clipboard from '@react-native-clipboard/clipboard';
 import SvgIcon from "./SvgIcon";
 import SettingBackupIcon from '../assets/svg/Setting/settingBackupIcon.svg';
+import {strings} from "../locales/i18n";
 
 type Props = {};
 const WalletUser: React.FC<Props> = (props) => {
@@ -34,7 +35,7 @@ const WalletUser: React.FC<Props> = (props) => {
     if (!password) {
       return Toast.show({
         type: 'error',
-        text1: 'No password entered!'
+        text1: strings('WalletUser.Toast.NoPassword')
       });
     }
     ;
@@ -54,7 +55,7 @@ const WalletUser: React.FC<Props> = (props) => {
     } catch (e) {
       return Toast.show({
         type: 'error',
-        text1: 'Password Invalid!'
+        text1: strings('WalletUser.Toast.PasswordInvalid')
       });
     }
   };
@@ -63,9 +64,9 @@ const WalletUser: React.FC<Props> = (props) => {
     Clipboard.setString(user?.address as string);
     const content = await Clipboard.getString();
     if (content === user?.address) {
-      Toast.show({type: 'info', text1: 'copy success!'});
+      Toast.show({type: 'info', text1: strings('WalletUser.Toast.copySuccess')});
     } else {
-      Toast.show({type: 'error', text1: 'copy error!'});
+      Toast.show({type: 'error', text1: strings('WalletUser.Toast.copyError')});
     }
   };
 
@@ -94,7 +95,7 @@ const WalletUser: React.FC<Props> = (props) => {
             <View style={{marginRight: 6}}>
               <SvgIcon svg={<SettingBackupIcon/>} width={15} height={15} />
             </View>
-            <Text style={[styles.xc8320fTypo]} numberOfLines={1}>Backup</Text>
+            <Text style={[styles.xc8320fTypo]} numberOfLines={1}>{strings('WalletUser.Backup')}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -104,15 +105,15 @@ const WalletUser: React.FC<Props> = (props) => {
           <Text
             style={styles.forMnemonic}>For {WalletController.type === "privateKey" ? 'private key' : 'mnemonic'}</Text>
           <TextInputBlock
-            title={'Password'}
-            placeholder={`Please enter passwords`}
+            title={strings('WalletUser.Password')}
+            placeholder={strings('WalletUser.PasswordPlaceholder')}
             value={password}
             setValue={setPassword}
             secureTextEntry={true}
           />
           <TouchableOpacity style={{marginTop: 20}} onPress={Confirm}>
             <FavorDaoButton
-              textValue="Confirm"
+              textValue={strings('WalletUser.Confirm')}
               frame1171275771BackgroundColor="#ff8d1a"
               cancelColor="#fff"
             />

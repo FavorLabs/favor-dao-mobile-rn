@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Text, StyleSheet, Image, View, TouchableOpacity} from "react-native";
 import { Color, FontSize, FontFamily, Border, Padding } from "../GlobalStyles";
+import {strings} from "../locales/i18n";
 
 type Props = {
   member: number;
@@ -11,10 +12,10 @@ const SingleChoice: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.titleParent}>
-      <Text style={[styles.title, styles.titleFlexBox]}>Permission</Text>
+      <Text style={[styles.title, styles.titleFlexBox]}>{strings('SingleChoice.Permission')}</Text>
       <View style={[styles.frameParent, styles.frameParentFlexBox]}>
         <View style={styles.descriptionFlexBox}>
-          <Text style={[styles.description, styles.titleFlexBox]}>Free</Text>
+          <Text style={[styles.description, styles.titleFlexBox]}>{strings('SingleChoice.Free')}</Text>
           <TouchableOpacity onPress={() => setMember(0) }>
             <Image
               style={[styles.checkboxIcon, styles.frameParentFlexBox]}
@@ -26,7 +27,7 @@ const SingleChoice: React.FC<Props> = (props) => {
         <View style={styles.frameChild} />
         <View style={[styles.descriptionGroup, styles.descriptionFlexBox]}>
           <Text style={[styles.description, styles.titleFlexBox]}>
-            Subscribe member
+            {strings('SingleChoice.SubscribeMember')}
           </Text>
           <TouchableOpacity onPress={() => setMember(1) }>
             <Image

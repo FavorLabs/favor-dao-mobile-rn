@@ -9,6 +9,7 @@ import {Config} from "../declare/global";
 import {Chunk, FileInfo} from '../declare/api/nodeApi';
 import {Color} from "../GlobalStyles";
 import ChunkTooltip from "./ChunkTooltip";
+import {strings} from "../locales/i18n";
 
 export type Props = {
     videoHash: string;
@@ -135,18 +136,18 @@ const ChunkSourceInfo: React.FC<Props> = (props) => {
       <View style={styles.container}>
           {currentVideoInfo && (
             <View style={styles.hashId}>
-                <Text style={styles.rcid}>RCID:{' '}</Text>
+                <Text style={styles.rcid}>{strings('ChunkSourceInfo.RCID')}:{' '}</Text>
                 <Text style={styles.hashText}>{currentVideoInfo.rootCid}</Text>
             </View>
           )}
           <View style={styles.chunkSourceInfo}>
-              <Text style={styles.sourceInfoTitle}>Chunk Source Info</Text>
+              <Text style={styles.sourceInfoTitle}>{strings('ChunkSourceInfo.ChunkSourceInfo')}</Text>
               <Text style={styles.chunkText}>{totalPercent.toFixed(2)}%</Text>
           </View>
           <View style={styles.sourceListWrap}>
               <ScrollView>
                   {
-                      loading ? <Text style={styles.loading}>Loading...</Text> : <View style={styles.sourceList}>
+                      loading ? <Text style={styles.loading}>{strings('ChunkSourceInfo.Loading')}</Text> : <View style={styles.sourceList}>
                           {chunkArr.map((item, index) => (
                             <View style={styles.sourceItem} key={item.overlay}>
                                 <View style={styles.sourceItemLeft}>

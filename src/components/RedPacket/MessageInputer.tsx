@@ -30,6 +30,7 @@ import SvgIcon from "../SvgIcon";
 import ChatSmail from '../../assets/svg/Chat/ChatSmail.svg'
 import ChatAdd from '../../assets/svg/Chat/ChatAdd.svg'
 import ChatToTop from '../../assets/svg/Chat/ChatToTop.svg'
+import {strings} from "../../locales/i18n";
 
 export type Props = {
   memberCount: number;
@@ -109,7 +110,7 @@ const MessageInputer: React.FC<Props> = (props) => {
         messageProcess(mediaMessage, 'image');
       } else return Toast.show({
         type: 'error',
-        text1: 'PickedImage error',
+        text1: strings('MessageInputer.Toast.pickImageError'),
       });
     });
   };
@@ -141,7 +142,7 @@ const MessageInputer: React.FC<Props> = (props) => {
     if (config?.videoLimitSize && (video.size / 1024 > config.videoLimitSize)) {
       Toast.show({
         type: 'info',
-        text1: `Video needs to be less than ${getSize(config.videoLimitSize, 1)}`
+        text1: `${strings('MessageInputer.Toast.pickImageError')}${getSize(config.videoLimitSize, 1)}`
       })
       return false;
     } else {
@@ -188,10 +189,10 @@ const MessageInputer: React.FC<Props> = (props) => {
         granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA,
           {
-            title: 'CometChat Camera Permission',
-            message: 'CometChat needs access to your camera ',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK',
+            title: strings('MessageInputer.takePhoto.title'),
+            message: strings('MessageInputer.takePhoto.message'),
+            buttonNegative: strings('MessageInputer.takePhoto.buttonNegative'),
+            buttonPositive: strings('MessageInputer.takePhoto.buttonPositive'),
           },
         );
       }
@@ -355,7 +356,7 @@ const MessageInputer: React.FC<Props> = (props) => {
         <View style={styles.flexBox}>
           <TextInput
             style={styles.textInp}
-            placeholder={'Message'}
+            placeholder={strings('MessageInputer.placeholder')}
             value={inputValue}
             onChangeText={text => setInputValue(text)}
             onFocus={closeBottom}
@@ -377,34 +378,34 @@ const MessageInputer: React.FC<Props> = (props) => {
               <View style={styles.flexToAct}>
                   <BottomItem
                       fn={uploadImage}
-                      title={'Picture'}
+                      title={strings('MessageInputer.Picture')}
                       imageUrl={require("../../assets/ChatPicIcon.png")}
                   />
                   <BottomItem
                       fn={() => takePhoto('photo')}
-                      title={'Capture'}
+                      title={strings('MessageInputer.Capture')}
                       imageUrl={require("../../assets/ChatCaptureIcon.png")}
                   />
                   <BottomItem
                       fn={uploadVideo}
-                      title={'Video'}
+                      title={strings('MessageInputer.Video')}
                       imageUrl={require("../../assets/ChatVideoIcon.png")}
                   />
               </View>
               <View style={styles.flexToAct}>
                   <BottomItem
                       fn={() => takePhoto('video')}
-                      title={'Record'}
+                      title={strings('MessageInputer.Record')}
                       imageUrl={require("../../assets/ChatRecordIcon.png")}
                   />
                   <BottomItem
                       fn={uploadFile}
-                      title={'File'}
+                      title={strings('MessageInputer.File')}
                       imageUrl={require("../../assets/ChatFileIcon.png")}
                   />
                   <BottomItem
                       fn={luckyPacketFun}
-                      title={'LuckyPacket'}
+                      title={strings('MessageInputer.LuckyPacket')}
                       imageUrl={require("../../assets/ChatLuckyPacketIcon.png")}
                   />
               </View>

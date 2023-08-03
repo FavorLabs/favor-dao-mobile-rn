@@ -8,6 +8,7 @@ import ImageApi from "../services/DAOApi/Image";
 import UploadBlockTitle from "./UploadBlockTitle";
 import Loading from "./Loading";
 import Toast from "react-native-toast-message";
+import {strings} from "../locales/i18n";
 
 export type Props = {
   imageType: string;
@@ -60,7 +61,7 @@ const UploadImage: React.FC<Props> = (props) => {
         if(pickedImage) return(imageSetting(pickedImage));
         else return Toast.show({
           type: 'error',
-          text1: 'PickedImage error',
+          text1: `${strings('UploadImage.Toast.PickedImageError')}`,
         });
       });
     // } else {
@@ -161,13 +162,13 @@ const UploadImage: React.FC<Props> = (props) => {
                 source={require("../assets/uploadcloud2.png")}
               />
               <Text style={styles.tips}>
-                { multiple ? `Upload ${ imageType } (s)` : `Upload ${ imageType }` }
+                { multiple ? `${strings('UploadImage.UploadTitle.UploadText')}${strings(`UploadImage.UploadTitle.${imageType}`)}${strings(`UploadImage.UploadTitle.s`)}` : `${strings('UploadImage.UploadTitle.UploadText')}${strings(`UploadImage.UploadTitle.${imageType}`)}` }
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       )}
-      <Loading visible={visible} text={'Image uploading in progress'}/>
+      <Loading visible={visible} text={strings('UploadImage.ImageUploading')}/>
     </View>
 
   );

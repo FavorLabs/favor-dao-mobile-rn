@@ -6,6 +6,7 @@ import {useDispatch} from "react-redux";
 import {updateState as searchUpdateState} from "../../../store/search";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import SearchHead from "../../../components/SearchHead";
+import {strings} from "../../../locales/i18n";
 
 const DAOScreen = () => {
   const dispatch = useDispatch()
@@ -22,7 +23,7 @@ const DAOScreen = () => {
       <View style={styles.container}>
         <View style={styles.frameParent}>
           <SearchHead
-              tittle={'DAO'}
+              tittle={strings('DAO.tittle')}
               getSearchBlur={getSearch}
               searchValue={searchValue}
               setSearchValue={setSearchValue}

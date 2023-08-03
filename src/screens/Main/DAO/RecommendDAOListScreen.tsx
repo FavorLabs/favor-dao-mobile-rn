@@ -21,6 +21,7 @@ import PublishContainer from "../../../components/PublishContainer";
 import Chats from "../../../components/Chats";
 import BottomSheetModal from "../../../components/BottomSheetModal";
 import Toast from "react-native-toast-message";
+import {strings} from "../../../locales/i18n";
 
 const RecommendDAOListScreen = () => {
   const url = useUrl();
@@ -146,9 +147,9 @@ const RecommendDAOListScreen = () => {
         ListEmptyComponent={!postListArr.length && !refreshing ?
           <View style={styles.noData}>
             <NoDataShow
-              title={'No results found'}
+              title={strings('RecommendDAO.noDataTitle')}
               image={require('../../../assets/postlistNoData.png')}
-              description={`Please go to publish the content first`}
+              description={strings('RecommendDAO.noDataDescription')}
             />
           </View>
           : null}

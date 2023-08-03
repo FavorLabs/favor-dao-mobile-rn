@@ -17,6 +17,7 @@ import TextInputParsedBlock from "../components/TextInputParsedBlock";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import {strings} from "../locales/i18n";
 
 const QuoteEdit = () => {
   const navigation = useNavigation();
@@ -52,7 +53,7 @@ const QuoteEdit = () => {
     if (createDisable) {
       return Toast.show({
         type: 'info',
-        text1: 'Please complete all options',
+        text1: `${strings('QuoteEditScreen.Toast.optionError')}`,
       })
     }
     if (postLoading) return;
@@ -77,13 +78,13 @@ const QuoteEdit = () => {
       if (data.data) {
         Toast.show({
           type: 'info',
-          text1: 'Quote success!!',
+          text1: `${strings('QuoteEditScreen.Toast.QuoteSuccess')}`,
         })
         navigation.goBack();
       } else {
         Toast.show({
           type: 'info',
-          text1: 'Quote error!!',
+          text1: `${strings('QuoteEditScreen.Toast.QuoteError')}`,
         })
         setPostLoading(false);
       }
@@ -105,16 +106,16 @@ const QuoteEdit = () => {
       <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
 
         <FavorDaoNavBar
-          title="Create Quote"
+          title={strings('QuoteEditScreen.title')}
         />
         <ScrollView style={styles.scrollWrap}>
           <View style={[styles.instanceParent, styles.bottombuttonFlexBox]}>
             <TextInputParsedBlock
-              title={'WriteComments'}
+              title={strings('QuoteEditScreen.WriteCommentsTitle')}
               value={description}
               setValue={setDescription}
               multiline={true}
-              placeholder={'Please enter password here'}
+              placeholder={strings('QuoteEditScreen.WriteCommentsPlaceholder')}
             />
             <View style={[styles.instanceParent, styles.bottombuttonFlexBox]}>
               <QuotePreview postInfo={postInfo}/>
@@ -126,7 +127,7 @@ const QuoteEdit = () => {
             onPress={getDebounce(postHandle)}
           >
             <FavorDaoButton
-              textValue="Post"
+              textValue={strings('QuoteEditScreen.PostButton')}
               frame1171275771BackgroundColor="#ff8d1a"
               cancelColor="#fff"
               isLoading={postLoading}

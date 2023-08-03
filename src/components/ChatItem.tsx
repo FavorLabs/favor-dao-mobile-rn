@@ -18,6 +18,7 @@ import {useCallback, useState} from "react";
 import SvgIcon from "./SvgIcon";
 import ChatIcon from '../assets/svg/Dao/chatIcon.svg';
 import RightArrow from '../assets/svg/Dao/rightArrow.svg';
+import {strings} from "../locales/i18n";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -34,8 +35,8 @@ const ChatItem: React.FC<Props> = (props) => {
     if(isLoading) return ;
     if(isJoin === false){
       return Toast.show({
-        type:'info',
-        text1: 'You need to join this dao to enter the chat!!!'
+        type:'error',
+        text1: strings('DAOChats.ChatItem.toChatError')
       })
     }
     setIsLoading(true);
@@ -68,7 +69,7 @@ const ChatItem: React.FC<Props> = (props) => {
         <View style={styles.channelinfo}>
           <View style={[styles.channelnamelLasttime, styles.parentFlexBox]}>
             <Text style={[styles.channelname, styles.subtitleFlexBox]}>
-              General
+              {strings('DAOChats.ChatItem.General')}
             </Text>
             {/*<Text style={[styles.lastmsgtime, styles.nehaTypo]}>5d ago</Text>*/}
           </View>

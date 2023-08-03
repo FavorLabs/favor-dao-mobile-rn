@@ -19,6 +19,7 @@ import FavorDaoButton from "../components/FavorDaoButton";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import analytics from "@react-native-firebase/analytics";
 import Favor from "../libs/favor";
+import {strings} from "../locales/i18n";
 
 const CreateDAOScreen = () => {
   const url = useUrl();
@@ -48,13 +49,13 @@ const CreateDAOScreen = () => {
     if (createDisable) {
       return Toast.show({
         type: 'error',
-        text1: 'Please complete all options',
+        text1: `${strings('CreateDAOScreen.Toast.optionsError')}`,
       })
     }
     if(hasWhiteSpace(daoName)) {
       return Toast.show({
         type: 'error',
-        text1: 'No spaces allowed in dao name!',
+        text1: `${strings('CreateDAOScreen.Toast.nameError')}`,
       })
     }
     try {
@@ -72,7 +73,7 @@ const CreateDAOScreen = () => {
       if(data.data) {
         Toast.show({
           type: 'info',
-          text1: 'Create dao success!'
+          text1: `${strings('CreateDAOScreen.Toast.createSuccess')}`
         });
         dispatch(globalUpdateState({
           dao: data.data,
@@ -108,29 +109,29 @@ const CreateDAOScreen = () => {
     if(daoName.length > 26 ){
        Toast.show({
         type: 'error',
-        text1: 'DAO name is too lang!',
+        text1: `${strings('CreateDAOScreen.Toast.nameLang')}`,
       })
     }
   },[daoName])
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar title="Create DAO"/>
+        <FavorDaoNavBar title={strings('CreateDAOScreen.title')}/>
       <ScrollView style={styles.scrollWrap}>
         <TextInputBlock
-          title={'Name'}
+          title={strings('CreateDAOScreen.NameTitle')}
           value={daoName}
           setValue={setDaoName}
-          placeholder={'Please enter a name'}
+          placeholder={strings('CreateDAOScreen.NamePlaceholder')}
           maxLength={20}
         />
         <TextInputParsedBlock
-          title={'DAO description'}
+          title={strings('CreateDAOScreen.DAODescription')}
           value={daoDescription}
           setValue={setDaoDescription}
           multiline={true}
           // parsed={true}
-          placeholder={'Your description...'}
+          placeholder={strings('CreateDAOScreen.DAOPlaceholder')}
         />
         <UploadImage imageType={'avatar'} isShowSelector={false} setUpImage={setDaoAvatar} multiple={false}/>
         <UploadImage imageType={'banner'} isShowSelector={false} setUpImage={setBanner} multiple={false}/>
@@ -140,7 +141,7 @@ const CreateDAOScreen = () => {
       <View style={[styles.instanceParent, createDisable && { opacity: 0.5 }]}>
         <TouchableOpacity onPress={createHandle}>
           <FavorDaoButton
-            textValue="Create"
+            textValue={strings('CreateDAOScreen.CreateButton')}
             frame1171275771BackgroundColor="#ff8d1a"
             cancelColor="#fff"
             isLoading={btnLoading}

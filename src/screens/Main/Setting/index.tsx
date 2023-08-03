@@ -13,6 +13,7 @@ import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import VPNSetting from "../../../components/VPNSetting";
 import SvgIcon from "../../../components/SvgIcon";
 import UnionSetting from '../../../assets/svg/Setting/unionSetting.svg';
+import {strings} from "../../../locales/i18n";
 
 const SettingScreen = () => {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ const SettingScreen = () => {
     <BackgroundSafeAreaView showFooter={false} headerStyle={{backgroundColor: Color.whitesmoke_300}}>
       <View style={styles.container}>
         <View style={styles.titleWrapper}>
-          <Text style={styles.title}>Profile</Text>
+          <Text style={styles.title}>{strings('Setting.title')}</Text>
 
           <TouchableOpacity onPress={goToSetting} style={styles.settingIcon}>
             <SvgIcon svg={<UnionSetting/>} width={22} height={22}/>

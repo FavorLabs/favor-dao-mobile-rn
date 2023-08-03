@@ -4,6 +4,7 @@ import {getTime} from "../utils/util";
 import {Color, FontFamily} from "../GlobalStyles";
 import {CommentInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
+import {strings} from "../locales/i18n";
 
 export type Props = {
     style?: ViewStyle
@@ -29,7 +30,7 @@ const CommentItem = ({commentInfo, clickReplyHandel,style}: Props) => {
                     <TouchableOpacity onPress={() => {
                         clickReplyHandel?.();
                     }}>
-                        <Text style={styles.replyCount}>{commentInfo.replies.length} Replies</Text>
+                        <Text style={styles.replyCount}>{commentInfo.replies.length}{strings('Comment.CommentItem.Replies')}</Text>
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.replyTime}>{getTime(commentInfo.created_on)}</Text>

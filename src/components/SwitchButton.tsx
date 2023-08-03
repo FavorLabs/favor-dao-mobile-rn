@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import { Text, StyleSheet, Image, View } from "react-native";
 import { Switch } from '@rneui/themed';
 import { Color, FontFamily, FontSize } from "../GlobalStyles";
+import {strings} from "../locales/i18n";
 
 export type Props = {
   mode: number;
@@ -28,9 +29,9 @@ const SwitchButton: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.blockTitle}>Default Content Mode</Text>
+      <Text style={styles.blockTitle}>{strings('SwitchButton.Default')}</Text>
       <View style={styles.switchWrap}>
-        <Text style={styles.switchText}>Public</Text>
+        <Text style={styles.switchText}>{strings('SwitchButton.Public')}</Text>
         <Switch
           color={Color.orange}
           value={checked}
@@ -38,7 +39,7 @@ const SwitchButton: React.FC<Props> = (props) => {
             setMode(value ? 1 : 0);
           }}
         />
-        <Text style={styles.switchText}>Private</Text>
+        <Text style={styles.switchText}>{strings('SwitchButton.Private')}</Text>
       </View>
     </View>
   );

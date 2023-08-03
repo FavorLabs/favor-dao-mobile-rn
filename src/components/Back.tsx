@@ -8,6 +8,7 @@ import {
 import { FontSize, FontFamily, Color } from "../GlobalStyles";
 import SvgIcon from "./SvgIcon";
 import ChevronLeft from '../assets/svg/chevronLeft.svg';
+import {strings} from "../locales/i18n";
 
 type BackType = {
   /** Style props */
@@ -28,7 +29,7 @@ const Back = ({ backColor }: BackType) => {
   return (
     <View style={styles.back}>
       <SvgIcon svg={<ChevronLeft/>} width={24} height={24}/>
-      <Text style={[styles.back1, backStyle]}>Back</Text>
+      <Text style={[styles.back1, backStyle]}>{strings('FavorDaoNavBar.back')}</Text>
     </View>
   );
 };

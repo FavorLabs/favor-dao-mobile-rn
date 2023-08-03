@@ -20,11 +20,12 @@ import ProfileInActiveSvg from '../assets/svg/profile_inactive.svg';
 import {Color} from "../GlobalStyles";
 import {useIsLogin} from "../utils/hook";
 import {CometChatGroupListWithMessages} from "../cometchat-pro-react-native-ui-kit/CometChatWorkspace"
+import { strings } from '../locales/i18n';
 
 const BottomTabBar = createBottomTabNavigator();
 
 export function BottomTabNavigator() {
-    const [isLogin, gotoLogin] = useIsLogin()
+    const [isLogin, gotoLogin] = useIsLogin();
     return (
       <BottomTabBar.Navigator
         initialRouteName={Screens.Main.Feeds}
@@ -32,7 +33,6 @@ export function BottomTabNavigator() {
             headerShown: false,
             tabBarActiveTintColor: Color.color,
         }}
-        // safeAreaInsets={{bottom: 20}}
         screenListeners={({navigation, route}) => ({
             tabPress: e => {
                 if (route.name !== 'Feeds' && !isLogin) {
@@ -46,7 +46,7 @@ export function BottomTabNavigator() {
             name={Screens.Main.Feeds}
             component={FeedsScreen}
             options={{
-                tabBarLabel: 'Feeds',
+                tabBarLabel: `${strings('BottomTabBar.Feeds')}`,
                 tabBarIcon: ({focused, color, size}) => (
                   <SvgIcon svg={focused ? <FeedsActiveSvg/> : <FeedsInActiveSvg/>}/>
                 )
@@ -56,7 +56,7 @@ export function BottomTabNavigator() {
             name={Screens.Main.Chat}
             component={ChatScreen}
             options={{
-                tabBarLabel: 'Chat',
+                tabBarLabel: `${strings('BottomTabBar.Chat')}`,
                 tabBarIcon: ({focused, color, size}) => (
                   <SvgIcon svg={focused ? <ChatActiveSvg/> : <ChatInActiveSvg/>}/>
                 )
@@ -66,7 +66,7 @@ export function BottomTabNavigator() {
             name={Screens.Main.DAO}
             component={DAOScreen}
             options={{
-                tabBarLabel: 'DAO',
+                tabBarLabel: `${strings('BottomTabBar.DAO')}`,
                 tabBarIcon: ({focused, color, size}) => (
                   <SvgIcon svg={focused ? <DaoActiveSvg/> : <DaoInActiveSvg/>}/>
                 )
@@ -76,7 +76,7 @@ export function BottomTabNavigator() {
             name={Screens.Main.Notify}
             component={NotifyScreen}
             options={{
-                tabBarLabel: 'Notify',
+                tabBarLabel: `${strings('BottomTabBar.Notify')}`,
                 tabBarIcon: ({focused, color, size}) => (
                   <SvgIcon svg={focused ? <NotifyActiveSvg/> : <NotifyInActiveSvg/>}/>
                 )
@@ -86,7 +86,7 @@ export function BottomTabNavigator() {
             name={Screens.Main.Setting}
             component={SettingScreen}
             options={{
-                tabBarLabel: 'Profile',
+                tabBarLabel: `${strings('BottomTabBar.Profile')}`,
                 tabBarIcon: ({focused, color, size}) => (
                   <SvgIcon svg={focused ? <ProfileActiveSvg/> : <ProfileInActiveSvg/>}/>
                 )

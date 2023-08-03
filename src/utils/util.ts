@@ -3,6 +3,7 @@ import {Post} from '../declare/api/DAOApi';
 // import { debounce } from 'lodash';
 import EventEmitter from 'eventemitter3';
 import moment from 'moment';
+import 'moment/locale/zh-cn';
 import {useRef} from 'react';
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import WalletController from "../libs/walletController";

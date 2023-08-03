@@ -23,6 +23,7 @@ import {updateState as globalUpdateState} from "../store/global";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import analytics from "@react-native-firebase/analytics";
 import Favor from "../libs/favor";
+import {strings} from "../locales/i18n";
 
 const CreateVideoScreen = () => {
   const url = useUrl();
@@ -49,12 +50,11 @@ const CreateVideoScreen = () => {
   }, [videoTitle, videoDesc, video, thumbnail]);
 
   const createHandle = async () => {
-    console.log('videoTitle, videoDesc, video, thumbnail', videoTitle, videoDesc, video, thumbnail)
     if (postLoading) return;
     if (createDisable) {
       return Toast.show({
         type: 'info',
-        text1: 'Please complete all options',
+        text1: `${strings('CreateVideoScreen.Toast.optionError')}`,
       })
     }
 
@@ -78,7 +78,7 @@ const CreateVideoScreen = () => {
       if (data.data) {
         Toast.show({
           type: 'success',
-          text1: 'Post successfully'
+          text1: `${strings('CreateVideoScreen.Toast.postSuccess')}`
         })
         eventEmitter.emit('menuRefreshRecommend');
         dispatch(globalUpdateState({
@@ -101,10 +101,6 @@ const CreateVideoScreen = () => {
   };
 
   useEffect(() => {
-    //
-  }, []);
-
-  useEffect(() => {
     if (dao) {
       setDaoMode(dao.visibility);
     }
@@ -117,19 +113,19 @@ const CreateVideoScreen = () => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar title="Create Video"/>
+        <FavorDaoNavBar title={strings('CreateVideoScreen.title')}/>
         <ScrollView style={styles.scrollWrap}>
           <TextInputBlock
-            title={'Video title'}
+            title={strings('CreateVideoScreen.videoTitle')}
             value={videoTitle}
             setValue={setVideoTitle}
-            placeholder={'Title of video'}
+            placeholder={strings('CreateVideoScreen.videoPlaceholder')}
           />
           <TextInputParsedBlock
-            title={'Video description'}
+            title={strings('CreateVideoScreen.videoDescription')}
             value={videoDesc}
             setValue={setVideoDesc}
-            placeholder={'Video description with # @...'}
+            placeholder={strings('CreateVideoScreen.videoDescriptionPlaceholder')}
             multiline={true}
           />
           <UploadVideo setVideo={setVideo} thumbnail={thumbnail} setThumbnail={setThumbnail}
@@ -143,7 +139,7 @@ const CreateVideoScreen = () => {
         <View style={[styles.instanceParent, createDisable && {opacity: 0.5}]}>
           <TouchableOpacity onPress={createHandle}>
             <FavorDaoButton
-              textValue="Post"
+              textValue={strings('CreateVideoScreen.postButton')}
               frame1171275771BackgroundColor="#ff8d1a"
               cancelColor="#fff"
               isLoading={postLoading}

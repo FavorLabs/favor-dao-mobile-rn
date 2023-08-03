@@ -2,6 +2,7 @@ import * as React from "react";
 import {Text, StyleSheet, View, FlatList} from "react-native";
 import WalletWordItem from "./WalletWordItem";
 import {FontSize, FontFamily, Color} from "../GlobalStyles";
+import {strings} from "../locales/i18n";
 
 type WalletWordsType = {
     mnemonicArray: string[];
@@ -11,7 +12,7 @@ const WalletWords = ({mnemonicArray}: WalletWordsType) => {
 
     return (
         <View style={styles.titleParent}>
-            <Text style={styles.title}>Mnemonic words</Text>
+            <Text style={styles.title}>{strings('CreateWalletScreen.WalletWordsTitle')}</Text>
             <FlatList
                 data={mnemonicArray}
                 renderItem={({item, index}) => {

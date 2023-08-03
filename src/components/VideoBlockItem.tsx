@@ -12,6 +12,7 @@ import SvgIcon from "./SvgIcon";
 import Lock from "../assets/svg/NewsFeed/lock.svg";
 import UnLock from "../assets/svg/NewsFeed/unlock.svg"
 import PlayCircle from "../assets/svg/NewsFeed/playCircle.svg"
+import {strings} from "../locales/i18n";
 
 type Props = {
   postInfo: PostInfo
@@ -73,7 +74,7 @@ const VideoBlockItem: React.FC<Props> = (props) => {
           {memberStatus === 1 &&
               <View style={styles.rectangleParent}>
                   <View style={styles.subtitleParent}>
-                      <Text style={styles.subtitle}>{isSubscribedStatus ? 'Unlock' : 'Locked'} </Text>
+                      <Text style={styles.subtitle}>{isSubscribedStatus ? strings('VideoBlockItem.Unlock') : strings('VideoBlockItem.Locked')} </Text>
                       <SvgIcon svg={isSubscribedStatus ? <UnLock/> : <Lock/>} width={15}/>
                   </View>
               </View>

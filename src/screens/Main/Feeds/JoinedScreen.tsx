@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 import {updateState as globalUpdateState} from "../../../store/global";
 import NoDataShow from "../../../components/NoDataShow";
+import {strings} from "../../../locales/i18n";
 
 export type Props = {};
 const JoinedScreen: React.FC<Props> = (props) => {
@@ -38,9 +39,9 @@ const JoinedScreen: React.FC<Props> = (props) => {
                 :
                 <View style={styles.noData}>
                     <NoDataShow
-                      title={'No results found'}
+                      title={`${strings('Feeds.JoinedScreen.noDataTitle')}`}
                       image={require('../../../assets/postlistNoData.png')}
-                      description={`Please join some DAO communities first`}
+                      description={`${strings('Feeds.JoinedScreen.noDataDescription')}`}
                     />
                 </View>
               }

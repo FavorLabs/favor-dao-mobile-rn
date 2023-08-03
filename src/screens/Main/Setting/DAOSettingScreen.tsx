@@ -20,9 +20,9 @@ import {getMatchedStrings} from "../../../utils/util";
 import {RegExps} from "../../../components/TextInputParsed";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import {addDecimal, mulDecimal} from "../../../utils/balance";
+import {strings} from "../../../locales/i18n";
 
-type Props = {};
-const DAOSettingScreen: React.FC<Props> = (props) => {
+const DAOSettingScreen = () => {
   const url = useUrl();
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -58,13 +58,13 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
     if (doneDisable) {
       return Toast.show({
         type: 'error',
-        text1: 'Please complete all options',
+        text1: strings('DAOSettingScreen.Toast.allOptions'),
       })
     };
     if(!checkNumber(daoPrice)){
       return Toast.show({
         type: 'error',
-        text1: 'Price can only be entered as a number',
+        text1: strings('DAOSettingScreen.Toast.enteredNumber'),
       })
     }
 
@@ -86,7 +86,7 @@ const DAOSettingScreen: React.FC<Props> = (props) => {
       if (data.msg === 'success') {
         Toast.show({
           type: 'info',
-          text1: 'modify dao success!'
+          text1: strings('DAOSettingScreen.Toast.success')
         });
 
         dispatch(globalUpdateState({

@@ -8,6 +8,7 @@ import JoinButton from "./JoinButton";
 import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import TextParsed from "./TextParsed";
+import {strings} from "../locales/i18n";
 
 type Props = {
   daoInfo: DaoInfo;
@@ -43,9 +44,9 @@ const DaoCardItem: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if(showMore) {
-      setMoreText('Show less');
+      setMoreText(strings('DaoCardItem.ShowLess'));
     } else {
-      setMoreText('Show More');
+      setMoreText(strings('DaoCardItem.SeeMore'));
     }
   },[showMore])
 
@@ -67,7 +68,7 @@ const DaoCardItem: React.FC<Props> = (props) => {
         <View style={[styles.groupParent, styles.labelFlexBox]}>
           <View style={styles.subtitleParent}>
             <Text style={[styles.title]} numberOfLines={1}>{daoInfo.name}</Text>
-            <Text style={styles.subtitle} numberOfLines={1}>joined: {daoInfo.follow_count}</Text>
+            <Text style={styles.subtitle} numberOfLines={1}>{strings('DaoCardItem.joined')}: {daoInfo.follow_count}</Text>
           </View>
           <View style={styles.labelWrapper}>
 

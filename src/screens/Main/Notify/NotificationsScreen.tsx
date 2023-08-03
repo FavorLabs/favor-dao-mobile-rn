@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {Notify, NotifyGroup, Page} from "../declare/api/DAOApi";
-import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import {Notify, NotifyGroup, Page} from "../../../declare/api/DAOApi";
+import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import {
   ActivityIndicator,
   FlatList,
@@ -12,23 +12,23 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import FavorDaoNavBar from "../components/FavorDaoNavBar";
+import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
 import {useFocusEffect, useNavigation, useRoute} from "@react-navigation/native";
-import NotifyApi from "../services/DAOApi/Notify";
-import {useResourceUrl, useUrl} from "../utils/hook";
-import SvgIcon from "../components/SvgIcon";
-import DeleteSvg from "../assets/svg/deleteIcon.svg";
-import {Color} from "../GlobalStyles";
-import {getDebounce, getTime} from "../utils/util";
+import NotifyApi from "../../../services/DAOApi/Notify";
+import {useResourceUrl, useUrl} from "../../../utils/hook";
+import SvgIcon from "../../../components/SvgIcon";
+import DeleteSvg from "../../../assets/svg/deleteIcon.svg";
+import {Color} from "../../../GlobalStyles";
+import {getDebounce, getTime} from "../../../utils/util";
 import Toast from "react-native-toast-message";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {useDispatch, useSelector} from "react-redux";
-import Models from "../declare/storeTypes";
-import {updateState as globalUpdateState} from "../store/notify";
-import NoDataShow from "../components/NoDataShow";
-import UnionSvg from "../assets/svg/unionWhite.svg";
-import TransactionSvg from "../assets/svg/transactionSvgWhite.svg";
-import {logger} from "../cometchat-pro-react-native-ui-kit/CometChatWorkspace/src/utils/common";
+import Models from "../../../declare/storeTypes";
+import {updateState as globalUpdateState} from "../../../store/notify";
+import NoDataShow from "../../../components/NoDataShow";
+import UnionSvg from "../../../assets/svg/unionWhite.svg";
+import TransactionSvg from "../../../assets/svg/transactionSvgWhite.svg";
+import {logger} from "../../../cometchat-pro-react-native-ui-kit/CometChatWorkspace/src/utils/common";
 
 const NotificationsScreen = () => {
   const dispatch = useDispatch();
@@ -203,7 +203,7 @@ const NotificationsScreen = () => {
             <NoDataShow
               title={'No messages'}
               description={"When you have messages you'll see them here"}
-              image={require('../assets/notifyNoData.png')}
+              image={require('../../../assets/notifyNoData.png')}
             />
           </View>
           : null

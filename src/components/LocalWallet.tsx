@@ -5,6 +5,7 @@ import {useNavigation,} from "@react-navigation/native";
 import {StackNavigationProp} from '@react-navigation/stack'
 import {FontFamily, FontSize, Color, Border, Padding} from "../GlobalStyles";
 import Screens from "../navigation/RouteNames";
+import {strings} from "../locales/i18n";
 
 const LocalWallet = () => {
     const navigation = useNavigation<StackNavigationProp<any>>();
@@ -25,12 +26,12 @@ const LocalWallet = () => {
 
     return (
       <View style={styles.titleParent}>
-          <Text style={styles.title}>Local wallet</Text>
+          <Text style={styles.title}>{strings('LocalWallet.title')}</Text>
           <TouchableOpacity onPress={createWallet}>
               <WalletItem
                 walletImage={require("../assets/group-1171275666.png")}
-                walletName="Create wallet"
-                walletIntroduction="No wallet to create"
+                walletName={`${strings('LocalWallet.CreateWalletTitle')}`}
+                walletIntroduction={`${strings('LocalWallet.CreateWalletDescription')}`}
                 frame1171275664Overflow="unset"
                 ellipse12Width={43}
                 ellipse12Height={36}
@@ -41,8 +42,8 @@ const LocalWallet = () => {
           <TouchableOpacity onPress={importWallet}>
               <WalletItem
                 walletImage={require("../assets/group-1171275667.png")}
-                walletName="Import wallet"
-                walletIntroduction="There is already a wallet to import"
+                walletName={`${strings('LocalWallet.ImportWalletTitle')}`}
+                walletIntroduction={`${strings('LocalWallet.ImportWalletDescription')}`}
                 frame1171275664Overflow="unset"
                 ellipse12Width={43}
                 ellipse12Height={36}
@@ -53,8 +54,8 @@ const LocalWallet = () => {
           <TouchableOpacity onPress={importPrivateKey}>
               <WalletItem
                 walletImage={require("../assets/group-1171275667.png")}
-                walletName="Import private key"
-                walletIntroduction="There is private key a wallet to import"
+                walletName={`${strings('LocalWallet.ImportPrivateKeyTitle')}`}
+                walletIntroduction={`${strings('LocalWallet.ImportPrivateKeyDescription')}`}
                 frame1171275664Overflow="unset"
                 ellipse12Width={43}
                 ellipse12Height={36}

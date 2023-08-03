@@ -26,7 +26,7 @@ import AccountCancellation from "../screens/Main/Setting/AccountCancellation";
 import LogOut from "../screens/Main/Setting/LogOut";
 import ChangePasswordScreen from "../screens/Main/Setting/ChangePasswordScreen";
 import UserAgreementScreen from "../screens/UserAgreementScreen";
-import NotificationsScreen from "../screens/NotificationsScreen";
+import NotificationsScreen from "../screens/Main/Notify/NotificationsScreen";
 import ComplaintScreen from "../screens/ComplaintScreen";
 import ChatInDAOScreen from "../screens/Main/Chat/ChatInDAOScreen";
 import RedEnvelopesScreen from '../screens/Main/Chat/RedEnvelopesScreen'
@@ -41,6 +41,7 @@ import NodeApi from "../services/NodeApi";
 import BackgroundService from "react-native-background-actions";
 import Models from "../declare/storeTypes";
 import {eventEmitter, errorEvent} from "../services"
+import {strings} from "../locales/i18n";
 
 const Stack = createStackNavigator();
 
@@ -169,8 +170,8 @@ function RootStack() {
         <Stack.Screen name={Screens.Notifications} component={NotificationsScreen}/>
         <Stack.Screen name={Screens.ClaimDetails} component={ClaimDetails}/>
       </Stack.Navigator>
-      <Loading visible={visible} text={'Connecting to a p2p network'} timeout={10000}/>
-      <Loading visible={!visible && networkError} text={'Connecting to a p2p network'} timeout={0}/>
+      <Loading visible={visible} text={`${strings('navigationIndex.loadingText')}`} timeout={10000}/>
+      <Loading visible={!visible && networkError} text={`${strings('navigationIndex.loadingText')}`} timeout={0}/>
     </>
   );
 }

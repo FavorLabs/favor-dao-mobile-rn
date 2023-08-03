@@ -1,13 +1,11 @@
 import * as React from "react";
-import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
-import { Color, Border, FontFamily, FontSize, Padding } from "../../../GlobalStyles";
+import { StyleSheet, View } from "react-native";
+import { Color } from "../../../GlobalStyles";
 import PostList from "../../../components/PostList";
 import {useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 
-type Props ={};
-
-const Mixed: React.FC<Props> = (props) => {
+const Mixed = () => {
   const { feedsOfDAOId } = useSelector((state: Models) => state.global);
 
   return (

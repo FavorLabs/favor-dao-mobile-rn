@@ -9,6 +9,7 @@ import VideoBlock from "./VideoBlock";
 import NoDataShow from "./NoDataShow";
 import ToolDaoList from "./ToolDaoList";
 import Toast from "react-native-toast-message";
+import {strings} from "../locales/i18n";
 
 export type Props = {
   type?: number | string;
@@ -155,9 +156,9 @@ const PostList: React.FC<Props> = (props) => {
         ListEmptyComponent={!postListArr.length && !refreshing ?
           <View style={styles.noData}>
             <NoDataShow
-              title={'No results found'}
+              title={strings('PostList.NoDataTitle')}
               image={require('../assets/postlistNoData.png')}
-              description={`Please join some DAO communities first`}
+              description={strings('PostList.NoDataDescription')}
             />
           </View>
           : null

@@ -5,6 +5,7 @@ import {DaoInfo, PostInfo} from "../declare/api/DAOApi";
 import {useResourceUrl} from "../utils/hook";
 import {getDebounce} from "../utils/util";
 import {useState} from "react";
+import {strings} from "../locales/i18n";
 
 type Props = {
   daoCardInfo: DaoInfo
@@ -26,7 +27,7 @@ const DaoBriefCard: React.FC<Props> = (props) => {
             <View style={styles.briefinfo}>
               <Text style={styles.title} numberOfLines={1}>{daoCardInfo.name}</Text>
               <Text style={[styles.subtitle, styles.subtitleTypo]} numberOfLines={1}>
-                Joined: {daoCardInfo.follow_count}
+                {strings('DAO.Joined')}: {daoCardInfo.follow_count}
               </Text>
             </View>
           </View>

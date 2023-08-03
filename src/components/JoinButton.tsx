@@ -6,6 +6,7 @@ import {getDebounce} from "../utils/util";
 import {updateState as globalUpdateState} from "../store/global";
 import {useDispatch} from "react-redux";
 import Toast from "react-native-toast-message";
+import {strings} from "../locales/i18n";
 
 type Props = {
   isJoin: boolean;
@@ -20,15 +21,15 @@ const JoinButton: React.FC<Props> = (props) => {
   const onClick = async () => {
     if(isJoin) {
       Alert.alert(
-        'Cancel Join',
-        'Are you sure you want to cancel joining？',
+        `${strings('JoinButton.alert.title')}`,
+        `${strings('JoinButton.alert.message')}`,
         [
           {
-            text: 'No',
+            text: `${strings('JoinButton.alert.No')}`,
             style: 'cancel'
           },
           {
-            text: 'Yes',
+            text: `${strings('JoinButton.alert.Yes')}`,
             onPress: async () => {
               await handle();
               dispatch(globalUpdateState({
@@ -57,7 +58,7 @@ const JoinButton: React.FC<Props> = (props) => {
         {
           isLoading ? <ActivityIndicator size="small"/> :
             <Text style={[styles.joinText, isJoin ? styles.joined : styles.join]}>
-              {isJoin ? 'Joined' : 'Join'}
+              {isJoin ? strings('JoinButton.Joined') : strings('JoinButton.Join')}
             </Text>
         }
       </View>

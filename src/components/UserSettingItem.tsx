@@ -5,19 +5,26 @@ import {Color, FontSize} from "../GlobalStyles";
 type Props = {
   title: string;
   onClick: () => void;
+  language?: any;
 };
 const UserSettingItem: React.FC<Props> = (props) => {
-  const { title, onClick } = props
+  const { title, onClick, language } = props
 
   return (
     <TouchableOpacity style={styles.block} onPress={onClick}>
       <Text style={styles.text}>{title}</Text>
 
-      <Image
-        style={styles.icon}
-        resizeMode="cover"
-        source={require("../assets/setting-right-icon.png")}
-      />
+      <View style={styles.right}>
+        {
+          language &&
+            <Text style={styles.language}>{language}</Text>
+        }
+        <Image
+          style={styles.icon}
+          resizeMode="cover"
+          source={require("../assets/setting-right-icon.png")}
+        />
+      </View>
     </TouchableOpacity>
   )
 }
@@ -34,6 +41,15 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: '500',
+    fontSize: FontSize.bodyBody17_size,
+    color: Color.iOSSystemLabelsLightPrimary
+  },
+  right: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  language: {
+    fontWeight: '400',
     fontSize: FontSize.bodyBody17_size,
     color: Color.iOSSystemLabelsLightPrimary
   },

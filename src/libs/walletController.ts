@@ -12,6 +12,7 @@ import messaging from "@react-native-firebase/messaging";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import analytics from "@react-native-firebase/analytics";
 import {Platform} from "react-native";
+import {strings} from "../locales/i18n";
 
 export type State = {
     data?: string;
@@ -53,10 +54,10 @@ class WalletController {
 
     importMnemonic(password: string, mnemonic: string) {
         if (!password) {
-            throw new Error('Password Invalid');
+            throw new Error(`${strings('walletController.PasswordInvalid')}`);
         }
         if (!bip39.validateMnemonic(mnemonic)) {
-            throw new Error('Mnemonic Invalid');
+            throw new Error(`${strings('walletController.MnemonicInvalid')}`);
         }
         this.state.data = encrypt(mnemonic, password);
         this.state.type = 'mnemonic';
@@ -64,10 +65,10 @@ class WalletController {
 
     importPrivateKey(password: string, privateKey: string) {
         if (!password) {
-            throw new Error('Password Invalid');
+            throw new Error(`${strings('walletController.PasswordInvalid')}`);
         }
         if (privateKey.length !== 64) {
-            throw new Error('PrivateKey Invalid');
+            throw new Error(`${strings('walletController.PrivateKeyInvalid')}`);
         }
         this.state.data = encrypt(privateKey, password);
         this.state.type = 'privateKey'
@@ -76,7 +77,7 @@ class WalletController {
     exportPrivateKeySting(password: string) {
         const privateKey = decrypt(this.state.data!, password);
         if (!privateKey) {
-            throw new Error('Password Invalid')
+            throw new Error(`${strings('walletController.PasswordInvalid')}`)
         }
         return privateKey;
     }
@@ -94,7 +95,7 @@ class WalletController {
     exportMnemonic(password: string) {
         const mnemonic = decrypt(this.state.data!, password);
         if (!mnemonic) {
-            throw new Error('Password Invalid')
+            throw new Error(`${strings('walletController.PasswordInvalid')}`)
         }
         return mnemonic;
     }

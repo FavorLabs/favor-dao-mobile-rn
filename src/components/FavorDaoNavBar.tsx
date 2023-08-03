@@ -10,6 +10,7 @@ import {FontSize, FontFamily, Color} from "../GlobalStyles";
 import {useNavigation} from "@react-navigation/native";
 import SvgIcon from "./SvgIcon";
 import BlueLeftArrow from '../assets/svg/blueLeftArrow.svg';
+import {strings} from "../locales/i18n";
 
 type FavorDaoNavBarType = {
   title?: string;
@@ -28,7 +29,7 @@ const FavorDaoNavBar = ({title,rightComponent}: FavorDaoNavBarType) => {
 
       <TouchableOpacity style={styles.left} onPress={back}>
         <SvgIcon svg={<BlueLeftArrow/>}/>
-        <Text style={styles.backText}>Back</Text>
+        <Text style={styles.backText}>{strings('FavorDaoNavBar.back')}</Text>
       </TouchableOpacity>
 
       <View style={styles.center}>

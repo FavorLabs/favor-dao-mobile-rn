@@ -10,6 +10,7 @@ import SvgIcon from "./SvgIcon";
 import NewsIcon from '../assets/svg/Dao/newsIcon.svg';
 import VideoIcon from '../assets/svg/Dao/videoIcon.svg';
 import RightArrow from '../assets/svg/Dao/rightArrow.svg';
+import {strings} from "../locales/i18n";
 
 type Props = {
   type: string;
@@ -41,7 +42,7 @@ const PublishesItem: React.FC<Props> = (props) => {
       <View style={[styles.channelitemwithseperator, styles.iconwithbackgroundFlexBox,]}>
         {
           daoInfo.type === 0 ?
-            <SvgIcon svg={type === 'News' ? <NewsIcon/> : <VideoIcon/>} width={50} height={50}/>
+            <SvgIcon svg={type === strings('FeedsOfDaoTabBar.News') ? <NewsIcon/> : <VideoIcon/>} width={50} height={50}/>
             :
             <Image
               style={styles.vectorIcon}
