@@ -8,6 +8,7 @@ import {
 import ChatItem from "./ChatItem";
 import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
 import {DaoInfo} from "../declare/api/DAOApi";
+import {strings} from "../locales/i18n";
 
 type Props = {
   daoInfo: DaoInfo
@@ -19,7 +20,7 @@ const Chats: React.FC<Props> = (props) => {
   const { daoInfo, setIsShow, isJoin } = props;
   return (
     <View style={styles.chats}>
-      <Text style={styles.title}>Chats</Text>
+      <Text style={styles.title}>{strings('DAOChats.Chats')}</Text>
       <ChatItem daoInfo={daoInfo} setIsShow={setIsShow} isJoin={isJoin}/>
     </View>
   );

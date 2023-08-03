@@ -4,13 +4,14 @@ import { Padding, Color, FontFamily, FontSize, Border } from "../../../GlobalSty
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import {RecordTabs} from "./RedEnvelopesTab/RecordTabs";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
+import {strings} from "../../../locales/i18n";
 
 const LuckyPacketRecordScreen = () => {
     return (
         <BackgroundSafeAreaView headerStyle={{backgroundColor:'#f8f8f8'}}>
             <View style={{backgroundColor:'#F8F8F8',flex:1}}>
                 <View style={styles.header}>
-                    <FavorDaoNavBar title="LuckyPacket Record"/>
+                    <FavorDaoNavBar title={strings('LuckyPacketRecordScreen.title')}/>
                 </View>
                 <View style={styles.content}>
                     <View style={styles.feedsOfDao}>

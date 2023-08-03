@@ -5,6 +5,7 @@ import {Pressable} from "react-native";
 import WalletController from "../libs/walletController";
 import {SignatureData} from "../declare/api/DAOApi";
 import Toast from "react-native-toast-message";
+import {strings} from "../locales/i18n";
 
 export type Props = {
     // fn?: <T=any>(data: T) => void
@@ -15,7 +16,7 @@ export type Props = {
     type?: number
     psd?: () => void
 }
-const InputPassword = ({fn, btnText = 'Confirm', type, psd}: Props) => {
+const InputPassword = ({fn, btnText = strings('InputPassword.btnText'), type, psd}: Props) => {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const confirm = async () => {
@@ -31,7 +32,7 @@ const InputPassword = ({fn, btnText = 'Confirm', type, psd}: Props) => {
         } catch (e) {
             Toast.show({
                 type:'error',
-                text1: 'Password Error'
+                text1: strings('InputPassword.Toast.PasswordError')
             })
         } finally {
             setLoading(false);
@@ -39,7 +40,7 @@ const InputPassword = ({fn, btnText = 'Confirm', type, psd}: Props) => {
     }
 
     return <>
-        <TextInputBlock title={'Password'} placeholder={'Please enter password here'} value={password}
+        <TextInputBlock title={strings('InputPassword.PasswordTitle')} placeholder={strings('InputPassword.PasswordPlaceholder')} value={password}
                         setValue={setPassword} secureTextEntry/>
         <Pressable disabled={loading} onPress={confirm} style={{marginTop: 20}}>
             <FavorDaoButton

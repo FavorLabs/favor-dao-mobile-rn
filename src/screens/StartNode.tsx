@@ -14,6 +14,7 @@ import {EXTERNAL_CONFIG_NAME, IS_TEST} from '@env';
 import {CometChat} from '@cometchat-pro/react-native-chat';
 import {useDispatch} from "react-redux";
 import {updateState} from "../store/favorx";
+import {strings} from "../locales/i18n";
 
 const DefaultConfig = {
   "name": "Polygon Mainnet",
@@ -160,7 +161,7 @@ const StartNode = () => {
         cancelColor={Color.color1}
       />
     </TouchableOpacity>
-    <Loading visible={visible} text={'loading...\n' + version}/>
+    <Loading visible={visible} text={ `${strings('StartNode.loadingText')}` + '\n' + version}/>
   </View>
 };
 

@@ -8,6 +8,7 @@ import {useResourceUrl, useUrl} from "../../../../utils/hook";
 import RedpacketApi from "../../../../services/RedpacketApi";
 import Screens from "../../../../navigation/RouteNames";
 import {useNavigation} from "@react-navigation/native";
+import {strings} from "../../../../locales/i18n";
 const RecordReceived = () => {
     const navigation = useNavigation();
     const [userData,setUserData]=useState([])
@@ -82,8 +83,8 @@ const RecordReceived = () => {
     },[years])
     return(
         <>
-        <RecordFavTSum type={0} setYears={setYears} years={years}/>
-            <Text style={[styles.text,{display:'flex'}]}> Received a total of {total_rows} luckypackets</Text>
+        <RecordFavTSum type={0} setYears={setYears} years={years} typeText={strings('RecordReceived.received')}/>
+            <Text style={[styles.text,{display:'flex'}]}>{strings('RecordReceived.Received')}{total_rows}{strings('RecordReceived.luckypackets')}</Text>
         <View style={styles.body}>
             <FlatList
                 data={userData}

@@ -10,6 +10,7 @@ import SvgIcon from "./SvgIcon";
 import AddIcon from '../assets/svg/Setting/addIcon.svg';
 import SettingIcon from '../assets/svg/Setting/settingIcon.svg';
 import DaoLevel from '../assets/svg/Setting/daoLevel.svg';
+import {strings} from "../locales/i18n";
 
 type Props = {};
 
@@ -30,14 +31,14 @@ const DAOManagementContainer: React.FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.daoManagement, styles.addTypo]}>DAO Management</Text>
+      <Text style={[styles.daoManagement, styles.addTypo]}>{strings('DAOManagementContainer.DAOManagement')}</Text>
       <View style={styles.daomnglist}>
 
         <View style={styles.addbtn}>
           <TouchableOpacity onPress={getDebounce(toCreateDaoOrSetting)}>
             <SvgIcon svg={dao ? <SettingIcon/> : <AddIcon/>} width={24} height={24}/>
           </TouchableOpacity>
-          <Text style={[styles.add, styles.addTypo]}>{dao ? 'Setting' : 'Add'}</Text>
+          <Text style={[styles.add, styles.addTypo]}>{dao ? strings('DAOManagementContainer.Setting') : strings('DAOManagementContainer.Add')}</Text>
         </View>
 
         {/*<View style={styles.daoListChild}/>*/}
@@ -46,7 +47,7 @@ const DAOManagementContainer: React.FC<Props> = (props) => {
           Platform.OS !== 'ios' &&
             <View style={styles.daosetting}>
                 <SvgIcon svg={<DaoLevel/>} width={24} height={24}/>
-                <Text style={[styles.add, styles.addTypo]}>DAO Level</Text>
+                <Text style={[styles.add, styles.addTypo]}>{strings('DAOManagementContainer.DAOLevel')}</Text>
             </View>
         }
       </View>

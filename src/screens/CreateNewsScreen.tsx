@@ -4,9 +4,7 @@ import Toast from 'react-native-toast-message';
 import FavorDaoNavBar from "../components/FavorDaoNavBar";
 import FavorDaoButton from '../components/FavorDaoButton';
 import UploadImage from '../components/UploadImage';
-import TextInputBlock from '../components/TextInputBlock';
-import {Color, Border} from "../GlobalStyles";
-import {useResourceUrl, useUrl} from "../utils/hook";
+import {useUrl} from "../utils/hook";
 import {Post} from "../declare/api/DAOApi";
 import {CreatePost} from "../declare/api/DAOApi";
 import PostApi from "../services/DAOApi/Post";
@@ -21,6 +19,7 @@ import {updateState as globalUpdateState} from "../store/global";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import analytics from "@react-native-firebase/analytics";
 import Favor from "../libs/favor";
+import {strings} from "../locales/i18n";
 
 const CreateNewsScreen = () => {
   const url = useUrl();
@@ -47,7 +46,7 @@ const CreateNewsScreen = () => {
     if (createDisable) {
       return Toast.show({
         type: 'info',
-        text1: 'Please complete all options',
+        text1: `${strings('CreateNewsScreen.Toast.optionsError')}`,
       })
     }
 
@@ -71,7 +70,7 @@ const CreateNewsScreen = () => {
       if (data.data) {
         Toast.show({
           type: 'info',
-          text1: 'Post successfully'
+          text1: `${strings('CreateNewsScreen.Toast.postSuccess')}`
         });
         dispatch(globalUpdateState({
           joinStatus: true,
@@ -111,14 +110,14 @@ const CreateNewsScreen = () => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar title="Create news"/>
+        <FavorDaoNavBar title={strings('CreateNewsScreen.title')}/>
         <ScrollView style={styles.scrollWrap}>
           <TextInputParsedBlock
-            title={'News description'}
+            title={strings('CreateNewsScreen.newsTitle')}
             value={description}
             setValue={setDescription}
             multiline={true}
-            placeholder={'Your description...'}
+            placeholder={strings('CreateNewsScreen.newsPlaceholder')}
           />
           <UploadImage imageType={'image'} isShowSelector={false} setUpImage={setImageList} multiple={true}
                        setImageLoading={setImageLoading}/>
@@ -128,7 +127,7 @@ const CreateNewsScreen = () => {
         <View style={[styles.instanceParent, createDisable && {opacity: 0.5}]}>
           <TouchableOpacity onPress={createHandle}>
             <FavorDaoButton
-              textValue={!imageLoading ? 'UpLoading' : "Post"}
+              textValue={!imageLoading ? strings('CreateNewsScreen.UpLoadingButton') : strings('CreateNewsScreen.PostButton') }
               frame1171275771BackgroundColor="#ff8d1a"
               cancelColor="#fff"
               isLoading={postLoading}

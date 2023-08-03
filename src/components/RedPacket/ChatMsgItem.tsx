@@ -27,6 +27,7 @@ import RNFS from 'react-native-fs';
 import * as FileSystem from 'expo-file-system';
 import {Icon} from "@rneui/themed";
 import PlayCircle from "../../assets/svg/NewsFeed/playCircle.svg";
+import {strings} from "../../locales/i18n";
 
 export type Props = {
   isUser?: boolean,
@@ -358,7 +359,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                           </Text>
                           <Text style={[styles.Received, {display: redStatus !== 2 ? 'flex' : 'none'}]}
                                 numberOfLines={2}>
-                            {redStatus === 1 ? 'Received' : 'The luckyPacket has expired'}
+                            {redStatus === 1 ? strings('ChatMsgItem.Received') : strings('ChatMsgItem.Expired')}
                           </Text>
                       </View>
                   </View>

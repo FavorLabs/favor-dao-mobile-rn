@@ -6,9 +6,9 @@ import {useDispatch} from "react-redux";
 import {updateState as searchUpdateState} from "../../../store/search"
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import SearchHead from "../../../components/SearchHead";
+import {strings} from "../../../locales/i18n";
 
-export type Props = {};
-const FeedsScreen: React.FC<Props> = (props) => {
+const FeedsScreen = () => {
   const dispatch = useDispatch()
 
   const [searchValue, setSearchValue] = useState<string>('');
@@ -24,7 +24,7 @@ const FeedsScreen: React.FC<Props> = (props) => {
       <View style={styles.container}>
         <View style={styles.frameParent}>
           <SearchHead
-            tittle={'News Feed'}
+            tittle={strings('Feeds.title')}
             getSearchBlur={getSearch}
             searchValue={searchValue}
             setSearchValue={setSearchValue}

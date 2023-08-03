@@ -5,6 +5,7 @@ const TopTab = createMaterialTopTabNavigator();
 import { FontSize, Color } from "../../../../GlobalStyles";
 import RecordReceived from "./RecordReceived";
 import RecordDistributed from "./RecordDistributed";
+import {strings} from "../../../../locales/i18n";
 
 export const REtabs = {
     header: () => null,
@@ -30,8 +31,8 @@ export function RecordTabs(props: FeedsOfDaoProps) {
     return (
         // @ts-ignore
         <TopTab.Navigator screenOptions={REtabs} >
-            <TopTab.Screen name="Received" component={RecordReceived} />
-            <TopTab.Screen name="Distributed" component={RecordDistributed}/>
+            <TopTab.Screen name={strings('RecordTabs.Received')} component={RecordReceived} />
+            <TopTab.Screen name={strings('RecordTabs.Distributed')} component={RecordDistributed}/>
         </TopTab.Navigator>
     );
 }

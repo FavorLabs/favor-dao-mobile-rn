@@ -23,6 +23,7 @@ import SvgIcon from "./SvgIcon";
 import TransactionIcon from '../assets/svg/Setting/transactionIcon.svg';
 import RevenueIcon from '../assets/svg/Setting/revenueIcon.svg';
 import ExpensesIcon from '../assets/svg/Setting/expensesIcon.svg';
+import {strings} from "../locales/i18n";
 
 type Props = {};
 const Transactions: React.FC<Props> = (props) => {
@@ -85,11 +86,11 @@ const Transactions: React.FC<Props> = (props) => {
     <>
       <TouchableOpacity style={styles.mainbuttonParent} onPress={showPopUp}>
         <SvgIcon svg={<TransactionIcon/>} width={50} height={50}/>
-        <Text style={styles.text}>Transaction</Text>
+        <Text style={styles.text}>{strings('Transactions.title')}</Text>
       </TouchableOpacity>
 
       <BottomSheetModal visible={popUpShow} setVisible={setPopUpShow} height={'50%'}>
-        <Text style={styles.title}>Transaction</Text>
+        <Text style={styles.title}>{strings('Transactions.title')}</Text>
         <FlatList
           style={styles.scrollView}
           data={transactions}

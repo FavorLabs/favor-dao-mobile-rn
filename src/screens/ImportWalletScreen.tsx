@@ -22,6 +22,7 @@ import DaoApi from "../services/DAOApi/Dao";
 import {getDAOInfo} from "../utils/util";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
 import * as buffer from "buffer";
+import {strings} from "../locales/i18n";
 
 const ImportWallet = () => {
     const url = useUrl();
@@ -58,11 +59,14 @@ const ImportWallet = () => {
         if (createDisable) {
             return Toast.show({
                 type: 'error',
-                text1: 'Please complete all options',
+                text1: `${strings('CreateWalletScreen.Toast.PleaseCompleteAllOptions')}`,
             })
         }
         if (!password || password !== repeatPassword) {
-            return Toast.show({type: 'error', text1: 'Two inconsistent passwords'});
+            return Toast.show({
+                type: 'error',
+                text1: `${strings('CreateWalletScreen.Toast.TwoInconsistentPasswords')}`
+            });
         }
         await setLoading(true);
         try {
@@ -98,32 +102,32 @@ const ImportWallet = () => {
                               footerStyle={{backgroundColor: Color.color2}}>
           <KeyboardAwareScrollView contentContainerStyle={[styles.importWalletSpaceBlock]}>
               <FavorDaoNavBar
-                title={type === 'mnemonic' ? 'Import wallet' : 'Import private key'}
+                title={type === 'mnemonic' ? strings('ImportWalletScreen.ImportWalletTitle') : strings('ImportWalletScreen.ImportPrivateKey')}
               />
               <View style={styles.content}>
                   <ScrollView>
                       <View>
                           <TextInputBlock
                             title={
-                                type === 'mnemonic' ? 'Mnemonic words' : 'Private key'
+                                type === 'mnemonic' ? strings('ImportWalletScreen.MnemonicWordsTitle') : strings('ImportWalletScreen.PrivateKeyTitle')
                             }
                             placeholder={
-                                type === 'mnemonic' ? `Please enter mnemonic words，Separate with space...` : 'Please enter private key'
+                                type === 'mnemonic' ? strings('ImportWalletScreen.MnemonicPlaceholder') : strings('ImportWalletScreen.PrivateKeyPlaceholder')
                             }
                             value={mnemonic}
                             setValue={setMnemonic}
                             multiline={true}
                           />
                           <TextInputBlock
-                            title={'Password'}
-                            placeholder={`Please enter passwords`}
+                            title={strings('CreateWalletScreen.passwordTitle')}
+                            placeholder={strings('CreateWalletScreen.passwordPlaceholder')}
                             value={password}
                             setValue={setPassword}
                             secureTextEntry={true}
                           />
                           <TextInputBlock
-                            title={'Confirm Password'}
-                            placeholder={`Please enter passwords again`}
+                            title={strings('CreateWalletScreen.ConfirmPasswordTitle')}
+                            placeholder={strings('CreateWalletScreen.ConfirmPasswordPlaceholder')}
                             value={repeatPassword}
                             setValue={setRepeatPassword}
                             secureTextEntry={true}
@@ -136,7 +140,7 @@ const ImportWallet = () => {
                                         onPress={importWallet}>
                           <FavorDaoButton
                             isLoading={loading}
-                            textValue="Import"
+                            textValue={strings('ImportWalletScreen.ImportButton')}
                             frame1171275771BackgroundColor="#ff8d1a"
                             cancelColor="#fff"
                           />

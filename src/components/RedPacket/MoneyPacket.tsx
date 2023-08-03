@@ -15,6 +15,7 @@ import {addDecimal, mulDecimal} from "../../utils/balance";
 import UserApi from "../../services/DAOApi/User";
 import {CometChat} from "@cometchat-pro/react-native-chat";
 import sendCustomMessage = CometChat.sendCustomMessage;
+import {strings} from "../../locales/i18n";
 
 
 export type Props ={
@@ -94,7 +95,7 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                                 navigation.goBack()
                                 Toast.show({
                                     type: 'info',
-                                    text1: 'Send success!'
+                                    text1: strings('MoneyPacket.Toast.SendSuccess')
                                 });
                             }
                             if (redPacketType==1){
@@ -102,13 +103,13 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                                 navigation.pop(1)
                                 Toast.show({
                                     type: 'info',
-                                    text1: 'Send success!'
+                                    text1: strings('MoneyPacket.Toast.SendSuccess')
                                 });
                             }
                     }else {
                         Toast.show({
                             type: 'error',
-                            text1: 'Send faild!'
+                            text1: strings('MoneyPacket.Toast.SendFailed')
                         });
                         setPassword('')
                         setVisible(false)
@@ -129,7 +130,7 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                 setLoading(false)
                 Toast.show({
                     type: 'error',
-                    text1:'Wrong password!'
+                    text1: strings('MoneyPacket.Toast.WrongPassword')
                 });
             }
         }
@@ -153,11 +154,11 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
             bgColor={'#F8F8F8'}
         >
             <ScrollView style={styles.scroll}>
-                <Text style={styles.title}>For luckypacket</Text>
+                <Text style={styles.title}>{strings('MoneyPacket.title')}</Text>
                 <View style={styles.bodyText}>
                     <View>
                         <Text style={styles.BalanceText}>
-                          Amount of money
+                            {strings('MoneyPacket.AmountOfMoney')}
                         </Text>
                     </View>
 
@@ -172,7 +173,7 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                     </View>
                     <View style={styles.BalanceBox}>
                             <Text style={styles.BalanceText}>
-                                Balance :
+                                {strings('MoneyPacket.Balance')} :
                             </Text>
                             <Text style={[styles.BalanceText,styles.BalanceText1]}>
                                 { addDecimal(balance) }
@@ -184,11 +185,11 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                 </View>
                 <View style={styles.pswBox}>
                     <Text style={styles.pswText}>
-                        Password
+                        {strings('MoneyPacket.Password')}
                     </Text>
                     <TextInput
                         style={styles.textInp}
-                        placeholder={'Please enter password here'}
+                        placeholder={strings('MoneyPacket.PasswordPlaceholder')}
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry={true}
@@ -197,7 +198,7 @@ const MoneyPacket = ({visible, setVisible,fn, type, psd,redPacketType,total,titl
                 <TouchableOpacity onPress={confirm}>
                     <FavorDaoButton
                         isLoading={loading}
-                        textValue="Confirm"
+                        textValue={strings('MoneyPacket.Confirm')}
                         frame1171275771BackgroundColor="#ff8d1a"
                         cancelColor="#fff"
                     />

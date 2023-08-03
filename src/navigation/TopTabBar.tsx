@@ -9,6 +9,7 @@ import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs
 const TopTab = createMaterialTopTabNavigator();
 import {FontSize, Color, Border, FontFamily, Padding} from "../GlobalStyles";
 import {useIsLogin} from "../utils/hook";
+import {strings} from "../locales/i18n";
 
 export const TopBarOptions = {
     header: () => null,
@@ -35,21 +36,21 @@ export function FeedsTopTabNavigator() {
     const [isLogin, gotoLogin] = useIsLogin()
     return (
       // @ts-ignore
-      <TopTab.Navigator initialRouteName={'Recommend'} screenOptions={TopBarOptions} screenListeners={({navigation, route}) => ({
+      <TopTab.Navigator initialRouteName={strings('Feeds.Recommend')} screenOptions={TopBarOptions} screenListeners={({navigation, route}) => ({
           tabPress: e => {
-              if (route.name === 'Joined' && !isLogin) {
+              if (route.name === strings('Feeds.Joined') && !isLogin) {
                   gotoLogin();
                   e.preventDefault()
               }
           },
           focus: () => {
-            if(route.name === 'Joined' && !isLogin) {
-              navigation.navigate('Recommend')
+            if(route.name === strings('Feeds.Joined') && !isLogin) {
+              navigation.navigate(strings('Feeds.Recommend'))
             }
           }
       })}>
-          <TopTab.Screen name="Recommend" component={RecommendScreen}/>
-          <TopTab.Screen name="Joined" component={JoinedScreen} options={{
+          <TopTab.Screen name={strings('Feeds.Recommend')} component={RecommendScreen}/>
+          <TopTab.Screen name={strings('Feeds.Joined')} component={JoinedScreen} options={{
               lazy: true
           }}/>
       </TopTab.Navigator>
@@ -60,8 +61,8 @@ export function DAOTopTabNavigator() {
     return (
       // @ts-ignore
       <TopTab.Navigator screenOptions={TopBarOptions}>
-          <TopTab.Screen name="DAOs" component={RecommendDAOListScreen}/>
-          <TopTab.Screen name="Joined" component={JoinedDAOListScreen}/>
+          <TopTab.Screen name={strings('DAO.DAOs')} component={RecommendDAOListScreen}/>
+          <TopTab.Screen name={strings('DAO.Joined')} component={JoinedDAOListScreen}/>
       </TopTab.Navigator>
     );
 }

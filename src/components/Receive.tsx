@@ -3,12 +3,13 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { Border, FontSize, FontFamily, Color } from "../GlobalStyles";
 import SvgIcon from "./SvgIcon";
 import DepositIcon from '../assets/svg/Setting/depositIcon.svg';
+import {strings} from "../locales/i18n";
 
 const Receive = () => {
   return (
     <View style={styles.receive}>
       <SvgIcon svg={<DepositIcon/>} width={50} height={50}/>
-      <Text style={styles.text}>Deposit</Text>
+      <Text style={styles.text}>{strings('Receive.title')}</Text>
     </View>
   );
 };

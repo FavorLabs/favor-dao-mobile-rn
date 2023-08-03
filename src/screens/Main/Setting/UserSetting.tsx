@@ -1,18 +1,38 @@
 import * as React from "react";
-import {StyleSheet, View, Text, TouchableOpacity, ScrollView, Image} from "react-native";
+import {useEffect, useMemo, useRef, useState} from "react";
+import {StyleSheet, View, Text, ScrollView} from "react-native";
 import FavorDaoNavBar from "../../../components/FavorDaoNavBar";
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation,CommonActions} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
 import UserSettingItem from "../../../components/UserSettingItem";
 import {Color, FontSize} from "../../../GlobalStyles";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import packageInfo from "../../../../package.json"
+import I18n, {getLanguages, setLocale, strings} from "../../../locales/i18n";
+import {Picker} from '@react-native-picker/picker';
+import BottomSheetModal from "../../../components/BottomSheetModal";
+import moment from 'moment';
 
-
-type Props = {};
-
-const UserSetting: React.FC<Props> = (props) => {
+const UserSetting = () => {
   const navigation = useNavigation();
+  const [languageList, setLanguageList] = useState<any[]>([])
+  const [selectedLanguage, setSelectedLanguage] = useState(I18n.locale);
+  const [selectedLabel, setSelectedLabel] = useState();
+  const [popUpShow, setPopUpShow] = useState(false);
+  const languages = getLanguages();
+  const languageOptions = Object.keys(languages).map((key) => ({
+    value: key,
+    // @ts-ignore
+    label: languages[key],
+    key,
+  }));
+
+  useEffect(() => {
+    setSelectedLabel(languageOptions.find(v => v.value === I18n.locale)?.label)
+    setLanguageList(() => languageOptions);
+    moment.locale(I18n.locale === 'zh' ? 'zh-cn' : 'en');
+  }, [I18n.locale])
+
   const goToModifyName = () => {
     // @ts-ignore
     navigation.navigate(Screens.ModifyName);
@@ -33,20 +53,48 @@ const UserSetting: React.FC<Props> = (props) => {
     navigation.navigate(Screens.LogOut);
   }
 
+  const onChange = () => {
+    setPopUpShow(true)
+  }
+
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar title="Setting"/>
+        <FavorDaoNavBar title={strings('SettingScreen.title')}/>
         <ScrollView>
-          <UserSettingItem title={'Modify name'} onClick={goToModifyName}/>
-          <UserSettingItem title={'Change password'} onClick={goToChangePassword}/>
-          <UserSettingItem title={'Account cancellation'} onClick={goToAccountCancellation}/>
-          <UserSettingItem title={'Log out'} onClick={goToLogOut}/>
+          <UserSettingItem title={strings('SettingScreen.ModifyName')} onClick={goToModifyName}/>
+          <UserSettingItem title={strings('SettingScreen.ChangePassword')} onClick={goToChangePassword}/>
+          <UserSettingItem title={strings('SettingScreen.AccountCancellation')} onClick={goToAccountCancellation}/>
+          <UserSettingItem title={strings('SettingScreen.LogOut')} onClick={goToLogOut}/>
+          <UserSettingItem title={strings('SettingScreen.language')} onClick={onChange} language={selectedLabel}/>
           <View style={styles.version}>
-            <Text style={styles.about}>About</Text>
-            <Text style={styles.versionText}>version {packageInfo.version}.0717</Text>
+            <Text style={styles.about}>{strings('SettingScreen.About')}</Text>
+            <Text style={styles.versionText}>{strings('SettingScreen.version')} {packageInfo.version}.0801</Text>
           </View>
         </ScrollView>
+
+        <BottomSheetModal visible={popUpShow} setVisible={setPopUpShow} height={'25%'}>
+          <Picker
+            mode={"dropdown"}
+            selectedValue={selectedLanguage}
+            onValueChange={(itemValue, itemIndex) => {
+              setSelectedLanguage(itemValue)
+              setLocale(itemValue)
+              setPopUpShow(false)
+              // @ts-ignore
+              navigation.navigate(Screens.Main.Feeds);
+              navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [{name: Screens.Main.Feeds}]
+                })
+              );
+            }}>
+            {
+              languageList.map((item,key) => <Picker.Item label={item.label} value={item.value} key={key}/>)
+            }
+          </Picker>
+        </BottomSheetModal>
       </View>
     </BackgroundSafeAreaView>
   )

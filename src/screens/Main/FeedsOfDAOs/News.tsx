@@ -1,12 +1,10 @@
 import * as React from "react";
-import {Image, StyleSheet, View, Text, TouchableOpacity} from "react-native";
+import { StyleSheet, View } from "react-native";
 import PostList from "../../../components/PostList";
 import {useSelector} from "react-redux";
 import Models from "../../../declare/storeTypes";
 
-type Props ={};
-
-const News: React.FC<Props> = (props) => {
+const News = () => {
   const { feedsOfDAOId } = useSelector((state: Models) => state.global);
 
   return (

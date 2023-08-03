@@ -1,11 +1,12 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {StyleSheet, Text, View} from "react-native";
 import {createMaterialTopTabNavigator} from "@react-navigation/material-top-tabs";
 const TopTab = createMaterialTopTabNavigator();
-import { FontSize, Color, Border, FontFamily, Padding } from "../../../GlobalStyles";
-import Mixed from '../FeedsOfDAOs/Mixed';
+import { FontSize, Color } from "../../../GlobalStyles";
+import Mixed from './Mixed';
 import News from "./News";
 import Videos from "./Viedos";
+import {strings} from "../../../locales/i18n";
 
 export const TopBarOptions = {
   header: () => null,
@@ -32,9 +33,9 @@ export function FeedsOfDaoNavigator(props: FeedsOfDaoProps) {
   return (
     // @ts-ignore
     <TopTab.Navigator screenOptions={TopBarOptions} initialRouteName={type}>
-      <TopTab.Screen name="Mixed" component={Mixed}/>
-      <TopTab.Screen name="News" component={News}/>
-      <TopTab.Screen name="Videos" component={Videos}/>
+      <TopTab.Screen name={strings('FeedsOfDaoTabBar.Mixed')} component={Mixed}/>
+      <TopTab.Screen name={strings('FeedsOfDaoTabBar.News')} component={News}/>
+      <TopTab.Screen name={strings('FeedsOfDaoTabBar.Videos')} component={Videos}/>
     </TopTab.Navigator>
   );
 }

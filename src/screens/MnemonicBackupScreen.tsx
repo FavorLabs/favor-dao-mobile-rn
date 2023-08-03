@@ -11,6 +11,7 @@ import TextInputBlock from "../components/TextInputBlock";
 import {Icon} from "@rneui/themed";
 import Clipboard from "@react-native-clipboard/clipboard"
 import Toast from "react-native-toast-message";
+import {strings} from "../locales/i18n";
 
 const Mnemonic = () => {
   const navigation = useNavigation();
@@ -29,14 +30,13 @@ const Mnemonic = () => {
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
       <View style={styles.mnemonic}>
         <FavorDaoNavBar
-          title={type === 'privateKey' ? 'Private Key' : 'Mnemonic words'}
+          title={type === 'privateKey' ? strings('Mnemonic.PrivateKey') : strings('Mnemonic.MnemonicWords')}
         />
         <ScrollView>
           <View style={styles.titleParent}>
-            <Text style={[styles.title, styles.titleLayout]}>{`Backup`}</Text>
+            <Text style={[styles.title, styles.titleLayout]}>{strings('Mnemonic.Backup')}</Text>
             <Text style={[styles.title1, styles.titleLayout]}>
-              Please copy the {type === 'privateKey' ? 'Private Key' : 'Mnemonic words'} in order to ensure accurate
-              backup
+               {type === 'privateKey' ? strings('Mnemonic.PrivateKeyTips') : strings('Mnemonic.MnemonicWordsTips')}
             </Text>
           </View>
           {
@@ -52,7 +52,7 @@ const Mnemonic = () => {
                     Clipboard.setString(mnemonic);
                     Toast.show({
                       type: 'success',
-                      text1: "copy success"
+                      text1: strings('Mnemonic.copySuccess')
                     })
                   }}>
                     <Icon size={20} name={'copy1'} type={'antdesign'}/>
@@ -71,7 +71,7 @@ const Mnemonic = () => {
       </View>
       <TouchableOpacity onPress={backUp} style={styles.backupButton}>
         <FavorDaoButton
-          textValue="Backup"
+          textValue={strings('Mnemonic.Backup')}
           frame1171275771BackgroundColor="#ff8d1a"
           cancelColor="#fff"
         />

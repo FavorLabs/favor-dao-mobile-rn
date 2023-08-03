@@ -10,6 +10,7 @@ import UserApi from "../../../../services/DAOApi/User";
 import Toast from "react-native-toast-message";
 import {useUrl} from "../../../../utils/hook";
 import {addDecimal} from "../../../../utils/balance";
+import {strings} from "../../../../locales/i18n";
 
 
 type Props ={
@@ -63,7 +64,7 @@ const FightForLuck: React.FC<Props> = (props) => {
             Toast.show({
                 type: 'error',
                 // @ts-ignore
-                text1: 'must be an positive integer',
+                text1: strings('FightForLuck.Toast.mustInteger'),
             });
         }
     },[TotalAmountSum])
@@ -71,24 +72,24 @@ const FightForLuck: React.FC<Props> = (props) => {
         <View style={styles.container}>
             <ScrollView>
                 <TextInputBlock
-                    title={`LuckyPacket quantity`}
-                    placeholder={`Please enter the quantity of luckypacket`}
+                    title={strings('FightForLuck.LuckyPacketTitle')}
+                    placeholder={strings('FightForLuck.LuckyPacketPlaceholder')}
                     value={LuckyPacketQuantitySum}
                     setValue={setLuckyPacketQuantitySum}
                     numberInput={true}
-                    AdditionalInformation={`(There are ${memberCount} people in this group)`}
+                    AdditionalInformation={`(${strings('FightForLuck.Information1')}${memberCount}${strings('FightForLuck.Information2')})`}
                 />
                 <TextInputBlock
-                    title={'Total amount'}
-                    placeholder={`Please enter the amounts`}
+                    title={strings('FightForLuck.TotalAmountTitle')}
+                    placeholder={strings('FightForLuck.TotalAmountPlaceholder')}
                     lastPlaceholder={'FavT'}
                     numberInput={true}
                     value={TotalAmountSum}
                     setValue={setTotalAmountSum}
                 />
                 <TextInputBlock
-                    title={'Best wishes'}
-                    placeholder={`Please enter best wishes`}
+                    title={strings('FightForLuck.BestWishesTitle')}
+                    placeholder={strings('FightForLuck.BestWishesPlaceholder')}
                     value={wishes}
                     setValue={setWishes}
                     maxLength={30}
@@ -99,7 +100,7 @@ const FightForLuck: React.FC<Props> = (props) => {
             </ScrollView>
             <Pressable onPress={()=>setLuckyModal(true)} style={createDisable && { opacity: 0.5 }} disabled={createDisable}>
                 <FavorDaoButton
-                    textValue="Insert money"
+                    textValue={strings('FightForLuck.InsertMoney')}
                     frame1171275771BackgroundColor="#ff564f"
                     cancelColor="#fff"
                 />

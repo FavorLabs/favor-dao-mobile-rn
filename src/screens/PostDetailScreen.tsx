@@ -14,6 +14,7 @@ import VideoBlockItem from "../components/VideoBlockItem";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Toast from "react-native-toast-message";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import {strings} from "../locales/i18n";
 
 const PostDetailScreen = () => {
   const url = useUrl();
@@ -87,7 +88,7 @@ const PostDetailScreen = () => {
                           fontWeight: '400',
                           textAlign: "left",
                           paddingHorizontal: Padding.p_base,
-                          paddingVertical: 10}}>Sorry, this news has been deleted by the author</Text>
+                          paddingVertical: 10}}>{strings('PostDetailScreen.deleteText')}</Text>
                       </View>
                   }
                   <OperationBlock postInfo={postInfo} type={0}/>

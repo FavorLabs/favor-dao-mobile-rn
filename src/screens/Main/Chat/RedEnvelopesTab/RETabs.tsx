@@ -5,6 +5,7 @@ const TopTab = createMaterialTopTabNavigator();
 import { FontSize, Color } from "../../../../GlobalStyles";
 import FightForLuck from "./FightForLuck";
 import Ordinary from "./Ordinary";
+import {strings} from "../../../../locales/i18n";
 
 
 export const REtabs = {
@@ -33,8 +34,8 @@ export function RETabs(props: FeedsOfDaoProps) {
     return (
         // @ts-ignore
         <TopTab.Navigator screenOptions={REtabs} >
-            <TopTab.Screen name="FightForLuck" component={FightForLuck}  initialParams={{ memberCount,sendCustomMessage}}/>
-            <TopTab.Screen name="Ordinary" component={Ordinary} initialParams={{ memberCount,sendCustomMessage}}/>
+            <TopTab.Screen name={strings('RETabs.FightForLuck')} component={FightForLuck}  initialParams={{ memberCount,sendCustomMessage}}/>
+            <TopTab.Screen name={strings('RETabs.Ordinary')} component={Ordinary} initialParams={{ memberCount,sendCustomMessage}}/>
         </TopTab.Navigator>
     );
 }

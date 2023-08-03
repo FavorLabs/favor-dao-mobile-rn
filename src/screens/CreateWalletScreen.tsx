@@ -18,6 +18,7 @@ import Models from "../declare/storeTypes";
 import {updateState as globalUpdateState} from "../store/global";
 import {getDAOInfo} from "../utils/util";
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import {strings} from "../locales/i18n";
 
 const CreateWallet = () => {
   const url = useUrl();
@@ -56,7 +57,7 @@ const CreateWallet = () => {
     } catch (e) {
       Toast.show({
         type: 'error',
-        text1: 'Get mnemonic error'
+        text1: `${strings('CreateWalletScreen.Toast.GetMnemonicError')}`
       });
     }
   }
@@ -64,11 +65,14 @@ const CreateWallet = () => {
     if (createDisable) {
       return Toast.show({
         type: 'error',
-        text1: 'Please complete all options',
+        text1: `${strings('CreateWalletScreen.Toast.PleaseCompleteAllOptions')}`
       })
     }
     if (!password || password !== repeatPassword) {
-      return Toast.show({type: 'error', text1: 'Two inconsistent passwords'});
+      return Toast.show({
+        type: 'error',
+        text1: `${strings('CreateWalletScreen.Toast.TwoInconsistentPasswords')}`
+      });
     }
     await setLoading(true);
     try {
@@ -95,22 +99,22 @@ const CreateWallet = () => {
   return <>
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
       <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
-        <FavorDaoNavBar title="Create wallet"/>
+        <FavorDaoNavBar title={strings('CreateWalletScreen.title')}/>
 
           <View style={styles.content}>
             <ScrollView>
             <View>
               <WalletWords mnemonicArray={mnemonicArray}/>
               <TextInputBlock
-                title={'Password'}
-                placeholder={`Please enter passwords`}
+                title={strings('CreateWalletScreen.passwordTitle')}
+                placeholder={strings('CreateWalletScreen.passwordPlaceholder')}
                 value={password}
                 setValue={setPassword}
                 secureTextEntry={true}
               />
               <TextInputBlock
-                title={'Confirm Password'}
-                placeholder={`Please enter passwords again`}
+                title={strings('CreateWalletScreen.ConfirmPasswordTitle')}
+                placeholder={strings('CreateWalletScreen.ConfirmPasswordPlaceholder')}
                 value={repeatPassword}
                 setValue={setRepeatPassword}
                 secureTextEntry={true}
@@ -123,7 +127,7 @@ const CreateWallet = () => {
                                 onPress={create}>
                 <FavorDaoButton
                   isLoading={loading}
-                  textValue="Create"
+                  textValue={strings('CreateWalletScreen.CreateButton')}
                   frame1171275771BackgroundColor="#ff8d1a"
                   cancelColor="#fff"
                 />

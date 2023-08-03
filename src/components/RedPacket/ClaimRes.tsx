@@ -7,6 +7,7 @@ import {useNavigation} from "@react-navigation/native";
 import {useResourceUrl, useUrl} from "../../utils/hook";
 import {getChatsAvatarUrl} from "../../utils/util";
 import {CometChat} from "@cometchat-pro/react-native-chat";
+import {strings} from "../../locales/i18n";
 export type Props = {
     claimResStatus:boolean,
     setClaimResStatus:Function,
@@ -77,7 +78,7 @@ const ClaimRes: React.FC<Props> = (props) => {
                                 </View>
                                 <View style={[{marginTop:0.75 * Width * 0.25 * 0.7 * 0.2},styles.flex]}>
                                     {
-                                      state &&  <Text style={[styles.noticetext,{fontSize:0.75 * Width * 0.25 * 0.7*0.3 }]}>It has been collected completely</Text>
+                                      state &&  <Text style={[styles.noticetext,{fontSize:0.75 * Width * 0.25 * 0.7*0.3 }]}>{strings('ClaimRes.collectedCompletely')}</Text>
                                     }
                                     {
                                       !state &&
@@ -88,7 +89,7 @@ const ClaimRes: React.FC<Props> = (props) => {
                             </View>
                             <View style={[styles.todetails,styles.bottom,{display: state?'flex':'none'}]}>
                                 <Pressable onPress={todetails} style={styles.textres}>
-                                    <Text style={styles.nametext}>View claim{'\u0020'}details{'\u0020'}</Text>
+                                    <Text style={styles.nametext}>{strings('ClaimRes.viewClaimDetails')}</Text>
                                     <Image
                                         style={{width:0.75 * Width * 0.25*0.7*0.5*0.5,height:0.75 * Width * 0.25*0.7*0.5*0.5}}
                                         resizeMode="contain"
@@ -100,7 +101,7 @@ const ClaimRes: React.FC<Props> = (props) => {
                                 <View style={[styles.openBox1,styles.flex,{width: 0.75 * Width * 0.25,height: 0.75 * Width * 0.25,borderRadius: 0.75 * Width * 0.25 *0.5}]}>
                                     <Pressable onPress={toopen}>
                                         <View style={[styles.openBox2,{width: 0.75 * Width * 0.25 *0.7,height: 0.75 * Width * 0.25*0.7,borderRadius: 0.75 * Width * 0.25*0.7*0.5},styles.flex]}>
-                                            <Text style={[styles.opentext,{fontSize:0.75 * Width * 0.25*0.7*0.5*0.5}]}>{loding?'Loding':'Open'}</Text>
+                                            <Text style={[styles.opentext,{fontSize:0.75 * Width * 0.25*0.7*0.5*0.5}]}>{loding ? strings('ClaimRes.Loading') : strings('ClaimRes.Open')}</Text>
                                         </View>
                                     </Pressable>
                                 </View>

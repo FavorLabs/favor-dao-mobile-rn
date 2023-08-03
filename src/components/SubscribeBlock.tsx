@@ -10,6 +10,7 @@ import {addDecimal, compareNumber} from "../utils/balance";
 import Toast from "react-native-toast-message";
 import DaoCardItem from "./DaoCardItem";
 import DaoApi from "../services/DAOApi/Dao";
+import {strings} from "../locales/i18n";
 
 type Props = React.ComponentProps<typeof DaoCommunityCard> & {
     subFn?: Function
@@ -30,7 +31,7 @@ const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
             const { data } = await DaoApi.bookmark(url, daoCardInfo.dao.id);
             if(data.data) {
                 setIsJoin(data.data.status);
-                Toast.show({type: 'info', text1: 'Join success!'});
+                Toast.show({type: 'info', text1: strings('SubscribeModal.SubscribeBlock.Toast.JoinSuccess')});
             }
         } catch (e) {
             if (e instanceof Error) console.error(e.message);
@@ -68,7 +69,7 @@ const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
         if (compareNumber(daoCardInfo.dao.price, balance)) {
             Toast.show({
                 type: 'info',
-                text1: 'Insufficient balance!'
+                text1: strings('SubscribeModal.SubscribeBlock.Toast.InsufficientBalance')
             })
             return;
         }
@@ -80,7 +81,7 @@ const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
       <View style={styles.titleParent}>
           <ScrollView>
           <Text style={[styles.title, styles.titleFlexBox]}>
-              Please subscribe first
+              {strings('SubscribeModal.SubscribeBlock.title')}
           </Text>
           <View style={{
               width: '100%',
@@ -93,19 +94,19 @@ const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
               <View style={styles.frameGroup}>
                   <View style={styles.descriptionParent}>
                       <Text style={[styles.description1, styles.descriptionTypo]}>
-                          Balance
+                          {strings('SubscribeModal.SubscribeBlock.Balance')}
                       </Text>
                       <Text style={[styles.description2, styles.descriptionTypo]}>
-                          {addDecimal(balance)} FavT
+                          {addDecimal(balance)}{strings('SubscribeModal.SubscribeBlock.FavT')}
                       </Text>
                   </View>
                   <View style={styles.frameItem}/>
                   <View style={styles.descriptionGroup}>
                       <Text style={[styles.description1, styles.descriptionTypo]}>
-                          Price
+                          {strings('SubscribeModal.SubscribeBlock.Price')}
                       </Text>
                       <Text style={[styles.description2, styles.descriptionTypo]}>
-                          {addDecimal(daoCardInfo.dao.price)} FavT
+                          {addDecimal(daoCardInfo.dao.price)}{strings('SubscribeModal.SubscribeBlock.FavT')}
                       </Text>
                   </View>
               </View>
@@ -113,7 +114,7 @@ const SubscribeBlock = ({daoCardInfo, subFn, loading}: Props) => {
           <Pressable disabled={loading}  onPress={subscribe} style={styles.button} >
               <FavorDaoButton
                 isLoading={loading}
-                textValue="Subscribe"
+                textValue={strings('SubscribeModal.SubscribeBlock.Subscribe')}
                 frame1171275771BackgroundColor="#ff8d1a"
                 cancelColor="#fff"
               />

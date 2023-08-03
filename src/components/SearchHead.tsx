@@ -12,6 +12,7 @@ import {useNavigation} from "@react-navigation/native";
 import {StackNavigationProp} from "@react-navigation/stack";
 import SvgIcon from "./SvgIcon";
 import SearchAddIcon from '../assets/svg/NewsFeed/searchAddIcon.svg'
+import {strings} from "../locales/i18n";
 
 export type Props = {
   tittle: string;
@@ -46,7 +47,7 @@ const SearchHead: React.FC<Props> = (props) => {
         <View style={[styles.groupWrapper, styles.wrapperBg]}>
             <TextInput
               style={styles.searchInput}
-              placeholder={'Search'}
+              placeholder={`${strings('SearchHead.placeholder')}`}
               value={searchValue}
               onChangeText={text => setSearchValue(text)}
               onBlur={getDebounce(getSearchBlur)}
@@ -60,8 +61,8 @@ const SearchHead: React.FC<Props> = (props) => {
       </View>
       <ActionSheet
         ref={actionSheetRef}
-        title={'Create post now!'}
-        options={['Video Post', 'News Post', 'Cancel']}
+        title={`${strings('SearchHead.modalTitle')}`}
+        options={[`${strings('SearchHead.videoPost')}`, `${strings('SearchHead.newsPost')}`, `${strings('SearchHead.cancel')}`]}
         cancelButtonIndex={2}
         onPress={(index: number) => {
           if (index < screens.length) { // @ts-ignore

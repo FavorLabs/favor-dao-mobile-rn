@@ -13,6 +13,7 @@ import Models from "../../../declare/storeTypes";
 import NoDataShow from "../../../components/NoDataShow";
 import {updateState as globalUpdateState} from "../../../store/global";
 import {useIsFocused} from "@react-navigation/native";
+import {strings} from "../../../locales/i18n";
 
 export type Props = {};
 const JoinedDAOListScreen: React.FC<Props> = (props) => {
@@ -144,9 +145,9 @@ const JoinedDAOListScreen: React.FC<Props> = (props) => {
           </View>
           :
           <NoDataShow
-            title={'No results found'}
+            title={strings('Feeds.JoinedScreen.noDataTitle')}
             image={require('../../../assets/postlistNoData.png')}
-            description={`Please join some DAO communities first`}
+            description={strings('Feeds.JoinedScreen.noDataDescription')}
           />
       }
 

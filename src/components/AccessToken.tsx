@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
   },
   accesstoken1: {
     fontWeight: "300",
-    fontFamily: FontFamily.interLight,
     color: Color.iOSSystemLabelsLightPrimary,
     fontSize: FontSize.capsCaps310SemiBold_size,
   },

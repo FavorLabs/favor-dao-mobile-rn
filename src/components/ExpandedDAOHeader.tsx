@@ -19,6 +19,7 @@ import Screens from "../navigation/RouteNames";
 import Toast from "react-native-toast-message";
 import {useCallback, useEffect, useState} from "react";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {strings} from "../locales/i18n";
 
 type Props = {
     daoInfo: DaoInfo;
@@ -44,13 +45,13 @@ const ExpandedDAOHeader: React.FC<Props> = (props) => {
 
     const toFeedsOfDao = async () => {
         // @ts-ignore
-        if(route.name === 'ChatInDAO') return  navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : 'Mixed'});
+        if(route.name === 'ChatInDAO') return  navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : strings('FeedsOfDaoTabBar.Mixed')});
         if (!isLogin) return gotoLogin();
         if(isLoading) return;
         if(!isJoin){
             return Toast.show({
                 type:'info',
-                text1: 'You need to join this dao to enter the chat!!!'
+                text1: strings('ExpandedDAOHeader.toChatError')
             })
         }
         setIsLoading(true);

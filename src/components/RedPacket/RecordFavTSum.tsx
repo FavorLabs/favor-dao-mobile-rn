@@ -24,10 +24,11 @@ import {addDecimal} from "../../utils/balance";
 export type Props = {
     type:number
     setYears:Function,
-    years:number
+    years:number,
+    typeText: string,
 };
 const RecordFavTSum :React.FC<Props> = (props) => {
-    const {type,setYears,years} = props
+    const {type,setYears,years,typeText} = props
     const url = useUrl();
     const year =new Date().getFullYear()
     const Width = Dimensions.get('window').width;
@@ -81,7 +82,7 @@ return (
         </View>
         <View style={styles.descriptionTextBox}>
           <Text style={styles.descriptionText}>
-              {user?.nickname} received a total of
+              {user?.nickname}{typeText}
           </Text>
         </View>
         <View style={styles.favTBox}>

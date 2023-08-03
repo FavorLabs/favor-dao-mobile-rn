@@ -24,6 +24,7 @@ import PostApi from '../services/DAOApi/Post';
 import {updateState as globalUpdateState} from "../store/global";
 import SvgIcon from "./SvgIcon";
 import Operate from "../assets/svg/NewsFeed/operate.svg"
+import {strings} from "../locales/i18n";
 
 
 type Props = {
@@ -80,7 +81,7 @@ const RowUser: React.FC<Props> = (props) => {
         if(data.code==0){
           Toast.show({
             type: 'info',
-            text1: 'Delete success!'
+            text1: `${strings('RowUser.Toast.DeleteSuccess')}`
           });
           dispatch(globalUpdateState({
             ShieldAct:{
@@ -107,7 +108,7 @@ const RowUser: React.FC<Props> = (props) => {
             if(data.code==0){
               Toast.show({
                 type: 'info',
-                text1: 'Block success!'
+                text1: `${strings('RowUser.Toast.BlockSuccess')}`
               });
               dispatch(globalUpdateState({
                 ShieldAct:{
@@ -122,7 +123,7 @@ const RowUser: React.FC<Props> = (props) => {
             if(data.code==0){
               Toast.show({
                 type: 'info',
-                text1: 'Block success!'
+                text1: `${strings('RowUser.Toast.BlockSuccess')}`
               });
               dispatch(globalUpdateState({
                 ShieldAct:{
@@ -150,7 +151,7 @@ const RowUser: React.FC<Props> = (props) => {
       if(data.code==0){
         Toast.show({
           type: 'info',
-          text1: 'Block success!'
+          text1: `${strings('RowUser.Toast.BlockSuccess')}`
         });
           dispatch(globalUpdateState({
             ShieldAct:{
@@ -200,7 +201,7 @@ const RowUser: React.FC<Props> = (props) => {
   }
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
     // @ts-ignore
-    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : 'Mixed'});
+    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : daoInfo , type : strings('FeedsOfDaoTabBar.Mixed')});
     event.stopPropagation();
   };
   useEffect(()=>{
@@ -209,15 +210,15 @@ const RowUser: React.FC<Props> = (props) => {
 
   const delDaoMsg=()=>{
     Alert.alert(
-        "Delete",
-        "Are you sure you want to delete this ?",
+      `${strings('RowUser.ActionSheet.Delete')}`,
+        `${strings('RowUser.alertDeleteMessage')}`,
         [
           {
-            text: "No",
+            text: `${strings('RowUser.No')}`,
             onPress: () => console.log("Cancel Pressed"),
             style: "destructive"
           },
-          { text: "Yes", onPress: () => {
+          { text: `${strings('RowUser.Yes')}`, onPress: () => {
               uDelDaoMsg()
             }
           }
@@ -252,8 +253,8 @@ const RowUser: React.FC<Props> = (props) => {
         { actionSheetType== 0 &&
           <ActionSheet
               ref={delSheetRef}
-              title={'delete'}
-              options={['Delete', 'Cancel']}
+              title={strings('RowUser.ActionSheet.deleteTitle')}
+              options={[strings('RowUser.ActionSheet.Delete'), strings('RowUser.ActionSheet.Cancel')]}
               cancelButtonIndex={1}
               destructiveButtonIndex={0}
               userInterfaceStyle={'dark'}
@@ -265,8 +266,8 @@ const RowUser: React.FC<Props> = (props) => {
         { actionSheetType== 1 &&
           <ActionSheet
               ref={shieldSheetRef}
-              title={'Block & Report'}
-              options={[`Block @${daoInfo?.name}`, 'Block this post' ,'Report','Cancel']}
+              title={strings('RowUser.ActionSheet.BlockReportTitle')}
+              options={[`${strings('RowUser.ActionSheet.Block')} @${daoInfo?.name}`, strings('RowUser.ActionSheet.BlockThisPost') ,strings('RowUser.ActionSheet.Report'),strings('RowUser.ActionSheet.Cancel')]}
               cancelButtonIndex={3}
               onPress={(index:number) => {
                 if (isLogin){

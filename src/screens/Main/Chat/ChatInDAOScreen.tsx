@@ -24,6 +24,7 @@ import {sleep} from "../../../utils/util";
 import User = CometChat.User;
 import navigation from "../../../navigation";
 import Toast from "react-native-toast-message";
+import {strings} from "../../../locales/i18n";
 
 const ChatInDAOScreen = () => {
     const limit = 10;
@@ -216,7 +217,7 @@ const ChatInDAOScreen = () => {
             :
             <View style={styles.loadingContent}>
                 <Text style={styles.loading}>
-                    loading...
+                    {strings('ChatInDAOScreen.loading')}
                 </Text>
             </View>
         }

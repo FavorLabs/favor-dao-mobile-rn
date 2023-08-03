@@ -7,6 +7,7 @@ import {useNavigation} from "@react-navigation/native";
 import {getDebounce} from "../utils/util";
 import Screens from "../navigation/RouteNames";
 import TextParsed from "./TextParsed";
+import {strings} from "../locales/i18n";
 
 type Props = {
   daoCardInfo: PostInfo
@@ -22,7 +23,7 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
   const onPress = () => {
     if(dao.type === 0) {
       // @ts-ignore
-      navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao, type : 'Mixed'});
+      navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao, type : strings('FeedsOfDaoTabBar.Mixed')});
     } else {
       // @ts-ignore
       navigation.navigate(Screens.ToolDaoDetail, { daoInfo: dao});
@@ -49,7 +50,7 @@ const DaoCommunityCard: React.FC<Props> = (props) => {
         <View style={styles.groupParent}>
           <View style={styles.subtitleParent}>
             <Text style={styles.daoName} numberOfLines={1}>{dao.name}</Text>
-            <Text style={styles.subtitle} numberOfLines={1}>joined: {dao.follow_count}</Text>
+            <Text style={styles.subtitle} numberOfLines={1}>{strings('DaoCommunityCard.joined')}: {dao.follow_count}</Text>
           </View>
           <View style={styles.labelWrapper}>
             {/*<View style={[styles.label, styles.labelFlexBox]}>*/}

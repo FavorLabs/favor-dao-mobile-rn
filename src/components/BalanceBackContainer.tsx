@@ -9,6 +9,7 @@ import Toast from "react-native-toast-message";
 import SvgIcon from "./SvgIcon";
 import ReTransFerIcon from '../assets/svg/NewsFeed/reTransFerIcon.svg';
 import Subtract from '../assets/svg/Setting/subtract.svg';
+import {strings} from "../locales/i18n";
 
 type Props = {};
 const BalanceBackContainer: React.FC<Props> = (props) => {
@@ -35,7 +36,7 @@ const BalanceBackContainer: React.FC<Props> = (props) => {
   return (
     <View style={styles.balanceback}>
         <View style={styles.row}>
-          <Text style={styles.title}>Balance</Text>
+          <Text style={styles.title}>{strings('BalanceBackContainer.Balance')}</Text>
           <TouchableOpacity onPress={getBalance}>
             <SvgIcon svg={<ReTransFerIcon/>} width={20}/>
           </TouchableOpacity>

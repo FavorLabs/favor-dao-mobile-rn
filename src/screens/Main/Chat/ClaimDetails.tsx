@@ -17,6 +17,7 @@ import {toNumber} from "lodash";
 import {getTime} from "../../../utils/util";
 import {useNavigation} from "@react-navigation/native";
 import Screens from "../../../navigation/RouteNames";
+import {strings} from "../../../locales/i18n";
 
 const ClaimDetails = () => {
   const navigation = useNavigation();
@@ -60,7 +61,7 @@ const ClaimDetails = () => {
       }else {
         Toast.show({
           type: 'error',
-          text1: 'Quest failed'
+          text1: strings('ClaimDetails.Toast.QuestFailed')
         });
       }
     }catch (e){
@@ -79,7 +80,7 @@ const ClaimDetails = () => {
     }else {
       Toast.show({
         type: 'error',
-        text1: 'QuestUser failed'
+        text1: strings('ClaimDetails.Toast.QuestUserFailed')
       });
     }
   }
@@ -124,7 +125,7 @@ const ClaimDetails = () => {
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <FavorDaoNavBar title={'Claim Details'} rightComponent={
+          <FavorDaoNavBar title={strings('ClaimDetails.title')} rightComponent={
             <TouchableOpacity style={[styles.right,{display:unToRecord?'none':'flex'}]} onPress={
               ()=>{
                 // @ts-ignore
@@ -138,7 +139,7 @@ const ClaimDetails = () => {
         {
           loding &&
             <View>
-              <Text style={{textAlign:'center',marginTop:"35%",fontSize:25,marginBottom:15}}>Loding...</Text>
+              <Text style={{textAlign:'center',marginTop:"35%",fontSize:25,marginBottom:15}}>{strings('ClaimDetails.loading')}</Text>
               <ActivityIndicator size="large" color="#FF5530" />
             </View>
         }
@@ -167,10 +168,10 @@ const ClaimDetails = () => {
               <View style={styles.frameView}>
                 <View style={[styles.titleWrapper, styles.frameGroupFlexBox]}>
                   {
-                      refund_status == 0 && <Text style={styles.title1Typo}>Received：{claim_count}/{total}</Text>
+                      refund_status == 0 && <Text style={styles.title1Typo}>{strings('ClaimDetails.Received')}：{claim_count}/{total}</Text>
                   }
                   {
-                      refund_status == 1 && <Text style={styles.title1Typo}>The luckpacket has expired. Received：{claim_count}/{total}</Text>
+                      refund_status == 1 && <Text style={styles.title1Typo}>{strings('ClaimDetails.expired')} {strings('ClaimDetails.Received')}：{claim_count}/{total}</Text>
                   }
                 </View>
                 <View style={styles.chatchannelParent}>
@@ -194,7 +195,7 @@ const ClaimDetails = () => {
                 </View>
                 <View style={[styles.bottomBox,{display:refund_status==0?'none':'flex'}]}>
                   <Text style={styles.bottomText}>
-                    Unclaimed luckpacket will be refunded upon expiration
+                    {strings('ClaimDetails.Unclaimed')}
                   </Text>
                 </View>
               </View>
@@ -283,7 +284,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   channelnameTypo: {
-    fontFamily: FontFamily.headingH613,
     fontWeight: "500",
     color: Color.iOSSystemLabelsLightPrimary,
     fontSize: FontSize.bodyBody17_size,
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
   },
   back1: {
     color: Color.color2,
-    fontFamily: FontFamily.paragraphP313,
+    fontWeight: '300',
     fontSize: FontSize.bodyBody17_size,
   },
   back: {
@@ -306,7 +306,6 @@ const styles = StyleSheet.create({
     marginLeft: 56,
     fontSize: FontSize.size_xl,
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.capsCaps310SemiBold,
     fontWeight: "600",
     lineHeight: 22,
     flex: 1,
@@ -335,7 +334,6 @@ const styles = StyleSheet.create({
     marginLeft: -99,
     fontSize: FontSize.size_xl,
     color: Color.iOSSystemLabelsLightPrimary,
-    fontFamily: FontFamily.capsCaps310SemiBold,
     fontWeight: "600",
     lineHeight: 22,
     width: 63,

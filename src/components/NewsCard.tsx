@@ -13,6 +13,7 @@ import Models from "../declare/storeTypes";
 import {updateState as globalUpdateState} from "../store/global";
 import SvgIcon from "./SvgIcon";
 import ReTransFerIcon from "../assets/svg/NewsFeed/reTransFerIcon.svg"
+import {strings} from "../locales/i18n";
 
 export type Props = {
   postInfo: PostInfo;
@@ -28,7 +29,7 @@ const NewsCard: React.FC<Props> = (props) => {
   const [oldDelContents,setOldDelContents]=useState(true)
   const toDaoCommunity = (event: { stopPropagation: () => void; }) => {
     // @ts-ignore
-    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao , type : 'Mixed'});
+    navigation.navigate(Screens.FeedsOfDAO,{ daoInfo : dao , type : strings('FeedsOfDaoTabBar.Mixed')});
     event.stopPropagation();
   };
   const { ShieldAct} = useSelector((state: Models) => state.global);
@@ -94,7 +95,7 @@ const NewsCard: React.FC<Props> = (props) => {
                 <View style={styles.retransRow}>
                   <SvgIcon svg={<ReTransFerIcon/>} width={20} height={16}/>
                   <Text style={styles.daoName} numberOfLines={1}>{dao.name}</Text>
-                  <Text style={styles.retranText}>retransfer this</Text>
+                  <Text style={styles.retranText}>{strings('NewsCard.retransferThis')}</Text>
                 </View>
               </TouchableOpacity>
           }
@@ -120,7 +121,7 @@ const NewsCard: React.FC<Props> = (props) => {
                 fontWeight: '400',
                 textAlign: "left",
                 paddingHorizontal: Padding.p_base,
-                paddingVertical: 10}}>Sorry, this news has been deleted by the author</Text>
+                paddingVertical: 10}}>{strings('NewsCard.deletedText')}</Text>
             </View>
         <OperationBlock postInfo={postInfo} type={contents?.length && orig_contents?.length ? 0 : orig_type}/>
         <View style={styles.frameChild} />

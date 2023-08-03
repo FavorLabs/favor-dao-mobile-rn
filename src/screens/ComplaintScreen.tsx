@@ -17,6 +17,7 @@ import PostApi from "../services/DAOApi/Post";
 import Toast from "react-native-toast-message";
 import {useIsLogin, useUrl} from '../utils/hook';
 import BackgroundSafeAreaView from "../components/BackgroundSafeAreaView";
+import {strings} from "../locales/i18n";
 
 const ComplaintScreen = () => {
     const route = useRoute();
@@ -49,14 +50,14 @@ const ComplaintScreen = () => {
                 if(data.code==0){
                     Toast.show({
                         type: 'info',
-                        text1: 'Report success!'
+                        text1: `${strings('ComplaintScreen.Toast.ReportSuccess')}`
                     });
                     navigation.goBack();
                 }
             }else {
                 Toast.show({
                     type: 'error',
-                    text1: 'Report failed ! Please check the input content'
+                    text1: `${strings('ComplaintScreen.Toast.ReportFiled')}`
                 });
             }
 
@@ -74,18 +75,18 @@ const ComplaintScreen = () => {
         if (reason!=='' && reason.trim()==''){
             Toast.show({
                 type: 'error',
-                text1: 'The input cannot be a plain space'
+                text1: `${strings('ComplaintScreen.Toast.SpaceError')}`
             });
         }
     },[reason])
     return (
         <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}} footerStyle={{backgroundColor: Color.color2}}>
         <KeyboardAwareScrollView contentContainerStyle={styles.createWallet}>
-            <FavorDaoNavBar title="Report"/>
+            <FavorDaoNavBar title={strings('ComplaintScreen.title')}/>
             <View style={styles.content}>
                 <ScrollView>
                     <TextInputBlock
-                        title={`Report about the content released by`}
+                        title={strings('ComplaintScreen.ReportTitle')}
                         placeholder={`${contentText}`}
                         username={`@${daoInfo.name}`}
                         value={complaint}
@@ -94,8 +95,8 @@ const ComplaintScreen = () => {
                         editable={false}
                     />
                     <TextInputBlock
-                        title={'Reason'}
-                        placeholder={`Please enter the reason for your report`}
+                        title={strings('ComplaintScreen.ReasonTitle')}
+                        placeholder={strings('ComplaintScreen.ReasonPlaceholder')}
                         value={reason}
                         setValue={setReason}
                         multiline={true}
@@ -105,7 +106,7 @@ const ComplaintScreen = () => {
                     <TouchableOpacity style={[{marginTop: 10},createDisable && { opacity: 0.5 }]} disabled={loading} onPress={toComplaint}>
                         <FavorDaoButton
                             isLoading={loading}
-                            textValue="Confirm"
+                            textValue={strings('ComplaintScreen.ConfirmButton')}
                             frame1171275771BackgroundColor="#ff8d1a"
                             cancelColor="#fff"
                         />

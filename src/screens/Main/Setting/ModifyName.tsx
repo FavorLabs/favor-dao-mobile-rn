@@ -13,6 +13,7 @@ import {updateState as globalUpdateState} from "../../../store/global";
 import Toast from "react-native-toast-message";
 import {hasWhiteSpace} from "../../../utils/util";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
+import {strings} from "../../../locales/i18n";
 
 const ModifyName = () => {
   const dispatch = useDispatch();
@@ -34,19 +35,19 @@ const ModifyName = () => {
     if (confirmDisable) {
       return Toast.show({
         type: 'error',
-        text1: 'Please enter the user name',
+        text1: strings('ModifyName.Toast.PleaseEnter'),
       })
     }
     if (hasWhiteSpace(nickName)) {
       return Toast.show({
         type: 'error',
-        text1: 'No spaces allowed in user name!',
+        text1: strings('ModifyName.Toast.NoSpaces'),
       })
     }
     if (user?.nickname === nickName){
       return Toast.show({
         type: 'error',
-        text1: 'Nickname duplication',
+        text1: strings('ModifyName.Toast.NicknameDuplication'),
       })
     }
 
@@ -61,7 +62,7 @@ const ModifyName = () => {
         }));
         Toast.show({
           type: 'info',
-          text1: 'modify name success!'
+          text1: strings('ModifyName.Toast.modifyNameSuccess')
         });
         navigation.goBack();
       }
@@ -84,19 +85,19 @@ const ModifyName = () => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar title="Modify name"/>
+        <FavorDaoNavBar title={strings('ModifyName.title')}/>
         <ScrollView>
           <TextInputBlock
-            title={'Modify name'}
+            title={strings('ModifyName.title')}
             value={nickName}
             setValue={setNickName}
-            placeholder={'Please enter a name'}
+            placeholder={strings('ModifyName.placeholder')}
           />
         </ScrollView>
         <View style={[styles.instanceParent, confirmDisable && {opacity: 0.5}]}>
           <TouchableOpacity onPress={changeName}>
             <FavorDaoButton
-              textValue="Confirm"
+              textValue={strings('ModifyName.Confirm')}
               frame1171275771BackgroundColor="#ff8d1a"
               cancelColor="#fff"
               isLoading={btnLoading}

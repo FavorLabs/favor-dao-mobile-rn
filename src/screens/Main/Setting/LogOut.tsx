@@ -11,16 +11,13 @@ import {updateState as globalUpdateState} from "../../../store/global";
 import {updateState as notifyUpdateState} from "../../../store/notify";
 import Toast from "react-native-toast-message";
 import {Color, FontFamily} from "../../../GlobalStyles";
-import {
-  LogOutIntroduction, LogOutText,
-  LogOutTitle
-} from "../../../config/constants";
 import WalletController from '../../../libs/walletController';
 import BottomSheetModal from "../../../components/BottomSheetModal";
 import InputPassword from "../../../components/InputPassword";
 import BackgroundSafeAreaView from "../../../components/BackgroundSafeAreaView";
 import LogOutIcon from '../../../assets/svg/Setting/logOutIcon.svg';
 import SvgIcon from "../../../components/SvgIcon";
+import {strings} from "../../../locales/i18n";
 
 const LogOut = () => {
   const dispatch = useDispatch();
@@ -41,7 +38,7 @@ const LogOut = () => {
       await WalletController.logout(user?.address);
       Toast.show({
         type: 'info',
-        text1: 'LogOut success!'
+        text1: strings('LogOut.success')
       })
       dispatch(globalUpdateState({
         user: null,
@@ -72,28 +69,28 @@ const LogOut = () => {
   return (
     <BackgroundSafeAreaView>
       <View style={styles.container}>
-        <FavorDaoNavBar title="Log out"/>
+        <FavorDaoNavBar title={strings('LogOut.title')}/>
 
         <ScrollView>
           <View style={styles.topBlock}>
             <View style={styles.titleRow}>
-              <Text style={styles.title}>{LogOutTitle}</Text>
+              <Text style={styles.title}>{strings('LogOut.title')}</Text>
               <SvgIcon svg={<LogOutIcon/>} width={40} height={40}/>
             </View>
             <Text style={styles.introduction}>
-              {LogOutIntroduction}
+              {strings('LogOut.Tips')}
             </Text>
           </View>
 
           <View style={styles.description}>
-            <Text style={styles.descriptionText}>{LogOutText}</Text>
+            <Text style={styles.descriptionText}>{strings('LogOut.logOutText')}</Text>
           </View>
         </ScrollView>
 
         <View style={styles.instanceParent}>
           <TouchableOpacity onPress={showBottomSheet}>
             <FavorDaoButton
-              textValue="Log out"
+              textValue={strings('LogOut.title')}
               frame1171275771BackgroundColor="#FF564F"
               cancelColor="#fff"
               isLoading={btnLoading}

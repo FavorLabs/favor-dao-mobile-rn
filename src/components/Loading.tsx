@@ -4,6 +4,7 @@ import {FontSize, FontFamily, Color} from "../GlobalStyles";
 import FastImage from 'react-native-fast-image';
 import {useEffect, useState} from "react";
 import RNExitApp from "react-native-exit-app";
+import {strings} from "../locales/i18n";
 const Image = require('../assets/loading_gif.gif');
 
 type LoadingType = {
@@ -36,11 +37,11 @@ const Loading = ({text, visible, timeout}: LoadingType) => {
       {
         show ?
           <>
-            <Text style={styles.loading}>Please try to exit and reopen FavorDAO</Text>
+            <Text style={styles.loading}>{strings('Loading.text')}</Text>
             <TouchableOpacity style={styles.exit} onPress={() => {
               RNExitApp.exitApp();
             }}>
-              <Text style={styles.exit_text}>Exit</Text>
+              <Text style={styles.exit_text}>{strings('Loading.exit')}</Text>
             </TouchableOpacity>
           </>
           :

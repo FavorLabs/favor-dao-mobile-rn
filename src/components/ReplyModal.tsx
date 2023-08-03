@@ -20,6 +20,7 @@ import {useSelector} from "react-redux";
 import Models from "../declare/storeTypes";
 import CommentItem from "./CommentItem";
 import BottomSheetModal from './BottomSheetModal';
+import {strings} from "../locales/i18n";
 
 export type Props = {
     commentInfo: CommentInfo,
@@ -35,7 +36,7 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
     const [isLoading,setIsLoading] = useState<boolean>(false);
     const sendReply = async () => {
         if (!isLogin) return gotoLogin();
-        if (!reply.trim()) return Toast.show({type: 'info', text1: 'Please enter your reply!'});
+        if (!reply.trim()) return Toast.show({type: 'info', text1: strings('ReplyModal.Toast.enterText')});
         if (isLoading) return ;
         try {
             setIsLoading(true);
@@ -54,7 +55,7 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
                 };
                 sendSuccess?.(commentReply)
                 setReply('');
-                Toast.show({type: 'info', text1: 'reply success!'})
+                Toast.show({type: 'info', text1: strings('ReplyModal.Toast.replySuccess')})
             }
         } catch (e) {
             if (e instanceof Error) Toast.show({type: 'error', text1: e.message});
@@ -77,13 +78,11 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
                   <Text style={styles.replyContent}>{item.content}</Text>
                   <View style={styles.replyCountTime}>
                       <TouchableOpacity
-                        onPress={() => {
-                            console.log('replay');
-                        }}>
+                        onPress={() => {}}>
                           <Text style={[styles.replyCount, {
                               marginRight: 24,
                               color: Color.iOSSystemLabelsLightSecondary
-                          }]}>Reply</Text>
+                          }]}>{strings('ReplyModal.replyText')}</Text>
                       </TouchableOpacity>
                       <Text style={styles.replyTime}>{getTime(item.created_on)}</Text>
                   </View>
@@ -108,7 +107,7 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
                               <View style={styles.currentComment}>
                                   <CommentItem commentInfo={commentInfo}/>
                               </View>
-                              <Text style={styles.replyModalTitle}>Replies</Text>
+                              <Text style={styles.replyModalTitle}>{strings('ReplyModal.RepliesText')}</Text>
                           </View>
                       }
                       data={commentInfo.replies}
@@ -118,14 +117,14 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
                         <View style={styles.separator}/>
                       )}
                       ListEmptyComponent={<View style={styles.noReply}>
-                          <Text style={styles.noReplyText}>No reply yet</Text>
+                          <Text style={styles.noReplyText}>{strings('ReplyModal.noReplyText')}</Text>
                       </View>}
                     />
                 </View>
                 <View style={[styles.replyModalFooter]}>
                     <TextInput
                       style={styles.footerInput}
-                      placeholder={'Reply...'}
+                      placeholder={strings('ReplyModal.replyPlaceholder')}
                       placeholderTextColor={Color.darkslategray_400}
                       value={reply}
                       onChangeText={(value) => {
@@ -136,7 +135,7 @@ const ReplyModal = ({visible,setVisible, commentInfo, sendSuccess}: Props) => {
                         sendReply();
                     })}>
                         {
-                            isLoading ? <ActivityIndicator size="small"/> :<Text>Send</Text>
+                            isLoading ? <ActivityIndicator size="small"/> :<Text>{strings('ReplyModal.SendButton')}</Text>
                         }
                     </TouchableOpacity>
                 </View>
