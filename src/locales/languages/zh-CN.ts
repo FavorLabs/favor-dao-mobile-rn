@@ -9,6 +9,9 @@ export default {
     text: '请尝试退出并重新打开 FavorDAO',
     exit: '退出',
   },
+  WalletBottomSheet: {
+    Login: '登录'
+  },
   LocalWallet: {
     title: '本地钱包',
     CreateWalletTitle: '创建钱包',
@@ -370,6 +373,10 @@ export default {
     System: '系统',
     MessageList: '消息列表',
   },
+  NotificationsScreen: {
+    noData: '没有消息',
+    noDataDescription: "有消息时，您将在这里看到它们",
+  },
   Chat: {
     title: '聊天',
     noDataTitle: '暂无消息',
@@ -484,6 +491,8 @@ export default {
       copyError: '复制失败!',
     },
     Backup: '备份',
+    forPrivateKey: '私钥',
+    forMnemonic: '助记词',
     Password: '密码',
     PasswordPlaceholder: '请输入密码',
     Confirm: '确认',

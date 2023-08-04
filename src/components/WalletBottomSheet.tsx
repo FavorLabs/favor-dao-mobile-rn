@@ -11,6 +11,7 @@ import WalletController from "../libs/walletController";
 import {useUrl} from "../utils/hook";
 import Toast from "react-native-toast-message";
 import {getDAOInfo} from "../utils/util";
+import {strings} from "../locales/i18n";
 
 const WalletBottomSheet = () => {
     const url = useUrl();
@@ -50,7 +51,7 @@ const WalletBottomSheet = () => {
         >
             {
                 data ?
-                  <InputPassword type={0} fn={login} btnText={'Login'}/>
+                  <InputPassword type={0} fn={login} btnText={strings('WalletBottomSheet.Login')}/>
                   :
                   <WalletConnect/>
             }

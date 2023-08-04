@@ -29,6 +29,7 @@ import NoDataShow from "../../../components/NoDataShow";
 import UnionSvg from "../../../assets/svg/unionWhite.svg";
 import TransactionSvg from "../../../assets/svg/transactionSvgWhite.svg";
 import {logger} from "../../../cometchat-pro-react-native-ui-kit/CometChatWorkspace/src/utils/common";
+import {strings} from "../../../locales/i18n";
 
 const NotificationsScreen = () => {
   const dispatch = useDispatch();
@@ -201,8 +202,8 @@ const NotificationsScreen = () => {
         ListEmptyComponent={!notifyList?.length && !refreshing ?
           <View style={styles.noData}>
             <NoDataShow
-              title={'No messages'}
-              description={"When you have messages you'll see them here"}
+              title={strings('NotificationsScreen.noData')}
+              description={strings('NotificationsScreen.noDataDescription')}
               image={require('../../../assets/notifyNoData.png')}
             />
           </View>

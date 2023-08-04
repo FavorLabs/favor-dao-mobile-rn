@@ -77,7 +77,7 @@ const MessageInputer: React.FC<Props> = (props) => {
   };
 
   const luckyPacketFun = () => {
-    navigation.navigate(Screens.RedEnvelopes, {sendCustomMessage: sendCustomMessage, memberCount: memberCount})
+    navigation.navigate(Screens.RedEnvelopes, {sendCustomMessage: sendCustomMessage, memberCount: memberCount })
     closeBottom();
   }
 
@@ -312,12 +312,13 @@ const MessageInputer: React.FC<Props> = (props) => {
           setMessageList(v => messageSent(v, message, userMessage._id));
         },
         error => {
-          Toast.show({
-            type: 'error',
-            text1: error,
-          });
-          // @ts-ignore
-          setMessageList(v => messageSendError(v, userMessage._id));
+          // Toast.show({
+          //   type: 'error',
+          //   text1: error,
+          // });
+          // // @ts-ignore
+          // setMessageList(v => messageSendError(v, userMessage._id));
+          messageProcess(userMessage, 'redPacket', 'custom')
         }
       );
     } else {
