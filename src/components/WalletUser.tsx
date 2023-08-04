@@ -103,7 +103,7 @@ const WalletUser: React.FC<Props> = (props) => {
       <BottomSheetModal visible={isBackUpShow} setVisible={setBackUpIsShow}>
         <View style={styles.backUpDialog}>
           <Text
-            style={styles.forMnemonic}>For {WalletController.type === "privateKey" ? 'private key' : 'mnemonic'}</Text>
+            style={styles.forMnemonic}>{WalletController.type === "privateKey" ? strings('WalletUser.forPrivateKey') : strings('WalletUser.forMnemonic')}</Text>
           <TextInputBlock
             title={strings('WalletUser.Password')}
             placeholder={strings('WalletUser.PasswordPlaceholder')}

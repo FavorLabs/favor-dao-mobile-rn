@@ -250,8 +250,8 @@ const NotifyScreen = () => {
                     ListEmptyComponent={!list.length && !refreshing ?
                       <View style={styles.noData}>
                         <NoDataShow
-                          title={'No messages'}
-                          description={"When you have messages you'll see them here"}
+                          title={strings('NotificationsScreen.noData')}
+                          description={strings('NotificationsScreen.noDataDescription')}
                           image={require('../../../assets/notifyNoData.png')}
                         />
                       </View>

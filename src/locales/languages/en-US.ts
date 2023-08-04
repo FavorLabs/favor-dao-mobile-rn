@@ -9,6 +9,9 @@ export default {
     text: 'Please try to exit and reopen FavorDAO',
     exit: 'Exit',
   },
+  WalletBottomSheet: {
+    Login: 'Login'
+  },
   LocalWallet: {
     title: 'Local wallet',
     CreateWalletTitle: 'Create wallet',
@@ -370,6 +373,10 @@ export default {
     System: 'System',
     MessageList: 'Message list',
   },
+  NotificationsScreen: {
+    noData: 'No messages',
+    noDataDescription: "When you have messages you'll see them here",
+  },
   Chat: {
     title: 'Chats Groups',
     noDataTitle: 'No news',
@@ -484,6 +491,8 @@ export default {
       copyError: 'Copy error!',
     },
     Backup: 'Backup',
+    forPrivateKey: 'For private key',
+    forMnemonic: 'For mnemonic',
     Password: 'Password',
     PasswordPlaceholder: 'Please enter passwords',
     Confirm: 'Confirm',
