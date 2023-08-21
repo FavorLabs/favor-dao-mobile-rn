@@ -127,8 +127,8 @@ android {
         applicationId 'io.favorlabs.fultter_favor_dao'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "1.0.5"
+        versionCode 6
+        versionName "1.0.6"
         vectorDrawables.useSupportLibrary = true
     }
 	packagingOptions {

@@ -4,12 +4,14 @@ import I18n from 'react-native-i18n';
 import { LANGUAGE } from '../config/constants';
 import { EventEmitter } from 'events';
 import en from './languages/en-US';
-import zh from './languages/zh-CN';
+import zhCn from './languages/zh-CN';
+import zhTw from './languages/zh-TW';
 import moment from 'moment';
 
 export const supportedTranslations = {
   en,
-  zh,
+  zhCn,
+  zhTw,
 };
 export const I18nEvents = new EventEmitter();
 I18n.fallbacks = true;
@@ -27,17 +29,11 @@ export async function setLocale(locale) {
 }
 
 export function getLanguages() {
-  if(I18n.locale === 'en') {
-    return {
-      en: 'English',
-      zh: 'Chinese',
-    };
-  } else {
-    return {
-      en: '英文',
-      zh: '中文',
-    };
-  }
+  return {
+    en: strings('language.en'),
+    zhCn: strings('language.zhCn'),
+    zhTw: strings('language.zhTw'),
+  };
 }
 
 // Allow RTL alignment in RTL languages
@@ -52,7 +48,7 @@ async function getUserPreferableLocale() {
   const locale = await AsyncStorage.getItem(LANGUAGE);
   if (locale) {
     I18n.locale = locale;
-    moment.locale(locale === 'zh' ? 'zh-cn' : 'en');
+    moment.locale(locale === 'zhCn' ? 'zh-cn' : locale === 'zhTw' ? 'zh-tw' : locale);
   }
 }
 
