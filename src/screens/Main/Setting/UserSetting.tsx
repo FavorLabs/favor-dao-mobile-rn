@@ -30,7 +30,7 @@ const UserSetting = () => {
   useEffect(() => {
     setSelectedLabel(languageOptions.find(v => v.value === I18n.locale)?.label)
     setLanguageList(() => languageOptions);
-    moment.locale(I18n.locale === 'zh' ? 'zh-cn' : 'en');
+    moment.locale(I18n.locale === 'zhCn' ? 'zh-cn' : I18n.locale === 'zhTw' ? 'zh-tw' : I18n.locale);
   }, [I18n.locale])
 
   const goToModifyName = () => {
@@ -69,7 +69,7 @@ const UserSetting = () => {
           <UserSettingItem title={strings('SettingScreen.language')} onClick={onChange} language={selectedLabel}/>
           <View style={styles.version}>
             <Text style={styles.about}>{strings('SettingScreen.About')}</Text>
-            <Text style={styles.versionText}>{strings('SettingScreen.version')} {packageInfo.version}.0801</Text>
+            <Text style={styles.versionText}>{strings('SettingScreen.version')} {packageInfo.version}.0821</Text>
           </View>
         </ScrollView>
 

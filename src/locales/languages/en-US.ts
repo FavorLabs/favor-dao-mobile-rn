@@ -1,4 +1,9 @@
 export default {
+  language: {
+    en: 'English',
+    zhCn: 'Chinese',
+    zhTw: 'Traditional Chinese'
+  },
   navigationIndex: {
     loadingText: 'Connecting to a p2p network',
   },
