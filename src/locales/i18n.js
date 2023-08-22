@@ -48,7 +48,7 @@ async function getUserPreferableLocale() {
   const locale = await AsyncStorage.getItem(LANGUAGE);
   if (locale) {
     I18n.locale = locale;
-    moment.locale(locale === 'zhCn' ? 'zh-cn' : locale === 'zhTw' ? 'zh-tw' : 'en');
+    moment.locale(locale === 'en' ? 'en' : 'zh-cn');
   }
 }
 
