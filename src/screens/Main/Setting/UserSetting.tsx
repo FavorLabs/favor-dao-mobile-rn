@@ -30,7 +30,7 @@ const UserSetting = () => {
   useEffect(() => {
     setSelectedLabel(languageOptions.find(v => v.value === I18n.locale)?.label)
     setLanguageList(() => languageOptions);
-    moment.locale(I18n.locale === 'zhCn' ? 'zh-cn' : I18n.locale === 'zhTw' ? 'zh-tw' : I18n.locale);
+    moment.locale(I18n.locale === 'zhCn' ? 'zh-cn' : I18n.locale === 'zhTw' ? 'zh-tw' : 'en');
   }, [I18n.locale])
 
   const goToModifyName = () => {
