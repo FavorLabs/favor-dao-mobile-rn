@@ -154,7 +154,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
 
 
   useEffect(() => {
-    if (type === 'redPacket') {
+    if (type === 'redPacket' && messageInfo.customData) {
       setRedPacketId(messageInfo.customData.id)
       setSenderName(messageInfo.getSender() ? messageInfo.getSender().getName() : messageInfo.sender.name)
       getRedPacketStatus();
@@ -354,7 +354,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
                       <View style={styles.RPText}>
                           <Text style={styles.Msg} numberOfLines={1} ellipsizeMode={"tail"}>
                             {
-                              messageInfo.customData.title
+                              messageInfo.customData && messageInfo.customData.title
                             }
                           </Text>
                           <Text style={[styles.Received, {display: redStatus !== 2 ? 'flex' : 'none'}]}
@@ -367,7 +367,7 @@ const ChatMsgItem: React.FC<Props> = (props) => {
           </TouchableOpacity>
       }
       {
-         type === 'redPacket' &&
+         type === 'redPacket' && messageInfo.customData &&
           <ClaimRes claimResStatus={claimResStatus} setClaimResStatus={setClaimResStatus} id={redPacketId}
                     senderName={senderName} setRedStatus={setRedStatus}
                     messageInfo={messageInfo}

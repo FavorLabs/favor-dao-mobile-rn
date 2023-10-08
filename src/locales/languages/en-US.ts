@@ -21,8 +21,8 @@ export default {
     title: 'Local wallet',
     CreateWalletTitle: 'Create wallet',
     CreateWalletDescription: 'No wallet to create',
-    ImportWalletTitle: 'Import wallet',
-    ImportWalletDescription: 'There is already a wallet to import',
+    ImportWalletTitle: 'Import mnemonic',
+    ImportWalletDescription: 'Please import a set of mnemonic words',
     ImportPrivateKeyTitle: 'Import private key',
     ImportPrivateKeyDescription: 'There is private key a wallet to import'
   },

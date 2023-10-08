@@ -21,33 +21,33 @@ const ClaimRes: React.FC<Props> = (props) => {
     const {claimResStatus,setClaimResStatus,id,senderName,messageInfo,setRedStatus}=props
     const url = useUrl();
     const navigation = useNavigation();
-    const status=false
-    const [state,setState]=useState(status)
-    const [redId,setRedId]=useState('')
-    const [loding,setLoding]=useState(false)
+    const status = false;
+    const [state,setState]=useState(status);
+    const [redId,setRedId]=useState('');
+    const [loading,setLoading]=useState(false);
     const avatarsResUrl = useResourceUrl('avatars');
     const Width = Dimensions.get('window').width;
     const Height = Dimensions.get('window').height;
-    const todetails =  () => {
+    const toDetails =  () => {
         // @ts-ignore
         navigation.navigate(Screens.ClaimDetails,{id:redId})
         setClaimResStatus(false)
     }
-    const toopen = async () => {
-        setLoding(true)
+    const toOpen = async () => {
+        setLoading(true)
         try{
             const request =  () => RedpacketApi.claimRedpacket(url,redId)
             const {data}= await request()
             setRedStatus(1)
             if(data.code==0){
                 setClaimResStatus(false)
-                setLoding(false)
+                setLoading(false)
                 // @ts-ignore
                 navigation.navigate(Screens.ClaimDetails,{id:redId})
             }
         } catch (e) {
             setRedStatus(1)
-            setLoding(false)
+            setLoading(false)
             setState(!state)
     }
     }
@@ -87,8 +87,8 @@ const ClaimRes: React.FC<Props> = (props) => {
                                     }
                                         </View>
                             </View>
-                            <View style={[styles.todetails,styles.bottom,{display: state?'flex':'none'}]}>
-                                <Pressable onPress={todetails} style={styles.textres}>
+                            <View style={[styles.toDetails,styles.bottom,{display: state?'flex':'none'}]}>
+                                <Pressable onPress={toDetails} style={styles.textres}>
                                     <Text style={styles.nametext}>{strings('ClaimRes.viewClaimDetails')}</Text>
                                     <Image
                                         style={{width:0.75 * Width * 0.25*0.7*0.5*0.5,height:0.75 * Width * 0.25*0.7*0.5*0.5}}
@@ -97,11 +97,11 @@ const ClaimRes: React.FC<Props> = (props) => {
                                     />
                                 </Pressable>
                             </View>
-                            <View style={[styles.todetails,styles.bottom,{display: !state?'flex':'none'}]}>
+                            <View style={[styles.toDetails,styles.bottom,{display: !state?'flex':'none'}]}>
                                 <View style={[styles.openBox1,styles.flex,{width: 0.75 * Width * 0.25,height: 0.75 * Width * 0.25,borderRadius: 0.75 * Width * 0.25 *0.5}]}>
-                                    <Pressable onPress={toopen}>
+                                    <Pressable onPress={toOpen}>
                                         <View style={[styles.openBox2,{width: 0.75 * Width * 0.25 *0.7,height: 0.75 * Width * 0.25*0.7,borderRadius: 0.75 * Width * 0.25*0.7*0.5},styles.flex]}>
-                                            <Text style={[styles.opentext,{fontSize:0.75 * Width * 0.25*0.7*0.5*0.5}]}>{loding ? strings('ClaimRes.Loading') : strings('ClaimRes.Open')}</Text>
+                                            <Text style={[styles.opentext,{fontSize:0.75 * Width * 0.25*0.7*0.5*0.5}]}>{loading ? strings('ClaimRes.Loading') : strings('ClaimRes.Open')}</Text>
                                         </View>
                                     </Pressable>
                                 </View>
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     openBox2:{
         backgroundColor:'#FF8D1A'
     },
-    todetails:{
+    toDetails:{
         display:"flex",
         flexDirection:'row',
         justifyContent:'center',

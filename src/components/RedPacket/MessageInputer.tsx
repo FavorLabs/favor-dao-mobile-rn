@@ -293,7 +293,7 @@ const MessageInputer: React.FC<Props> = (props) => {
     // @ts-ignore
     userMessage.setId(userMessage._id);
     // @ts-ignore
-    userMessage.updatedAt = Date.now() / 1000;
+    userMessage.updatedAt = Math.floor(Date.now() / 1000);
     userMessage.setRawMessage({
       category,
       type,
