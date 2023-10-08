@@ -59,6 +59,7 @@ function RootStack() {
   const fullCount = useRef(0)
   const proxyCount = useRef(0)
   let timer = useRef<NodeJS.Timer | null>(null);
+  const {user} = useSelector((state: Models) => state.global);
 
   useEffect(() => {
     if (start) {
@@ -99,6 +100,7 @@ function RootStack() {
                 type: "error",
                 text1: e.message
               })
+              await WalletController.logout(user?.address)
             }
           }
           setFirstLoad(false);

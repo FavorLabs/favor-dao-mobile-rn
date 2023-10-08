@@ -53,7 +53,7 @@ const ChatChannel = ({avatar, channelName, amount, isLuckKing, record,time,isSho
             </View>
             <View style={[styles.lastmessage,styles.chatchannelFlexBox]}>
               <Text style={[styles.messageinfo,styles.chatchannelFlexBox]}>
-                {time}
+                { time }
               </Text>
               {
                 isLuckKing &&

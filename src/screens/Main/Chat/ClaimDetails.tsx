@@ -27,15 +27,15 @@ const ClaimDetails = () => {
   const {id, unToRecord=false} = route.params
   const [claimSumStatus,setClaimSumStatus]=useState(true)
   const [claimSum,setClaim]=useState('')
-  const [claim_count,setClaim_count]=useState('')
+  const [claimCount,setClaimCount]=useState('')
   const [total,setTotal]=useState('')
   const [userData,setUserData]=useState([])
   const [senderName,setSenderName]=useState('')
   const [senderAvatar,setSenderAvatar]=useState('')
   const [type,setType]=useState(0)
-  const [refund_status,setRefund_status]=useState(0)
-  const [RPTitle,setRPTitle]=useState('')
-  const [loding,setLoding]=useState(true)
+  const [refundStatus,setRefundStatus]=useState(0)
+  const [rPTitle,setRpTitle]=useState('')
+  const [loading,setLoading]=useState(true)
   const showClaimSum=useMemo(()=>{
     return  parseFloat(claimSum)/1000
   },[claimSum])
@@ -44,19 +44,19 @@ const ClaimDetails = () => {
       const request =  () => RedpacketApi.getRedPacketInfo(url,id)
       const { data }= await request()
       if (data.code==0){
-        setClaim_count(data.data.claim_count)
+        setClaimCount(data.data.claim_count)
         setTotal(data.data.total)
         setType(data.data.type)
-        setRPTitle(data.data.title)
+        setRpTitle(data.data.title)
         setSenderName(data.data.user_nickname)
         setSenderAvatar(data.data.user_avatar)
-        setRefund_status(data.data.refund_status)
+        setRefundStatus(data.data.refund_status)
         if(data.data.claim_amount){
           await setClaim(data.data.claim_amount)
-          setLoding(false)
+          setLoading(false)
         }else {
           setClaimSumStatus(false)
-          setLoding(false)
+          setLoading(false)
         }
       }else {
         Toast.show({
@@ -68,12 +68,12 @@ const ClaimDetails = () => {
       if (e instanceof Error) {
         console.log(e.message)
       }
-       setLoding(false)
+      setLoading(false)
     }
 
   }
   const getRedPacketUser=async ()=>{
-    const request =  () => RedpacketApi.getClai(url,id,{page:1,page_size:claim_count})
+    const request =  () => RedpacketApi.getClai(url,id,{page:1,page_size:claimCount})
     const res= await request()
     if(res.data.code==0){
       setUserData(res.data.data.list)
@@ -111,7 +111,7 @@ const ClaimDetails = () => {
             channelName={item.user_nickname}
             isLuckKing={isMax}
             amount={item.amount}
-            time={getTime(item.modified_on)}
+            time={ item.modified_on ? getTime(Math.floor(item.modified_on)) : getTime(Math.floor(Date.now() / 1000))}
         />
     );
   }
@@ -120,7 +120,7 @@ const ClaimDetails = () => {
   },[])
   useEffect(()=>{
     getRedPacketUser()
-  },[claim_count])
+  },[claimCount])
   return (
     <BackgroundSafeAreaView headerStyle={{backgroundColor: Color.color2}}>
       <View style={styles.container}>
@@ -137,14 +137,14 @@ const ClaimDetails = () => {
           }/>
         </View>
         {
-          loding &&
+          loading &&
             <View>
               <Text style={{textAlign:'center',marginTop:"35%",fontSize:25,marginBottom:15}}>{strings('ClaimDetails.loading')}</Text>
               <ActivityIndicator size="large" color="#FF5530" />
             </View>
         }
         {
-          !loding &&
+          !loading &&
             <View style={{flex:1}}>
               <View style={styles.redUser}>
                 <View style={styles.frameContainer}>
@@ -157,7 +157,7 @@ const ClaimDetails = () => {
                   </View>
                   <Text style={[styles.andrewParker, styles.titleTypo]}>{senderName}</Text>
                     <Text style={[styles.mayYouBe, styles.title1Typo,{maxWidth:'70%'}]}>
-                      {RPTitle}
+                      {rPTitle}
                   </Text>
                 </View>
                 <View style={[styles.favt,{display: claimSumStatus?'flex':'none'}]}>
@@ -168,10 +168,10 @@ const ClaimDetails = () => {
               <View style={styles.frameView}>
                 <View style={[styles.titleWrapper, styles.frameGroupFlexBox]}>
                   {
-                      refund_status == 0 && <Text style={styles.title1Typo}>{strings('ClaimDetails.Received')}：{claim_count}/{total}</Text>
+                    refundStatus == 0 && <Text style={styles.title1Typo}>{strings('ClaimDetails.Received')}：{claimCount}/{total}</Text>
                   }
                   {
-                      refund_status == 1 && <Text style={styles.title1Typo}>{strings('ClaimDetails.expired')} {strings('ClaimDetails.Received')}：{claim_count}/{total}</Text>
+                    refundStatus == 1 && <Text style={styles.title1Typo}>{strings('ClaimDetails.expired')} {strings('ClaimDetails.Received')}：{claimCount}/{total}</Text>
                   }
                 </View>
                 <View style={styles.chatchannelParent}>
@@ -193,7 +193,7 @@ const ClaimDetails = () => {
                       keyExtractor={(item,index) => item.id+index}
                   />
                 </View>
-                <View style={[styles.bottomBox,{display:refund_status==0?'none':'flex'}]}>
+                <View style={[styles.bottomBox,{display:refundStatus==0?'none':'flex'}]}>
                   <Text style={styles.bottomText}>
                     {strings('ClaimDetails.Unclaimed')}
                   </Text>

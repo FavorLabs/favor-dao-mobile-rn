@@ -69,7 +69,7 @@ const UserSetting = () => {
           <UserSettingItem title={strings('SettingScreen.language')} onClick={onChange} language={selectedLabel}/>
           <View style={styles.version}>
             <Text style={styles.about}>{strings('SettingScreen.About')}</Text>
-            <Text style={styles.versionText}>{strings('SettingScreen.version')} {packageInfo.version}.0821</Text>
+            <Text style={styles.versionText}>{strings('SettingScreen.version')} {packageInfo.version}.1008</Text>
           </View>
         </ScrollView>
 

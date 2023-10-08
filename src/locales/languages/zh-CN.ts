@@ -21,8 +21,8 @@ export default {
     title: '本地钱包',
     CreateWalletTitle: '创建钱包',
     CreateWalletDescription: '没有创建过钱包',
-    ImportWalletTitle: '导入钱包',
-    ImportWalletDescription: '已经有一个钱包可以导入',
+    ImportWalletTitle: '导入助记词',
+    ImportWalletDescription: '请导入一组助记词',
     ImportPrivateKeyTitle: '导入私钥',
     ImportPrivateKeyDescription: '有私人密钥的钱包要导入'
   },
